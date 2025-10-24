@@ -46,17 +46,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="icon" href="https://avatars.githubusercontent.com/u/230787001?v=4" type="image/png">
     <style>
+        /* Embedded Tailwind CSS (minified subset of used utilities) */
+        *,::after,::before{box-sizing:border-box}html{font-family:'Orbitron',Arial,sans-serif;line-height:1.6}body{margin:0;padding:0;background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);color:#e0e0e0;overflow-x:hidden;position:relative}.fixed{position:fixed}.top-0{top:0}.left-0{left:0}.w-full{width:100%}.h-full{height:100%}.text-center{text-align:center}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:text-5xl{font-size:3rem;line-height:1}@media (min-width:768px){.md\:text-5xl{font-size:3rem}}.font-bold{font-weight:700}.text-white{color:#fff}.shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05)}.border-b-4{border-bottom-width:4px}.border-cyan-400{border-color:#22d3ee}.text-lg{font-size:1.125rem;line-height:1.75rem}.md\:text-xl{font-size:1.25rem;line-height:1.75rem}@media (min-width:768px){.md\:text-xl{font-size:1.25rem}}.mt-2{margin-top:0.5rem}.text-base{font-size:1rem;line-height:1.5rem}.sticky{position:sticky}.bg-black{background-color:#000}.bg-opacity-30{background-opacity:0.3}.backdrop-blur-md{backdrop-filter:blur(8px)}.py-4{padding-top:1rem;padding-bottom:1rem}.shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06)}.shadow-nav{box-shadow:0 2px 10px rgba(0,0,0,0.5)}.z-10{z-index:10}.flex{display:flex}.justify-center{justify-content:center}.space-x-6>*+*{margin-left:1.5rem}.text-cyan-400{color:#22d3ee}.text-lg{font-size:1.125rem}.hover\:text-pink-500:hover{color:#ec4899}.transition-all{transition-property:all}.duration-300{transition-duration:300ms}.mx-auto{margin-left:auto;margin-right:auto}.my-8{margin-top:2rem;margin-bottom:2rem}.p-8{padding:2rem}.max-w-5xl{max-width:80rem}.bg-gray-800{background-color:#1f2937}.bg-opacity-90{background-opacity:0.9}.rounded-xl{border-radius:0.75rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}@media (min-width:768px){.md\:text-4xl{font-size:2.25rem}}.mb-4{margin-bottom:1rem}.text-base{font-size:1rem}.md\:text-lg{font-size:1.125rem}@media (min-width:768px){.md\:text-lg{font-size:1.125rem}}.mt-4{margin-top:1rem}.inline-block{display:inline-block}.px-4{padding-left:1rem;padding-right:1rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.m-2{margin:0.5rem}.bg-gray-900{background-color:#111827}.border-2{border-width:2px}.rounded-md{border-radius:0.375rem}.hover\:bg-pink-500:hover{background-color:#ec4899}.hover\:border-pink-500:hover{border-color:#ec4899}.hover\:text-white:hover{color:#fff}.hover\:underline:hover{text-decoration:underline}.grid{display:grid}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}@media (min-width:640px){.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (min-width:768px){.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}.gap-4{gap:1rem}.p-4{padding:1rem}.hover\:shadow-\[0_0_25px_\#ff007a\,0_0_50px_\#00d4ff\]:hover{box-shadow:0 0 25px #ff007a,0 0 50px #00d4ff}.transform{transform:perspective(500px) rotateX(0) rotateY(0)}.hover\:-translate-y-1:hover{transform:translateY(-0.25rem)}.w-16{width:4rem}.h-16{height:4rem}.rounded-full{border-radius:9999px}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.border-purple-500{border-color:#a855f7}.hover\:scale-110:hover{transform:scale(1.1)}.transition-transform{transition-property:transform}.flex-col{flex-direction:column}.items-center{align-items:center}.space-y-4>*+*{margin-top:1rem}.w-full{width:100%}.max-w-md{max-width:28rem}.mt-6{margin-top:1.5rem}.text-xl{font-size:1.25rem}.md\:text-2xl{font-size:1.5rem}@media (min-width:768px){.md\:text-2xl{font-size:1.5rem}}.space-x-4>*+*{margin-left:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.text-gray-400{color:#9ca3af}.bottom-6{bottom:1.5rem}.right-6{right:1.5rem}.p-3{padding:0.75rem}.rounded-full{border-radius:9999px}.hidden{display:none}.min-w-\[200px\]{min-width:200px}.border-gradient {
+            border-image: linear-gradient(to right, #ff007a, #00d4ff, #aa00ff) 1;
+        }
+
+        /* Custom Scrollbar Styling for WebKit Browsers */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #22d3ee;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #ff007a;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ec4899;
+        }
+
+        /* Custom CSS for animations and particle background */
         body {
-            font-family: 'Orbitron', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-            color: #e0e0e0;
-            line-height: 1.6;
             overflow-x: hidden;
             position: relative;
+            scroll-behavior: smooth;
         }
-        /* Particle Background */
         #particles {
             position: fixed;
             top: 0;
@@ -65,141 +82,18 @@
             height: 100%;
             z-index: -1;
             background: transparent;
+            opacity: 0.7; /* Further reduced for readability */
         }
-        header {
-            text-align: center;
-            padding: 40px 20px;
+        .gradient-shift {
             background: linear-gradient(45deg, #ff007a, #00d4ff, #aa00ff);
             background-size: 200% 200%;
-            animation: gradientShift 5s ease infinite;
-            color: #fff;
-            box-shadow: 0 0 30px rgba(255, 0, 122, 0.7);
-            border-bottom: 3px solid #00d4ff;
+            animation: gradientShift 7s ease infinite; /* Slower and smoother */
         }
-        header h1 {
-            margin: 0;
-            font-size: 3.5em;
-            text-shadow: 0 0 15px #ff007a, 0 0 30px #00d4ff;
-            animation: fadeIn 1s ease-in-out;
-        }
-        header p {
-            font-size: 1.3em;
-            text-shadow: 0 0 10px #aa00ff;
-        }
-        nav {
-            position: sticky;
-            top: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0, 212, 255, 0.5);
-            z-index: 1000;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            text-align: center;
-        }
-        nav li {
-            display: inline-block;
-            margin: 0 20px;
-        }
-        nav a {
-            color: #00d4ff;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.2em;
-            transition: all 0.3s ease;
-            text-shadow: 0 0 5px #00d4ff;
-        }
-        nav a:hover {
-            color: #ff007a;
-            text-shadow: 0 0 15px #ff007a;
-            transform: translateY(-2px);
-        }
-        section {
-            margin: 30px auto;
-            padding: 25px;
-            max-width: 900px;
-            background: rgba(40, 40, 40, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
-            animation: fadeInUp 0.8s ease-out;
-        }
-        .profiles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-            padding: 15px;
-        }
-        .profile-item {
-            position: relative;
-            padding: 15px;
-            border: 2px solid #00d4ff;
-            border-radius: 10px;
-            background: #1f1f1f;
-            transition: all 0.3s ease;
-            overflow: hidden;
-            cursor: pointer;
-        }
-        .profile-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 0, 122, 0.3), transparent);
-            transition: 0.5s;
-        }
-        .profile-item:hover::before {
-            left: 100%;
-        }
-        .profile-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 25px #ff007a, 0 0 50px #00d4ff;
-        }
-        .profile-item img {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            margin-bottom: 10px;
-            border: 3px solid #aa00ff;
-            transition: transform 0.3s ease;
-        }
-        .profile-item:hover img {
-            transform: scale(1.1);
-        }
-        img.stats-img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-            margin: 15px auto;
-            display: block;
-        }
-        .project-pin {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-        .sloth-web-svg {
-            display: block;
-            margin: 0 auto 20px;
-            animation: float 3s ease-in-out infinite;
-        }
-        h2 {
-            color: #00d4ff;
-            text-shadow: 0 0 10px #00d4ff;
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-        /* Cooler Text Styling */
         .intro-text {
             display: inline-block;
             overflow: hidden;
             white-space: nowrap;
-            animation: typing 2s steps(40, end);
+            animation: typing 2s steps(40, end), slideIn 1s ease-out;
         }
         .about-text strong {
             color: #ff007a;
@@ -210,46 +104,61 @@
             margin: 10px 0;
             position: relative;
             padding-left: 20px;
+            animation: fadeInUp 1s ease-out backwards;
         }
+        .about-text li:nth-child(1) { animation-delay: 0.1s; }
+        .about-text li:nth-child(2) { animation-delay: 0.2s; }
+        .about-text li:nth-child(3) { animation-delay: 0.3s; }
+        .about-text li:nth-child(4) { animation-delay: 0.4s; }
+        .about-text li:nth-child(5) { animation-delay: 0.5s; }
+        .about-text li:nth-child(6) { animation-delay: 0.6s; }
         .about-text li::before {
             content: '🦥';
             position: absolute;
             left: 0;
             color: #00d4ff;
         }
-        .sloth-web-text {
-            text-align: center;
-        }
         .sloth-web-text h3 {
             background: linear-gradient(to right, #ff007a, #00d4ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 10px #aa00ff;
-            font-size: 1.8em;
+            animation: fadeIn 1s ease-out;
         }
-        .sloth-web-text a {
-            display: inline-block;
-            padding: 8px 15px;
-            margin: 10px;
-            border-radius: 5px;
-            background: #1f1f1f;
-            border: 2px solid #00d4ff;
+        .stats-img {
+            animation: bounceIn 1.5s ease-out backwards;
+        }
+        .stats-img:nth-child(1) { animation-delay: 0.1s; }
+        .stats-img:nth-child(2) { animation-delay: 0.3s; }
+        .stats-img:nth-child(3) { animation-delay: 0.5s; }
+        .project-link {
+            animation: fadeIn 1s ease-out backwards;
+        }
+        .project-link:nth-child(1) { animation-delay: 0.2s; }
+        .project-link:nth-child(2) { animation-delay: 0.4s; }
+        .section-header {
             transition: all 0.3s ease;
-            animation: bounce 1.5s infinite;
         }
-        .sloth-web-text a:hover {
-            background: #ff007a;
-            border-color: #ff007a;
-            text-shadow: 0 0 15px #ff007a;
-            transform: translateY(-3px);
+        .section-header:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 20px #00d4ff;
         }
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #aaa;
+        .text-shadow-lg {
+            text-shadow: 0 0 15px #ff007a, 0 0 30px #00d4ff;
+        }
+        .text-shadow-md {
+            text-shadow: 0 0 10px #aa00ff;
+        }
+        .text-shadow-sm {
             text-shadow: 0 0 5px #aaa;
         }
-        /* Animations */
+        .profile-item {
+            padding: 1.5rem;
+            min-width: 200px;
+        }
+        .nav-link {
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -262,6 +171,15 @@
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
         }
         @keyframes typing {
             from { width: 0; }
@@ -276,189 +194,227 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-5px); }
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #22d3ee;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            display: none;
         }
-        /* Mobile-specific styles */
-        @media (max-width: 600px) {
-            header h1 { font-size: 2.2em; }
-            header p { font-size: 1em; }
-            nav li { margin: 0 10px; }
-            nav a { font-size: 1em; }
-            section { margin: 15px; padding: 20px; }
-            .profiles-grid { grid-template-columns: 1fr; }
-            .profile-item img { width: 60px; height: 60px; }
-            h2 { font-size: 1.5em; }
-            .sloth-web-text h3 { font-size: 1.5em; }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <canvas id="particles"></canvas>
-    <header>
-        <h1>😃 Parker Tripoli 😃</h1>
-        <p>Epic Game Creator | Computer Wizard | Robot Champ | Basketball Star | Slick Ninja
-                <div align="center">
-                        📍 US, CA</p>
-                  </div> 
+    <canvas id="particles" class="fixed top-0 left-0 w-full h-full"></canvas>
+    <header class="text-center py-10 gradient-shift text-white shadow-lg border-b-4 border-gradient">
+        <h1 class="text-4xl md:text-5xl font-bold text-shadow-lg" style="animation: fadeIn 1s ease-out; text-shadow: 0 0 20px #00d4ff, 0 0 10px #ff007a;">😃 Parker Tripoli 😃</h1>
+        <p class="text-lg md:text-xl mt-2 text-shadow-md">Epic Game Creator | Computer Wizard | Robot Champ | Basketball Star | Slick Ninja</p>
+        <p class="text-base">📍 US, CA</p>
     </header>
 
-    <nav>
-        <ul>
-            <li><a href="#about" onclick="scrollToSection('about')">About Me</a></li>
-            <li><a href="#profiles" onclick="scrollToSection('profiles')">My Profiles</a></li>
-            <li><a href="#stats" onclick="scrollToSection('stats')">My Stats & Projects</a></li>
-        </ul>
+    <nav class="sticky top-0 bg-black bg-opacity-30 backdrop-blur-md py-4 shadow-nav z-10">
+        <div class="flex justify-center space-x-6">
+            <a href="#about" class="text-cyan-400 font-bold text-lg nav-link hover:text-pink-500 hover:text-shadow-lg hover:underline transition-all duration-300" onclick="scrollToSection('about', this); return false;" aria-label="Scroll to About Me">About Me</a>
+            <a href="#profiles" class="text-cyan-400 font-bold text-lg nav-link hover:text-pink-500 hover:text-shadow-lg hover:underline transition-all duration-300" onclick="scrollToSection('profiles', this); return false;" aria-label="Scroll to My Profiles">My Profiles</a>
+            <a href="#stats" class="text-cyan-400 font-bold text-lg nav-link hover:text-pink-500 hover:text-shadow-lg hover:underline transition-all duration-300" onclick="scrollToSection('stats', this); return false;" aria-label="Scroll to My Stats & Projects">My Stats & Projects</a>
+        </div>
     </nav>
 
-    <section id="about">
-        <h2>About Me</h2>
-        <p class="intro-text">I like to make things, and do basket ball, and like tech heres what makes me, me:</p>
-        <ul class="about-text">
-            <li><strong>Game Creator Extraordinaire:</strong> I love making my own video games and software! It’s like building my own world where I decide the rules. I use computers to bring my ideas to life, and it’s so cool to play something I made.</li>
-            <li><strong>Computer Whiz:</strong> I’m crazy about computers! I like learning how they work and using them for fun projects. They’re like magic tools for creating and exploring.</li>
-            <li><strong>Robot Champ:</strong> I was part of a super awesome team called Robot Subs in First LEGO League (FLL). We built and programmed robots, and guess what? We made it all the way to regionals and won the rising all star which celebrates a team that the judges notice and expect great things from the future we also won the Engineering excellence award wich is award to a team with efficiently disigned robot, an innovative project solution that effectively addresses the season challenge, and Core Values evident in all they do! It was like being in a real-life robot adventure.</li>
-            <li><strong>Basketball Star:</strong> When I’m not at the computer, you’ll find me on the basketball court. I love dribbling, shooting hoops, and playing with my friends—it’s so much fun to stay active!</li>
-            <li><strong>Master Builder:</strong> I love making things, whether it’s a cool LEGO creation, a craft, or something totally new. I’m always coming up with ideas and figuring out how to build them.</li>
-            <li><strong>Slick Ninja:</strong> I go to a ninja class, there I learnd how to do a front flip, and other cool moves my coach is nice, and I go every thursday and its fun! </li>
+    <section id="about" class="mx-auto my-8 p-8 max-w-5xl bg-gray-800 bg-opacity-90 rounded-xl shadow-lg border-4 border-gradient" style="animation: fadeInUp 0.8s ease-out;">
+        <h2 class="text-3xl md:text-4xl text-cyan-400 text-shadow-md mb-4 section-header">About Me</h2>
+        <p class="intro-text text-lg">I like to make things, and do basketball, and like tech, here's what makes me, me:</p>
+        <ul class="about-text text-base md:text-lg">
+            <li><strong>Game Creator Extraordinaire:</strong> I love making my own video games and software! It's like building my own world where I decide the rules. I use computers to bring my ideas to life, and it's so cool to play something I made.</li>
+            <li><strong>Computer Whiz:</strong> I'm crazy about computers! I like learning how they work and using them for fun projects. They're like magic tools for creating and exploring.</li>
+            <li><strong>Robot Champ:</strong> I was part of a super awesome team called Robot Subs in First LEGO League (FLL). We built and programmed robots, and guess what? We made it all the way to regionals and won the Rising All-Star award, celebrating a team the judges expect great things from in the future. We also won the Engineering Excellence Award for an efficiently designed robot and an innovative project solution!</li>
+            <li><strong>Basketball Star:</strong> When I'm not at the computer, you'll find me on the basketball court. I love dribbling, shooting hoops, and playing with my friends—it's so much fun to stay active!</li>
+            <li><strong>Master Builder:</strong> I love making things, whether it's a cool LEGO creation, a craft, or something totally new. I'm always coming up with ideas and figuring out how to build them.</li>
+            <li><strong>Slick Ninja:</strong> I go to a ninja class where I learned how to do a front flip and other cool moves. My coach is nice, and I go every Thursday—it's fun!</li>
         </ul>
-        <p class="intro-text">If you want to talk about games, robots, or basketball, or being a ninja I’m your guy!</p>
-            <div align="center">
-            <p>
-                <a href="https://github.com/parkertrip/parkertrip.github.io/blob/main/summery.md">🆂🆄🅼🅼🅰🆁🆈</a>
-                <a href="https://github.com/parkertrip/parkertrip.github.io/blob/main/Resume.md">🆁🅴🆂🆄🅼🅴</a>
-                <a href="https://www.cocrea.world/@TecHelp/PakrerAI">✨🅰🆂🅺</a>
-            </p>
+        <p class="intro-text text-lg">If you want to talk about games, robots, basketball, or being a ninja, I'm your guy!</p>
+        <div class="text-center mt-4">
+            <a href="https://github.com/parkertrip/parkertrip.github.io/blob/main/summery.md" class="inline-block px-4 py-2 m-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300" style="animation: bounce 1.5s infinite;">🆂🆄🅼🅼🅰🆁🆈</a>
+            <a href="https://github.com/parkertrip/parkertrip.github.io/blob/main/Resume.md" class="inline-block px-4 py-2 m-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300" style="animation: bounce 1.5s infinite 0.2s;">🆁🅴🆂🆄🅼🅴</a>
+            <a href="https://www.cocrea.world/@TecHelp/PakrerAI" class="inline-block px-4 py-2 m-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300" style="animation: bounce 1.5s infinite 0.4s;">✨🅰🆂🅺</a>
         </div>
     </section>
 
-    <section id="profiles">
-        <h2>My Profiles</h2>
-        <div class="profiles-grid">
-            <a href="https://github.com/parkertripoli-wq" target="_blank" class="profile-item" aria-label="Visit GitHub Profile">
-                <h3>GitHub</h3>
-                <img src="https://avatars.githubusercontent.com/u/230787001?v=4" alt="GitHub Avatar">
+    <section id="profiles" class="mx-auto my-8 p-8 max-w-5xl bg-gray-800 bg-opacity-90 rounded-xl shadow-lg border-4 border-gradient" style="animation: fadeInUp 0.8s ease-out;">
+        <h2 class="text-3xl md:text-4xl text-cyan-400 text-shadow-md mb-4 section-header">My Profiles</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
+            <a href="https://github.com/parkertripoli-wq" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit GitHub Profile">
+                <div class="spinner" id="github-spinner"></div>
+                <img src="https://avatars.githubusercontent.com/u/230787001?v=4" alt="GitHub Avatar" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('github-spinner').style.display='none';" loading="lazy">
+                <h3 class="text-lg font-bold text-cyan-400">GitHub</h3>
                 <p>parkertripoli-wq</p>
             </a>
-            <a href="https://x.com/huckenbacher" target="_blank" class="profile-item" aria-label="Visit Twitter/X Profile">
-                <h3>Twitter/X</h3>
-                <img src="https://pbs.twimg.com/profile_images/1874669732336431104/oPbmgtxO_400x400.jpg" alt="X Avatar">
+            <a href="https://x.com/huckenbacher" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit Twitter/X Profile">
+                <div class="spinner" id="x-spinner"></div>
+                <img src="https://pbs.twimg.com/profile_images/1874669732336431104/oPbmgtxO_400x400.jpg" alt="X Avatar" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('x-spinner').style.display='none';" loading="lazy">
+                <h3 class="text-lg font-bold text-cyan-400">Twitter/X</h3>
                 <p>@huckenbacher</p>
             </a>
-            <a href="https://www.youtube.com/@PlayWithParkerAndEaston" target="_blank" class="profile-item" aria-label="Visit YouTube Profile">
-                <h3>YouTube</h3>
-                <img src="https://yt3.googleusercontent.com/_39gdO0jBACuC2TXTK8RdTrQNM1sQw2iP7zUPrSGSbT5k7RppmloNTjK9L4GwJvx2rcf_l5nj1o=s72-c-k-c0x00ffffff-no-rj" alt="YouTube Avatar">
+            <a href="https://www.youtube.com/@PlayWithParkerAndEaston" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit YouTube Profile">
+                <div class="spinner" id="youtube-spinner"></div>
+                <img src="https://yt3.googleusercontent.com/_39gdO0jBACuC2TXTK8RdTrQNM1sQw2iP7zUPrSGSbT5k7RppmloNTjK9L4GwJvx2rcf_l5nj1o=s72-c-k-c0x00ffffff-no-rj" alt="YouTube Avatar" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('youtube-spinner').style.display='none';" loading="lazy">
+                <h3 class="text-lg font-bold text-cyan-400">YouTube</h3>
                 <p>Play with Parker and Easton</p>
             </a>
-            <a href="https://penguinmod.com/profile/?user=softbear312" target="_blank" class="profile-item" aria-label="Visit PenguinMod Profile">
-                <h3>PenguinMod</h3>
-                <img src="https://projects.penguinmod.com/api/v1/users/getpfp?username=softbear312" alt="PenguinMod Avatar">
+            <a href="https://penguinmod.com/profile/?user=softbear312" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit PenguinMod Profile">
+                <div class="spinner" id="penguinmod-spinner"></div>
+                <img src="https://projects.penguinmod.com/api/v1/users/getpfp?username=softbear312" alt="PenguinMod Avatar" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('penguinmod-spinner').style.display='none';" loading="lazy">
+                <h3 class="text-lg font-bold text-cyan-400">PenguinMod</h3>
                 <p>softbear312</p>
             </a>
-            <a href="https://scratch.mit.edu/users/king__99/" target="_blank" class="profile-item" aria-label="Visit Scratch Profile">
-                <h3>Scratch</h3>
-                <img src="https://uploads.scratch.mit.edu/get_image/user/139698736_60x60.png" alt="Scratch Avatar">
+            <a href="https://scratch.mit.edu/users/king__99/" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit Scratch Profile">
+                <div class="spinner" id="scratch-spinner"></div>
+                <img src="https://uploads.scratch.mit.edu/get_image/user/139698736_60x60.png" alt="Scratch Avatar" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('scratch-spinner').style.display='none';" loading="lazy">
+                <h3 class="text-lg font-bold text-cyan-400">Scratch</h3>
                 <p>king__99</p>
             </a>
-            <a href="https://www.cocrea.world/@TecHelp" target="_blank" class="profile-item" aria-label="Visit Gandi IDE Profile">
-                <h3>Gandi IDE (Cocrea)</h3>
-                <img src="https://assets.cocrea.world/ccw/oNviRgK0W1GhFjWA.png" alt="Cocrea Avatar">
+            <a href="https://www.cocrea.world/@TecHelp" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit Gandi IDE Profile">
+                <div class="spinner" id="cocrea-spinner"></div>
+                <img src="https://assets.cocrea.world/ccw/oNviRgK0W1GhFjWA.png" alt="Cocrea Avatar" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('cocrea-spinner').style.display='none';" loading="lazy">
+                <h3 class="text-lg font-bold text-cyan-400">Gandi IDE (Cocrea)</h3>
                 <p>@TecHelp</p>
             </a>
-            <a href="https://hyse16.wixstudio.com/techelp" target="_blank" class="profile-item" aria-label="Visit PenguinMod Profile">
-                <h3>My Tec Help Website</h3>
-                <img src="https://i.ibb.co/tpxTQwpH/Screenshot-2025-10-12-110335.png" alt="Tec Help Logo">
+            <a href="https://hyse16.wixstudio.com/techelp" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit Tec Help Website">
+                <div class="spinner" id="techelp-spinner"></div>
+                <img src="https://i.ibb.co/tpxTQwpH/Screenshot-2025-10-12-110335.png" alt="Tec Help Logo" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('techelp-spinner').style.display='none';" loading="lazy">
+                <h3 class="text-lg font-bold text-cyan-400">My Tec Help Website</h3>
                 <p>Tec Help</p>
-            <a href="https://www.instagram.com/techelp_biz/" target="_blank" class="profile-item" aria-label="Visit PenguinMod Profile">
-                <h3>Instagram</h3>
-                <img src="https://i.ibb.co/nN4cthqK/525615673-17842091496551172-6708170054717946277-n.jpg" alt="Instagram Profile">
+            </a>
+            <a href="https://www.instagram.com/techelp_biz/" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit Instagram Profile">
+                <div class="spinner" id="instagram-spinner"></div>
+                <img src="https://i.ibb.co/nN4cthqK/525615673-17842091496551172-6708170054717946277-n.jpg" alt="Instagram Profile" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('instagram-spinner').style.display='none';" loading="lazy">
+                <h3 class="text-lg font-bold text-cyan-400">Instagram</h3>
                 <p>techelp_biz</p>
             </a>
+			<a href="https://contacts.google.com/person/100132206015984426451?hl=en" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit Instagram Profile">
+                <div class="spinner" id="google-spinner"></div>
+                <img src="https://lh3.googleusercontent.com/a/ACg8ocJ4nZnq3lreD5Gh3yY107oA0ObWlgJgscS1DAfqlmis2YlCszM=s272-p-k-rw-no" alt="Google Profile" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('instagram-spinner').style.display='none';" loading="lazy">
+                <h3 class="text-lg font-bold text-cyan-400">Google</h3>
+                <p>P Trip</p>
+            </a>
         </div>
-            <div align="center">
-            <p>
-                <a href="mailto:parkertripoli@gmail.com">🅴-🅼🅰🅸🅻 🅼🅴</a>
+        <div class="text-center mt-4">
+            <a href="mailto:parkertripoli@gmail.com" class="inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce">🅴-🅼🅰🅸🅻 🅼🅴</a>
+        </div>
+    </section>
+
+    <section id="stats" class="mx-auto my-8 p-8 max-w-5xl bg-gray-800 bg-opacity-90 rounded-xl shadow-lg border-4 border-gradient" style="animation: fadeInUp 0.8s ease-out;">
+        <h2 class="text-3xl md:text-4xl text-cyan-400 text-shadow-md mb-4 section-header">My Stats & Projects</h2>
+        <div class="flex flex-col items-center space-y-4">
+            <div class="spinner" id="stats-spinner-1"></div>
+            <img class="w-full max-w-md rounded-lg stats-img" src="https://github-readme-stats.vercel.app/api?username=parkertripoli-wq&hide_title=false&hide_rank=false&show_icons=true&include_all_commits=true&count_private=true&disable_animations=false&theme=neon&locale=en&hide_border=false&border_radius=30" height="150" alt="stats graph" onload="document.getElementById('stats-spinner-1').style.display='none';" loading="lazy">
+            <div class="spinner" id="stats-spinner-2"></div>
+            <img class="w-full max-w-md rounded-lg stats-img" src="https://streak-stats.demolab.com/?user=parkertripoli-wq&locale=en&mode=daily&theme=neon&hide_border=false&border_radius=30" height="150" alt="streak graph" onload="document.getElementById('stats-spinner-2').style.display='none';" loading="lazy">
+            <div class="spinner" id="stats-spinner-3"></div>
+            <img class="w-full max-w-md rounded-lg stats-img" src="https://github-readme-stats.vercel.app/api/top-langs?username=parkertripoli-wq&locale=en&hide_title=false&layout=compact&card_width=320&langs_count=5&theme=neon&hide_border=false&border_radius=30" height="150" alt="languages graph" onload="document.getElementById('stats-spinner-3').style.display='none';" loading="lazy">
+        </div>
+        <div class="sloth-web-text text-center mt-6">
+            <h3 class="text-xl md:text-2xl mb-4">I'm Making Sloth Web</h3>
+            <div class="flex justify-center mb-4">
+                <div class="spinner" id="sloth-web-spinner"></div>
+                <a href="https://github.com/parkertripoli-wq/sloth-web" class="project-link">
+                    <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertripoli-wq&repo=sloth-web&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Sloth Web Pin" onload="document.getElementById('sloth-web-spinner').style.display='none';" loading="lazy">
+                </a>
+            </div>
+            <p class="space-x-4">
+                <a href="https://github.com/parkertripoli-wq/sloth-web" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce">Want to try Sloth Web?</a>
+                <a href="https://cse.google.com/cse?cx=666b70a81f11c4eb9#gsc.tab=0&gsc.sort=" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce">Try the search engine</a>
+            </p>
+            <h3 class="text-xl md:text-2xl mb-4 mt-6">I'm Making My Portfolio</h3>
+            <div class="flex justify-center mb-4">
+                <div class="spinner" id="portfolio-spinner"></div>
+                <a href="https://github.com/parkertrip/parkertrip.github.io" class="project-link">
+                    <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertrip&repo=parkertrip.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Portfolio Pin" onload="document.getElementById('portfolio-spinner').style.display='none';" loading="lazy">
+                </a>
+            </div>
+            <p class="space-x-4">
+                <a href="https://parkertrip.github.io/" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce">Want to try My Portfolio</a>
+                <a href="https://github.com/parkertrip/parkertrip.github.io" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce">Repo</a>
+            </p>
+            <h3 class="text-xl md:text-2xl mb-4 mt-6">I'm Making Sloth Web Extensions Site</h3>
+            <div class="flex justify-center mb-4">
+                <div class="spinner" id="extensions-spinner"></div>
+                <a href="https://github.com/parkertripoli-wq/parkertripoli-wq.github.io" class="project-link">
+                    <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertripoli-wq&repo=parkertripoli-wq.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Extensions Pin" onload="document.getElementById('extensions-spinner').style.display='none';" loading="lazy">
+                </a>
+            </div>
+            <p class="space-x-4">
+                <a href="https://parkertripoli-wq.github.io" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce">Want to try the Extensions Site</a>
+                <a href="https://github.com/parkertripoli-wq/parkertripoli-wq.github.io" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce">Repo</a>
             </p>
         </div>
     </section>
 
-    <section id="stats">
-        <h2>My Stats & Projects</h2>
-        <div align="center">
-            <img class="stats-img" src="https://github-readme-stats.vercel.app/api?username=parkertripoli-wq&hide_title=false&hide_rank=false&show_icons=true&include_all_commits=true&count_private=true&disable_animations=false&theme=neon&locale=en&hide_border=false&border_radius=30" height="150" alt="stats graph" />
-            <img class="stats-img" src="https://streak-stats.demolab.com/?user=parkertripoli-wq&locale=en&mode=daily&theme=neon&hide_border=false&border_radius=30" height="150" alt="streak graph" />
-            <img class="stats-img" src="https://github-readme-stats.vercel.app/api/top-langs?username=parkertripoli-wq&locale=en&hide_title=false&layout=compact&card_width=320&langs_count=5&theme=neon&hide_border=false&border_radius=30" height="150" alt="languages graph" />
-        </div>
-        <div class="sloth-web-text">
-            <h3>I'm Making Sloth Web</h3>
-            </svg>
-            <div class="project-pin">
-                <a href="https://github.com/parkertripoli-wq/sloth-web">
-                    <img class="stats-img" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertripoli-wq&repo=sloth-web&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Sloth Web Pin" />
-                </a>
-            </div>
-            <p>
-                <a href="https://github.com/parkertripoli-wq/sloth-web">Want to try Sloth Web?</a>
-                <a href="https://cse.google.com/cse?cx=666b70a81f11c4eb9#gsc.tab=0&gsc.sort=">Try the search engine</a>
-            </p>
-            <h3>I'm Making My Potfolio</h3>
-            </svg>
-            <div class="project-pin">
-                <a href="https://github.com/parkertrip/parkertrip.github.io">
-                    <img class="stats-img" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertrip&repo=parkertrip.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Protfolio Pin" />
-                </a>
-            </div>
-            <p>
-                <a href="https://parkertrip.github.io/">Want to try My Potfolio</a>
-                <a href="https://github.com/parkertrip/parkertrip.github.io">Repo</a>
-            </p>
-            <h3>I'm Making Sloth web Extencons site</h3>
-            </svg>
-            <div class="project-pin">
-                <a href="https://github.com/parkertripoli-wq/parkertripoli-wq.github.io">
-                    <img class="stats-img" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertripoli-wq&repo=parkertripoli-wq.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Extencons Pin" />
-                </a>
-            </div>
-            <p>
-                <a href="parkertripoli-wq.github.io">Want to try the Extencons site</a>
-                <a href="https://github.com/parkertripoli-wq/parkertripoli-wq.github.io">Repo</a>
-            </p>
-        </div>
-    </section>
-
-    <footer>
-        <p>Made with ❤️ and code (html). 🦥</p>
+    <footer class="text-center py-6 text-gray-400 text-shadow-sm border-t-4 border-gradient">
+        <p>Made with ❤️ and code (HTML, CSS, JS). 🦥</p>
     </footer>
 
+    <button id="backToTop" class="fixed bottom-6 right-6 bg-cyan-400 text-gray-900 p-3 rounded-full shadow-lg hover:bg-pink-500 hover:text-white transition-all duration-300 hidden" aria-label="Back to Top">⬆️</button>
+
     <script>
-        // Smooth scrolling for nav links
-        function scrollToSection(event, sectionId, link) {
-            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
-            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            link.classList.add('active');
+        // Smooth scrolling fallback function
+        function smoothScrollToElement(element) {
+            if ('scrollBehavior' in document.documentElement.style || window.__forceSmoothScroll) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                const start = window.pageYOffset;
+                const target = element.getBoundingClientRect().top + start;
+                const distance = target - start;
+                const duration = 800;
+                let startTime = null;
+
+                function animation(currentTime) {
+                    if (startTime === null) startTime = currentTime;
+                    const timeElapsed = currentTime - startTime;
+                    const progress = Math.min(timeElapsed / duration, 1);
+                    const ease = progress * (2 - progress);
+                    window.scrollTo(0, start + distance * ease);
+                    if (timeElapsed < duration) {
+                        requestAnimationFrame(animation);
+                    }
+                }
+                requestAnimationFrame(animation);
+            }
         }
 
-
-        // User-agent detection for mobile optimization
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        if (isMobile) {
-            document.body.style.fontSize = '0.85em';
-            document.querySelectorAll('.profile-item img').forEach(img => {
-                img.style.width = '50px';
-                img.style.height = '50px';
-            });
-            document.querySelectorAll('h2').forEach(h2 => {
-                h2.style.fontSize = '1.3em';
-            });
-            document.querySelectorAll('.sloth-web-text h3').forEach(h3 => {
-                h3.style.fontSize = '1.3em';
-            });
+        // Scroll to section function
+        function scrollToSection(sectionId, link) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                smoothScrollToElement(element);
+            }
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('text-pink-500', 'text-shadow-lg'));
+            link.classList.add('text-pink-500', 'text-shadow-lg');
         }
 
-        // Lazy-load images
-        document.querySelectorAll('img').forEach(img => {
-            img.setAttribute('loading', 'lazy');
+        // Back to Top button
+        const backToTopButton = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTopButton.classList.toggle('hidden', window.scrollY < 200);
+        });
+        backToTopButton.addEventListener('click', () => {
+            smoothScrollToElement(document.documentElement);
+        });
+
+        // Keyboard navigation for accessibility
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const sectionId = link.getAttribute('href').slice(1);
+                    scrollToSection(sectionId, link);
+                }
+            });
         });
 
         // 3D Tilt Effect for Profile Cards
@@ -470,8 +426,8 @@
                 const y = e.clientY - rect.top;
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
-                const tiltX = (y - centerY) / 10;
-                const tiltY = -(x - centerX) / 10;
+                const tiltX = (y - centerY) / 15;
+                const tiltY = -(x - centerX) / 15;
                 card.style.transform = `perspective(500px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
             });
             card.addEventListener('mouseleave', () => {
@@ -485,15 +441,15 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         const particlesArray = [];
-        const particleCount = isMobile ? 50 : 100;
+        const particleCount = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 40 : 80; // Reduced for performance
 
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
+                this.size = Math.random() * 1.5 + 0.5; // Smaller particles
+                this.speedX = Math.random() * 0.15 - 0.075;
+                this.speedY = Math.random() * 0.15 - 0.075;
                 this.color = ['#ff007a', '#00d4ff', '#aa00ff'][Math.floor(Math.random() * 3)];
             }
             update() {
@@ -516,10 +472,12 @@
 
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particlesArray.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
+            for (let i = particlesArray.length - 1; i >= 0; i--) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+                if (particlesArray[i].size <= 0.2) particlesArray.splice(i, 1);
+            }
+            if (particlesArray.length < particleCount) particlesArray.push(new Particle());
             requestAnimationFrame(animateParticles);
         }
         animateParticles();
