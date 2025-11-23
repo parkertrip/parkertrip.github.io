@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notely</title>
+    <link rel="icon" href="https://i.ibb.co/PvwwyrpX/brave-screenshot-1-removebg-preview.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&family=Comic+Neue:wght@700&family=Pacifico&family=Courier+Prime&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root{--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--accent:#3b82f6;--border:#334155;}
+        [data-theme="light"]{--bg:#f8fafc;--card:#ffffff;--text:#0f172a;--muted:#64748b;--border:#e2e8f0;}
+        *{box-sizing:border-box;margin:0;padding:0;}
+        body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:all .3s;}
+        header{background:var(--card);padding:1rem 2rem;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,.3);}
+        .logo{font-size:1.8rem;font-weight:700;color:var(--accent);}
+        .header-actions{display:flex;gap:1rem;align-items:center;}
+        .btn{padding:.7rem 1.4rem;border:none;border-radius:12px;cursor:pointer;font-size:1rem;transition:all .2s;}
+        .btn-primary{background:var(--accent);color:#fff;}
+        .btn-secondary{background:#334155;color:#e2e8f0;}
+        .theme-toggle{background:none;border:none;font-size:1.4rem;color:var(--muted);cursor:pointer;}
+        .container{max-width:1400px;margin:0 auto;padding:20px;display:grid;gap:24px;}
+        @media(min-width:768px){.container{grid-template-columns:340px 1fr;}}
+        .sidebar{background:var(--card);border-radius:20px;padding:1.8rem;box-shadow:0 10px 30px rgba(0,0,0,.4);height:calc(100vh - 100px);overflow-y:auto;}
+        .main{background:var(--card);border-radius:20px;padding:2.5rem;box-shadow:0 10px 30px rgba(0,0,0,.4);}
+        input,select,.note-input{width:100%;padding:1rem;border:1px solid var(--border);border-radius:14px;background:var(--bg);color:var(--text);margin-bottom:1.2rem;font-size:1.1rem;}
+        .note-input{min-height:320px;resize:vertical;outline:none;padding:1.5rem;border-radius:16px;}
+        .toolbar{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1.4rem;align-items:center;}
+        .toolbar button,.toolbar input[type="color"],.toolbar select{background:var(--bg);border:1px solid var(--border);padding:.7rem;border-radius:12px;cursor:pointer;font-size:1.1rem;transition:all .2s;}
+        .toolbar button:hover,.toolbar select:hover{background:var(--accent);color:#fff;}
+        .toolbar input[type="color"]{width:40px;height:40px;padding:0;cursor:pointer;}
+        .note-list{list-style:none;}
+        .note-item{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:1.4rem;margin-bottom:1.2rem;cursor:pointer;position:relative;transition:all .3s;display:flex;flex-direction:column;}
+        .note-item:hover{transform:translateY(-6px);box-shadow:0 16px 30px rgba(0,0,0,.4);}
+        .note-item.pinned{border-left:6px solid var(--accent);}
+        .note-header{display:flex;justify-content:space-between;align-items:flex-start;}
+        .note-title{font-weight:600;font-size:1.1rem;flex:1;}
+        .note-actions{opacity:0;transition:opacity .3s;display:flex;gap:.5rem;flex-wrap:wrap;justify-content:flex-end;}
+        .note-item:hover .note-actions{opacity:1;}
+        .note-actions button{font-size:.85rem;padding:.4rem .8rem;}
+        .tag{background:var(--accent);color:#fff;padding:.3rem .8rem;border-radius:8px;font-size:.85rem;margin-right:.5rem;}
+        #fullscreenView{display:none;position:fixed;inset:0;background:var(--bg);padding:5rem;overflow:auto;z-index:9999;}
+        #fullscreenContent{max-width:1100px;margin:0 auto;background:var(--card);border-radius:20px;padding:4rem;box-shadow:0 30px 60px rgba(0,0,0,.6);}
+        .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center;}
+        .modal-content{background:var(--card);padding:2.5rem;border-radius:20px;max-width:500px;width:90%;box-shadow:0 20px 50px rgba(0,0,0,.5);text-align:center;}
+        .modal input,.modal textarea{width:100%;padding:1rem;border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text);margin:1rem 0;font-size:1.1rem;}
+        .modal textarea{min-height:200px;}
+        .modal-buttons{display:flex;gap:1rem;justify-content:center;margin-top:1.5rem;}
+        .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:1rem 2rem;border-radius:50px;box-shadow:0 10px 30px rgba(0,0,0,.4);z-index:9999;animation:toast 3s forwards;}
+        @keyframes toast{0%{opacity:0;transform:translateX(-50%) translateY(20px);}10%{opacity:1;transform:translateX(-50%) translateY(0);}90%{opacity:1;}100%{opacity:0;}}
+        ::-webkit-scrollbar{width:12px;}
+        ::-webkit-scrollbar-track{background:var(--bg);}
+        ::-webkit-scrollbar-thumb{background:var(--muted);border-radius:10px;}
+        ::-webkit-scrollbar-thumb:hover{background:var(--accent);}
+    </style>
+</head>
+<body data-theme="dark">
+    <header>
+        <div class="logo">Notely</div>
+        <div class="header-actions">
+            <button class="btn btn-secondary" onclick="exportNotes()">Export</button>
+            <input type="file" id="importFile" accept=".notely" style="display:none" onchange="importNotes(event)">
+            <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Import</button>
+            <button class="btn btn-secondary" onclick="exportPDF()">PDF</button>
+            <button class="theme-toggle" onclick="toggleTheme()">Theme</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <input type="text" id="search" placeholder="Search notes..." oninput="searchNotes()">
+            <div style="margin:1.5rem 0;padding:1.5rem;background:var(--bg);border-radius:16px;text-align:center;">
+                <div style="font-size:2.5rem;color:var(--accent);font-weight:700;" id="totalCount">0</div>
+                <div style="color:var(--muted);font-size:1.1rem;">Total Notes</div>
+            </div>
+            <ul class="note-list" id="noteList"></ul>
+            <div style="margin-top:2rem;padding-top:1.5rem;border-top:2px solid var(--border);cursor:pointer;" onclick="toggleArchive()">
+                <div style="color:var(--accent);font-weight:600;font-size:1.1rem;">
+                    Archived (<span id="archivedCount">0</span>)
+                </div>
+            </div>
+            <ul class="note-list" id="archiveList" style="display:none;margin-top:1rem;"></ul>
+        </aside>
+
+        <main class="main">
+            <input type="text" id="title" placeholder="Title">
+            <select id="category">
+                <option>General</option><option>Work</option><option>Personal</option><option>Ideas</option>
+            </select>
+            <input type="text" id="tags" placeholder="Tags (comma separated)">
+
+            <div class="toolbar">
+                <button onclick="format('bold')">B</button>
+                <button onclick="format('italic')">I</button>
+                <button onclick="format('underline')">U</button>
+                <input type="color" id="textColor" title="Text Color" onchange="format('foreColor',this.value)">
+                <input type="color" id="highlight" title="Highlight" onchange="format('hiliteColor',this.value)">
+                <select onchange="format('fontName',this.value)">
+                    <option value="Inter">Inter</option>
+                    <option value="Playfair Display">Playfair</option>
+                    <option value="Comic Neue">Comic</option>
+                    <option value="Pacifico">Pacifico</option>
+                    <option value="Courier Prime">Courier</option>
+                </select>
+                <select onchange="format('fontSize',this.value)">
+                    <option value="3">Small</option>
+                    <option value="4">Normal</option>
+                    <option value="5">Large</option>
+                    <option value="6">Huge</option>
+                </select>
+                <button onclick="insertLink()">Link</button>
+                <button onclick="pasteHtml()">Code</button>
+                <button onclick="showImageDialog()">Image</button>
+                <button onclick="startVoice()">Voice</button>
+                <button onclick="format('insertUnorderedList')">List</button>
+                <button onclick="format('insertOrderedList')">Numbered</button>
+                <button onclick="toggleMarkdown()">Markdown</button>
+            </div>
+
+            <div contenteditable="true" id="content" class="note-input" placeholder="Start typing…"></div>
+            <button class="btn btn-primary" style="margin-top:1rem;" onclick="saveNote()">Save Note</button>
+        </main>
+    </div>
+
+    <!-- Fullscreen clean view -->
+    <div id="fullscreenView">
+        <div id="fullscreenContent"></div>
+    </div>
+
+    <!-- Custom Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <p id="modalText" style="margin-bottom:1rem;font-size:1.2rem;"></p>
+            <input id="modalInput" style="display:none;">
+            <textarea id="modalTextarea" style="display:none;"></textarea>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="modalOk()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast" style="display:none;"></div>
+
+    <script>
+        let notes = JSON.parse(localStorage.getItem('notes')||'[]');
+        let editing = null;
+        let markdownMode = false;
+        let modalCallback = null;
+        let modalIsTextarea = false;
+
+        function $(id){return document.getElementById(id);}
+        function save(){localStorage.setItem('notes',JSON.stringify(notes));updateStats();render();}
+        function updateStats(){
+            $('totalCount').textContent = notes.length;
+            $('archivedCount').textContent = notes.filter(n=>n.archived).length;
+        }
+        function render(){
+            const list = $('noteList');
+            const archive = $('archiveList');
+            list.innerHTML = ''; archive.innerHTML = '';
+            notes.forEach((n,i)=>{
+                const date = new Date(n.date);
+                const dateStr = isNaN(date.getTime()) ? 'Just now' : date.toLocaleDateString();
+                const li = document.createElement('div');
+                li.className = `note-item${n.pinned?' pinned':''}${n.archived?' archived':''}`;
+                li.onclick = ()=>viewNote(i);
+                li.innerHTML = `
+                    <div class="note-header">
+                        <div class="note-title">${n.title||'(no title)'}</div>
+                    </div>
+                    <div style="font-size:.9rem;color:var(--muted);margin:.5rem 0;">${dateStr}</div>
+                    <div class="note-actions">
+                        <button class="btn btn-small" onclick="event.stopPropagation();togglePin(${i})">
+                            ${n.pinned?'Unpin':'Pin'}
+                        </button>
+                        <button class="btn btn-small" onclick="event.stopPropagation();editNote(${i})">Edit</button>
+                        <button class="btn btn-small" onclick="event.stopPropagation();delNote(${i})">Delete</button>
+                        <button class="btn btn-small" onclick="event.stopPropagation();printNote(${i})">Print</button>
+                        ${n.archived?
+                         `<button class="btn btn-small" onclick="event.stopPropagation();unarchive(${i})">Unarchive</button>`:
+                         `<button class="btn btn-small" onclick="event.stopPropagation();archive(${i})">Archive</button>`}
+                        <button class="btn btn-small" onclick="event.stopPropagation();shareNote(${i})">Share</button>
+                    </div>
+                `;
+                if(n.archived) archive.appendChild(li);
+                else list.appendChild(li);
+            });
+        }
+        function saveNote(){
+            const note = {
+                title:$('title').value.trim(),
+                content:$('content').innerHTML,
+                raw:markdownMode?$('content').innerText:'',
+                category:$('category').value,
+                tags:$('tags').value.split(',').map(t=>t.trim()).filter(t=>t),
+                date:new Date().toISOString(),
+                pinned:false,
+                archived:false
+            };
+            if(editing!==null){
+                notes[editing]=note;
+                editing=null;
+            }else notes.push(note);
+            save();
+            clearForm();
+        }
+        function clearForm(){
+            $('title').value='';
+            $('content').innerHTML='';
+            $('tags').value='';
+            $('category').value='General';
+            markdownMode=false;
+        }
+        function editNote(i){
+            const n=notes[i];
+            $('title').value=n.title||'';
+            $('content').innerHTML = n.raw||n.content;
+            $('category').value=n.category||'General';
+            $('tags').value=n.tags?n.tags.join(', '):'';
+            editing=i;
+            markdownMode=!!n.raw;
+        }
+        function delNote(i){showModal('Delete this note?',false,()=>{notes.splice(i,1);save();if(editing===i)clearForm();});}
+        function togglePin(i){notes[i].pinned=!notes[i].pinned;save();}
+        function archive(i){notes[i].archived=true;save();}
+        function unarchive(i){notes[i].archived=false;save();}
+        function toggleArchive(){
+            const el=$('archiveList');
+            el.style.display=el.style.display==='none'?'block':'none';
+        }
+        function shareNote(i){
+            const n=notes[i];
+            const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(n));
+            const url = location.origin+location.pathname+'?view='+compressed;
+            navigator.clipboard.writeText(url);
+            showToast('Link copied to clipboard!');
+        }
+        function printNote(i){
+            const n=notes[i];
+            const printWindow = window.open('','_blank');
+            printWindow.document.write(`
+                <html><head><title>${n.title||'Note'}</title>
+                <style>body{font-family:Inter,sans-serif;padding:2rem;line-height:1.6;}</style>
+                </head><body><h1>${n.title||'Untitled'}</h1>${n.raw?marked.parse(n.raw):n.content}</body></html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+        function viewNote(i){
+            const n=notes[i];
+            const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(n));
+            history.replaceState(null, '', '?view='+compressed);
+            showFullscreen(n);
+        }
+        function showFullscreen(note){
+            const view = $('fullscreenView');
+            const content = note.raw?marked.parse(note.raw):note.content;
+            $('fullscreenContent').innerHTML = `<h1 style="font-size:2.8rem;margin-bottom:1.5rem;">${note.title||'(no title)'}</h1>${content}`;
+            view.style.display='block';
+            document.body.style.overflow='hidden';
+        }
+        function closeFullscreen(){
+            $('fullscreenView').style.display='none';
+            document.body.style.overflow='';
+            history.replaceState(null, '', location.pathname);
+        }
+        $('fullscreenView').onclick=e=>{if(e.target===e.currentTarget)closeFullscreen();};
+
+        function searchNotes(){
+            const query = $('search').value.toLowerCase();
+            const filtered = notes.filter(n=>
+                (n.title||'').toLowerCase().includes(query) ||
+                (n.content||'').toLowerCase().includes(query) ||
+                (n.tags||[]).some(t=>t.toLowerCase().includes(query))
+            );
+            renderFiltered(filtered);
+        }
+        function renderFiltered(list){
+            const container = $('noteList');
+            container.innerHTML = '';
+            list.forEach((n,i)=>{
+                const globalIndex = notes.indexOf(n);
+                const li = document.createElement('div');
+                li.className = `note-item${n.pinned?' pinned':''}${n.archived?' archived':''}`;
+                li.onclick = ()=>viewNote(globalIndex);
+                li.innerHTML = `
+                    <div class="note-header">
+                        <div class="note-title">${n.title||'(no title)'}</div>
+                    </div>
+                    <div style="font-size:.9rem;color:var(--muted);margin:.5rem 0;">${new Date(n.date).toLocaleDateString()}</div>
+                    <div class="note-actions">
+                        <button class="btn btn-small" onclick="event.stopPropagation();togglePin(${globalIndex})">${n.pinned?'Unpin':'Pin'}</button>
+                        <button class="btn btn-small" onclick="event.stopPropagation();editNote(${globalIndex})">Edit</button>
+                        <button class="btn btn-small" onclick="event.stopPropagation();delNote(${globalIndex})">Delete</button>
+                        <button class="btn btn-small" onclick="event.stopPropagation();printNote(${globalIndex})">Print</button>
+                        ${n.archived?
+                         `<button class="btn btn-small" onclick="event.stopPropagation();unarchive(${globalIndex})">Unarchive</button>`:
+                         `<button class="btn btn-small" onclick="event.stopPropagation();archive(${globalIndex})">Archive</button>`}
+                        <button class="btn btn-small" onclick="event.stopPropagation();shareNote(${globalIndex})">Share</button>
+                    </div>
+                `;
+                container.appendChild(li);
+            });
+        }
+
+        function exportNotes(){
+            const blob=new Blob([JSON.stringify(notes,null,2)],{type:'application/json'});
+            const url=URL.createObjectURL(blob);
+            const a=document.createElement('a');
+            a.href=url;a.download='mynotes.notely';a.click();
+            URL.revokeObjectURL(url);
+        }
+        function importNotes(e){
+            const file=e.target.files[0];
+            if(!file)return;
+            const r=new FileReader();
+            r.onload=ev=>{
+                try{notes=JSON.parse(ev.target.result);save();showToast('Imported successfully!');}
+                catch{showToast('Invalid file');}
+            };
+            r.readAsText(file);
+        }
+        function exportPDF(){
+            const {jsPDF}=window.jspdf;
+            const doc=new jsPDF();
+            let y=20;
+            notes.forEach(n=>{
+                if(y>260){doc.addPage();y=20;}
+                doc.setFontSize(16);doc.text(n.title||'Untitled',20,y);
+                y+=10;doc.setFontSize(10);
+                const txt=(n.raw?marked.parse(n.raw):n.content).replace(/<[^>]*>/g,'').substring(0,1000);
+                doc.text(txt,20,y);y+=40;
+            });
+            doc.save('notely-notes.pdf');
+        }
+
+        function showModal(text,input=false,textarea=false,cb=null){
+            $('modalText').textContent=text;
+            $('modalInput').style.display=input?'block':'none';
+            $('modalTextarea').style.display=textarea?'block':'none';
+        if(input||textarea){
+            const field = textarea?$('modalTextarea'):$('modalInput');
+            field.value='';
+            field.focus();
+        }
+        modalCallback=cb||(()=>{});
+        $('modal').style.display='flex';
+    }
+    function closeModal(){$('modal').style.display='none';}
+    function modalOk(){
+        const val = $('modalTextarea').style.display==='block'?$('modalTextarea').value:$('modalInput').value;
+        closeModal();
+        if(modalCallback)modalCallback(val);
+    }
+
+    function format(cmd,val=null){
+        if(val) document.execCommand(cmd,false,val);
+        else document.execCommand(cmd,false,null);
+    }
+    function insertLink(){showModal('Enter URL:',true,false,url=>{if(url)document.execCommand('createLink',false,url);});}
+    function pasteHtml(){showModal('Paste full HTML page here:',false,true,code=>{if(code&&code.includes('<!DOCTYPE html>')){const d=new DOMParser().parseFromString(code,'text/html');const s=[...d.querySelectorAll('style,link')].map(e=>e.outerHTML).join('');$('content').innerHTML=`<div>${s}${d.body.innerHTML}</div>`;}else{$('content').innerHTML=code;}});}
+    function showImageDialog(){showModal('Image URL:',true,false,url=>{if(url)document.execCommand('insertImage',false,url);});}
+    function startVoice(){
+        navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+            const r=new MediaRecorder(stream);
+            const c=[];r.ondataavailable=e=>c.push(e.data);
+            r.onstop=()=>{const b=new Blob(c,{type:'audio/webm'});const u=URL.createObjectURL(b);document.execCommand('insertHTML',false,`<audio controls src="${u}"></audio>`);};
+            r.start();showToast('Recording… Click OK to stop');setTimeout(()=>{r.stop();stream.getTracks().forEach(t=>t.stop());},100);
+        }).catch(()=>{showToast('Microphone access denied');});
+    }
+    function toggleMarkdown(){
+        markdownMode=!markdownMode;
+        if(markdownMode){
+            $('content').innerText=$('content').innerText||'';
+        }else{
+            $('content').innerHTML=marked.parse($('content').innerText);
+        }
+    }
+    function showToast(msg){
+        const toast = $('toast');
+        toast.textContent = msg;
+        toast.style.display = 'block';
+        setTimeout(()=>{toast.style.display='none';},3000);
+    }
+
+    function toggleTheme(){
+        const isDark=document.body.getAttribute('data-theme')==='dark';
+        document.body.setAttribute('data-theme',isDark?'light':'dark');
+        localStorage.setItem('theme',isDark?'light':'dark');
+    }
+    const theme=localStorage.getItem('theme')||'dark';
+    document.body.setAttribute('data-theme',theme);
+
+    // fullscreen URL
+    const p=new URLSearchParams(location.search);
+    if(p.has('view')){
+        try{
+            const n=JSON.parse(LZString.decompressFromEncodedURIComponent(p.get('view')));
+            if(p.get('fullscreen')==='true'){
+                document.body.innerHTML='';
+                document.write(`<div style="margin:5rem auto;max-width:1100px;background:var(--card);padding:4rem;border-radius:20px;box-shadow:0 30px 60px rgba(0,0,0,.6);font-family:Inter,sans-serif;">${n.raw?marked.parse(n.raw):n.content}</div>`);
+            }else showFullscreen(n);
+        }catch(e){showToast('Invalid note link');}
+    }
+
+    updateStats();
+    render();
+    </script>
+</body>
+</html>
