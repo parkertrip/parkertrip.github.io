@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notely</title>
+    <title>𝓝𝓸𝓽𝓮𝓵𝔂</title>
     <link rel="icon" href="https://i.ibb.co/PvwwyrpX/brave-screenshot-1-removebg-preview.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&family=Comic+Neue:wght@700&family=Pacifico&family=Courier+Prime&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -59,7 +59,6 @@
 </head>
 <body data-theme="dark">
     <header>
-        <i class="fas fa-sticky-note"></i>
         <div class="logo">🗒️𝓝𝓸𝓽𝓮𝓵𝔂</div>
         <div class="header-actions">
             <button class="btn btn-secondary" onclick="exportNotes()">📤</button>
@@ -172,7 +171,7 @@
                 li.onclick = ()=>viewNote(i);
                 li.innerHTML = `
                     <div class="note-header">
-                        <div class="note-title">${n.title||'(no title)'}</div>
+                        <div class="note-title">${n.title||'Untitled'}</div>
                     </div>
                     <div style="font-size:.9rem;color:var(--muted);margin:.5rem 0;">${dateStr}</div>
                     <div class="note-actions">
