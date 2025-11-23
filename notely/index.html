@@ -61,11 +61,11 @@
     <header>
         <div class="logo">🗒️Notely</div>
         <div class="header-actions">
-            <button class="btn btn-secondary" onclick="exportNotes()">Export</button>
+            <button class="btn btn-secondary" onclick="exportNotes()">📤</button>
             <input type="file" id="importFile" accept=".notely" style="display:none" onchange="importNotes(event)">
-            <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Import</button>
-            <button class="btn btn-secondary" onclick="exportPDF()">PDF</button>
-            <button class="theme-toggle" onclick="toggleTheme()">Theme</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📥</button>
+            <button class="btn btn-secondary" onclick="exportPDF()">📄</button>
+            <button class="theme-toggle" onclick="toggleTheme()">🌑☀️</button>
         </div>
     </header>
 
@@ -88,14 +88,14 @@
         <main class="main">
             <input type="text" id="title" placeholder="Title">
             <select id="category">
-                <option>General</option><option>Work</option><option>Personal</option><option>Ideas</option>
+                <option>𝕲𝖊𝖓𝖊𝖗𝖆𝖑</option><option>𝓦𝓸𝓻𝓴</option><option>🅿🅴🆁🆂🅾🅽🅰🅻</option><option>𝓘𝕕🅴ⓐs͓̽</option>
             </select>
-            <input type="text" id="tags" placeholder="Tags (comma separated)">
+            <input type="text" id="tags" placeholder="Tags (comma separated eg: fun, bad)">
 
             <div class="toolbar">
-                <button onclick="format('bold')">B</button>
-                <button onclick="format('italic')">I</button>
-                <button onclick="format('underline')">U</button>
+                <button onclick="format('bold')">𝗕</button>
+                <button onclick="format('italic')">𝐼</button>
+                <button onclick="format('underline')">U̲</button>
                 <input type="color" id="textColor" title="Text Color" onchange="format('foreColor',this.value)">
                 <input type="color" id="highlight" title="Highlight" onchange="format('hiliteColor',this.value)">
                 <select onchange="format('fontName',this.value)">
@@ -106,22 +106,22 @@
                     <option value="Courier Prime">Courier</option>
                 </select>
                 <select onchange="format('fontSize',this.value)">
-                    <option value="3">Small</option>
+                    <option value="3">ˢᵐᵃˡˡ</option>
                     <option value="4">Normal</option>
-                    <option value="5">Large</option>
-                    <option value="6">Huge</option>
+                    <option value="5">𝗟𝗮𝗿𝗴𝗲</option>
+                    <option value="6">Ｈｕｇｅ</option>
                 </select>
-                <button onclick="insertLink()">Link</button>
-                <button onclick="pasteHtml()">Code</button>
-                <button onclick="showImageDialog()">Image</button>
-                <button onclick="startVoice()">Voice</button>
-                <button onclick="format('insertUnorderedList')">List</button>
-                <button onclick="format('insertOrderedList')">Numbered</button>
-                <button onclick="toggleMarkdown()">Markdown</button>
+                <button onclick="insertLink()">🔗</button>
+                <button onclick="pasteHtml()"></></button>
+                <button onclick="showImageDialog()">🖼️</button>
+                <button onclick="startVoice()">🎤</button>
+                <button onclick="format('insertUnorderedList')">≔</button>
+                <button onclick="format('insertOrderedList')">🔢</button>
+                <button onclick="toggleMarkdown()">𝐌⬇️</button>
             </div>
 
-            <div contenteditable="true" id="content" class="note-input" placeholder="Start typing…"></div>
-            <button class="btn btn-primary" style="margin-top:1rem;" onclick="saveNote()">Save Note</button>
+            <div contenteditable="true" id="content" class="note-input" placeholder="Start typing your note here…"></div>
+            <button class="btn btn-primary" style="margin-top:1rem;" onclick="saveNote()">➕</button>
         </main>
     </div>
 
@@ -137,8 +137,8 @@
             <input id="modalInput" style="display:none;">
             <textarea id="modalTextarea" style="display:none;"></textarea>
             <div class="modal-buttons">
-                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="modalOk()">OK</button>
+                <button class="btn btn-secondary" onclick="closeModal()">❌</button>
+                <button class="btn btn-primary" onclick="modalOk()">✅</button>
             </div>
         </div>
     </div>
@@ -260,7 +260,7 @@
         function showFullscreen(note){
             const view = $('fullscreenView');
             const content = note.raw?marked.parse(note.raw):note.content;
-            $('fullscreenContent').innerHTML = `<h1 style="font-size:2.8rem;margin-bottom:1.5rem;">${note.title||'(no title)'}</h1>${content}`;
+            $('fullscreenContent').innerHTML = `<h1 style="font-size:2.8rem;margin-bottom:1.5rem;">${note.title||'Untitled'}</h1>${content}`;
             view.style.display='block';
             document.body.style.overflow='hidden';
         }
@@ -294,14 +294,14 @@
                     </div>
                     <div style="font-size:.9rem;color:var(--muted);margin:.5rem 0;">${new Date(n.date).toLocaleDateString()}</div>
                     <div class="note-actions">
-                        <button class="btn btn-small" onclick="event.stopPropagation();togglePin(${globalIndex})">${n.pinned?'Unpin':'Pin'}</button>
-                        <button class="btn btn-small" onclick="event.stopPropagation();editNote(${globalIndex})">Edit</button>
-                        <button class="btn btn-small" onclick="event.stopPropagation();delNote(${globalIndex})">Delete</button>
-                        <button class="btn btn-small" onclick="event.stopPropagation();printNote(${globalIndex})">Print</button>
+                        <button class="btn btn-small" onclick="event.stopPropagation();togglePin(${globalIndex})">${n.pinned?'Unpin📌':'Pin📌'}</button>
+                        <button class="btn btn-small" onclick="event.stopPropagation();editNote(${globalIndex})">Edit✏️</button>
+                        <button class="btn btn-small" onclick="event.stopPropagation();delNote(${globalIndex})">Delete🗑️</button>
+                        <button class="btn btn-small" onclick="event.stopPropagation();printNote(${globalIndex})">Print🖨️</button>
                         ${n.archived?
-                         `<button class="btn btn-small" onclick="event.stopPropagation();unarchive(${globalIndex})">Unarchive</button>`:
-                         `<button class="btn btn-small" onclick="event.stopPropagation();archive(${globalIndex})">Archive</button>`}
-                        <button class="btn btn-small" onclick="event.stopPropagation();shareNote(${globalIndex})">Share</button>
+                         `<button class="btn btn-small" onclick="event.stopPropagation();unarchive(${globalIndex})">Unarchive🗃️</button>`:
+                         `<button class="btn btn-small" onclick="event.stopPropagation();archive(${globalIndex})">Archive🗃️</button>`}
+                        <button class="btn btn-small" onclick="event.stopPropagation();shareNote(${globalIndex})">Share➦</button>
                     </div>
                 `;
                 container.appendChild(li);
@@ -321,7 +321,7 @@
             const r=new FileReader();
             r.onload=ev=>{
                 try{notes=JSON.parse(ev.target.result);save();showToast('Imported successfully!');}
-                catch{showToast('Invalid file');}
+                catch{showToast('Invalid file must be mynotes.notely');}
             };
             r.readAsText(file);
         }
@@ -336,7 +336,7 @@
                 const txt=(n.raw?marked.parse(n.raw):n.content).replace(/<[^>]*>/g,'').substring(0,1000);
                 doc.text(txt,20,y);y+=40;
             });
-            doc.save('notely-notes.pdf');
+            doc.save('mynotes.pdf');
         }
 
         function showModal(text,input=false,textarea=false,cb=null){
@@ -370,7 +370,7 @@
             const r=new MediaRecorder(stream);
             const c=[];r.ondataavailable=e=>c.push(e.data);
             r.onstop=()=>{const b=new Blob(c,{type:'audio/webm'});const u=URL.createObjectURL(b);document.execCommand('insertHTML',false,`<audio controls src="${u}"></audio>`);};
-            r.start();showToast('Recording… Click OK to stop');setTimeout(()=>{r.stop();stream.getTracks().forEach(t=>t.stop());},100);
+            r.start();showToast('Recording… Click OK to stop');setTimeout(()=>{r.stop();stream.getTracks().forEach(t=>t.stop());},9999);
         }).catch(()=>{showToast('Microphone access denied');});
     }
     function toggleMarkdown(){
