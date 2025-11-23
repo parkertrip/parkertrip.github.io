@@ -225,7 +225,7 @@
             editing=i;
             markdownMode=!!n.raw;
         }
-        function delNote(i){showModal('Delete this note?',true,()=>{notes.splice(i,1);save();if(editing===i)clearForm();});}
+        function delNote(i){notes.splice(i,1);save();if(editing===i)clearForm();if(editing>i)editing--;}
         function togglePin(i){notes[i].pinned=!notes[i].pinned;save();}
         function archive(i){notes[i].archived=true;save();}
         function unarchive(i){notes[i].archived=false;save();}
