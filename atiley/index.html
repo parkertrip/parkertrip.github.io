@@ -86,9 +86,11 @@ const WIKIS = [
   t => `http://en.citizendium.org/wiki/${encodeURIComponent(t)}`,
   t => `http://www.scholarpedia.org/article/${encodeURIComponent(t.replace(/ /g,'_'))}`,
   t => `https://iq.wiki/wiki/${encodeURIComponent(t)}`,
+  t => `https://en.metapedia.org/m/index.php?search=${encodeURIComponent(t)}`,
   t => `https://infogalactic.com/info/${encodeURIComponent(t)}`,
   t => `https://www.quora.com/search?q=${encodeURIComponent(t)}`,
   t => `https://www.reddit.com/search/?q=${encodeURIComponent(t)}`,
+  t => `https://www.conservapedia.com/index.php?search=${encodeURIComponent(t)}`,
   t => `https://www.infoplease.com/search/site/${encodeURIComponent(t)}`,
   t => `https://en.uncyclopedia.co/wiki/${encodeURIComponent(t)}`,
   t => `https://www.encyclopedia.com/search?query=${encodeURIComponent(t)}`,
@@ -97,6 +99,7 @@ const WIKIS = [
   t => `https://www.worldbookonline.com/wb/Search?st=${encodeURIComponent(t)}`,
   t => `https://web.archive.org/web/20230000000000/https://www.digitaluniverse.net/search?q=${encodeURIComponent(t)}`,
   t => `https://foundation.wikimedia.org/wiki/Search?search=${encodeURIComponent(t)}`,
+  t => `https://www.nytimes.com/search?query=${encodeURIComponent(t)}`,
   t => `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(t)}&gsrlimit=5&prop=imageinfo&iiprop=url&format=json&origin=*`
 ];
 
@@ -166,3 +169,4 @@ window.onload = () => {
 </script>
 </body>
 </html>
+
