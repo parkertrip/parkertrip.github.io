@@ -100,6 +100,8 @@ const WIKIS = [
   t => `https://web.archive.org/web/20230000000000/https://www.digitaluniverse.net/search?q=${encodeURIComponent(t)}`,
   t => `https://foundation.wikimedia.org/wiki/Search?search=${encodeURIComponent(t)}`,
   t => `https://www.nytimes.com/search?query=${encodeURIComponent(t)}`,
+  t => `https://www.whitehouse.gov/articles/?s=${encodeURIComponent(t)}`,
+  t => `https://www.cnn.com/search?q=${encodeURIComponent(t)}`,
   t => `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(t)}&gsrlimit=5&prop=imageinfo&iiprop=url&format=json&origin=*`
 ];
 
@@ -118,7 +120,7 @@ async function search(term) {
 
   // Show loading max 2 seconds
   const timer = setTimeout(() => {
-    document.getElementById("main").innerHTML = "<div style='text-align:center;font-size:6rem;margin:200px;color:#ff00ff'>Loading from 25+ wikis...</div>";
+    document.getElementById("main").innerHTML = "<div style='text-align:center;font-size:6rem;margin:200px;color:#ff00ff'>Loading from 25+ wikis... (see: bit.ly/48xLIz4 for more info)</div>";
   }, 300);
 
   for (let makeUrl of WIKIS) {
@@ -130,7 +132,7 @@ async function search(term) {
       if (data && (data.extract || data.title)) {
         const img = data.originalimage?.source || data.thumbnail?.source || data.imageinfo?.[0]?.url || "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
         clearTimeout(timer);
-        show(data.title || term, data.extract?.slice(0,1400)+"..." || "Found it!", img, [img], "Wikipedia & Friends");
+        show(data.title || term, data.extract?.slice(0,1400)+"..." || "Found it!", img, [img], "25+ wiki apis see: bit.ly/48xLIz4 for more info");
         return;
       }
     } catch (e) {}
@@ -162,11 +164,12 @@ window.onload = () => {
     document.getElementById("main").innerHTML = `
       <div class="article">
         <h1>Welcome to Atiley!</h1>
-        <p style="font-size:2.5rem">Try: dog • john cabot • pizza • github • nyan cat • unicorn • minecraft</p>
+        <p style="font-size:2.5rem">Try: dog • john cabot • pizza • github • nyan cat • unicorn • minecraft • etc</p>
       </div>`;
   }
 };
 </script>
 </body>
 </html>
+
 
