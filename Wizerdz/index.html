@@ -1,1 +1,265 @@
-Work In Progeres
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wizerdz</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>sparkles</text></svg>">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #1e90ff, #87cefa);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+        #game-container {
+            width: 900px;
+            height: 650px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 10px 30px rgba(0,0,0,0.4);
+            position: relative;
+            border: 3px solid #fff;
+        }
+        #title {
+            text-align: center;
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+        #status {
+            text-align: center;
+            font-size: 24px;
+            margin: 15px 0;
+        }
+        #player-info, #enemy-info {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+        }
+        #player, #enemy {
+            width: 180px;
+            height: 180px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255,255,255,0.6);
+        }
+        .stats {
+            font-size: 20px;
+            background: rgba(0,0,0,0.3);
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+        #actions {
+            text-align: center;
+            margin: 30px 0;
+        }
+        button {
+            padding: 12px 25px;
+            margin: 8px;
+            font-size: 18px;
+            background: #ff4500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            transition: 0.2s;
+        }
+        button:hover {
+            transform: translateY(-3px);
+            background: #ff6347;
+        }
+        #log {
+            height: 140px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        #new-game {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: #8b0000;
+        }
+        #new-game:hover {
+            background: #a00000;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="title">Wizerdz</div>
+        <button id="new-game">New Game (Clear Save)</button>
+        
+        <div id="status">Loading your wizard adventure...</div>
+        
+        <div id="player-info">
+            <div id="player" style="background-image: url('https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/Wizerdz/wizard.png')"></div>
+            <div class="stats" id="player-stats"></div>
+        </div>
+        
+        <div id="enemy-info">
+            <div id="enemy"></div>
+            <div class="stats" id="enemy-stats"></div>
+        </div>
+        
+        <div id="actions"></div>
+        
+        <div id="log"></div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'wizerdz_save_v2';
+
+        const foods = [
+            { name: 'Pizza Slice',   hp: 50, maxHp: 50, attack: 11, image: 'https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/Wizerdz/Untitled_design-removebg-preview.png' },
+            { name: 'Burger',        hp: 65, maxHp: 65, attack: 13, image: 'https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/Wizerdz/5t3q.png' },
+            { name: 'Ice Cream',     hp: 45, maxHp: 45, attack: 9,  image: 'https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/Wizerdz/Untitled_design__1_-removebg-preview.png' },
+            { name: 'Apple',         hp: 35, maxHp: 35, attack: 7,  image: 'https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/Wizerdz/Untitled_design__2_-removebg-preview.png' },
+            { name: 'Cake',          hp: 80, maxHp: 80, attack: 16, image: 'https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/Wizerdz/Untitled_design__3_-removebg-preview.png' }
+        ];
+
+        const spells = [
+            { name: 'Fireball',      damage: 22, color: '#ff4444' },
+            { name: 'Frost Nova',    damage: 18, color: '#44aaff' },
+            { name: 'Lightning Bolt',damage: 28, color: '#ffff44' }
+        ];
+
+        let player = { hp: 100, maxHp: 100, level: 1, exp: 0 };
+        let enemy = null;
+        let gameState = 'explore';
+
+        function log(msg) {
+            const logEl = document.getElementById('log');
+            logEl.innerHTML += `<p>${msg}</p>`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        function saveGame() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(player));
+            log('<span style="color:#88ff88">Game saved automatically!</span>');
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                player = JSON.parse(saved);
+                log('Welcome back, wizard! Progress loaded.');
+            } else {
+                log('A new wizard awakens...');
+            }
+            updateUI();
+        }
+
+        document.getElementById('new-game').onclick = () => {
+            if (confirm('Start fresh? This will delete your current wizard forever!')) {
+                localStorage.removeItem(STORAGE_KEY);
+                player = { hp: 100, maxHp: 100, level: 1, exp: 0 };
+                gameState = 'explore';
+                document.getElementById('log').innerHTML = '';
+                log('A brand new wizard has been born!');
+                updateUI();
+            }
+        };
+
+        function updateUI() {
+            document.getElementById('player-stats').innerHTML = `
+                <strong>You</strong><br>
+                HP: ${player.hp}/${player.maxHp}<br>
+                Level: ${player.level}<br>
+                EXP: ${player.exp}/100
+            `;
+
+            if (gameState === 'explore') {
+                document.getElementById('status').textContent = 'The food monsters are hiding...';
+                document.getElementById('enemy').style.backgroundImage = '';
+                document.getElementById('enemy-stats').innerHTML = '';
+                document.getElementById('actions').innerHTML = `
+                    <button onclick="startBattle()">Search for Food Enemy!</button>
+                    <button onclick="saveGame()">Save Game</button>
+                `;
+            } else if (gameState === 'battle' && enemy) {
+                document.getElementById('status').textContent = `Fighting ${enemy.name}!`;
+                document.getElementById('enemy').style.backgroundImage = `url('${enemy.image}')`;
+                document.getElementById('enemy-stats').innerHTML = `<strong>${enemy.name}</strong><br>HP: ${enemy.hp}/${enemy.maxHp}`;
+
+                document.getElementById('actions').innerHTML = '';
+                spells.forEach(spell => {
+                    const btn = document.createElement('button');
+                    btn.innerHTML = `${spell.name}`;
+                    btn.style.background = spell.color;
+                    btn.onclick = () => castSpell(spell);
+                    document.getElementById('actions').appendChild(btn);
+                });
+            } else if (gameState === 'gameover') {
+                document.getElementById('status').textContent = 'You have been deliciously defeated...';
+                document.getElementById('actions').innerHTML = `<button onclick="location.reload()">Try Again</button>`;
+            }
+        }
+
+        function startBattle() {
+            const food = foods[Math.floor(Math.random() * foods.length)];
+            enemy = {...food};
+            gameState = 'battle';
+            log(`A wild ${enemy.name} appears!`);
+            updateUI();
+        }
+
+        function castSpell(spell) {
+            const dmg = spell.damage + (player.level * 3);
+            enemy.hp -= dmg;
+            log(`You cast <strong style="color:${spell.color}">${spell.name}</strong> for ${dmg} damage!`);
+
+            if (enemy.hp <= 0) {
+                log(`<strong>${enemy.name}</strong> was deliciously vanquished! +30 EXP`);
+                player.exp += 30;
+
+                if (player.exp >= 100) {
+                    player.level++;
+                    player.maxHp += 25;
+                    player.hp = player.maxHp;
+                    player.exp -= 100;
+                    log(`Level Up! You are now level ${player.level}!`);
+                }
+
+                enemy = null;
+                gameState = 'explore';
+                saveGame();
+                updateUI();
+                return;
+            }
+
+            // Enemy turn
+            const enemyDmg = Math.max(1, enemy.attack - Math.floor(player.level / 2));
+            player.hp -= enemyDmg;
+            log(`${enemy.name} hits you for ${enemyDmg} damage!`);
+
+            if (player.hp <= 0) {
+                player.hp = 0;
+                gameState = 'gameover';
+                log('<span style="color:#ff4444"><strong>GAME OVER</strong> — The food won this time...</span>');
+            }
+
+            updateUI();
+            saveGame();
+        }
+
+        // Start the adventure
+        loadGame();
+    </script>
+</body>
+</html>
