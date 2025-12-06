@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wizerdz</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>sparkles</text></svg>">
+    <link rel="icon" href="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/Wizerdz/Untitled%20design%20(4).png">
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -41,6 +41,41 @@
         #inventory { top: 320px; }
         .zone-btn { padding: 15px; background: rgba(255,255,255,0.2); margin: 10px; border-radius: 15px; cursor: pointer; }
         .zone-btn:hover { background: rgba(255,255,255,0.4); }
+        #setup-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 1100px;
+            height: 750px;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            border: 4px solid rgba(255,255,255,0.3);
+            padding: 30px;
+        }
+        #username-input {
+            padding: 12px;
+            font-size: 20px;
+            border-radius: 10px;
+            border: none;
+            width: 300px;
+            margin: 20px 0;
+        }
+        #start-game-btn {
+            padding: 14px 30px;
+            font-size: 20px;
+            background: #ff4500;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+            transition: 0.3s;
+        }
+        #start-game-btn:hover {
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -49,7 +84,7 @@
         <h1 style="font-size:70px;text-align:center;margin:20px;">Welcome to Wizerdz</h1>
         <p style="text-align:center;font-size:24px;">Create your wizard!</p>
         <div style="text-align:center;margin:30px;">
-            <input type="text" id="username-input" placeholder="Enter your wizard name" maxlength="16" style="padding:12px;font-size:20px;border-radius:10px;border:none;width:300px;">
+            <input type="text" id="username-input" placeholder="Enter your wizard name" maxlength="16">
         </div>
         <p style="text-align:center;font-size:22px;">Choose your look:</p>
         <div class="avatar-grid" style="justify-content:center;">
@@ -93,7 +128,7 @@
     </div>
 
     <script>
-        const STORAGE_KEY = 'wizerdz_profile_v5';
+        const STORAGE_KEY = 'wizerdz_profile_v6';
         const avatars = [
             "https://cdn.pixabay.com/photo/2021/12/20/17/20/cat-6883556_1280.png",
             "https://cdn.pixabay.com/photo/2012/04/18/23/36/boy-38262_1280.png",
@@ -217,12 +252,17 @@
                 document.getElementById('actions').innerHTML = '';
             } else if (gameState === "explore") {
                 document.getElementById('status').textContent = `Exploring ${zones[player.zone]}`;
+                document.getElementById('world-map').innerHTML = '';
+                document.getElementById('enemy').style.backgroundImage = '';
+                document.getElementById('enemy-stats').innerHTML = '';
                 document.getElementById('actions').innerHTML = `
                     <button onclick="startBattle('food')">Hunt Food Monster</button>
                     <button onclick="startBattle('player')">Duel Another Wizard</button>
                     <button onclick="gameState='world';updateUI()">World Map</button>
                 `;
             } else if (gameState.includes("battle")) {
+                document.getElementById('world-map').innerHTML = '';
+                document.getElementById('status').textContent = `Battling ${enemy.name}!`;
                 document.getElementById('enemy').style.backgroundImage = `url('${enemy.image}')`;
                 document.getElementById('enemy-stats').innerHTML = `<strong>${enemy.name}</strong><br>HP: ${enemy.hp}/${enemy.maxHp}`;
                 document.getElementById('actions').innerHTML = '';
@@ -233,6 +273,9 @@
                     b.onclick = () => castSpell(s);
                     document.getElementById('actions').appendChild(b);
                 });
+            } else if (gameState === "gameover") {
+                document.getElementById('status').textContent = "Game Over!";
+                document.getElementById('actions').innerHTML = '<button onclick="location.reload()">Rise Again</button>';
             }
         }
 
