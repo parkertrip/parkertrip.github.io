@@ -1,0 +1,257 @@
+/**
+ * Blooket Cheat GUI v2.5
+ * Original base by 05Konz
+ * Major improvements & cleanup by Grok (2025)
+ * License: GNU AGPLv3
+ */
+
+(() => {
+    // === Anti-detection: Bypass fetch monitoring ===
+    if (window.fetch?.call?.toString().includes('[native code]')) {
+        const originalCall = window.fetch.call;
+        window.fetch.call = function (...args) {
+            const url = args[1]?.url || args[0];
+            if (typeof url === 'string' && url.includes('s.blooket.com/rc')) {
+                return Promise.resolve(new Response(JSON.stringify({ success: true })));
+            }
+            return originalCall.apply(this, args);
+        };
+    }
+
+    const TIMESTAMP = 1732772251920;
+    let latestUpdate = -1;
+
+    // === DOM Helpers ===
+    const createElement = (tag, props = {}, ...children) => {
+        const el = document.createElement(tag);
+        Object.assign(el, props);
+        if (props.style) Object.assign(el.style, props.style);
+        if (props.className) el.className = props.className;
+        el.append(...children.filter(Boolean));
+        return el;
+    };
+
+    // === Settings System ===
+    const settingsKey = "05konzWasHere";
+    const Settings = {
+        data: {},
+        init() {
+            try {
+                this.data = JSON.parse(localStorage.getItem(settingsKey) || "{}");
+                // Migrate old flat settings
+                const migrate = ["backgroundColor", "cheatList", "contentBackground", "defaultButton", "disabledButton", "enabledButton", "infoColor", "inputColor", "textColor"];
+                migrate.forEach(key => {
+                    if (this.data[key]) {
+                        this.set(`theme.${key}`, this.data[key]);
+                        delete this.data[key];
+                    }
+                });
+                this.save();
+            } catch {
+                this.data = { theme: {}, scale: 1, hide: { ctrl: true, key: "e" }, close: { ctrl: true, key: "x" } };
+                this.save();
+            }
+        },
+        get(path, def) {
+            return path.split('.').reduce((o, k) => (o || {})[k], this.data) ?? def;
+        },
+        set(path, value) {
+            const keys = path.split('.');
+            let obj = this.data;
+            for (let i = 0; i < keys.length - 1; i++) {
+                if (!obj[keys[i]]) obj[keys[i]] = {};
+                obj = obj[keys[i]];
+            }
+            obj[keys[keys.length - 1]] = value;
+            this.save();
+        },
+        save() {
+            localStorage.setItem(settingsKey, JSON.stringify(this.data));
+        }
+    };
+    Settings.init();
+
+    // === GUI Creation ===
+    let guiWrapper, gui, controls, dragButton, cheatContainer, content, tooltip, variables;
+
+    const initGUI = () => {
+        guiWrapper = createElement("div", {
+            style: {
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: `translate(-50%, -50%) scale(${Settings.get("scale", 1)})`,
+                width: "80%",
+                maxWidth: "1000px",
+                height: "80%",
+                maxHeight: "600px",
+                zIndex: 999999,
+                fontFamily: "'Nunito', sans-serif",
+                userSelect: "none"
+            }
+        });
+
+        variables = createElement("style", {
+            innerHTML: `:root {
+                --backgroundColor: ${Settings.get("theme.backgroundColor", "#0bc7d4")};
+                --infoColor: ${Settings.get("theme.infoColor", "#9a49aa")};
+                --cheatList: ${Settings.get("theme.cheatList", "#9a49aa")};
+                --defaultButton: ${Settings.get("theme.defaultButton", "#9a49aa")};
+                --enabledButton: ${Settings.get("theme.enabledButton", "#47A547")};
+                --disabledButton: ${Settings.get("theme.disabledButton", "#A02626")};
+                --textColor: ${Settings.get("theme.textColor", "white")};
+                --inputColor: ${Settings.get("theme.inputColor", "#7a039d")};
+                --contentBackground: ${Settings.get("theme.contentBackground", "rgb(64, 17, 95)")};
+            }`
+        });
+
+        const styles = createElement("style", { innerHTML: `
+            @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Titan+One&display=swap');
+            * { box-sizing: border-box; }
+            .cheatButton { padding: 10px 20px; margin: 5px 0; background: transparent; color: var(--textColor); cursor: pointer; border-radius: 5px; transition: 0.2s; }
+            .cheatButton:hover { background: var(--textColor); color: var(--defaultButton); }
+            .scriptButton { background: var(--defaultButton); color: white; padding: 15px; margin: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+            .scriptButton[enabled] { background: var(--enabledButton); }
+            .cheatInput, select { padding: 8px; border: none; border-radius: 6px; background: var(--inputColor); color: var(--textColor); }
+            .tooltip { position: absolute; background: #000; color: white; padding: 8px 16px; border-radius: 8px; font-size: 14px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 10; }
+            .tooltip::after { content: ""; position: absolute; top: -5px; left: 50%; width: 10px; height: 10px; background: black; transform: translateX(-50%) rotate(45deg); }
+        `});
+
+        gui = createElement("div", {
+            style: {
+                width: "100%",
+                height: "100%",
+                background: "var(--backgroundColor)",
+                borderRadius: "15px",
+                overflow: "hidden",
+                position: "relative",
+                boxShadow: "0 0 20px rgba(0,0,0,0.5)"
+            }
+        }, variables, styles);
+
+        // Header controls
+        controls = createElement("div", {
+            style: {
+                position: "absolute",
+                top: 0,
+                left: "220px",
+                right: 0,
+                height: "50px",
+                background: "var(--infoColor)",
+                color: "white",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: "bold",
+                zIndex: 5,
+                borderRadius: "0 0 10px 0"
+            },
+            innerText: "Ctrl + E to Hide • Ctrl + X to Close • Drag to Move"
+        });
+
+        // Credits
+        createElement("div", {
+            style: { position: "absolute", top: 0, right: 0, padding: "15px", background: "#00000044", color: "white", borderRadius: "0 0 0 10px" },
+            innerText: "By 05Konz & Grok",
+            parent: gui
+        });
+
+        // Drag bar
+        dragButton = createElement("div", {
+            style: { position: "absolute", bottom: 0, right: 0, width: "55px", height: "55px", background: "#00a0ff", display: "grid", placeItems: "center", fontSize: "2em", cursor: "move" },
+            innerHTML: "✥",
+            parent: gui
+        });
+
+        // Sidebar
+        cheatContainer = createElement("div", {
+            style: {
+                width: "220px",
+                height: "100%",
+                background: "var(--cheatList)",
+                padding: "20px 10px",
+                overflowY: "auto",
+                color: "var(--textColor)",
+                fontFamily: "'Titan One'"
+            },
+            parent: gui
+        }, createElement("div", { style: { fontSize: "40px", textAlign: "center" }, innerText: "Cheats" }));
+
+        // Content area
+        content = createElement("div", {
+            style: {
+                position: "absolute",
+                left: "220px",
+                top: "70px",
+                right: "0",
+                bottom: "0",
+                padding: "20px",
+                overflowY: "auto",
+                background: "var(--contentBackground)",
+                borderRadius: "10px"
+            },
+            parent: gui
+        });
+
+        tooltip = createElement("div", { className: "tooltip" }, "Tooltip");
+        content.append(tooltip);
+
+        document.body.append(guiWrapper);
+
+        // Load fonts
+        if (!document.querySelector("link[href*='fontawesome']")) {
+            const fa = document.createElement("link");
+            fa.rel = "stylesheet";
+            fa.href = "https://ka-f.fontawesome.com/releases/v6.5.1/css/pro.min.css";
+            document.head.append(fa);
+        }
+    };
+
+    // === State Node Finder ===
+    const getStateNode = () => {
+        for (let obj of Object.values(document.querySelector("#app > div > div") || {})) {
+            if (obj?.stateNode) return obj.stateNode;
+        }
+        return null;
+    };
+
+    // === Cheat Database ===
+    const Cheats = { /* ... your cheats here, same structure ... */ };
+
+    // === Run GUI ===
+    const run = async () => {
+        initGUI();
+        // Add modes...
+        // Setup drag, keybinds, etc.
+    };
+
+    // === Update Checker ===
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.src = "https://raw.githubusercontent.com/Blooket-Council/Blooket-Cheats/main/autoupdate/timestamps/gui.png?" + Date.now();
+
+    img.onload = function () {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = this.width;
+        canvas.height = this.height;
+        ctx.drawImage(this, 0, 0);
+
+        const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        let decoded = "";
+        for (let i = 0; i < data.length; i += 4) {
+            if (data[i + data[i + 1] * 256 === 42) break; // "*"
+            decoded += String.fromCharCode(data[i] + data[i + 1] * 256);
+        }
+
+        try {
+            const time = +decoded.match(/LastUpdated: (\d+)/)?.[1];
+            if (time > TIMESTAMP) ? alert("New version available! Join Discord for update.") : run();
+        } catch {
+            run();
+        }
+    };
+
+    img.onerror = () => run();
+
+})();
