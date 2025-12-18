@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌲 Tree Chopping Empire 🌲</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: auto; /* Ensure scrolling is always enabled on the page */
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #333;
+            position: relative;
+            min-height: 100vh; /* Changed from fixed height */
+        }
+        body::before {
+            content: '';
+            position: fixed; /* Changed to fixed so background stays put while scrolling */
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('https://img.itch.zone/aW1hZ2UvMTIxNjU4LzU2MDM4MS5wbmc=/original/N%2Fb6N3.png') center center / cover no-repeat;
+            z-index: -1;
+            opacity: 0.85;
+        }
+        h1 {
+            color: #228B22;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        #game-container {
+            max-width: 700px;
+            margin: 40px auto; /* Add top/bottom margin so content isn't glued to edges */
+            background: rgba(255,255,255,0.85);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            backdrop-filter: blur(8px);
+        }
+        #tree {
+            font-size: 150px;
+            cursor: pointer;
+            user-select: none;
+            transition: none;
+            margin: 20px 0;
+            display: inline-block;
+        }
+        #tree.chopping {
+            animation: chopShake 0.4s ease-out;
+        }
+        @keyframes chopShake {
+            0% { transform: scale(1) rotate(0deg); }
+            20% { transform: scale(0.95) rotate(-8deg); }
+            40% { transform: scale(0.92) rotate(8deg); }
+            60% { transform: scale(0.95) rotate(-4deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        #stats {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #8B4513;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        #save-info {
+            font-size: 14px;
+            color: #666;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        #upgrades {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        button {
+            padding: 15px 25px;
+            font-size: 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        button:hover:not(:disabled) {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .upgrade {
+            background: #FF9800;
+            min-width: 160px;
+        }
+        .upgrade:hover:not(:disabled) {
+            background: #e68900;
+        }
+        #reset {
+            background: #f44336;
+            margin-top: 20px;
+            padding: 12px 30px;
+            font-size: 15px;
+        }
+        #reset:hover:not(:disabled) {
+            background: #d32f2f;
+        }
+
+        /* Falling maple leaf style */
+        .falling-leaf {
+            position: fixed;
+            font-size: 50px;
+            pointer-events: none;
+            opacity: 1;
+            transition: top 4s ease-in, opacity 2s ease-out, transform 4s ease-in-out;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>🌲 Tree Chopping Empire 🌲</h1>
+        <p>Click the tree to chop wood! Buy upgrades to grow your empire! 🪓</p>
+        
+        <div id="tree">🌳</div>
+        
+        <div id="stats">
+            <div>🪵 Wood: <span id="wood">0</span></div>
+            <div>🔨 Per Click: <span id="clickPower">1</span></div>
+            <div>🤖 Per Second: <span id="autoPower">0</span></div>
+        </div>
+        
+        <p id="save-info">Progress auto-saves! 🔄</p>
+        
+        <div id="upgrades">
+            <button id="betterAxe" class="upgrade">
+                Better Axe<br>Cost: <span id="betterAxeCost">20</span> 🪵<br>+1 per click
+            </button>
+            <button id="lumberjack" class="upgrade">
+                Hire Lumberjack<br>Cost: <span id="lumberjackCost">200</span> 🪵<br>+1 per second
+            </button>
+            <button id="steelAxe" class="upgrade">
+                Steel Axe<br>Cost: <span id="steelAxeCost">800</span> 🪵<br>+3 per click
+            </button>
+            <button id="foreman" class="upgrade">
+                Hire Foreman<br>Cost: <span id="foremanCost">3000</span> 🪵<br>+2 per second
+            </button>
+            <button id="robot" class="upgrade">
+                Chopping Robot<br>Cost: <span id="robotCost">10000</span> 🪵<br>+5 per second
+            </button>
+            <button id="legendaryAxe" class="upgrade">
+                Legendary Axe<br>Cost: <span id="legendaryCost">50000</span> 🪵<br>+15 per click
+            </button>
+        </div>
+        
+        <button id="reset">🔄 Reset Game</button>
+    </div>
+
+    <!-- The rest of the JavaScript remains unchanged -->
+    <script>
+        // ... (all the previous JavaScript code is exactly the same)
+        let wood = 0;
+        let clickPower = 1;
+        let autoPower = 0;
+        
+        let upgradeData = {
+            betterAxe: { cost: 20, power: 1, mult: 1.5, type: 'click' },
+            lumberjack: { cost: 200, power: 1, mult: 1.8, type: 'auto' },
+            steelAxe: { cost: 800, power: 3, mult: 1.5, type: 'click' },
+            foreman: { cost: 3000, power: 2, mult: 1.8, type: 'auto' },
+            robot: { cost: 10000, power: 5, mult: 2.0, type: 'auto' },
+            legendaryAxe: { cost: 50000, power: 15, mult: 1.6, type: 'click' }
+        };
+        
+        const upgradeIds = Object.keys(upgradeData);
+        const tree = document.getElementById('tree');
+        const woodDisplay = document.getElementById('wood');
+        const clickDisplay = document.getElementById('clickPower');
+        const autoDisplay = document.getElementById('autoPower');
+        
+        function formatNum(num) {
+            if (num < 1000) return Math.floor(num).toLocaleString();
+            if (num < 1000000) return (num / 1000).toFixed(1) + 'k';
+            if (num < 1000000000) return (num / 1000000).toFixed(1) + 'M';
+            return (num / 1000000000).toFixed(1) + 'B';
+        }
+        
+        function updateDisplay() {
+            woodDisplay.textContent = formatNum(wood);
+            clickDisplay.textContent = formatNum(clickPower);
+            autoDisplay.textContent = formatNum(autoPower);
+            
+            upgradeIds.forEach(id => {
+                const data = upgradeData[id];
+                const costSpan = document.getElementById(id + 'Cost');
+                const btn = document.getElementById(id);
+                if (costSpan) costSpan.textContent = formatNum(data.cost);
+                if (btn) btn.disabled = wood < data.cost;
+            });
+            
+            saveGame();
+        }
+        
+        function buyUpgrade(id) {
+            const data = upgradeData[id];
+            if (wood >= data.cost) {
+                wood -= data.cost;
+                if (data.type === 'click') {
+                    clickPower += data.power;
+                } else {
+                    autoPower += data.power;
+                }
+                data.cost = Math.floor(data.cost * data.mult);
+                updateDisplay();
+                
+                createFallingLeaf();
+            }
+        }
+        
+        function createFallingLeaf() {
+            const leaf = document.createElement('div');
+            leaf.textContent = '🍁';
+            leaf.className = 'falling-leaf';
+            
+            leaf.style.left = Math.random() * 90 + 'vw';
+            leaf.style.top = '-60px';
+            
+            const rotationStart = Math.random() * 360;
+            const rotationEnd = rotationStart + (Math.random() > 0.5 ? 360 : -360);
+            const sway = Math.random() * 100 - 50;
+            leaf.style.transform = `rotate(${rotationStart}deg) translateX(0px)`;
+            
+            document.body.appendChild(leaf);
+            
+            setTimeout(() => {
+                leaf.style.top = '110vh';
+                leaf.style.opacity = '0';
+                leaf.style.transform = `rotate(${rotationEnd}deg) translateX(${sway}px)`;
+            }, 100);
+            
+            setTimeout(() => {
+                if (leaf.parentNode) document.body.removeChild(leaf);
+            }, 4200);
+        }
+        
+        function saveGame() {
+            const saveData = {
+                wood,
+                clickPower,
+                autoPower,
+                upgradeData: { ...upgradeData }
+            };
+            localStorage.setItem('treeGameSave', JSON.stringify(saveData));
+        }
+        
+        function loadGame() {
+            const saved = localStorage.getItem('treeGameSave');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    wood = data.wood || 0;
+                    clickPower = data.clickPower || 1;
+                    autoPower = data.autoPower || 0;
+                    if (data.upgradeData) {
+                        Object.assign(upgradeData, data.upgradeData);
+                    }
+                } catch (e) {
+                    console.error('Load failed:', e);
+                }
+            }
+        }
+        
+        function resetGame() {
+            if (confirm('Are you sure? This will reset ALL progress to the beginning! 😱\n(Upgrade costs will return to starting prices!)')) {
+                wood = 0;
+                clickPower = 1;
+                autoPower = 0;
+                upgradeData = {
+                    betterAxe: { cost: 20, power: 1, mult: 1.5, type: 'click' },
+                    lumberjack: { cost: 200, power: 1, mult: 1.8, type: 'auto' },
+                    steelAxe: { cost: 800, power: 3, mult: 1.5, type: 'click' },
+                    foreman: { cost: 3000, power: 2, mult: 1.8, type: 'auto' },
+                    robot: { cost: 10000, power: 5, mult: 2.0, type: 'auto' },
+                    legendaryAxe: { cost: 50000, power: 15, mult: 1.6, type: 'click' }
+                };
+                updateDisplay();
+                localStorage.removeItem('treeGameSave');
+            }
+        }
+        
+        loadGame();
+        updateDisplay();
+        
+        upgradeIds.forEach(id => {
+            document.getElementById(id).addEventListener('click', () => buyUpgrade(id));
+        });
+        
+        document.getElementById('reset').addEventListener('click', resetGame);
+        
+        tree.addEventListener('click', () => {
+            wood += clickPower;
+            updateDisplay();
+            
+            tree.textContent = '🪓🌳';
+            tree.classList.add('chopping');
+            setTimeout(() => {
+                tree.classList.remove('chopping');
+                tree.textContent = '🌳';
+            }, 400);
+            
+            for (let i = 0; i < Math.min(clickPower, 20); i++) {
+                setTimeout(() => createFallingLeaf(), i * 70);
+            }
+        });
+        
+        setInterval(() => {
+            wood += autoPower;
+            updateDisplay();
+        }, 1000);
+    </script>
+</body>
+</html>
