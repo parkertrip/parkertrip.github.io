@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heathey - Your Health Companion</title>
+    <link rel="icon" href="https://cdn.pixabay.com/photo/2025/10/25/19/34/heart-9916675_1280.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            padding: 20px;
+        }
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #007bff;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0056b3;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+        h1, h2 {
+            color: #007bff;
+        }
+        .card {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        img.eye-chart {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #6c757d;
+        }
+        #contextMenu {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+        #contextMenu ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        #contextMenu li {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        #contextMenu li:hover {
+            background-color: #f8f9fa;
+        }
+        .form-control {
+            border: 1px solid #ced4da;
+        }
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+        .modal-content {
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        .btn-close {
+            filter: none;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        .nav-tabs .nav-link.active {
+            background-color: #fff;
+            border-color: #dee2e6 #dee2e6 #fff;
+        }
+        .tab-content {
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-top: none;
+            border-radius: 0 0 0.25rem 0.25rem;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .loading .spinner-border {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body onload="loadModels(); loadResponses()">
+    <div class="container">
+        <header class="text-center mb-4">
+            <h1 class="display-4">Heathey - Your Health Companion</h1>
+        </header>
+
+        <ul class="nav nav-tabs" id="healthTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="eye-tab" data-bs-toggle="tab" data-bs-target="#eye" type="button" role="tab" aria-controls="eye" aria-selected="true">Eye Test</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="hearing-tab" data-bs-toggle="tab" data-bs-target="#hearing" type="button" role="tab" aria-controls="hearing" aria-selected="false">Hearing Test</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="face-tab" data-bs-toggle="tab" data-bs-target="#face" type="button" role="tab" aria-controls="face" aria-selected="false">Face Analysis</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="ask-tab" data-bs-toggle="tab" data-bs-target="#ask" type="button" role="tab" aria-controls="ask" aria-selected="false">Ask Heathey</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="healthTabsContent">
+            <div class="tab-pane fade show active" id="eye" role="tabpanel" aria-labelledby="eye-tab">
+                <div class="card-body">
+                    <p>To take the eye test:</p>
+                    <ul>
+                        <li>Stand or sit 10 feet (about 3 meters) away from your screen.</li>
+                        <li>Cover one eye at a time and read the letters on the chart below.</li>
+                        <li>Note the smallest line you can read clearly.</li>
+                    </ul>
+                    <img src="https://images.squarespace-cdn.com/content/v1/5e4c2ab855f49e2eb34dd11c/1586273214312-BT0OLPPTBG8C4O2TMRDJ/Safe+Eyes+America+Eye+Chart-2.jpg?format=1000w" alt="Eye Test Chart" class="eye-chart">
+                    <form id="eyeForm" class="mt-3">
+                        <div class="mb-3">
+                            <label for="eyeScore" class="form-label">Enter the line number of the smallest line you can read (1-11, where 1 is the largest letters):</label>
+                            <input type="number" class="form-control" id="eyeScore" min="1" max="11" required>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="processEyeTest()">Submit Scores</button>
+                    </form>
+                    <div id="eyeResult" class="result"></div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="hearing" role="tabpanel" aria-labelledby="hearing-tab">
+                <div class="card-body">
+                    <p>Take the online hearing test below (embedded from Starkey). After completing it, enter your results summary below.</p>
+                    <iframe src="https://www.starkey.com/online-hearing-test/lifestyle-questions/1" title="Hearing Test"></iframe>
+                    <form id="hearForm" class="mt-3">
+                        <div class="mb-3">
+                            <label for="hearScore" class="form-label">Enter your hearing test results (e.g., 'mild hearing loss'):</label>
+                            <input type="text" class="form-control" id="hearScore" required>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="processHearingTest()">Submit Results</button>
+                    </form>
+                    <div id="hearResult" class="result"></div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="face" role="tabpanel" aria-labelledby="face-tab">
+                <div class="card-body">
+                    <p>Upload an image of your face to get suggestions on glasses or hearing aids that might fit your face shape (actual analysis using AI).</p>
+                    <div class="mb-3">
+                        <input type="file" class="form-control" id="faceUpload" accept="image/*">
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="processFaceUpload()">Analyze Image</button>
+                    <div class="loading" id="faceLoading"><div class="spinner-border" role="status"></div> Analyzing...</div>
+                    <div id="faceResult" class="result"></div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="ask" role="tabpanel" aria-labelledby="ask-tab">
+                <div class="card-body">
+                    <p>Ask any health-related question to Heathey AI.</p>
+                    <div class="mb-3">
+                        <label for="healthQuestion" class="form-label">Your Question:</label>
+                        <input type="text" class="form-control" id="healthQuestion" required>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="askHeathey()">Ask Heathey</button>
+                    <div id="healthResponse" class="result"></div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <small>Consulting a doctor is recommended.</small>
+        </footer>
+    </div>
+
+    <div id="contextMenu">
+        <ul>
+            <li onclick="showAboutModal()">About Heathey</li>
+            <li onclick="location.reload()">Refresh Page</li>
+            <li onclick="window.open('https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcRzDDDhPCCZslRWNlXVGhcPXjwzVwCTzLcvCzzQcjhcxrQNzvKnxgDPJZTmpHkGlVmMKxJnF', '_blank')">Contact Us</li>
+            <li onclick="document.getElementById('contextMenu').style.display = 'none'">Close Menu</li>
+        </ul>
+    </div>
+
+    <!-- About Modal -->
+    <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="aboutModalLabel">About Heathey</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Heathey is your friendly health companion, offering simple tests and AI-powered advice. Remember, this is for informational purposes only.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let faceShape = '';
+        let healthResponses = {};
+
+        async function loadModels() {
+            try {
+                const MODEL_URL = 'https://raw.githubusercontent.com/justadudewhohacks/face-api.js/master/weights';
+                await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
+                await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+                console.log('Models loaded successfully');
+            } catch (error) {
+                console.error('Error loading models:', error);
+            }
+        }
+
+        async function loadResponses() {
+            try {
+                const res = await fetch('https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/heathy/list%20for%20ai');
+                const text = await res.text();
+                // Parse the text into a map for better AI-like behavior
+                const lines = text.split('\n');
+                lines.forEach(line => {
+                    if (line.includes('question.includes')) {
+                        const keyMatch = line.match(/question.includes\('(.*?)'\)/);
+                        const answerMatch = line.match(/answer = '(.*?)' \+ response;/);
+                        if (keyMatch && answerMatch) {
+                            healthResponses[keyMatch[1]] = answerMatch[1];
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading responses:', error);
+            }
+        }
+
+        function getDistance(p1, p2) {
+            return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+        }
+
+        async function processFaceUpload() {
+            const file = document.getElementById('faceUpload').files[0];
+            if (!file) {
+                document.getElementById('faceResult').innerHTML = 'Please upload an image first.';
+                return;
+            }
+
+            document.getElementById('faceLoading').style.display = 'block';
+
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = async function() {
+                    try {
+                        const detections = await faceapi.detectAllFaces(img).withFaceLandmarks();
+                        if (detections.length > 0) {
+                            const landmarks = detections[0].landmarks.positions;
+                            const leftCheek = landmarks[1];
+                            const rightCheek = landmarks[15];
+                            const faceWidth = getDistance(leftCheek, rightCheek);
+                            const chin = landmarks[8];
+                            const foreheadApprox = {
+                                x: (landmarks[18].x + landmarks[25].x) / 2,
+                                y: (landmarks[18].y + landmarks[25].y) / 2
+                            };
+                            const faceHeight = getDistance(foreheadApprox, chin);
+                            const ratio = faceHeight / faceWidth;
+
+                            if (ratio > 1.35) {
+                                faceShape = 'oval';
+                            } else if (ratio < 1.05) {
+                                faceShape = 'round';
+                            } else {
+                                faceShape = 'square';
+                            }
+
+                            document.getElementById('faceResult').innerHTML = `Detected face shape: ${faceShape}. This will be used for personalized recommendations.`;
+                        } else {
+                            faceShape = '';
+                            document.getElementById('faceResult').innerHTML = 'No face detected. Please try another image.';
+                        }
+                    } catch (error) {
+                        document.getElementById('faceResult').innerHTML = 'Error analyzing image: ' + error.message;
+                    } finally {
+                        document.getElementById('faceLoading').style.display = 'none';
+                    }
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function processEyeTest() {
+            const line = parseInt(document.getElementById('eyeScore').value);
+            if (isNaN(line) || line < 1 || line > 11) {
+                document.getElementById('eyeResult').innerHTML = 'Invalid line number. Please enter between 1 and 11.';
+                return;
+            }
+            let resultText = '';
+            let glassesType = '';
+            let searchTerm = '';
+            let buyLink = '';
+
+            if (line <= 5) {
+                resultText = 'Your vision may be poor (e.g., 20/100 or worse). You likely need corrective glasses.';
+                glassesType = 'prescription glasses';
+            } else if (line <= 7) {
+                resultText = 'Your vision is below average (e.g., 20/40 to 20/70). Consider getting glasses.';
+                glassesType = 'reading glasses';
+            } else {
+                resultText = 'Your vision seems good (e.g., 20/20 or better). No glasses needed based on this test.';
+            }
+
+            if (glassesType) {
+                searchTerm = glassesType;
+                if (faceShape) searchTerm += ` for ${faceShape} face`;
+                buyLink = `<br><button class="btn btn-success mt-2" onclick="window.open('https://www.eyebuydirect.com/search?q=${encodeURIComponent(searchTerm)}', '_blank')">Buy Now</button>`;
+            }
+
+            document.getElementById('eyeResult').innerHTML = resultText + buyLink;
+        }
+
+        function processHearingTest() {
+            const score = document.getElementById('hearScore').value.trim().toLowerCase();
+            let resultText = '';
+            let aidType = '';
+            let searchTerm = '';
+            let buyLink = '';
+
+            if (score.includes('mild') || score.includes('slight')) {
+                resultText = 'You have mild hearing loss. Consider basic hearing aids.';
+                aidType = 'in the ear hearing aid';
+            } else if (score.includes('moderate') || score.includes('severe')) {
+                resultText = 'You have moderate to severe hearing loss. Stronger hearing aids recommended.';
+                aidType = 'behind the ear hearing aid';
+            } else if (score.includes('no') || score.includes('normal')) {
+                resultText = 'Your hearing seems normal. No aids needed.';
+            } else {
+                resultText = 'Unrecognized results. Please describe as "mild hearing loss", "severe", etc.';
+            }
+
+            if (aidType) {
+                searchTerm = aidType;
+                if (faceShape) searchTerm += ` for ${faceShape} face`;
+                buyLink = `<br><button class="btn btn-success mt-2" onclick="window.open('https://www.amazon.com/hearing-aid/s?k=hearing+aid+${encodeURIComponent(searchTerm)}', '_blank')">Buy Now</button>`;
+            }
+
+            document.getElementById('hearResult').innerHTML = resultText + buyLink;
+        }
+
+        function askHeathey() {
+            const question = document.getElementById('healthQuestion').value.trim().toLowerCase();
+            let response = 'Please consult a professional doctor for accurate advice.';
+            let answer = 'Sorry, I don\'t have specific information on that topic. ' + response;
+
+            if (question === '') {
+                answer = 'Please enter a question.';
+            } else {
+                // AI-like matching: find the best match from loaded responses
+                let bestMatch = '';
+                let maxScore = 0;
+                for (const key in healthResponses) {
+                    const score = question.split(' ').filter(word => key.includes(word)).length;
+                    if (score > maxScore) {
+                        maxScore = score;
+                        bestMatch = key;
+                    }
+                }
+                if (bestMatch) {
+                    answer = healthResponses[bestMatch] + ' ' + response;
+                }
+            }
+
+            document.getElementById('healthResponse').innerHTML = 'Heathey AI: ' + answer;
+        }
+
+        function showAboutModal() {
+            var myModal = new bootstrap.Modal(document.getElementById('aboutModal'));
+            myModal.show();
+        }
+
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            const menu = document.getElementById('contextMenu');
+            menu.style.left = `${e.pageX}px`;
+            menu.style.top = `${e.pageY}px`;
+            menu.style.display = 'block';
+        });
+
+        document.addEventListener('click', function() {
+            document.getElementById('contextMenu').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
