@@ -1,0 +1,523 @@
+} else if (question.includes('headache')) {
+                answer = 'For headaches, try resting in a quiet, dark room, staying hydrated, and using over-the-counter pain relief if appropriate. ' + response;
+            } else if (question.includes('cold') || question.includes('flu')) {
+                answer = 'For a common cold or flu, get plenty of rest, drink fluids, and consider over-the-counter remedies for symptoms. ' + response;
+            } else if (question.includes('exercise') || question.includes('fitness')) {
+                answer = 'Regular exercise is beneficial for health. Aim for at least 150 minutes of moderate activity per week. ' + response;
+            } else if (question.includes('diet') || question.includes('nutrition')) {
+                answer = 'A balanced diet with fruits, vegetables, lean proteins, and whole grains is recommended. ' + response;
+            } else if (question.includes('sleep')) {
+                answer = 'Adults should aim for 7-9 hours of sleep per night for optimal health. ' + response;
+            } else if (question.includes('stress')) {
+                answer = 'To manage stress, try deep breathing, meditation, exercise, or talking to a friend. ' + response;
+            } else if (question.includes('hypertension') || question.includes('high blood pressure')) {
+                answer = 'For high blood pressure, maintain a healthy diet low in salt, exercise regularly, and monitor your blood pressure. ' + response;
+            } else if (question.includes('diabetes')) {
+                answer = 'Managing diabetes involves monitoring blood sugar, eating healthy, exercising, and taking prescribed medications. ' + response;
+            } else if (question.includes('allergy')) {
+                answer = 'For allergies, avoid triggers, use antihistamines, and consider allergy shots if severe. ' + response;
+            } else if (question.includes('back pain')) {
+                answer = 'For back pain, try gentle stretching, maintain good posture, and use heat or cold packs. ' + response;
+            } else if (question.includes('heart attack')) {
+                answer = 'The common symptoms of a heart attack include chest pain or discomfort, shortness of breath, nausea, lightheadedness, and pain in the arms, back, neck, jaw, or stomach. Seek immediate medical help if you experience these. ' + response;
+            } else if (question.includes('improve my sleep quality')) {
+                answer = 'To improve sleep quality, maintain a consistent sleep schedule, create a relaxing bedtime routine, avoid screens before bed, keep your bedroom cool and dark, and limit caffeine and heavy meals in the evening. ' + response;
+            } else if (question.includes('daily intake of water')) {
+                answer = 'The recommended daily intake of water is about 3.7 liters (125 ounces) for men and 2.7 liters (91 ounces) for women, but this can vary based on activity level, climate, and health conditions. ' + response;
+            } else if (question.includes('benefits of regular exercise')) {
+                answer = 'Regular exercise benefits include improved cardiovascular health, stronger muscles and bones, better mood through endorphin release, weight management, reduced risk of chronic diseases, and enhanced sleep quality. ' + response;
+            } else if (question.includes('high blood pressure')) {
+                answer = 'You may have high blood pressure if you experience headaches, shortness of breath, or nosebleeds, but often it\'s asymptomatic. Regular monitoring with a blood pressure cuff is the best way to know. ' + response;
+            } else if (question.includes('gut health')) {
+                answer = 'For better gut health, eat foods rich in fiber like fruits, vegetables, whole grains, and legumes; include fermented foods like yogurt, kefir, sauerkraut, and kimchi; and stay hydrated. ' + response;
+            } else if (question.includes('signs of depression')) {
+                answer = 'Signs of depression include persistent sadness, loss of interest in activities, changes in appetite or weight, sleep disturbances, fatigue, feelings of worthlessness, and thoughts of death or suicide. ' + response;
+            } else if (question.includes('reduce stress')) {
+                answer = 'To reduce stress, practice mindfulness or meditation, exercise regularly, maintain social connections, get enough sleep, prioritize tasks, and engage in hobbies or relaxation techniques like deep breathing. ' + response;
+            } else if (question.includes('importance of vaccination')) {
+                answer = 'Vaccination is important because it prevents the spread of infectious diseases, protects vulnerable populations, reduces healthcare costs, and can eradicate diseases like smallpox, saving millions of lives. ' + response;
+            } else if (question.includes('balanced diet')) {
+                answer = 'To maintain a balanced diet, include a variety of fruits, vegetables, lean proteins, whole grains, and healthy fats; control portion sizes; limit processed foods, sugar, and salt; and stay hydrated. ' + response;
+            } else if (question.includes('risks of smoking')) {
+                answer = 'Risks of smoking include lung cancer, heart disease, stroke, chronic obstructive pulmonary disease (COPD), weakened immune system, premature aging, and increased risk of other cancers. ' + response;
+            } else if (question.includes('manage diabetes')) {
+                answer = 'To manage diabetes effectively, monitor blood sugar levels, follow a balanced diet, exercise regularly, take prescribed medications, maintain a healthy weight, and have regular check-ups with your doctor. ' + response;
+            } else if (question.includes('symptoms of covid-19')) {
+                answer = 'Symptoms of COVID-19 include fever, cough, shortness of breath, fatigue, loss of taste or smell, sore throat, headache, and body aches. Variants may present differently, so testing is key. ' + response;
+            } else if (question.includes('prevent heart disease')) {
+                answer = 'To prevent heart disease, eat a healthy diet, exercise regularly, avoid smoking, maintain a healthy weight, manage stress, control blood pressure and cholesterol, and get regular health screenings. ' + response;
+            } else if (question.includes('role of fiber')) {
+                answer = 'Fiber in the diet aids digestion, prevents constipation, helps control blood sugar levels, lowers cholesterol, supports weight management, and promotes gut health. ' + response;
+            } else if (question.includes('signs of a stroke')) {
+                answer = 'Signs of a stroke include sudden numbness or weakness in the face, arm, or leg (especially on one side), confusion, trouble speaking, vision problems, dizziness, and severe headache. Remember FAST: Face, Arms, Speech, Time. ' + response;
+            } else if (question.includes('benefits of meditation')) {
+                answer = 'Benefits of meditation include reduced stress and anxiety, improved focus and concentration, better emotional health, enhanced self-awareness, lower blood pressure, and improved sleep. ' + response;
+            } else if (question.includes('boost my immune system')) {
+                answer = 'To boost your immune system, eat a nutrient-rich diet, exercise regularly, get enough sleep, manage stress, stay hydrated, avoid smoking, and maintain good hygiene. ' + response;
+            } else if (question.includes('mental health')) {
+                answer = 'Mental health refers to emotional, psychological, and social well-being. It\'s important because it affects how we think, feel, and act, influences relationships, productivity, and overall quality of life. ' + response;
+            } else if (question.includes('deal with anxiety')) {
+                answer = 'To deal with anxiety, practice deep breathing or mindfulness, exercise regularly, talk to someone, challenge negative thoughts, maintain a healthy lifestyle, and seek professional help if needed. ' + response;
+            } else if (question.includes('effects of alcohol')) {
+                answer = 'Effects of alcohol on the body include liver damage, increased risk of cancers, cardiovascular problems, weakened immune system, addiction, mental health issues, and impaired judgment leading to accidents. ' + response;
+            } else if (question.includes('choose the right sunscreen')) {
+                answer = 'Choose the right sunscreen by looking for broad-spectrum protection (UVA and UVB), SPF 30 or higher, water-resistant if needed, and ingredients suitable for your skin type (e.g., non-comedogenic for acne-prone skin). ' + response;
+            } else if (question.includes('signs of skin cancer')) {
+                answer = 'Signs of skin cancer include new growths or sores that don\'t heal, changes in existing moles (asymmetry, border irregularity, color variation, diameter >6mm, evolving), and unusual skin changes. ' + response;
+            } else if (question.includes('improve my posture')) {
+                answer = 'To improve posture, sit and stand with your shoulders back, keep your feet flat on the floor, use ergonomic furniture, strengthen core muscles through exercise, and take breaks to stretch. ' + response;
+            } else if (question.includes('importance of regular check-ups')) {
+                answer = 'Regular check-ups are important for early detection of health issues, preventive care, monitoring chronic conditions, updating vaccinations, and maintaining overall health through professional advice. ' + response;
+            } else if (question.includes('handle allergies')) {
+                answer = 'To handle allergies, identify triggers through testing, avoid exposure, use antihistamines or nasal sprays, keep your environment clean, and consider immunotherapy for long-term relief. ' + response;
+            } else if (question.includes('benefits of yoga')) {
+                answer = 'Benefits of yoga include improved flexibility, strength, and balance; reduced stress and anxiety; better posture; enhanced breathing; and potential relief from chronic pain. ' + response;
+            } else if (question.includes('prevent back pain')) {
+                answer = 'To prevent back pain, maintain good posture, exercise regularly (focusing on core strength), lift objects properly, use ergonomic furniture, maintain a healthy weight, and stretch daily. ' + response;
+            } else if (question.includes('cholesterol')) {
+                answer = 'Cholesterol is a fatty substance in the blood. To control it, eat a diet low in saturated fats and trans fats, exercise regularly, maintain a healthy weight, avoid smoking, and take medications if prescribed. ' + response;
+            } else if (question.includes('time management for health')) {
+                answer = 'To get better at time management for health, set priorities, use calendars or apps, break tasks into smaller steps, avoid multitasking, schedule breaks, and review your progress regularly. ' + response;
+            } else if (question.includes('symptoms of thyroid problems')) {
+                answer = 'Symptoms of thyroid problems include fatigue, weight changes, hair loss, mood swings, temperature sensitivity, and irregular heartbeat. Hypothyroidism and hyperthyroidism have overlapping but distinct signs. ' + response;
+            } else if (question.includes('healthy bones')) {
+                answer = 'To maintain healthy bones, consume calcium-rich foods, get enough vitamin D, exercise with weight-bearing activities, avoid smoking and excessive alcohol, and get bone density screenings as needed. ' + response;
+            } else if (question.includes('impact of caffeine')) {
+                answer = 'The impact of caffeine on health can be positive in moderation (improved alertness, metabolism boost) but negative in excess (insomnia, anxiety, dependency, digestive issues). ' + response;
+            } else if (question.includes('improve my memory')) {
+                answer = 'To improve memory, exercise regularly, get enough sleep, eat brain-healthy foods (like berries and nuts), challenge your brain with puzzles, manage stress, and stay socially active. ' + response;
+            } else if (question.includes('drinking green tea')) {
+                answer = 'Benefits of drinking green tea include antioxidants that fight inflammation, improved brain function, fat burning, lower risk of cancers, better heart health, and potential longevity. ' + response;
+            } else if (question.includes('prevent colds and flu')) {
+                answer = 'To prevent colds and flu, wash hands frequently, avoid close contact with sick people, get vaccinated, eat healthily, exercise, get enough sleep, and manage stress. ' + response;
+            } else if (question.includes('role of vitamins')) {
+                answer = 'Vitamins play roles in metabolism, immune function, bone health, energy production, and antioxidant protection. Each vitamin (A, B-complex, C, D, E, K) has specific functions. ' + response;
+            } else if (question.includes('manage chronic pain')) {
+                answer = 'To manage chronic pain, use medications as prescribed, try physical therapy, practice relaxation techniques, maintain activity levels, eat anti-inflammatory foods, and consider alternative therapies like acupuncture. ' + response;
+            } else if (question.includes('signs of dehydration')) {
+                answer = 'Signs of dehydration include dry mouth, fatigue, dizziness, dark urine, headache, and dry skin. Severe cases can lead to confusion and rapid heartbeat. ' + response;
+            } else if (question.includes('work-life balance for health')) {
+                answer = 'To achieve better work-life balance for health, set boundaries, prioritize tasks, delegate when possible, take breaks, pursue hobbies, and ensure time for rest and family. ' + response;
+            } else if (question.includes('importance of oral hygiene')) {
+                answer = 'Oral hygiene is important to prevent tooth decay, gum disease, bad breath, and systemic issues like heart disease. It involves brushing, flossing, and regular dental visits. ' + response;
+            } else if (question.includes('prevent burnout')) {
+                answer = 'To recognize and prevent burnout, watch for exhaustion, cynicism, and reduced performance; prevent by setting boundaries, taking breaks, seeking support, and maintaining self-care. ' + response;
+            } else if (question.includes('foods help with weight loss')) {
+                answer = 'Foods that help with weight loss include leafy greens, lean proteins, whole grains, fruits, nuts, and foods high in fiber and protein that promote satiety and metabolism. ' + response;
+            } else if (question.includes('build muscle')) {
+                answer = 'To build muscle effectively, engage in strength training, consume adequate protein, maintain a calorie surplus if needed, get enough rest, stay consistent, and progressively increase weights. ' + response;
+            } else if (question.includes('effects of sugar')) {
+                answer = 'Effects of sugar on health include weight gain, increased risk of diabetes, tooth decay, fatty liver, heart disease, and inflammation when consumed in excess. ' + response;
+            } else if (question.includes('improve cardiovascular health')) {
+                answer = 'To improve cardiovascular health, exercise aerobically, eat heart-healthy foods, manage weight, avoid smoking, control blood pressure and cholesterol, and reduce stress. ' + response;
+            } else if (question.includes('benefit of intermittent fasting')) {
+                answer = 'Benefits of intermittent fasting include weight loss, improved insulin sensitivity, cellular repair, better brain health, and potential longevity, but it\'s not suitable for everyone. ' + response;
+            } else if (question.includes('detect early signs of cancer')) {
+                answer = 'To detect early signs of cancer, watch for unexplained weight loss, persistent fatigue, changes in skin, lumps, chronic cough, bowel changes, and get regular screenings. ' + response;
+            } else if (question.includes('plant-based diet')) {
+                answer = 'Advantages of a plant-based diet include lower risk of heart disease, better weight management, improved digestion, reduced inflammation, and environmental benefits. ' + response;
+            } else if (question.includes('manage asthma')) {
+                answer = 'To manage asthma symptoms, avoid triggers, use inhalers as prescribed, monitor lung function, exercise appropriately, maintain a healthy weight, and get vaccinated against respiratory illnesses. ' + response;
+            } else if (question.includes('role of probiotics')) {
+                answer = 'Probiotics support gut health by balancing bacteria, aiding digestion, boosting immunity, and potentially alleviating IBS, allergies, and mental health issues. ' + response;
+            } else if (question.includes('focus and concentration')) {
+                answer = 'To enhance focus and concentration, minimize distractions, practice mindfulness, break tasks into chunks, get enough sleep, exercise, and eat brain-boosting foods. ' + response;
+            } else if (question.includes('symptoms of anemia')) {
+                answer = 'Symptoms of anemia include fatigue, pale skin, shortness of breath, dizziness, cold hands and feet, and headaches due to low red blood cells or hemoglobin. ' + response;
+            } else if (question.includes('prevent osteoporosis')) {
+                answer = 'To prevent osteoporosis, consume calcium and vitamin D, do weight-bearing exercises, avoid smoking and excessive alcohol, and get bone density tests as recommended. ' + response;
+            } else if (question.includes('screen time on eyes')) {
+                answer = 'Impact of screen time on eyes includes digital eye strain (dry eyes, blurred vision, headaches), disrupted sleep from blue light, and potential long-term damage; use the 20-20-20 rule. ' + response;
+            } else if (question.includes('healthy snacks')) {
+                answer = 'Choose healthy snacks like nuts, yogurt, fruits, veggies with hummus, whole-grain crackers, or smoothies that are nutrient-dense and low in added sugars. ' + response;
+            } else if (question.includes('benefits of walking daily')) {
+                answer = 'Benefits of walking daily include improved cardiovascular health, weight management, better mood, stronger muscles and bones, reduced risk of chronic diseases, and enhanced creativity. ' + response;
+            } else if (question.includes('cope with grief')) {
+                answer = 'To cope with grief and loss, allow yourself to feel emotions, seek support from others, maintain routines, practice self-care, and consider professional counseling if needed. ' + response;
+            } else if (question.includes('hydration during exercise')) {
+                answer = 'Hydration during exercise is important to maintain performance, regulate body temperature, prevent cramps and fatigue, and support recovery; drink water before, during, and after. ' + response;
+            } else if (question.includes('improve flexibility')) {
+                answer = 'To improve flexibility, incorporate stretching routines like yoga or Pilates, hold stretches for 20-30 seconds, warm up first, and be consistent without forcing. ' + response;
+            } else if (question.includes('signs of a healthy relationship')) {
+                answer = 'Signs of a healthy relationship include mutual respect, trust, open communication, support, equality, and the ability to resolve conflicts constructively. ' + response;
+            } else if (question.includes('quit bad habits')) {
+                answer = 'To quit bad habits, identify triggers, set clear goals, replace with positive behaviors, track progress, seek support, and be patient with setbacks. ' + response;
+            } else if (question.includes('role of omega-3')) {
+                answer = 'Omega-3 fatty acids support heart health, reduce inflammation, aid brain function, improve eye health, and may alleviate depression and anxiety. ' + response;
+            } else if (question.includes('prevent kidney stones')) {
+                answer = 'To prevent kidney stones, stay hydrated, limit salt and animal proteins, eat calcium-rich foods, avoid oxalate-heavy foods if prone, and maintain a healthy weight. ' + response;
+            } else if (question.includes('effects of poor sleep')) {
+                answer = 'Effects of poor sleep include impaired cognition, mood disturbances, weakened immunity, weight gain, increased risk of chronic diseases, and reduced productivity. ' + response;
+            } else if (question.includes('maintain eye health')) {
+                answer = 'To maintain eye health, get regular exams, protect from UV rays, eat nutrient-rich foods (like carrots and leafy greens), rest eyes from screens, and avoid smoking. ' + response;
+            } else if (question.includes('mindfulness')) {
+                answer = 'Mindfulness is being present in the moment without judgment; practice through meditation, deep breathing, or mindful activities like walking or eating. ' + response;
+            } else if (question.includes('seasonal affective disorder')) {
+                answer = 'To handle seasonal affective disorder, use light therapy, exercise outdoors, maintain a routine, eat healthily, seek social support, and consider medication or therapy. ' + response;
+            } else if (question.includes('foods for brain health')) {
+                answer = 'Foods good for brain health include fatty fish, berries, nuts, whole grains, dark chocolate, avocados, and leafy greens rich in omega-3s, antioxidants, and vitamins. ' + response;
+            } else if (question.includes('prevent hair loss')) {
+                answer = 'To prevent hair loss, maintain a balanced diet, avoid tight hairstyles, manage stress, use gentle hair products, treat underlying conditions, and avoid excessive heat styling. ' + response;
+            } else if (question.includes('benefit of strength training')) {
+                answer = 'Benefits of strength training include increased muscle mass, stronger bones, better metabolism, improved posture, reduced injury risk, and enhanced mental health. ' + response;
+            } else if (question.includes('manage arthritis pain')) {
+                answer = 'To manage arthritis pain, stay active with low-impact exercises, maintain a healthy weight, use hot/cold therapy, take medications, and consider physical therapy. ' + response;
+            } else if (question.includes('symptoms of food poisoning')) {
+                answer = 'Symptoms of food poisoning include nausea, vomiting, diarrhea, abdominal cramps, fever, and headache, usually appearing within hours of eating contaminated food. ' + response;
+            } else if (question.includes('improve digestion')) {
+                answer = 'To improve digestion, eat fiber-rich foods, stay hydrated, exercise regularly, chew food thoroughly, manage stress, and avoid overeating or trigger foods. ' + response;
+            } else if (question.includes('social connections for health')) {
+                answer = 'Social connections are important for health as they reduce stress, boost immunity, improve mental health, increase longevity, and provide emotional support. ' + response;
+            } else if (question.includes('prevent migraines')) {
+                answer = 'To prevent migraines, identify triggers (like stress or foods), maintain regular sleep and meals, exercise, manage stress, and use preventive medications if needed. ' + response;
+            } else if (question.includes('benefits of herbal teas')) {
+                answer = 'Benefits of herbal teas include antioxidants, relaxation (chamomile), digestion aid (peppermint), immune boost (echinacea), and hydration without calories. ' + response;
+            } else if (question.includes('recognize heatstroke')) {
+                answer = 'To recognize heatstroke, look for high body temperature, confusion, hot dry skin, rapid pulse, headache, and unconsciousness; it\'s a medical emergency. ' + response;
+            } else if (question.includes('role of antioxidants')) {
+                answer = 'Antioxidants protect cells from damage, reduce inflammation, support immune function, and may lower risk of chronic diseases like cancer and heart disease. ' + response;
+            } else if (question.includes('track my fitness progress')) {
+                answer = 'To track fitness progress, use apps or journals to log workouts, measurements, weights lifted, times, and how you feel; set milestones and adjust goals. ' + response;
+            } else if (question.includes('signs of vitamin deficiency')) {
+                answer = 'Signs of vitamin deficiency vary: e.g., vitamin D (fatigue, bone pain), C (bleeding gums), B12 (numbness, anemia); blood tests confirm. ' + response;
+            } else if (question.includes('maintain healthy skin')) {
+                answer = 'To maintain healthy skin, cleanse gently, moisturize, use sunscreen, eat antioxidants, stay hydrated, get enough sleep, and avoid smoking. ' + response;
+            } else if (question.includes('impact of pollution')) {
+                answer = 'Impact of pollution on health includes respiratory issues, heart disease, cancer, skin problems, neurological effects, and weakened immunity. ' + response;
+            } else if (question.includes('prepare for a doctor\'s visit')) {
+                answer = 'To prepare for a doctor\'s visit, list symptoms and questions, bring medications and history, be honest, take notes, and follow up on recommendations. ' + response;
+            } else if (question.includes('benefits of cycling')) {
+                answer = 'Benefits of cycling include cardiovascular fitness, muscle strengthening, weight loss, low-impact on joints, stress reduction, and environmental friendliness. ' + response;
+            } else if (question.includes('deal with insomnia')) {
+                answer = 'To deal with insomnia, establish a sleep routine, avoid caffeine and screens before bed, create a comfortable environment, exercise earlier, and consider cognitive behavioral therapy. ' + response;
+            } else if (question.includes('importance of foot care')) {
+                answer = 'Foot care is important to prevent infections, injuries, and complications like in diabetes; involves cleaning, moisturizing, proper footwear, and regular checks. ' + response;
+            } else if (question.includes('prevent sports injuries')) {
+                answer = 'To prevent sports injuries, warm up and cool down, use proper equipment, build strength and flexibility, listen to your body, and rest adequately. ' + response;
+            } else if (question.includes('foods lower blood pressure')) {
+                answer = 'Foods that lower blood pressure include leafy greens, berries, beets, oats, bananas, fish, and nuts rich in potassium, magnesium, and fiber. ' + response;
+            } else if (question.includes('boost energy levels')) {
+                answer = 'To boost energy levels naturally, eat balanced meals, stay hydrated, exercise, get sunlight, manage stress, sleep well, and avoid sugar crashes. ' + response;
+            } else if (question.includes('symptoms of lyme disease')) {
+                answer = 'Symptoms of Lyme disease include bull\'s-eye rash, fever, chills, fatigue, joint pain, and neurological issues if untreated. ' + response;
+            } else if (question.includes('healthy liver')) {
+                answer = 'To maintain a healthy liver, limit alcohol, eat a balanced diet, exercise, avoid toxins, get vaccinated for hepatitis, and monitor medications. ' + response;
+            } else if (question.includes('deep breathing exercises')) {
+                answer = 'Benefits of deep breathing exercises include reduced stress, lower blood pressure, improved focus, better oxygenation, and enhanced relaxation. ' + response;
+            } else if (question.includes('recognize addiction signs')) {
+                answer = 'To recognize addiction signs, look for loss of control, continued use despite harm, tolerance, withdrawal, and neglect of responsibilities. ' + response;
+            } else if (question.includes('effects of processed foods')) {
+                answer = 'Effects of processed foods include weight gain, high blood pressure, diabetes risk, inflammation, and nutrient deficiencies due to added sugars, fats, and preservatives. ' + response;
+            } else if (question.includes('improve joint health')) {
+                answer = 'To improve joint health, maintain a healthy weight, exercise low-impact activities, eat anti-inflammatory foods, stretch, and use supplements like glucosamine if advised. ' + response;
+            } else if (question.includes('role of sleep in weight management')) {
+                answer = 'Sleep plays a role in weight management by regulating hunger hormones (ghrelin and leptin), improving metabolism, and supporting better food choices and energy for exercise. ' + response;
+            } else if (question.includes('glycogen') || question.includes('body stores glucose')) {
+                answer = 'The common name for glycogen, the way the body stores glucose? Sugar. ' + response;
+            } else if (question.includes('square feet') || question.includes('adult human’s skin')) {
+                answer = 'How many square feet is the average adult human’s skin? 19 feet. ' + response;
+            } else if (question.includes('largest artery')) {
+                answer = 'What is the largest artery in the body? The aorta. ' + response;
+            } else if (question.includes('liver a part of')) {
+                answer = 'What body system is the liver a part of? Digestive System. ' + response;
+            } else if (question.includes('cartilage link')) {
+                answer = 'What does cartilage link? Joints and bones. ' + response;
+            } else if (question.includes('blood cells fight infections')) {
+                answer = 'What type of blood cells fight infections and diseases? White blood cells. ' + response;
+            } else if (question.includes('stores bile')) {
+                answer = 'What internal organ stores bile? The gallbladder. ' + response;
+            } else if (question.includes('heart beat over the course of an average human lifespan')) {
+                answer = 'How many times does a heart beat over the course of an average human lifespan? Over three billion times. ' + response;
+            } else if (question.includes('babies start shedding tears')) {
+                answer = 'After what age do babies start shedding tears? One month. ' + response;
+            } else if (question.includes('hair grow')) {
+                answer = 'About how many inches a year does hair grow? Six inches. ' + response;
+            } else if (question.includes('skin the thinnest')) {
+                answer = 'Where on your body is your skin the thinnest? Eyelid. ' + response;
+            } else if (question.includes('breathe and swallow')) {
+                answer = 'Is it possible to breathe and swallow at the same time? No. ' + response;
+            } else if (question.includes('fingers to move')) {
+                answer = 'What causes your fingers to move? Tendons in your forearm. ' + response;
+            } else if (question.includes('common blood type')) {
+                answer = 'What is the most common blood type? O+. ' + response;
+            } else if (question.includes('highest life expectancy')) {
+                answer = 'What country has the highest life expectancy in the world? Japan. ' + response;
+            } else if (question.includes('pigment responsible for giving skin and hair color')) {
+                answer = 'What is the name of the pigment responsible for giving skin and hair color? Melanin. ' + response;
+            } else if (question.includes('universal plasma donor')) {
+                answer = 'What blood type is the universal plasma donor? AB. ' + response;
+            } else if (question.includes('highest concentration of vitamin c')) {
+                answer = 'What fruit has the highest concentration of Vitamin C per serving? Guava. ' + response;
+            } else if (question.includes('chambers does the heart have')) {
+                answer = 'How many chambers does the heart have? Four. ' + response;
+            } else if (question.includes('regulating basic bodily functions')) {
+                answer = 'What part of the brain is responsible for regulating basic bodily functions like heartbeat and breathing? Medulla Oblongata. ' + response;
+            } else if (question.includes('produces insulin')) {
+                answer = 'What organ produces insulin? Pancreas. ' + response;
+            } else if (question.includes('sideways curvature of the spine')) {
+                answer = 'What is the medical term for the sideways curvature of the spine that most often occurs in young adults during a growth spurt? Scoliosis. ' + response;
+            } else if (question.includes('smallest school in harvard')) {
+                answer = 'The smallest school in Harvard awards degrees to students in what field of medicine? Dentistry. ' + response;
+            } else if (question.includes('varicella-zoster virus')) {
+                answer = 'What is the common name for the disease caused by the varicella-zoster virus? Chicken Pox. ' + response;
+            } else if (question.includes('pain relievers that includes ibuprofen')) {
+                answer = 'What is the name for the class of pain relievers that includes ibuprofen and naproxen? NSAIDS. ' + response;
+            } else if (question.includes('urge to move one\'s legs')) {
+                answer = 'What is the three-word name that is used to refer to the disorder in which there\'s a strong urge to move one\'s legs? Restless-Leg Syndrome. ' + response;
+            } else if (question.includes('hyperhidrosis')) {
+                answer = 'Hyperhidrosis is the medical term for excessive what? Sweating. ' + response;
+            } else if (question.includes('azoles')) {
+                answer = 'Azoles, like clotrimazole, ketoconazole, and voriconazoles, are compounds typically used to combat what general type of infection? Fungal. ' + response;
+            } else if (question.includes('surgery that removes the gall bladder')) {
+                answer = 'What is the name for the surgery that removes the gall bladder? Cholecystectomy. ' + response;
+            } else if (question.includes('disease that is common or constantly present')) {
+                answer = 'What term is used to describe a disease that is common or constantly present in a given population? Endemic. ' + response;
+            } else if (question.includes('sepsis')) {
+                answer = 'What is sepsis an infection of? Blood. ' + response;
+            } else if (question.includes('anti-malarial medication')) {
+                answer = 'What anti-malarial medication is extracted from the bark of the cinchona tree? Quinine. ' + response;
+            } else if (question.includes('bolus')) {
+                answer = 'What is the five-letter word that is used to refer to a dosage of fast-acting insulin that is given via the continuously-attached "pump" device worn by some diabetics? Bolus. ' + response;
+            } else if (question.includes('pet scan')) {
+                answer = 'During a clinical assessment, a brain imaging scan called a PET scan may be administered. What does PET stand for? Positron Emission Tomography. ' + response;
+            } else if (question.includes('warfarin')) {
+                answer = 'Warfarin belongs to what class of blood-thinning medications? Anticoagulants. ' + response;
+            } else if (question.includes('dialysis')) {
+                answer = 'What is the process used to treat kidneys by removing excess water, solutes, and toxins called? Dialysis. ' + response;
+            } else if (question.includes('basal cell carcinoma')) {
+                answer = 'In the US, basal cell carcinoma is the most common form of what type of cancer? Skin Cancer. ' + response;
+            } else if (question.includes('nephrologist')) {
+                answer = 'A nephrologist specializes in the treatment of which organ? Kidneys. ' + response;
+            } else if (question.includes('mmr vaccine')) {
+                answer = 'The MMR vaccine prevents which three diseases? Measles, mumps, and Rubella. ' + response;
+            } else if (question.includes('q.i.d.')) {
+                answer = 'How many times a day should you take a medication if your prescription reads “q.i.d.”? Four. ' + response;
+            } else if (question.includes('vicks nyquil')) {
+                answer = 'What active ingredient is included in Vicks Nyquil? Acetaminophen. ' + response;
+            } else if (question.includes('disease do 6 million americans not know')) {
+                answer = 'What disease do 6 million Americans not know that they have? Diabetes. ' + response;
+            } else if (question.includes('over-the-counter acetaminophen')) {
+                answer = 'What brand of over-the-counter acetaminophen was first introduced in 1955? Tylenol. ' + response;
+            } else if (question.includes('ancient greek god of medicine')) {
+                answer = 'Known for his serpent-entwined staff, who was the ancient Greek god of medicine? Ascelpius. ' + response;
+            } else if (question.includes('german psychologist')) {
+                answer = 'What early German psychologist was the first to refer to his profession as psychology, as opposed to biology? William Wundt. ' + response;
+            } else if (question.includes('outbreak resulted in the deaths of approximately 9% of philadelphia')) {
+                answer = 'What outbreak resulted in the deaths of approximately 9% of Philadelphia’s population in 1793? The Yellow Fever. ' + response;
+            } else if (question.includes('disease was deemed eradicated in 1980')) {
+                answer = 'What disease was deemed eradicated in 1980 after a worldwide vaccination program? Smallpox. ' + response;
+            } else if (question.includes('wilma rudolph')) {
+                answer = 'Wilma Rudolph, an American Track and Field medalist from the 1956 and 1960 Olympics, had a childhood plagued by what disease? Polio. ' + response;
+            } else if (question.includes('thomas hodgkin')) {
+                answer = 'Thomas Hodgkin, an 1800s physician, is most commonly associated with what type of cancer today? Lymphoma. ' + response;
+            } else if (question.includes('fda approve the vaccine that treats chicken pox')) {
+                answer = 'In what year did the FDA approve the vaccine that treats Chicken Pox? 1995. ' + response;
+            } else if (question.includes('gray’s anatomy first published')) {
+                answer = 'In what year was Gray’s Anatomy first published? 1858. ' + response;
+            } else if (question.includes('stethoscopes originally made')) {
+                answer = 'What material were stethoscopes originally made out of? Wood. ' + response;
+            } else if (question.includes('psychoactive street drug')) {
+                answer = 'What psychoactive street drug was used as an enhancement for psychotherapy as late as the 1970s? MDMA. ' + response;
+            } else if (question.includes('first recorded reference to the brain')) {
+                answer = 'In which ancient empire was the first recorded reference to the brain found? Egypt. ' + response;
+            } else if (question.includes('earkeckers')) {
+                answer = '“Earkeckers” is an outdated term for what part of the body? Tonsils. ' + response;
+            } else if (question.includes('founder of genetics')) {
+                answer = 'Who is widely credited as the founder of genetics? Gregor Mendel. ' + response;
+            } else if (question.includes('florence nightingale')) {
+                answer = 'In what year was Florence Nightingale, widely considered the founder of modern nursing, born? 1820. ' + response;
+            } else if (question.includes('widely used vaccine in the history of medicine')) {
+                answer = 'The most widely used vaccine in the history of medicine is mostly used to treat which infection of the lungs? Tuberculosis. ' + response;
+            } else if (question.includes('body part was first x-rayed')) {
+                answer = 'What body part was first x-rayed in 1895? Hands. ' + response;
+            } else if (question.includes('street drug was briefly marketed as a cough suppressant')) {
+                answer = 'What street drug was briefly marketed as a over-the-counter cough suppressant in 1898 as it was not believed to be addictive? Heroin. ' + response;
+            } else if (question.includes('first heart transplant')) {
+                answer = 'The first heart transplant, which occurred in the 1960s, took place in what country? South Africa. ' + response;
+            } else if (question.includes('california become the first state to legalize medical marijuana')) {
+                answer = 'In what year did California become the first state to legalize medical marijuana usage? 1996. ' + response;
+            } else if (question.includes('discovered the world’s first antibiotic')) {
+                answer = 'Who discovered the world’s first antibiotic in 1923? Alexander Fleming. ' + response;
+            } else if (question.includes('cell phone kill me')) {
+                answer = 'It seems unlikely. But if you use your mobile phone a lot, consider getting an earpiece or putting your caller on speaker so you can hold the phone away from your head. The biggest study yet, in which Danish researchers tracked 420,000 cell phone users for up to 21 years, found no cancer risk, but much of the data was collected when cell phones were more of a novelty than a primary form of communication. In a smaller recent Israeli study of 1,726 people, heavy cell phone use raised the risk for salivary gland tumors 50 percent on the side on which the subjects usually held the phone (though the risk overall is still vanishingly small). The biggest threat, however, has nothing to do with cancer: Driving while talking on a cell phone puts you in the same league as a drunk driver. You\'re four to five times more likely to have an accident. ' + response;
+            } else if (question.includes('vitamin d save my life')) {
+                answer = 'A growing body of evidence strongly suggests that vitamin D in high doses not only helps keep bones strong but also reduces the risk of colon, ovarian, and breast cancers, and diseases such as diabetes and multiple sclerosis. And many of us don\'t get enough because of a lack of exposure to sunlight (the sun triggers D\'s production in the skin) or diets that omit good sources (fatty fish such as salmon, mackerel, and tuna, and fortified milk and cereal). While the official daily dose for people age 51 to 70 is 400 IUs, most experts agree that they should aim for 800 to 1,000 IUs of supplemental D a day. But if you\'re under 50 and you consume the recommended 200 IUs (the equivalent of two glasses of milk daily) and get 10 to 15 minutes of sun exposure—without sunscreen—a day, a 400 IU supplement should do you fine. ' + response;
+            } else if (question.includes('cleanse your body by fasting')) {
+                answer = 'As long as you are in good health, a brief liquid fast or cleanse is fine. But don\'t expect wonders—other than a sense of personal accomplishment, perhaps: Any physiologist will tell you that properly functioning lungs, liver, kidneys, and intestines do a fantastic job of keeping your body free of impurities without the help of fasting. If you do pursue a fast, always make sure to drink enough fluids to avoid dehydration. ' + response;
+            } else if (question.includes('trust my tap water')) {
+                answer = 'Sure. Unless you\'re on a private well, tap water comes from municipal treatment plants that are carefully monitored and better regulated than bottled water. (Some popular brands like Aquafina and Dasani are just that: tap water.) Very strict federal rules now require extensive filtering of the water supply, but minuscule amounts of chemicals and pharmaceuticals may still turn up. If you want to ensure you\'re drinking the purest water possible, consider adding a filter to your tap. For information on filters, go to NRDC.org/waterfilters. ' + response;
+            } else if (question.includes('microwave giving me cancer')) {
+                answer = 'No. Microwaving doesn\'t alter food in any way that could make you sick. All a microwave does is spur the water molecules in your food to move, and the friction of those molecules heats up your meal. The ovens do generate a tiny magnetic field, but there\'s very little evidence that such a field poses a problem for humans. What\'s more, there\'s an easy way to avoid any potential harm—step back when the oven is on. ' + response;
+            } else if (question.includes('contagious when i have the flu or a cold')) {
+                answer = 'As long as you have symptoms. Your ability to spread these viruses remains until the last sniffle, says Bill Schaffner, MD, a physician and infectious disease expert at Vanderbilt Medical Center in Nashville. And you\'re contagious 24 hours before you first show symptoms. ' + response;
+            } else if (question.includes('48 hours after starting antibiotics')) {
+                answer = 'Yes, in most cases, and provided you really had a bacterial infection, like strep throat, and not a viral one—against which antibiotics are useless, says Schaffner. But the bug may come back if you quit the drugs early; also, if you fail to complete the full prescription, the leftover bacteria could develop antibiotic resistance and the drugs might not work next time. ' + response;
+            } else if (question.includes('bird flu')) {
+                answer = 'Yes. As of this writing, influenza A virus subtype H5N1—bird flu—has not made an appearance in the United States. But it still lurks in many parts of the world, particularly Asia and parts of Africa. What makes the virus so scary is its deadliness—it kills 50 to 80 percent of the people it infects. Currently, the virus is primarily passed from an infected bird to a human. "You\'re not going to get it because you\'re on the plane with someone who has it," says Richard V. Lee, MD, a physician and infectious disease expert at the State University of New York at Buffalo. Nor does cooked chicken pose a risk, since heat kills the virus. But influenza viruses can evolve rapidly, and despite some promising vaccine developments, if the H5N1 virus develops an ability to spread rapidly between people anytime soon, it could spell disaster. ' + response;
+            } else if (question.includes('teeth professionally cleaned')) {
+                answer = 'The answer depends on your habits at home, says periodontist Sally Cram, consumer adviser for the American Dental Association. Studies show it takes about three months for bacteria to take hold in the gums. Daily flossers who brush twice a day can get by with twice a year professional cleanings, but those who let things slide or have prior gum disease may need visits every two or three months. Diabetes, autoimmune diseases, and medications like antidepressants that dry out your mouth can also speed bacterial buildup and create a need for more cleanings, says Cram. ' + response;
+            } else if (question.includes('plastic bags from my dry cleaner')) {
+                answer = 'The plastic bag isn\'t dangerous, but the chemical residues it traps in your clothing might be, says Sarah Janssen, MD, an expert with the Natural Resources Defense Council, an environmental advocacy group. That smell your dry-cleaned clothes give off is perchloroethylene (perc), a chemical the state of California classifies as a potential carcinogen. Reduce your exposure by removing the bag and hanging the clothes outside—or in your bathroom with the window open or the fan on—to air. Don\'t leave bagged clothes in a hot car: The heat accelerates perc\'s release, and could make the air in your car toxic, says Janssen. ' + response;
+            } else if (question.includes('birth control pills that eliminate your periods')) {
+                answer = 'Yes. There\'s no evidence that suppressing your period is dangerous. The periods you get on the regular Pill aren\'t real anyway, because the hormones prevent your uterus from building up the thick lining that\'s normally shed during menstruation. One reason the Pill\'s inventors included the off week was to mimic the normal menstrual cycle in the hope that the Pope might bless the Pill. Needless to say, he didn\'t. ' + response;
+            } else if (question.includes('staring at a computer')) {
+                answer = 'No. A marathon computer session is like a long hike. "If you walk long enough, your legs will be tired, but that doesn\'t mean you\'ve permanently damaged them," says ophthalmologist John C. Hagan III, MD, a spokesperson for the American Academy of Ophthalmology. Focusing on a computer screen—a fixed distance—will leave your eye muscles tired and stiff, he says, plus you tend to blink less. The antidote: Look up from the computer screen every so often and focus on something 20 or more feet away, then blink briskly four or five times. ' + response;
+            } else if (question.includes('diet soda kill me')) {
+                answer = 'If you mean, could it give you cancer, the answer is probably not. Diabetes? Unlikely. Osteoporosis? Maybe. And it seems possible that the drinks are related to weight gain. Recent research suggests that having several diet drinks a day can weaken bones and is linked to weight gain, though the causes are very murky. Respected nutritionist Marion Nestle, PhD, author of What to Eat and Food Politics, has this to say: "I so prefer real sugar. The other sweeteners are all chemical and all artificial, and I\'m not aware of much real evidence that they help people cut calories." A study published this year indicates just the opposite: In rodents, at least, there\'s evidence that the substitutes interfere with the body\'s ability to register how many calories it\'s taking in—which could lead to overeating. ' + response;
+            } else if (question.includes('flu shots')) {
+                answer = 'Yes, absolutely. Although the CDC does not say everyone needs a flu shot, it does recommend them for enough people (due to health risks, age-related concerns, and other factors) that about 82 percent of the total U.S. population qualifies. Even if you don\'t, you\'d be best off getting in line. According to flu expert Trish Perl, MD, a professor of medicine at Johns Hopkins University, "it usually prevents you from catching the flu, but even if you do get sick, your symptoms won\'t be as severe." More important, it prevents you from spreading the flu to others who might be at risk for developing a fatal case. (About 25 percent of people who have the flu don\'t even realize it.) ' + response;
+            } else if (question.includes('stave off alzheimer\'s')) {
+                answer = 'Sadly, no. The closest scientists have come was a vaccine against synapse-destroying beta-amyloid deposits, a hallmark of the disease. But human trials were stopped abruptly a few years ago when some volunteers developed severe brain inflammation. Still, studies suggest that you can take steps to help your brain—from staying intellectually, socially, and physically active (exercise raises levels of a brain chemical called BDNF that encourages the growth of new brain cells) to eating more fruit, veggies, and salmon. ' + response;
+            } else if (question.includes('eating tuna, swordfish, and salmon')) {
+                answer = 'Swordfish, yes. But for most other fish, the benefits of wise consumption outweigh the risks, according to a landmark study in the Journal of the American Medical Association. Swordfish contains high levels of mercury; canned albacore (white) tuna has more mercury than canned light tuna, which is why the Environmental Protection Agency recommends that women of childbearing age eat no more than six ounces of albacore per week. Though salmon does not pose a mercury risk, it may have PCBs (industrial compounds). Limit servings of farmed salmon to one a month; enjoy wild-caught four or more times a month. To learn which seafood is lowest in contaminants and isn\'t overfished, visit OceansAlive.org. ' + response;
+            } else if (question.includes('see a doctor about')) {
+                answer = '...a backache? See a physician immediately if the back pain keeps you from sleeping; you also have numbness in your leg, foot, groin, or rectal area; you also have fever, chills, nausea, vomiting, stomachache, weakness, or sweating; you\'ve also lost control of urination or bowel movements; you\'ve been in a car crash or other accident; you have a history of cancer. Otherwise, try over-the-counter pain relievers, alternating heating pads with ice packs, and a day or two of rest followed by gentle exercise for two to three weeks before making an appointment. ...heartburn? You\'ll want to call after two weeks of a burning sensation in the middle of your chest or abdomen—or sooner if you have other signs of gastroesophageal reflux disease such as a dry cough or trouble swallowing despite using an over-the-counter antacid or reflux medicine. ...a fever? Go to the emergency room if you also experience stomach pain, nausea, or vomiting (it could be appendicitis); severe headache, neck stiffness, drowsiness, vomiting, and light sensitivity (possibly meningitis); you feel faint and confused after spending time outdoors in hot weather (signs of heatstroke). Call your doctor right away if you have one or more of the following: a fever above 103 degrees; bloody diarrhea; a red rash or red streaks on your arm or leg; an earache; painful urination; sore throat; muscle and joint pain; back pain. If two days of an over-the-counter fever reducer (like aspirin or ibuprofen) doesn\'t bring down your temperature—or if you\'re also vomiting—it\'s time for professional help. Call in two weeks if you have a persistent low-grade (101 degrees or less) fever that doesn\'t go away. ...a sore throat? See a doctor immediately if you have one or more of the following: a fever of 101 degrees or higher; dehydration; difficulty swallowing or breathing; tender or swollen lymph glands in your neck; pus in the back of your throat; a red rash that feels rough, with increased redness in the skin folds; a persistent cough. Call after three days if you also have body aches, headache, cough, or runny nose. ...abdominal pain, diarrhea, vomiting? You\'ll need emergency treatment if you have one or more of the following: a fever of 102 degrees; tender abdomen; bloody diarrhea or black stools; sudden sharp pain that starts under your ribs and moves to your groin; backache; bloating and severe cramping; or you\'re pregnant and have abdominal or pelvic pain or vaginal bleeding. Call your physician right away if you\'re in constant pain and have vaginal discharge or a burning feeling when you urinate; traveler\'s diarrhea that doesn\'t respond to over-the-counter medicines; or are taking a new medicine that seems to be causing diarrhea. ...muscle and joint pain? Get your internist or general practitioner on the phone immediately if you have a fever; red or swollen skin over the muscle; severe pain that has no obvious cause; a tick bite or rash; or if you recently started a new prescription or changed doses of a drug you\'ve been taking. Otherwise, give rest and pain relievers three days to work before making a call. ' + response;
+            } else if (question.includes('liposuction')) {
+                answer = 'Yes—but only to resculpt stubborn bulges after weight loss. It won\'t get rid of cellulite, and it\'s a bust for keeping you slim: In one study from the University of Texas Southwestern Medical Center, 43 percent of people who\'d had lipo put the fat back on, mostly because they didn\'t adopt a healthy diet or exercise. ' + response;
+            } else if (question.includes('stay cancer-free')) {
+                answer = 'There isn\'t one. The ugly truth is, some people who do everything right get cancer anyway. Still, bad habits worsen your odds. Tobacco use causes about one in three cancers overall, and diet, inactivity, and obesity contribute to another third of cases, says Peter Greenwald, MD, PhD, director of the division of cancer prevention at the National Cancer Institute. ' + response;
+            } else if (question.includes('lift weights') || question.includes('yoga enough')) {
+                answer = 'Yoga can build muscle, exercise physiologists say, as long as your muscles burn a little; poses like downward dog require you to lift and shift your own body weight. It\'s less clear whether yoga can build or maintain bone density—a benefit weight lifting confers—simply because it hasn\'t been studied. If your current yoga sessions don\'t feel challenging, or if your bones are thinning, consider adding strength training to the weight-bearing exercise (walking, for example) that you\'re already doing for your bones. (You are already doing it, right?) ' + response;
+            } else if (question.includes('self-tanners cause cancer')) {
+                answer = 'Nope. The faux glow is delivered by dihydroxyacetone (DHA), which only interacts with dead surface cells on the skin to create a color change that simulates a tan for five to seven days. However: "Although self-tanners do not cause cancer, they generally don\'t give any protection against UVB or UVA, so it\'s still important to use sunscreen to prevent aging, sun damage, and skin cancer," says Oanh Lauring, MD, a dermatologist at Mercy Medical Center in Baltimore. ' + response;
+            } else if (question.includes('skip exercise when i have a cold')) {
+                answer = 'Not necessarily. "If the symptoms are above the neck, like a runny or stuffy nose, sneezing, or sore throat, exercising should pose little or no risk," says Cedric X. Bryant, PhD, chief science officer for the American Council on Exercise in San Diego. "In fact, mild to moderate exercise has been shown to help boost immune system function." But if your symptoms include body aches, chest congestion or tightness, and a hacking cough, workouts should be postponed. ' + response;
+            } else if (question.includes('shingles vaccine')) {
+                answer = 'Not yet. "The vaccine has been studied only in relatively healthy people over age 60," says Stephen K. Tyring, MD, PhD, clinical professor of dermatology at the University of Texas Medical School at Houston. "There\'s no problem with healthy people under 60 receiving the vaccine, but insurance companies won\'t pay for the shot, which usually runs at least $150." People with weak immunity—those with cancer or HIV—should avoid this vaccine. A recent study Tyring co-authored suggests that if a blood relative has had shingles, you could be at higher risk and may want to consider the vaccine. ' + response;
+            } else if (question.includes('aluminum-based antiperspirants')) {
+                answer = 'There\'s no evidence, according to the National Cancer Institute, though you wouldn\'t know it from the persistent Internet and e-mail rumors. Aluminum-based compounds such as those in antiperspirants can be absorbed by the skin and may behave like cancer-promoting estrogen in the body. But no one can say whether antiperspirants lead to a buildup of aluminum in breast tissue, or if that would trigger the breast cell changes that may lead to cancer. Aluminum-free alternatives are out there, though their effectiveness is questionable. ' + response;
+            } else if (question.includes('superfood')) {
+                answer = 'Sorry; there isn\'t one. Forget the latest news on supposedly magical treats like blueberries, chocolate, emu meat, or red wine. Researchers often get their amazing results by isolating a substance in the food and then injecting it into cells in a petri dish or administering amounts to rats that far exceed what you could realistically get in your diet. Yes, these foods are healthy—but only as part of an overall sound diet. Don\'t let that news dismay you; it should be freeing. You don\'t have to track the latest food craze—just eat right and in sensible portions. Phew; that sure makes things easier. ' + response;
+            } else if (question.includes('in my 50s') || question.includes('serious about my health')) {
+                answer = 'Right now would be a good start. Longevity researchers study a phenomenon known as future time perspective. The more time we perceive we have, the more we’re able to ignore the fact that we’re overweight, may have elevated inflammation levels and don’t know what our basic health numbers look like. If you haven’t had a checkup in the past year, start there. Get your blood pressure, blood glucose and cholesterol numbers checked, and make sure that keeping them under control is a top priority. ' + response;
+            } else if (question.includes('high cholesterol')) {
+                answer = 'No. High cholesterol, particularly LDL, or “bad” cholesterol, is still a marker for a higher risk for heart disease. And preliminary results from a 2022 study of more than 750 older adults found a link between high cholesterol levels and elevated dementia risk. So, stick to those statins, if that’s what your physician suggests. ' + response;
+            } else if (question.includes('healthy living stuff really help')) {
+                answer = 'It’s not just about how long you live; it’s about how well you live. A 2019 BMJ (British Medical Journal ) study that had followed more than 110,000 people since the 1980s found that those who adopted healthy lifestyle habits such as controlling their weight, exercising and not smoking lived disease-free for far longer after age 50 (30-plus years) than people who didn’t adopt those habits (23 years). Science still hasn’t explained Keith Richards, however. ' + response;
+            } else if (question.includes('best diet')) {
+                answer = 'Healthy-food rule number one: no fad diets, no weird plans, just common sense. A recent analysis of 1,995 people showed that those who ate greater amounts of fruits, vegetables, nuts, legumes, whole grains and low-fat dairy — and lesser amounts of red and processed meats, sugar-sweetened beverages and sodium — slowed their aging at a cellular level. “Foods like sugar and highly processed flour can trigger inflammation in your body and are usually calorie dense as well,” explains registered dietitian Maryann Walsh, a certified diabetes educator and the founder of Walsh Nutrition Consulting. ' + response;
+            } else if (question.includes('calories down') || question.includes('fasting')) {
+                answer = 'Multiple studies have shown that long-term calorie restriction can reduce metabolic function and slow the cellular aging process — in rats! Human trials have been limited. A 2019 study in The Lancet showed that people who reduced their calorie intake by 12 percent had lower blood pressure and cholesterol, increased insulin sensitivity and lower inflammation. The problem? The study covered only 238 people over two years, and the oldest among them were 50. Plus, calorie-restriction diets can cause muscle loss, which in turn can result in rebound weight gain and other unhealthy outcomes. Women feel worse about their health than men do. Across all age groups, 70 percent of men rated their mental health as very good or excellent, compared with 54 percent of women. Females worry more about joint pain and sleeping problems, too. ' + response;
+            } else if (question.includes('skipping breakfast')) {
+                answer = 'Bad for you. Breakfast is important for a number of reasons, and one of the big ones is fiber intake. A 2021 Journal of the American Board of Family Medicine study found that breakfast eaters who ate more than 25 grams of fiber a day had a 21 percent lower risk of all-causes death than breakfast skippers did. And a meta-analysis of studies showed that for every day of the week you skip breakfast, your risk of diabetes grows. ' + response;
+            } else if (question.includes('prescription meds')) {
+                answer = 'One in 5 adults age 40-plus take at least five Rxs. The risk comes when you have multiple docs all writing prescriptions with no reliable communication between them, says Amie Taggart Blaszczyk, division head of geriatrics at the Texas Tech University Health Sciences Center School of Pharmacy. Keep a written list of every prescription and over-the-counter drug and supplment you\'re taking, how often and the dose. Cross-check this list with each of your doctors. ' + response;
+            } else if (question.includes('healthy diet when i’m on a budget')) {
+                answer = '“Hit the freezer section,” Walsh says. Frozen fish and vegetables are generally less expensive than fresh, come in convenient serving sizes (no more tossing half-full containers of spoiled spinach) and keep for weeks. ' + response;
+            } else if (question.includes('vitamins')) {
+                answer = 'Studies show over and over again that pills don’t work the way foods do. Example: A 2019 study of more than 30,000 adults found that healthy levels of vitamins A and K and the minerals magnesium and zinc may be associated with a lower risk of death — but only from food, not pills. We don’t fully understand why, though it may have something to do with the way the nutrients in food interact with one another. ' + response;
+            } else if (question.includes('fish oil pills')) {
+                answer = 'It’s not clear. A 2020 JAMA study of more than 13,000 people with high heart disease risk (average age: 63) compared groups taking a common omega-3 formulation or a placebo and found no benefits to the fish oil. Other research, including a 2019 analysis of more than 127,000 people— showed that taking omega-3 supplements derived from fish oil reduced the risk of heart attacks and death from heart disease. Bottom line: Eat more fish and omega-3-rich foods such as nuts and seeds, and talk with your physician about an omega-3 supplement. ' + response;
+            } else if (question.includes('great medical care')) {
+                answer = 'Find great doctors you like and stick with them for life. Continuity of care is linked to fewer ER visits, better adherence to medication and longer life. ' + response;
+            } else if (question.includes('lifestyle change')) {
+                answer = 'Go for a walk. Being sedentary, with low overall fitness, raises your mortality risk as much as, or more than, smoking, high blood pressure and heart disease. An analysis of studies on people ages 54 to 65 found that binge-watching TV for four-plus hours a day may make you 35 percent more likely to develop blood clots in the thigh and lower leg. ' + response;
+            } else if (question.includes('exercise')) {
+                answer = 'Yes and no. Research has shown that moderate activity such as walking has excellent health benefits, and the Centers for Disease Control and Prevention recommends at least 150 minutes of moderate-intensity activity each week. Just over 20 minutes of brisk walking each day gets you there. “Doing the same activity every day over time has benefits, but changing it up could have more benefits,” notes Jordan Metzl, M.D., a sports medicine specialist at New York City’s Hospital for Special Surgery. “Doing a variety of activities, particularly as you get older, will challenge your body, lead to greater fitness and health benefits and help you avoid injuries.” He recommends swapping in weight training, swimming or biking, and yoga. ' + response;
+            } else if (question.includes('preserve mobility')) {
+                answer = 'Play tennis or pickleball. “Mobility is all about the lower body, and your entire lower body is interconnected,” Metzl says. Unlike, say, running or biking, tennis moves you in every direction, challenging your hips, glutes and legs from a variety of angles. Basketball is another option. Plus, first thing in the morning, do some multidirectional lunges (forward, side to side, and backward). ' + response;
+            } else if (question.includes('floss')) {
+                answer = 'Floss your teeth every day. According to the 2019 Global Burden of Disease survey, untreated oral diseases caused people ages 50 to 74 worldwide to suffer a collective 8 million years of life “with disability” in 2019. ' + response;
+            } else if (question.includes('fitness goal')) {
+                answer = 'If you dream of running a marathon, that’s great. But there’s a simpler goal within such big goals as well, Metzl says: “Just start exercising, and don’t stop. Build a foundation, and keep building with the next 30 years in mind. Then you can set more specific goals.” ' + response;
+            } else if (question.includes('exercising but haven’t lost any weight')) {
+                answer = 'Weight loss comes primarily from eating healthier food and fewer junk calories. What exercise does is dramatically lower your risk of age-related health issues, from bone loss to heart disease to back pain, Metzl explains. ' + response;
+            } else if (question.includes('joints ache after exercise')) {
+                answer = 'Exercise soreness goes away after a day or two. With osteoarthritis, you’ll most likely be dealing with joint pain, swelling and limitations on motion, Metzl says. “Because we’re talking pain, people often think, I have arthritis — I need to baby it. The opposite is true.” Building up muscles around your joints will improve any arthritis symptoms you currently have and prevent more of them in the future. ' + response;
+            } else if (question.includes('fitness watches')) {
+                answer = 'A military study involving 1,500-plus soldiers is underway to test a theory that smartwatches can help soldiers manage stress and train more effectively. While definitive results aren’t in, if something can motivate and protect you, it might be worth a look. ' + response;
+            } else if (question.includes('back pain for years')) {
+                answer = 'No, just the opposite: You need to learn to live without it. Recent trials have shown that when some people suffer chronic pain for a long time, their brains can still generate pain signals, even though the problem has healed. A new treatment — pain reprocessing therapy — teaches the brain to stop sending those signals. In a 2021 clinical trial, two-thirds of those who used the therapy for four weeks were pain-free or nearly so, and brain scans showed reduced activity in pain processing. ' + response;
+            } else if (question.includes('bad back')) {
+                answer = 'Plank exercises, Metzl advises. Lie facedown on a mat. Bend your elbows, and bring your hands together under your chin. Now lift your knees, hips and torso off the floor, so your weight is on your elbows and toes. Keep your back straight, and don’t let your belly or hips sag. Hold this position for as long as you can. Repeat twice. ' + response;
+            } else if (question.includes('healthy sex drive')) {
+                answer = 'If your current sex drive makes you happy, it’s healthy, notes gynecologic oncologist Elizabeth Poynor, M.D. If it’s low and that’s upsetting to you, it’s time to look for the root cause of your sluggish libido and address it. “Not everybody has to have lots of sex to be healthy and happy,” Poynor adds. “It’s highly individualized.” ' + response;
+            } else if (question.includes('growing older')) {
+                answer = '“How old do you feel?” asks Diehl. Research shows that feeling younger is associated with better mental and physical health, cognitive function and satisfaction with life. A study that followed nearly 3,600 people for 10 years found that those who started out with a higher subjective age and depression ended up with more physical health issues later on. If you’re depressed and “feel” older most days, seek help. ' + response;
+            } else if (question.includes('stress in my life')) {
+                answer = 'Aggressively rethink how you react to daily dramas. A 2020 study showed that people experiencing “unbearable” stress lost nearly three years from their life expectancy. Always remember that stress isn’t a demanding boss, a struggling child or lousy daily news headlines; it’s your reaction to them. You have two choices: Remove the stressor, or learn how to react to it in a healthier way. ' + response;
+            } else if (question.includes('stay young')) {
+                answer = 'Nope, you’re just taking advantage of the way we’re redefining aging. People in their 50s to 70s today “were the first cohorts that grew up with better education, better health care, and developed different lifestyles,” Diehl says. That has translated into older people looking and behaving much younger than people their age in previous generations. Embrace it! ' + response;
+            } else if (question.includes('cosmetic surgery safe')) {
+                answer = 'The fact is, we’re surrounded by people who’ve had cosmetic surgery: There were 2.3 million procedures in 2020, and surveys show that about 90 percent of patients are satisfied with their results. And, in general, cosmetic surgery is safe. A study of more than 26,000 cosmetic procedures found that only about 1 percent of patients experienced complications in the 48 hours that followed surgery. ' + response;
+            } else if (question.includes('husband refuses to talk about his health')) {
+                answer = 'Half of men admit that they don’t talk about their health, a Cleveland Clinic survey showed. “Not knowing there’s a problem may be preferable to the discomfort of learning there is one,” says Harvard clinical health psychologist Natalie Christine Dattilo. Forget guilt-tripping and nagging; you’ll only cause resentment. Try to give off calm, supportive and loving vibes. Be a good role model and take care of yourself in the meantime. ' + response;
+            } else if (question.includes('chronic exhaustion')) {
+                answer = 'Eat nourishing foods. Drink lots of water. Change out of your pajamas. (Yes, every day.) And exercise — moving your body on a daily basis builds the physical and emotional resilience you need to make it through yet another variant. These are all what we might call “the self-care basics,” ' + response;
+            } else if (question.includes('covid last winter')) {
+                answer = 'Data suggests that more than half of COVID survivors wind up with post-acute COVID-19 syndrome. It’s marked by extended breathing problems, brain fog, headaches and joint pain. Studies show that the virus may persist in the heart, brain and spinal fluid for months after the initial infection has run its course. If you have persistent post-COVID health problems, see your doctor. ' + response;
+            } else if (question.includes('sharp at work')) {
+                answer = 'Consider different ways to reinvigorate your career. That might mean moving to a new division, pursuing a promotion or pivoting to another field entirely. Updating your skill set can also organically boost energy levels at work. Become active on social media channels that are relevant to your career, take a class, or freshen up your LinkedIn profile or create one if you haven’t yet done so. ' + response;
+            } else if (question.includes('caregiving nightmare')) {
+                answer = 'Start a conversation now. “Tell them, ‘My passwords are located here; here’s my financial situation; these are the medicines I’m on,’ ” explains certified care manager Amy Cameron O’Rourke, author of The Fragile Years. Make these issues part of an annual family meeting, because what you want at age 55 in terms of, say, end-of-life wishes may be different once you’re 75. ' + response;
+            } else if (question.includes('estranged')) {
+                answer = 'Some 27 percent of American adults are estranged from a family member, according to a survey by Cornell University sociologist Karl Pillemer. Whether your rift was caused by politics, unresolved childhood baggage or something else, move toward healing by reaching out and saying, “My relationship with you is more important than the topic we are disagreeing on,” O’Rourke suggests. Mending your family feud will do more than resuscitate your relationship; it may make you healthier. ' + response;
+            } else if (question.includes('hypertension') || question.includes('blood pressure cuffs')) {
+                answer = 'Yes. A 2021 study, over 10 years, of 11,502 people ages 45 to 60 showed that those with the lowest cumulative systolic BP readings lived 4.1 years longer and delayed heart disease by 5.4 years. Measuring your blood pressure frequently reminds you to do the things needed to keep it in a healthy range. ' + response;
+            } else if (question.includes('first sign of heart disease')) {
+                answer = 'It’s plural: unusual fatigue, sleep problems, shortness of breath, indigestion and chest pain, says Suzanne Steinbaum, an osteopathic preventive cardiologist. Take special note if the latter three happen when you’re active and go away when you’re at rest. ' + response;
+            } else if (question.includes('nightly glass of wine')) {
+                answer = 'Maybe not. Several organizations, such as the Mayo Clinic, still endorse that idea. But the American Heart Association doesn’t recommend drinking any form of alcohol to gain health benefits. Research is beginning to coalesce around the idea that light or moderate drinking may not help to prevent heart disease — so much so that the World Heart Federation declared in 2022 that “no level of alcohol is safe” for your heart health. ' + response;
+            } else if (question.includes('marijuana')) {
+                answer = 'Not as safe as it used to be. A meta-analysis of studies found that pot potency — its THC level, specifically — rose 24 percent from 1975 to 2017. A JAMA review of studies of more than 1,400 people 50 and older found that higher doses of THC were associated with a higher incidence of thinking and perception issues (not the good kind), as well as dizziness. ' + response;
+            } else if (question.includes('occasional cigarette')) {
+                answer = 'Yes. A review of 141 studies showed that people who smoke just one cigarette a day still have half the heart disease risk of people who smoke 20. ' + response;
+            } else if (question.includes('prediabetes')) {
+                answer = 'There are no guarantees, but there’s a lot of evidence that making lifestyle changes now can dramatically reverse the direction your health is headed in. For example, preliminary results of a 2022 study of more than 8,700 people showed a strong relationship between cardiorespiratory fitness and new-onset type 2 diabetes: The higher the fitness level, the lower the type 2 incidence. ' + response;
+            } else if (question.includes('tech-free way to measure my health')) {
+                answer = 'Waist-to-height ratio. Strive for a waist circumference that’s less than half your height. ' + response;
+            } else if (question.includes('cancer in my 50s')) {
+                answer = 'The median age for a cancer diagnosis is 66, meaning half of all cases occur in those who are younger. These are especially important years to pay attention to cervical cancer (median age at diagnosis: 50) and breast cancer (median age at diagnosis: 63). The good news is that cancer mortality rates have fallen about 32 percent since 1992, with an overall five-year survival rate of 68 percent. ' + response;
+            } else if (question.includes('cancer runs in my family')) {
+                answer = 'The U.S. Preventive Services Task Force recommends screening for several types of cancer, including breast, cervical, colorectal and lung. There is evidence showing that screening tests can catch these cancers early and make a difference in treatment and survival. ' + response;
+            } else if (question.includes('prostate cancer') || question.includes('psa test')) {
+                answer = 'Yes. Prostate cancer is the most common cancer in men besides skin cancer, and 40 percent of cases hit men before age 65. Nearly 99 percent of prostate cases, however, are treatable if they are caught early. And don’t panic if your PSA is elevated. Most men who have an elevated PSA don’t have cancer, and only 25 percent of prostate biopsies find cancer, according to the National Institutes of Health. ' + response;
+            } else if (question.includes('protect my eyes')) {
+                answer = 'Pop in to see the eye doctor for a dilated-eye exam every year, says Kenneth Dickerson, a doctor of optometry at the University of Rochester’s Flaum Eye Institute. Most eye diseases, such as macular degeneration, are silent sight stealers; without a doctor’s inspection, you don’t know you have a condition until it’s at an advanced stage. ' + response;
+            } else if (question.includes('tinnitus')) {
+                answer = 'There are no sanctioned treatments. Still, ask your doctor about neuromodulation, in which a device simultaneously delivers electric stimulation to the tongue and auditory signals to both ears. A 2020 study found that this type of therapy reduced tinnitus symptoms over a 12-week period. ' + response;
+            } else if (question.includes('prevent dementia')) {
+                answer = 'Be in bed by 10 p.m. “The earlier you get to sleep, the more slow-wave sleep you’ll get,” says Sara Mednick, a professor of cognitive science at the University of California, Irvine, and author of The Power of the Downstate. Slow-wave sleep (SWS) supercharges brain health, clearing away toxins and other buildup that cause dementia, as well as developing connections between areas of the brain to create stronger memories. But SWS also abides by nature’s circadian clock and peters out at around 1 a.m., so you need to hit the sack early to maximize your time there. In short, you can’t close your eyes at midnight and still expect to net three hours of memory-protective SWS. ' + response;
+            } else if (question.includes('sleep less now')) {
+                answer = 'Yes, it’s totally normal. In your 20s you needed about eight to nine hours of sleep every night. More mature you needs about an hour less, notes Nalaka Gooneratne, M.D., a sleep medicine physician and geriatrician at the University of Pennsylvania’s Perelman School of Medicine. You know you’re clocking enough if you’re alert during the day; sleepiness or brain fog signals a possible medical issue, such as sleep apnea, that you’ll want to get checked out. ' + response;
+            } else if (question.includes('nightly wine') || question.includes('good for my brain')) {
+                answer = 'No. No, it’s not. A study of more than 25,000 people in the U.K. showed that any alcohol consumption at all had negative effects on brain volume and structure — and that those who binge drink or who are overweight with high blood pressure are more susceptible. The study’s key takeaway: “No safe dose of alcohol for the brain was found.” ' + response;
+            } else if (question.includes('protect my brain')) {
+                answer = 'There’s no miracle pill for brain health, though one of the most important things you can do is keep your weight stable. A 2021 meta-analysis of data found that being significantly overweight increased the risk of dementia. Surprisingly, however, being underweight was also a risk factor. (Turns out you can be too thin, if not too rich.) Plus, getting exercise is important to cutting your risk. There’s no magic bullet for preventing dementia, but lifestyle factors like exercise, diet, and social engagement play a key role. ' + response;
+            } else if (question.includes('sick')) {
+                answer = 'When you get sick, part or all of your body is not working as it should. The cause of sickness can come from inside your body or from the outside world. Diseases that start on the inside are usually inherited in the genes that you receive from your parents, which make up the master plan that determines how your body will grow and run. Abnormal development or functioning of different body systems is the cause of many chronic diseases. Things in the outside world can cause sickness too. Poisons in the environment can cause illnesses in people. Not eating the right foods, with their important nutrients, can also cause diseases. But the most common cause of sickness from the outside world is infectious agents. These agents are usually microscopic organisms (living things so small that they can only be seen with the help of microscopes) such as bacteria and viruses, commonly referred to as germs. Bacteria and viruses and other microscopic organisms live in the air, water, and soil that make up our world. They are on the things and people we touch and in the food we eat. Many of them are beneficial: bacteria are needed to make cheese, some bacteria help vegetables grow, and some bacteria clean the environment and enrich the soil by feeding on dead plants and animals. But there are other microscopic organisms that invade the bodies of plants and animals—and people—and cause diseases. ' + response;
+            } else if (question.includes('disease-causing germs invade')) {
+                answer = 'Your skin is a wonderful protective barrier that prevents many of the disease-causing germs that you run into each day from entering your body. Only when you have an opening in your skin—like a cut or a scrape—are germs likely to enter there. Most germs enter through your mouth and nose, making their way farther into your body through your respiratory or digestive tracts. But even then, certain chemicals in body tissues and fluids keep many harmful germs from causing problems. When an infection does begin—with the germs multiplying inside your body—your immune systemleaps into action to get rid of the foreign organisms. Your white blood cells produce special substances called antibodies that attack and destroy the invaders, helping you to recover. ' + response;
+            } else if (question.includes('immune system do')) {
+                answer = 'The immune system protects the human body against germs, which are microorganisms that cause sickness and disease. There are four major types of germs— harmful bacteria (pathogens), viruses, fungi, and protozoa. This defense system begins with the skin, which stops germs from getting into your blood or tissues. If germs get into your body, for example through your nose or mouth, white blood cells called phagocytes and lymphocytes attack them. Phagocytes scout out and destroy invaders, and long-living lymphocytes remember the invaders and release chemicals called antibodies to make the body resistant, or immune, to them. White blood cells live in the bloodstream, lymphatic system, and spleen. The lymphatic system (or lymph system, for short) is a far-reaching network that extends throughout your entire body. A clear liquid called lymph runs throughout the system, washing the body’s cells with nutrients and water and detecting and removing pathogens. Lymph is filtered through the lymph nodes and then passes into the body’s bloodstream. ' + response;
+            } else if (question.includes('difference between bacteria and viruses')) {
+                answer = 'Bacteria are single-celled organisms that have the ability to feed themselves and to reproduce. They are found everywhere, including the air, water, and soil. They divide and multiply very quickly, which means that one cell can become 1 million cells in just a few hours. Viruses are microorganisms that are smaller than bacteria, but they cannot grow or reproduce without the help of a separate living cell. Once a virus gets inside your body, it attaches itself to a healthy cell and uses the cell’s nucleus to reproduce itself. ' + response;
+            } else if (question.includes('intestines contain germs')) {
+                answer = 'Yes, our intestines contain germs. Germs aren’t all bad—in fact, some are helpful. For example, the common bacterium E. coli can be found in our intestines, and it helps us digest green vegetables and beans (also making gases). These same bacteria also make vitamin K, which causes blood to clot. ' + response;
+            } else if (question.includes('other places that germs hide')) {
+                answer = 'Germs are everywhere! Most germs spread through the air, invading our homes, pets, and family, and sometimes they make us sick. Besides your bathroom toilet and the kitchen sink, everyday items such as shopping carts, restaurant menus, mobile phones, and shower curtains contain germs. These items contain bacteria, mold, and rhinoviruses (instigators of the common cold) that can lead to sickness. In fact, cold and flu viruses can survive for 18 hours on hard surfaces. Common household items can be swabbed with a disinfectant wipe easily before use in order to prevent germs from spreading. Washing your hands with soap and water, using hand sanitizer, and avoiding touching your face with your hands after using these items also helps keep germs away from you. To eliminate dust mites—those little critters that live in your bed sheets and feed on dead skin cells—don’t make your bed for a while. Studies have found that dust mites need humidity levels above 50 percent to survive and cannot live in the arid conditions of an unmade bed. ' + response;
+            } else if (question.includes('allergies')) {
+                answer = 'An allergic reaction is a reaction to a substance that is typically harmless to most other people. Allergies happen when a person’s immune system overreacts to a substance that the person has breathed in, touched, or eaten. Allergens—the antigens that bring on an allergic reaction—may be foods, medications, plants or animals, chemicals, dust, or molds. Some common allergic reactions are hay fever, allergic conjunctivitis (an eye reaction), asthma, pet-dander allergies, and skin reactions, such as hives. A common cause for allergies are dust mites, a large part of household dust. If they are breathed in by an allergic person, the body parts of the dead mites can trigger asthma, a lung condition that causes a person to have difficulty breathing. Cat and dog dander, or skin flakes, can cause an allergic reaction, such as sneezing, wheezing, and runny eyes and nose. Common food allergy triggers are the proteins in cow’s milk, eggs, peanuts, wheat, soy, fish, shellfish, and tree nuts. ' + response;
+            } else if (question.includes('antibiotics')) {
+                answer = 'Antibiotics are medicines that help the human body fight bacteria, either by killing the offending germs directly or by weakening them so that the body’s own immune system can fight and kill them more easily. The most widely known antibiotic is penicillin, which is made from mold. Penicillin kills bacteria by interfering with the formation of the cell walls or cell contents of the bacteria. ' + response;
+            } else if (question.includes('penicillin developed')) {
+                answer = 'In 1928 the Scottish research scientist Alexander Fleming found that mold had accidentally contaminated one of his experiments. The mold created a bacteria-free circle around itself, and Fleming deduced that the mold was an antibacterial agent that could kill many harmful bacteria. He named the active agent penicillin. By the middle of the 20th century, Fleming’s discovery birthed a pharmaceutical industry that made synthetic penicillin to treat many bacterial diseases of the day, including syphilis, gangrene, and tuberculosis. He won a Nobel Prize in 1945 for his discovery. ' + response;
+            } else if (question.includes('vaccines invented')) {
+                answer = 'Edward Jenner, an army surgeon and country doctor from Gloucestershire, England, tried his first experimental vaccination in 1796. At the time, smallpox was a fatal disease that mostly affected infants and young children. Jenner recognized that dairymaids infected with cowpox virus (a minor virus that affected cows) were immune to smallpox. He used material from the arm of Sarah Nells, a dairymaid who had contracted cowpox, to infect James Phipps, an eight-year-old boy. He then exposed Phipps to smallpox, which Phipps did not contract. It worked because cowpox and smallpox have common antigens (proteins), which activated the young boy’s immune system. After repeating the experiment on other children, including his own son, Jenner concluded that vaccination provided immunity to smallpox without the risk of the person contracting the disease. Jenner used the word vaccination for his treatment, which comes from the Latin word vacca, meaning “cow.” Jenner’s findings were published two years later, in 1798; his smallpox vaccine spread rapidly to America and the rest of Europe. Today vaccines are used around the world to produce immunity to disease. ' + response;
+            } else if (question.includes('chicken soup help a cold')) {
+                answer = 'Chicken soup doesn’t cure a cold, but it can help lessen the symptoms. For centuries, people around the world have used chicken soup to treat the common cold. Chicken soup can help people feel better, but scientists have learned that chicken fat may help relieve cold and flu symptoms in two ways. First, the chicken broth acts as an anti-inflammatory by slowing down the movement of neutrophils (immune system cells that play a role in the body’s inflammatory response). Second, it temporarily speeds up the movement of mucus through the nose. This movement helps relieve congestion and limits the amount of time viruses are in contact with the nose’s lining. ' + response;
+            } else if (question.includes('exercise important to health')) {
+                answer = 'Exercise is good for your health. Regular physical activity helps a person have stronger bones and muscles, helps control body fat, helps prevent certain illnesses, and contributes to a good outlook on life. Regular exercise helps promote digestion and a good night’s sleep. When children exercise as part of their busy lives, they are better equipped to manage the physical and emotional challenges of a busy day. Many governments and other organizations recommend at least 150 minutes of moderate-intensity physical activity every week. ' + response;
+            } else if (question.includes('sleep necessary for good health')) {
+                answer = 'Scientists do not know exactly why people need sleep, but studies show that sleep is necessary for survival. Sleep appears to be necessary for the nervous system to work properly. While too little sleep one night may leave us feeling drowsy and unable to concentrate the next day, a long period of too little sleep leads to poor memory and physical performance. Hallucinations (experiencing things that aren’t really there), vision problems, and mood swings may develop if sleep deprivation continues. ' + response;
+            } else if (question.includes('substance abuse')) {
+                answer = 'Substance abuse means taking drugs (other than those prescribed by a doctor for a specific illness) in amounts that are dangerous or that prevent a person from doing everyday things, including going to school or work. The substance being abused can be alcohol, marijuana, pills called tranquilizers that make people feel very tired or relaxed, household products that are inhaled, or a number of other drugs. Drug abuse happens all over the world, to all kinds of people, young and old. It frequently causes terrible damage to a person’s body, to relationships with family and friends, and to career or education. In some cases, substance abuse leads to death, because the abuser gets involved in an accident or because he or she takes enough of the substance to cause the body to completely shut down. ' + response;
+            } else if (question.includes('alcohol be bad')) {
+                answer = 'Alcohol is a type of drug known as a depressant that slows down the body’s central nervous system. After a person has had a few drinks, it immediately affects the way they think or act. Alcohol can make a person feel sleepy, less coordinated, and slow to react. And it can cause your brain to feel foggy as well as make you think and see differently. After years of drinking, alcohol use can cause stomach and intestinal problems, liver damage, nerve and muscle damage, heart problems, and brain damage. Alcohol can cause everything from blackouts to permanent loss of brain function and memory. Researchers have also linked long-term drinking to cancer of the throat, mouth, liver, esophagus, and larynx. Drinking alcohol can also lead to emotional and psychological problems such as sadness and depression. If a pregnant woman drinks too much alcohol, it can seriously injure her unborn baby and result in birth defects. ' + response;
+            } else if (question.includes('smoking cigarettes unhealthy')) {
+                answer = 'In addition to the stimulant nicotine, cigarettes contain many harmful chemicals, including tar and the poisonous gas carbon monoxide. These chemicals present health risks that range from bronchitis to cancer. Doctors believe that cigarette smoking is the cause of 90 percent of all cases of lung cancer. Heart disease, heart attack, and stroke are far more common in smokers. One of the effects of nicotine is constricting the blood vessels, which causes high blood pressure. Another effect is that smoking raises your heart rate, which adds extra stress on your heart. Smoking also affects every part of the body’s circulatory system. Your blood becomes thicker and stickier, making it harder for your heart to work effectively. The lining of the blood vessels is damaged, allowing fat deposits to stick, which most likely causes arteriosclerosis, or hardening of the arteries. Smoking also stains teeth, fingernails, and lung tissue, and it causes bad breath. ' + response;
+            } else if (question.includes('secondhand smoke')) {
+                answer = 'Yes, secondhand smoke is bad. Also known as environmental tobacco smoke (ETS), secondhand smoke is a mixture of the smoke given off by the burning end of a cigarette, pipe, or cigar and the smoke exhaled by people who are smoking. It is involuntarily inhaled by nonsmokers, lingers in the air hours after cigarettes have been extinguished, and can cause a wide range of illnesses, including cancer, respiratory infections, and asthma. ' + response;
+            } else {
+                answer = 'Sorry, I don\'t have specific information on that topic. ' + response;
+            }
