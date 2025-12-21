@@ -78,9 +78,11 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         iframe {
+            width: 100%;
+            height: 900px; /* Made much taller and wider */
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            height: 800px; /* Increased height for Starkey embed */
+            border: none;
         }
         .result {
             background-color: #e0f7fa;
@@ -161,6 +163,34 @@
         }
         .category-content {
             line-height: 1.8;
+        }
+        #contextMenu {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #007bff;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            padding: 10px 0;
+            z-index: 10000;
+            min-width: 180px;
+        }
+        #contextMenu ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        #contextMenu li {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        #contextMenu li:hover {
+            background-color: #e0f7fa;
+        }
+        .about-content img {
+            width: 200px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -326,6 +356,37 @@
         <footer>
             <small>Consulting a doctor is recommended for professional medical advice.</small>
         </footer>
+    </div>
+
+    <!-- Custom Right-Click Menu -->
+    <div id="contextMenu">
+        <ul>
+            <li onclick="showAbout()">About Heathey</li>
+            <li onclick="location.reload()">Refresh Page</li>
+            <li onclick="window.open('https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcRzDDDhPCCZslRWNlXVGhcPXjwzVwCTzLcvCzzQcjhcxrQNzvKnxgDPJZTmpHkGlVmMKxJnF', '_blank')">Contact Us</li>
+            <li onclick="document.getElementById('contextMenu').style.display = 'none'">Close</li>
+        </ul>
+    </div>
+
+    <!-- About Content (hidden, shown only via right-click) -->
+    <div id="aboutContent" style="display:none;">
+        <div class="text-center my-4">
+            <img src="https://github.com/parkertrip/parkertrip.github.io/blob/main/heathy/Heathy.png?raw=true" alt="Heathy">
+        </div>
+        <h1>About</h1>
+        <blockquote>Heathy is your friendly health companion, offering simple health tests and AI-powered personalized advice to help you on your wellness journey.</blockquote>
+
+        <h2>Credits</h2>
+        <ul>
+            <li><strong>Parker</strong>: Coder</li>
+            <li><strong>Easton</strong>: Art</li>
+            <li><strong>Ciena</strong>: Tester</li>
+            <li><strong>Amber</strong>: Tester & Helper</li>
+            <li><strong>Clayton</strong>: Idea</li>
+        </ul>
+
+        <h2>Mission</h2>
+        <p>To empower people to become healthier through the power of AI!</p>
     </div>
 
     <!-- New Chat Modal -->
@@ -629,6 +690,44 @@
                 localStorage.clear();
                 location.reload();
             }
+        }
+
+        // Custom right-click menu
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            const menu = document.getElementById('contextMenu');
+            menu.style.left = `${e.pageX}px`;
+            menu.style.top = `${e.pageY}px`;
+            menu.style.display = 'block';
+        });
+
+        document.addEventListener('click', function() {
+            document.getElementById('contextMenu').style.display = 'none';
+        });
+
+        function showAbout() {
+            document.getElementById('contextMenu').style.display = 'none';
+            const aboutDiv = document.createElement('div');
+            aboutDiv.innerHTML = document.getElementById('aboutContent').innerHTML;
+            aboutDiv.style.position = 'fixed';
+            aboutDiv.style.top = '50%';
+            aboutDiv.style.left = '50%';
+            aboutDiv.style.transform = 'translate(-50%, -50%)';
+            aboutDiv.style.background = '#fff';
+            aboutDiv.style.padding = '30px';
+            aboutDiv.style.borderRadius = '15px';
+            aboutDiv.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
+            aboutDiv.style.maxWidth = '600px';
+            aboutDiv.style.zIndex = '10001';
+            aboutDiv.style.textAlign = 'center';
+
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = 'Close';
+            closeBtn.className = 'btn btn-primary mt-4';
+            closeBtn.onclick = () => document.body.removeChild(aboutDiv);
+
+            aboutDiv.appendChild(closeBtn);
+            document.body.appendChild(aboutDiv);
         }
     </script>
 </body>
