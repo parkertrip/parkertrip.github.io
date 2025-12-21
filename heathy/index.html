@@ -110,6 +110,7 @@
             border-radius: 50%;
             border: 3px solid #007bff;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            object-fit: cover;
         }
         .message .content {
             max-width: 70%;
@@ -140,6 +141,22 @@
             width: 150px;
             height: 150px;
             object-fit: cover;
+        }
+        .chat-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .chat-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        .chat-item.active {
+            background-color: #e0f7fa;
+            font-weight: 600;
+        }
+        .chat-item:hover {
+            background-color: #f0f8ff;
         }
     </style>
 </head>
@@ -217,13 +234,22 @@
 
             <div class="tab-pane fade" id="chat">
                 <div class="card-body">
-                    <p class="lead">Chat with Heathey about health questions. Your history is saved!</p>
-                    <div id="chatHistory"></div>
-                    <div class="input-group">
-                        <input type="text" class="form-control form-control-lg" id="healthQuestion" placeholder="Ask about health..." onkeypress="if(event.keyCode==13) sendMessage();">
-                        <button class="btn btn-primary btn-lg" onclick="sendMessage()">Send</button>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>Your Chats</h5>
+                            <button class="btn btn-primary w-100 mb-3" data-bs-toggle="modal" data-bs-target="#newChatModal">+ New Chat</button>
+                            <div class="chat-list" id="chatList"></div>
+                        </div>
+                        <div class="col-md-8">
+                            <h5 id="currentChatTitle">Select a chat or create a new one</h5>
+                            <div id="chatHistory"></div>
+                            <div class="input-group" id="chatInputGroup" style="display:none;">
+                                <input type="text" class="form-control form-control-lg" id="healthQuestion" placeholder="Ask about health..." onkeypress="handleEnter(event)">
+                                <button class="btn btn-primary btn-lg" onclick="sendMessage()">Send</button>
+                            </div>
+                            <button class="btn btn-danger mt-3" onclick="deleteAccount()">Delete Account & All Data</button>
+                        </div>
                     </div>
-                    <button class="btn btn-danger mt-3" onclick="deleteAccount()">Delete Account & All Data</button>
                 </div>
             </div>
         </div>
@@ -233,19 +259,40 @@
         </footer>
     </div>
 
+    <!-- New Chat Modal -->
+    <div class="modal fade" id="newChatModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Chat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="newChatName" placeholder="Chat name (e.g., General Health, Diet Tips)">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="createNewChat()">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const heatheyPfp = 'https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/heathy/heathy%20pfp.png';
         let userPfp = localStorage.getItem('userPfp') || 'https://via.placeholder.com/150?text=Upload+Face';
         let faceShape = localStorage.getItem('faceShape') || '';
-        let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+        let chats = JSON.parse(localStorage.getItem('heatheyChats')) || [{id: 'default', name: 'My Health Chat', history: []}];
+        let currentChatId = localStorage.getItem('currentChatId') || 'default';
         let healthResponses = {};
 
         async function initApp() {
             await loadModels();
             await loadResponses();
             loadUserData();
-            renderChat();
+            renderChatList();
+            loadCurrentChat();
         }
 
         async function loadModels() {
@@ -253,9 +300,7 @@
                 const MODEL_URL = 'https://raw.githubusercontent.com/justadudewhohacks/face-api.js/master/weights';
                 await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
                 await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
-            } catch (e) {
-                console.error('Face models failed to load');
-            }
+            } catch (e) {}
         }
 
         async function loadResponses() {
@@ -280,7 +325,6 @@
             document.getElementById('currentPfp').src = userPfp;
             document.getElementById('detectedShape').textContent = faceShape || 'Not analyzed yet';
 
-            // Auto-analyze if we have a stored base64 image but no faceShape
             if (userPfp.startsWith('data:image') && !faceShape) {
                 analyzeStoredImage();
             }
@@ -288,6 +332,7 @@
 
         async function analyzeStoredImage() {
             const img = new Image();
+            img.crossOrigin = "anonymous";
             img.src = userPfp;
             img.onload = async () => {
                 await analyzeFace(img);
@@ -406,37 +451,42 @@
             document.getElementById('hearResult').innerHTML = resultText + buyLink;
         }
 
-        async function sendMessage() {
-            const input = document.getElementById('healthQuestion');
-            const q = input.value.trim();
-            if (!q) return;
+        function renderChatList() {
+            const list = document.getElementById('chatList');
+            list.innerHTML = '';
+            chats.forEach(chat => {
+                const div = document.createElement('div');
+                div.className = 'chat-item' + (chat.id === currentChatId ? ' active' : '');
+                div.textContent = chat.name;
+                div.onclick = () => switchChat(chat.id);
+                list.appendChild(div);
+            });
+        }
 
-            addChat('user', q);
-            input.value = '';
+        function switchChat(id) {
+            currentChatId = id;
+            localStorage.setItem('currentChatId', id);
+            loadCurrentChat();
+            renderChatList();
+        }
 
-            let answer = 'Sorry, I don\'t have specific information on that topic. Please consult a professional doctor.';
-            const lowerQ = q.toLowerCase();
-
-            for (const key in healthResponses) {
-                if (lowerQ.includes(key)) {
-                    answer = healthResponses[key] + ' Please consult a professional doctor.';
-                    break;
-                }
+        function loadCurrentChat() {
+            const current = chats.find(c => c.id === currentChatId);
+            if (current) {
+                document.getElementById('currentChatTitle').textContent = current.name;
+                renderChat(current.history);
+                document.getElementById('chatInputGroup').style.display = 'flex';
+            } else {
+                document.getElementById('currentChatTitle').textContent = 'Select a chat or create a new one';
+                document.getElementById('chatHistory').innerHTML = '';
+                document.getElementById('chatInputGroup').style.display = 'none';
             }
-
-            setTimeout(() => addChat('ai', answer), 600);
         }
 
-        function addChat(role, text) {
-            chatHistory.push({role, text});
-            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-            renderChat();
-        }
-
-        function renderChat() {
-            const history = document.getElementById('chatHistory');
-            history.innerHTML = '';
-            chatHistory.forEach(m => {
+        function renderChat(history = []) {
+            const chatDiv = document.getElementById('chatHistory');
+            chatDiv.innerHTML = '';
+            history.forEach(m => {
                 const div = document.createElement('div');
                 div.className = `message ${m.role}`;
                 const img = document.createElement('img');
@@ -452,13 +502,61 @@
                     div.appendChild(img);
                     div.appendChild(content);
                 }
-                history.appendChild(div);
+                chatDiv.appendChild(div);
             });
-            history.scrollTop = history.scrollHeight;
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+        }
+
+        function createNewChat() {
+            const nameInput = document.getElementById('newChatName');
+            const name = nameInput.value.trim() || 'New Chat';
+            const newChat = {
+                id: Date.now().toString(),
+                name: name,
+                history: []
+            };
+            chats.push(newChat);
+            localStorage.setItem('heatheyChats', JSON.stringify(chats));
+            switchChat(newChat.id);
+            nameInput.value = '';
+            bootstrap.Modal.getInstance(document.getElementById('newChatModal')).hide();
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('healthQuestion');
+            const q = input.value.trim();
+            if (!q) return;
+
+            const current = chats.find(c => c.id === currentChatId);
+            if (!current) return;
+
+            current.history.push({role: 'user', text: q});
+            renderChat(current.history);
+            input.value = '';
+
+            let answer = 'Sorry, I don\'t have specific information on that topic. Please consult a professional doctor.';
+            const lowerQ = q.toLowerCase();
+
+            for (const key in healthResponses) {
+                if (lowerQ.includes(key)) {
+                    answer = healthResponses[key] + ' Please consult a professional doctor.';
+                    break;
+                }
+            }
+
+            setTimeout(() => {
+                current.history.push({role: 'ai', text: answer});
+                renderChat(current.history);
+                localStorage.setItem('heatheyChats', JSON.stringify(chats));
+            }, 600);
         }
 
         function deleteAccount() {
-            if (confirm('Are you sure? This will delete your profile picture, face analysis, and chat history permanently.')) {
+            if (confirm('Are you sure? This will delete your profile picture, face analysis, and ALL chats permanently.')) {
                 localStorage.clear();
                 location.reload();
             }
