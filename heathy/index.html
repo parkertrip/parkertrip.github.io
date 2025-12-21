@@ -80,6 +80,7 @@
         iframe {
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            height: 800px; /* Increased height for Starkey embed */
         }
         .result {
             background-color: #e0f7fa;
@@ -158,6 +159,9 @@
         .chat-item:hover {
             background-color: #f0f8ff;
         }
+        .category-content {
+            line-height: 1.8;
+        }
     </style>
 </head>
 <body onload="initApp()">
@@ -178,6 +182,12 @@
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#chat" type="button">Chat with Heathey</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#food" type="button">Food Help</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#sleep" type="button">Sleep</button>
             </li>
         </ul>
 
@@ -250,6 +260,65 @@
                             <button class="btn btn-danger mt-3" onclick="deleteAccount()">Delete Account & All Data</button>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="food">
+                <div class="card-body category-content">
+                    <img src="https://imgs.search.brave.com/tO0E7N9XRkoPcdlk8al5ZlcOMU8pYdhms6enPA2W2ak/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTYy/NTEyODYzMi9waG90/by9tb3N0LWNvbW1v/bi1hbGxlcmd5LWZv/b2Qtc2hvdC1mcm9t/LWFib3ZlLmpwZz9z/PTYxMng2MTImdz0w/Jms9MjAmYz12YmJr/TlZScEh2LVg0c0lL/SnphSzF5WVJDbXpF/LUNnbnVXRTk4d2xO/X3ZVPQ" alt="food" class="img-fluid mb-4">
+
+                    <h2>Food</h2>
+                    <p><strong>Food is an important thing for you is effects your sleep health etc! here are some valuable food resources about how food effects you!</strong></p>
+
+                    <ul>
+                        <li><a href="https://www.takingcharge.csh.umn.edu/how-does-food-impact-health" target="_blank">takeing charge</a></li>
+                        <li><a href="https://newsinhealth.nih.gov/2017/05/how-your-eating-habits-affect-your-health" target="_blank">NIH</a></li>
+                        <li><a href="https://www.health.harvard.edu/blog/nutritional-psychiatry-your-brain-on-food-201511168626" target="_blank">Haverd</a></li>
+                        <li><a href="https://www.woosterhospital.org/nutrition-and-wellness-how-food-choices-impact-your-overall-health/" target="_blank">WCH</a></li>
+                        <li><a href="https://supplysix.com/blogs/all/how-does-food-impact-your-body" target="_blank">S⁶</a></li>
+                        <li><a href="https://x.com/i/grok?text=how%20does%20food%20effect%20my%20health" target="_blank">grok</a></li>
+                        <li><a href="https://www.google.com/search?q=how%20does%20food%20affect%20your%20body%20and%20what%20does%20it%20do" target="_blank">google</a></li>
+                    </ul>
+
+                    <blockquote>These sources will tell you about food and what it does with your body</blockquote>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="sleep">
+                <div class="card-body category-content">
+                    <h4>Sleep profoundly impacts nearly every aspect of your physical, mental, and cognitive health. Getting adequate, high-quality sleep (typically 7–9 hours per night for adults) supports recovery and optimal functioning, while insufficient or poor sleep can lead to significant short- and long-term issues.</h4>
+
+                    <h5>Physical Health Effects</h5>
+                    <p>Good sleep allows your body to repair tissues, regulate hormones, and strengthen the immune system. During deep sleep, the body releases growth hormones that promote muscle repair, cell regeneration, and growth (especially in children and teens). It also balances hunger hormones (ghrelin and leptin), helping maintain a healthy weight, and helps improve insulin sensitivity to control blood sugar levels.</p>
+
+                    <p>Poor sleep disrupts these processes:</p>
+                    <ul>
+                        <li>Increases risk of obesity (due to heightened hunger and reduced metabolism).</li>
+                        <li>Raises chances of type 2 diabetes, heart disease, high blood pressure, and stroke.</li>
+                        <li>Weakens immunity, making you more susceptible to infections and slower to recover.</li>
+                    </ul>
+
+                    <p>Chronic sleep deprivation can even contribute to inflammation and long-term conditions like cardiovascular disease.</p>
+
+                    <h5>Mental and Emotional Health Effects</h5>
+                    <p>Sleep plays a key role in emotional regulation and mood stability. Quality sleep helps process daily experiences, reduce stress, and clear brain toxins that build up during wakefulness.</p>
+
+                    <p>Benefits include better mood, lower irritability, and reduced anxiety. Insufficient sleep heightens emotional reactivity, leading to mood swings, depression, anxiety, and impulsivity. It can worsen existing mental health conditions or contribute to their onset, creating a bidirectional cycle where poor mental health further disrupts sleep.</p>
+
+                    <h5>Cognitive and Performance Effects</h5>
+                    <p>During sleep, the brain consolidates memories, enhances learning, and improves focus, attention, reaction time, and decision-making. Well-rested people perform better in daily tasks, work, school, and physical activities.</p>
+
+                    <p>Sleep deprivation impairs these functions similarly to alcohol intoxication:</p>
+                    <ul>
+                        <li>Reduces concentration.</li>
+                        <li>Slows reaction times.</li>
+                        <li>Harms memory.</li>
+                        <li>Increases error rates and accident risk.</li>
+                    </ul>
+
+                    <p>Over time, it can contribute to cognitive decline.</p>
+
+                    <p>In summary, sleep is a biological necessity—not a luxury. Prioritizing consistent, restorative sleep enhances overall well-being, energy, resilience, and longevity, while skimping on it accumulates "sleep debt" with compounding negative effects. If you're struggling with sleep, simple habits like a regular schedule, limiting screens before bed, and avoiding caffeine late in the day can help, but persistent issues warrant consulting a healthcare professional.</p>
                 </div>
             </div>
         </div>
@@ -526,7 +595,7 @@
             if (e.key === 'Enter') sendMessage();
         }
 
-        function sendMessage() {
+        async function sendMessage() {
             const input = document.getElementById('healthQuestion');
             const q = input.value.trim();
             if (!q) return;
