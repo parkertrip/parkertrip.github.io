@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heathey - Your Health Companion</title>
-    <link rel="icon" href="https://cdn.pixabay.com/photo/2025/10/25/19/34/heart-9916675_1280.jpg">
+    <link rel="icon" href="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/heathy/Heathy.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
@@ -53,6 +53,13 @@
         }
         .btn-success:hover {
             background-color: #218838;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
         }
         img.eye-chart {
             max-width: 100%;
@@ -141,9 +148,51 @@
         .loading .spinner-border {
             color: #007bff;
         }
+        #chatHistory {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+        }
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .message.user {
+            justify-content: flex-end;
+        }
+        .message.ai {
+            justify-content: flex-start;
+        }
+        .message .pfp {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 0 10px;
+        }
+        .message .content {
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .message.user .content {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .message.ai .content {
+            background-color: #e9ecef;
+            color: #333;
+        }
+        #deleteAccount {
+            margin-top: 10px;
+        }
     </style>
 </head>
-<body onload="loadModels();">
+<body onload="loadModels(); loadResponses(); loadChatHistory();">
     <div class="container">
         <header class="text-center mb-4">
             <h1 class="display-4">Heathey - Your Health Companion</h1>
@@ -199,7 +248,7 @@
             </div>
             <div class="tab-pane fade" id="face" role="tabpanel" aria-labelledby="face-tab">
                 <div class="card-body">
-                    <p>Upload an image of your face to get suggestions on glasses or hearing aids that might fit your face shape (actual analysis using AI).</p>
+                    <p>Upload an image of your face to get suggestions on glasses or hearing aids that might fit your face shape (actual analysis using AI). This will also set your profile picture.</p>
                     <div class="mb-3">
                         <input type="file" class="form-control" id="faceUpload" accept="image/*">
                     </div>
@@ -210,13 +259,13 @@
             </div>
             <div class="tab-pane fade" id="ask" role="tabpanel" aria-labelledby="ask-tab">
                 <div class="card-body">
-                    <p>Ask any health-related question to Heathey AI.</p>
-                    <div class="mb-3">
-                        <label for="healthQuestion" class="form-label">Your Question:</label>
-                        <input type="text" class="form-control" id="healthQuestion" required>
+                    <p>Chat with Heathey AI about your health questions.</p>
+                    <div id="chatHistory"></div>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="healthQuestion" placeholder="Type your question..." required>
+                        <button type="button" class="btn btn-primary" onclick="sendMessage()">Send</button>
                     </div>
-                    <button type="button" class="btn btn-primary" onclick="askHeathey()">Ask Heathey</button>
-                    <div id="healthResponse" class="result"></div>
+                    <button type="button" class="btn btn-danger mt-3" id="deleteAccount" onclick="deleteAccount()">Delete Account</button>
                 </div>
             </div>
         </div>
@@ -257,6 +306,9 @@
     <script>
         let faceShape = '';
         let healthResponses = {};
+        const heatheyPfp = 'https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/heathy/heathy%20pfp.png';
+        let userPfp = localStorage.getItem('userPfp') || heatheyPfp;
+        let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
 
         async function loadModels() {
             try {
@@ -266,6 +318,26 @@
                 console.log('Models loaded successfully');
             } catch (error) {
                 console.error('Error loading models:', error);
+            }
+        }
+
+        async function loadResponses() {
+            try {
+                const res = await fetch('https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/heathy/list%20for%20ai');
+                const text = await res.text();
+                // Improved parsing
+                const elseIfRegex = /} else if \(question\.includes\('(.*?)'\)\) {\s*answer = (.*) \+ response;/gs;
+                let match;
+                while ((match = elseIfRegex.exec(text)) !== null) {
+                    let key = match[1].trim();
+                    let ans = match[2].trim();
+                    if (ans.startsWith("'") && ans.endsWith("'")) {
+                        ans = ans.slice(1, -1);
+                    }
+                    healthResponses[key] = ans;
+                }
+            } catch (error) {
+                console.error('Error loading responses:', error);
             }
         }
 
@@ -310,7 +382,10 @@
                                 faceShape = 'square';
                             }
 
-                            document.getElementById('faceResult').innerHTML = `Detected face shape: ${faceShape}. This will be used for personalized recommendations.`;
+                            localStorage.setItem('userPfp', event.target.result); // Save base64 as pfp
+                            userPfp = event.target.result;
+
+                            document.getElementById('faceResult').innerHTML = `Detected face shape: ${faceShape}. This will be used for personalized recommendations. Your profile picture has been updated.`;
                         } else {
                             faceShape = '';
                             document.getElementById('faceResult').innerHTML = 'No face detected. Please try another image.';
@@ -383,38 +458,85 @@
             document.getElementById('hearResult').innerHTML = resultText + buyLink;
         }
 
-        async function askHeathey() {
-            const question = document.getElementById('healthQuestion').value.trim().toLowerCase();
+        async function sendMessage() {
+            const question = document.getElementById('healthQuestion').value.trim();
+            if (question === '') return;
+
+            addMessage('user', question);
+            document.getElementById('healthQuestion').value = '';
+
             let response = 'Please consult a professional doctor for accurate advice.';
             let answer = 'Sorry, I don\'t have specific information on that topic. ' + response;
+            const lowerQuestion = question.toLowerCase();
 
-            if (question === '') {
-                answer = 'Please enter a question.';
-            } else {
-                let bestMatch = '';
-                let maxScore = 0;
-                for (const key in healthResponses) {
-                    const score = question.split(' ').filter(word => key.includes(word)).length;
-                    if (score > maxScore) {
-                        maxScore = score;
-                        bestMatch = key;
-                    }
+            let bestMatch = '';
+            let maxScore = 0;
+            for (const key in healthResponses) {
+                const score = lowerQuestion.split(' ').filter(word => key.includes(word)).length;
+                if (score > maxScore) {
+                    maxScore = score;
+                    bestMatch = key;
                 }
-                if (bestMatch) {
-                    answer = healthResponses[bestMatch] + ' ' + response;
-                } else {
-                    // Fallback to web search for more AI integration
-                    try {
-                        const searchRes = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(question)}&format=json`);
-                        const data = await searchRes.json();
-                        answer = data.Abstract + ' ' + response;
-                    } catch (error) {
-                        answer = 'Unable to fetch additional information. ' + response;
-                    }
+            }
+            if (bestMatch) {
+                answer = healthResponses[bestMatch] + ' ' + response;
+            } else {
+                // Fallback to web search
+                try {
+                    const searchRes = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(lowerQuestion)}&format=json`);
+                    const data = await searchRes.json();
+                    answer = data.Abstract + ' ' + response;
+                } catch (error) {
+                    answer = 'Unable to fetch additional information. ' + response;
                 }
             }
 
-            document.getElementById('healthResponse').innerHTML = 'Heathey AI: ' + answer;
+            addMessage('ai', answer);
+        }
+
+        function addMessage(role, content) {
+            chatHistory.push({role, content});
+            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+            renderChat();
+        }
+
+        function renderChat() {
+            const chatDiv = document.getElementById('chatHistory');
+            chatDiv.innerHTML = '';
+            chatHistory.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', msg.role);
+                const pfpImg = document.createElement('img');
+                pfpImg.classList.add('pfp');
+                pfpImg.src = msg.role === 'user' ? userPfp : heatheyPfp;
+                const contentDiv = document.createElement('div');
+                contentDiv.classList.add('content');
+                contentDiv.textContent = msg.content;
+                if (msg.role === 'user') {
+                    messageDiv.appendChild(contentDiv);
+                    messageDiv.appendChild(pfpImg);
+                } else {
+                    messageDiv.appendChild(pfpImg);
+                    messageDiv.appendChild(contentDiv);
+                }
+                chatDiv.appendChild(messageDiv);
+            });
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+        }
+
+        function loadChatHistory() {
+            renderChat();
+        }
+
+        function deleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This will clear all saved data.')) {
+                localStorage.clear();
+                userPfp = heatheyPfp;
+                chatHistory = [];
+                renderChat();
+                alert('Account deleted. Reloading page.');
+                location.reload();
+            }
         }
 
         function showAboutModal() {
@@ -434,25 +556,25 @@
             document.getElementById('contextMenu').style.display = 'none';
         });
 
-        // Hardcoded responses as fallback or primary, since fetch failed
-        healthResponses = {
-            'headache': 'For headaches, try resting in a quiet, dark room, staying hydrated, and using over-the-counter pain relief if appropriate.',
-            'cold': 'For a common cold or flu, get plenty of rest, drink fluids, and consider over-the-counter remedies for symptoms.',
-            'flu': 'For a common cold or flu, get plenty of rest, drink fluids, and consider over-the-counter remedies for symptoms.',
-            'exercise': 'Regular exercise is beneficial for health. Aim for at least 150 minutes of moderate activity per week.',
-            'fitness': 'Regular exercise is beneficial for health. Aim for at least 150 minutes of moderate activity per week.',
-            'diet': 'A balanced diet with fruits, vegetables, lean proteins, and whole grains is recommended.',
-            'nutrition': 'A balanced diet with fruits, vegetables, lean proteins, and whole grains is recommended.',
-            'sleep': 'Adults should aim for 7-9 hours of sleep per night for optimal health.',
-            'stress': 'To manage stress, try deep breathing, meditation, exercise, or talking to a friend.',
-            'hypertension': 'For high blood pressure, maintain a healthy diet low in salt, exercise regularly, and monitor your blood pressure.',
-            'high blood pressure': 'For high blood pressure, maintain a healthy diet low in salt, exercise regularly, and monitor your blood pressure.',
-            'diabetes': 'Managing diabetes involves monitoring blood sugar, eating healthy, exercising, and taking prescribed medications.',
-            'allergy': 'For allergies, avoid triggers, use antihistamines, and consider allergy shots if severe.',
-            'back pain': 'For back pain, try gentle stretching, maintain good posture, and use heat or cold packs.',
-            // Add more from the list as needed, but truncated for brevity
-            // ... (include the full list from previous messages)
-        };
+        // Load responses
+        async function loadResponses() {
+            try {
+                const res = await fetch('https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/heathy/list%20for%20ai');
+                const text = await res.text();
+                const elseIfRegex = /} else if \(question\.includes\('(.*?)'\)\) {\s*answer = (.*) \+ response;/gs;
+                let match;
+                while ((match = elseIfRegex.exec(text)) !== null) {
+                    let key = match[1].trim();
+                    let ans = match[2].trim();
+                    if (ans.startsWith("'") && ans.endsWith("'")) {
+                        ans = ans.slice(1, -1);
+                    }
+                    healthResponses[key] = ans;
+                }
+            } catch (error) {
+                console.error('Error loading responses:', error);
+            }
+        }
     </script>
 </body>
 </html>
