@@ -1,131 +1,117 @@
 /**
- * @name Insane Neon Cyberpunk Overhaul
- * @author Grok (maxed out edition)
- * @description Full glassmorphic transparency + epic neon city background visible everywhere. WAAAAAAAAAAAAAAAAY BETTER!
- * @version 3.0
+ * @name Max Neon Cyberpunk Fixed
+ * @author Grok (ultimate fixed edition)
+ * @description FULL background visibility + glass transparency + insane neon glows. Background behind EVERYTHING!
+ * @version 4.0
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@600&display=swap');
 
-/* === VARIABLES === */
+/* === VARIABLES - CHANGE BG HERE === */
 :root {
+    --cyber-bg: url('https://preview.redd.it/n2yy6pz2ux411.png?auto=webp&s=c2724e02f31ff7fd8e9498b1be41ae5ff7d1eba0'); /* Epic rainy cyberpunk default */
     --neon-cyan: #00ffff;
     --neon-magenta: #ff00ff;
-    --neon-pink: #ff69b4;
     --neon-purple: #c800ff;
-    --panel-bg: rgba(5, 5, 20, 0.45); /* Super transparent */
-    --blur-strength: blur(24px);
-    --text-glow: 0 0 12px var(--neon-cyan);
-    --text-glow-magenta: 0 0 12px var(--neon-magenta);
-    --roundness: 16px;
+    --panel-bg: rgba(5, 10, 25, 0.35); /* Low opacity for max bg visibility */
+    --blur: blur(28px);
+    --text-glow: 0 0 14px var(--neon-cyan);
+    --roundness: 18px;
     --font-heading: 'Orbitron', sans-serif;
     --font-body: 'Rajdhani', sans-serif;
 }
 
-/* FORCE BACKGROUND ON THE DEEPEST LAYERS */
-html, body, .appMount-3lHmkl, .app-2rEoOp, .bg-AYqtMd, .layers-3iHuyZ, .layer-3QrUeG {
+/* FORCE BACKGROUND ON THE TRUE ROOT (this is the key fix!) */
+#app-mount {
     background: var(--cyber-bg) !important;
     background-size: cover !important;
     background-position: center !important;
+    background-repeat: no-repeat !important;
     background-attachment: fixed !important;
 }
 
-/* PICK ONE OF THESE INSANE BACKGROUNDS (copy the full URL) */
-:root { --cyber-bg: url('https://images4.alphacoders.com/102/1024096.jpg'); } /* Rainy neon streets - epic! */
-/* Alternatives - uncomment one: */
-/* --cyber-bg: url('https://preview.redd.it/n2yy6pz2ux411.png?width=3840&format=png&auto=webp&s=c2724e02f31ff7fd8e9498b1be41ae5ff7d1eba0'); */ /* Ultra 4K rainy city */
-/* --cyber-bg: url('https://wallpapers.com/images/hd/blade-runner-cyberpunk-city-street-cyeb3qlmqb0oime1.jpg'); */ /* Blade Runner vibes */
-/* --cyber-bg: url('https://images3.alphacoders.com/883/883448.jpg'); */ /* Neon nightscape */
-/* --cyber-bg: url('https://wallpapers.com/images/hd/blade-runner-cyberpunk-neon-city-4oxlkpcj4lp3vbcj.jpg'); */ /* Pure neon signs */
-/* --cyber-bg: url('https://thumbs.dreamstime.com/z/dark-futuristic-cyberpunk-neon-grid-background-glowing-blue-pink-light-reflections-digital-landscape-sci-fi-atmosphere-354213451.jpg'); */ /* Grid style */
-
-/* MAX TRANSPARENCY + BLUR EVERYWHERE */
-.sidebar-2K8pFh, .chat-3bRxxu, .members-1998pB, .container-3baos1,
-.panels-j1Uci_, .title-3qD0b-, .container-1r6BKw, .base-3dtUhz,
-.privateChannels-1nO12o, .scroller-1Bvpku, .peopleColumn-29fq28,
-.root-1gCeng, .modal-3c3bKg, .footer-3mqk7D {
-    background: var(--panel-bg) !important;
-    backdrop-filter: var(--blur-strength) !important;
-    -webkit-backdrop-filter: var(--blur-strength) !important;
-    border-radius: var(--roundness) !important;
-    border: 1px solid rgba(0, 255, 255, 0.2) !important;
+/* Extra force on other root layers */
+.appMount-3lHmkl, .app-2rEoOp, .bg-AYqtMd, .layers-3iHuyZ {
+    background: transparent !important;
 }
 
-/* Override Discord defaults */
+/* MAX GLASS TRANSPARENCY + BLUR ON ALL PANELS */
+.sidebar-2K8pFh, .chat-3bRxxu, .members-1998pB, .container-3baos1,
+.panels-j1Uci_, .title-3qD0b-, .container-1r6BKw, .privateChannels-1nO12o,
+.peopleColumn-29fq28, .root-1gCeng, .modal-3c3bKg, .footer-3mqk7D,
+.scroller-1Bvpku, .base-3dtUhz {
+    background: var(--panel-bg) !important;
+    backdrop-filter: var(--blur) !important;
+    -webkit-backdrop-filter: var(--blur) !important;
+    border-radius: var(--roundness) !important;
+    border: 1px solid rgba(0, 255, 255, 0.25) !important;
+}
+
+/* Discord variable overrides for full transparency */
 .theme-dark {
     --background-primary: transparent !important;
     --background-secondary: transparent !important;
     --background-secondary-alt: transparent !important;
     --background-tertiary: transparent !important;
     --background-floating: rgba(0,0,0,0.5) !important;
-    --channeltextarea-background: rgba(10,10,40,0.6) !important;
+    --channeltextarea-background: rgba(10,20,50,0.5) !important;
     --brand-experiment: var(--neon-cyan) !important;
     --header-primary: var(--neon-cyan) !important;
-    --text-normal: #cfffff !important;
+    --text-normal: #d0ffff !important;
     --interactive-active: var(--neon-magenta) !important;
     --scrollbar-thin-thumb: var(--neon-purple) !important;
 }
 
-/* INSANE GLOWING TEXT */
+/* INSANE NEON TEXT GLOW */
 h1, h2, h3, .username-1A8OIy, .headerText-3Uvj1Y, .name-uJV0GL,
-.topic-TCb_qw, .title-29uC1r, .markup-2BOw-j {
+.topic-TCb_qw, .title-29uC1r, .markup-2BOw-j, .messageContent-2qWWxC {
     color: var(--neon-cyan) !important;
     text-shadow: var(--text-glow) !important;
     font-family: var(--font-heading) !important;
-    letter-spacing: 1px;
+    letter-spacing: 1.2px;
 }
 .messageContent-2qWWxC {
-    text-shadow: 0 0 6px var(--neon-cyan);
     font-family: var(--font-body) !important;
-    font-size: 15px;
+    text-shadow: 0 0 8px var(--neon-cyan);
 }
 
 /* Links & mentions */
-a { color: var(--neon-magenta) !important; text-shadow: var(--text-glow-magenta) !important; }
+a { color: var(--neon-magenta) !important; text-shadow: 0 0 14px var(--neon-magenta) !important; }
 .mention {
-    background: rgba(255,0,255,0.25) !important;
+    background: rgba(255,0,255,0.3) !important;
     color: var(--neon-magenta) !important;
-    text-shadow: var(--text-glow-magenta) !important;
-    border-radius: 6px;
-    padding: 0 6px;
+    text-shadow: var(--text-glow);
+    border-radius: 8px;
+    padding: 0 8px;
 }
 
-/* Pulsing buttons */
-.button-38aScr {
-    border-radius: var(--roundness) !important;
-    transition: all 0.4s ease !important;
-}
+/* Pulsing neon buttons */
 .button-38aScr:hover {
     background: var(--neon-cyan) !important;
-    box-shadow: 0 0 30px var(--neon-cyan) !important;
-    transform: scale(1.05) translateY(-3px);
-    animation: pulse 1.5s infinite;
+    box-shadow: 0 0 40px var(--neon-cyan) !important;
+    animation: pulse 2s infinite;
 }
-@keyframes pulse { 0% { box-shadow: 0 0 20px var(--neon-cyan); } 50% { box-shadow: 0 0 40px var(--neon-cyan); } 100% { box-shadow: 0 0 20px var(--neon-cyan); } }
-
-/* Glowing inputs */
-.channelTextArea-2VhpuV, .input-2VB9rf:focus {
-    box-shadow: 0 0 20px var(--neon-cyan) !important;
-    border-color: var(--neon-cyan) !important;
+@keyframes pulse {
+    0% { box-shadow: 0 0 20px var(--neon-cyan); }
+    50% { box-shadow: 0 0 50px var(--neon-cyan); }
+    100% { box-shadow: 0 0 20px var(--neon-cyan); }
 }
 
-/* Neon scrollbars */
+/* Glowing inputs & scrollbars */
+.channelTextArea-2VhpuV:focus, .input-2VB9rf:focus {
+    box-shadow: 0 0 25px var(--neon-cyan) !important;
+}
 ::-webkit-scrollbar-thumb {
     background: var(--neon-magenta) !important;
-    border-radius: 10px !important;
-    box-shadow: 0 0 15px var(--neon-magenta) !important;
+    box-shadow: 0 0 20px var(--neon-magenta) !important;
 }
 
-/* Hover glows everywhere */
-.layout-2DM8Md:hover, .container-1r6BKw:hover, .membersWrap-2h-GB4 .member-3-YXUe:hover {
-    background: rgba(0,255,255,0.2) !important;
-    box-shadow: 0 0 20px var(--neon-cyan) !important;
-    transform: translateX(4px);
-    transition: all 0.3s ease;
+/* Hover glows */
+.layout-2DM8Md:hover, .container-1r6BKw:hover, .member-3-YXUe:hover {
+    background: rgba(0,255,255,0.25) !important;
+    box-shadow: 0 0 25px var(--neon-cyan) !important;
 }
 
-/* Clean up stock Discord junk */
-.wordmark-2iDDfm, .divider-32i8lo { display: none !important; }
-
-/* Rounded avatars */
-.avatar-1BDnDE { border-radius: 25% !important; border: 2px solid var(--neon-cyan); box-shadow: 0 0 15px var(--neon-cyan); }
+/* Cleanup */
+.wordmark-2iDDfm { display: none !important; }
+.avatar-1BDnDE { border: 3px solid var(--neon-cyan); box-shadow: 0 0 20px var(--neon-cyan); border-radius: 30% !important; }
