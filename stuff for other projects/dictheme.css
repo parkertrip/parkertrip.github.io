@@ -1,0 +1,95 @@
+/**
+ * @name Cool Neon Cyberpunk
+ * @author Grok
+ * @description A dark neon cyberpunk theme with glowing accents in cyan and magenta. Highly customizable!
+ * @version 1.0
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap'); /* Optional cool neon font */
+
+/* Root variables for easy customization */
+:root {
+    --neon-primary: #00ffff;     /* Cyan glow */
+    --neon-secondary: #ff00ff;   /* Magenta glow */
+    --background-dark: #0a0a0a;
+    --background-secondary: #111111;
+    --text-normal: #e0e0e0;
+    --text-glow: 0 0 10px var(--neon-primary);
+    --channels-width: 240px;
+    --members-width: 240px;
+}
+
+/* Main background with subtle neon grid or image (replace URL with your own cyberpunk/neon background) */
+.appMount-3lHmkl,
+.body-3iLsc4,
+.bg-AYqtMd {
+    background: linear-gradient(rgba(10,10,10,0.9), rgba(10,10,10,0.9)), url('https://images.unsplash.com/photo-1538439907460-1596ca5e2db8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+/* Darken overall UI */
+.theme-dark {
+    --background-primary: var(--background-dark);
+    --background-secondary: var(--background-secondary);
+    --background-secondary-alt: #0f0f0f;
+    --background-tertiary: #000000;
+    --channeltextarea-background: #111111;
+    --text-normal: var(--text-normal);
+}
+
+/* Neon accents for mentions, links, etc. */
+a {
+    color: var(--neon-primary) !important;
+    text-shadow: var(--text-glow);
+}
+
+.mention {
+    color: var(--neon-secondary) !important;
+    background: rgba(255,0,255,0.1) !important;
+    text-shadow: var(--text-glow);
+}
+
+/* Glowing text for usernames, channels */
+.username-1A8OIy,
+.name-uJV0GL,
+.headerText-3Uvj1Y {
+    color: var(--neon-primary) !important;
+    text-shadow: var(--text-glow);
+    font-family: 'Orbitron', sans-serif; /* Optional futuristic font */
+}
+
+/* Neon borders and glows */
+.divider-3_HH5L {
+    border-color: var(--neon-primary) !important;
+    box-shadow: 0 0 8px var(--neon-primary);
+}
+
+.scrollbar-2rkZSL {
+    background: var(--neon-secondary) !important;
+}
+
+/* Buttons with neon hover */
+.button-38aScr:hover {
+    background-color: var(--neon-primary) !important;
+    box-shadow: 0 0 15px var(--neon-primary);
+    transition: all 0.3s ease;
+}
+
+/* Status indicators glow */
+.status-1ibiUI {
+    box-shadow: 0 0 10px var(--neon-primary);
+}
+
+/* Input fields glow */
+.input-2VB9rf:focus {
+    border-color: var(--neon-primary);
+    box-shadow: 0 0 12px var(--neon-primary);
+}
+
+/* Optional: Make channels and members list glow on hover */
+.container-1r6BKw:hover,
+.members-1998pB > div:hover {
+    background: rgba(0,255,255,0.1);
+    box-shadow: 0 0 10px var(--neon-primary);
+}
