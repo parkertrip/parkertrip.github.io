@@ -307,6 +307,20 @@
             font-size: 1.2rem;
             font-weight: 600;
         }
+        #calibration {
+            background: #e0f7fa;
+            color: #333;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        #calibrationLine {
+            width: 100px;
+            height: 5px;
+            background: #000;
+            margin: 20px auto;
+        }
     </style>
 </head>
 <body onload="initApp()">
@@ -340,9 +354,16 @@
         <div class="tab-content">
             <div class="tab-pane fade show active" id="eye">
                 <div class="card-body">
+                    <div id="calibration">
+                        <p class="lead">Calibrate for accurate test:</p>
+                        <div id="calibrationLine"></div>
+                        <p>Measure the black line with a ruler (in mm) and enter below:</p>
+                        <input type="number" class="form-control mb-3" id="measuredMm" placeholder="Enter mm">
+                        <button type="button" class="btn btn-primary" onclick="calibrateScreen()">Calibrate</button>
+                    </div>
                     <div class="distance-info">
-                        <p><strong>Recommended distance:</strong> <span id="recommendedDistance">Calculating...</span></p>
-                        <p>Sit at this distance for the most accurate eye test. It adjusts automatically for your screen!</p>
+                        <p><strong>Recommended distance:</strong> <span id="recommendedDistance">3 meters (10 feet) - calibrate for accuracy</span></p>
+                        <p>Sit at this distance for the most accurate eye test.</p>
                     </div>
                     <p class="lead">To take the eye test:</p>
                     <ul class="list-group list-group-flush mb-4">
@@ -350,9 +371,7 @@
                         <li class="list-group-item">Cover one eye at a time and read the letters on the chart below.</li>
                         <li class="list-group-item">Note the smallest line you can read clearly.</li>
                     </ul>
-                    <div class="text-center">
-                        <img src="https://images.squarespace-cdn.com/content/v1/5e4c2ab855f49e2eb34dd11c/1586273214312-BT0OLPPTBG8C4O2TMRDJ/Safe+Eyes+America+Eye+Chart-2.jpg?format=1000w" alt="Eye Test Chart" class="eye-chart img-fluid" id="eyeChartImg">
-                    </div>
+                    <img src="https://images.squarespace-cdn.com/content/v1/5e4c2ab855f49e2eb34dd11c/1586273214312-BT0OLPPTBG8C4O2TMRDJ/Safe+Eyes+America+Eye+Chart-2.jpg?format=1000w" alt="Eye Test Chart" class="eye-chart img-fluid" id="eyeChartImg">
                     <form id="eyeForm" class="mt-4">
                         <div class="mb-3">
                             <label for="eyeScore" class="form-label fw-bold">Smallest line you can read (1-11):</label>
@@ -840,48 +859,51 @@
             document.body.appendChild(aboutDiv);
         }
 
-        // Fixed eye chart distance calculation
-        function calculateRecommendedDistance() {
-            const container = document.querySelector('.card-body');
-            const img = document.getElementById('eyeChartImg');
-            if (!container || !img || !img.complete || img.naturalWidth === 0) {
-                document.getElementById('recommendedDistance').textContent = '3 meters (10 feet)';
+        // Eye test distance calculation - final version
+        function calibrateScreen() {
+            const measuredMm = parseFloat(document.getElementById('measuredMm').value);
+            if (isNaN(measuredMm) || measuredMm <= 0) {
+                alert('Please enter a valid measurement in mm.');
                 return;
             }
 
-            // Get the actual displayed width of the image
-            const displayedWidth = img.clientWidth;
+            const linePx = 100;
+            const ppi = linePx / (measuredMm / 25.4);
+            localStorage.setItem('screenPPI', ppi);
+            calculateRecommendedDistance();
+            alert('Calibration complete! Distance updated.');
+        }
 
-            // The original chart image is ~1000px wide at standard size
-            const originalChartWidthPx = 1000;
+        function calculateRecommendedDistance() {
+            const ppi = parseFloat(localStorage.getItem('screenPPI')) || 96 * window.devicePixelRatio;
 
-            // Standard viewing distance is 6 meters when the chart is printed at real size
-            // We scale based on how much larger/smaller it appears on screen
-            const scaleFactor = displayedWidth / originalChartWidthPx;
+            const img = document.getElementById('eyeChartImg');
+            if (!img || img.clientHeight === 0) {
+                document.getElementById('recommendedDistance').textContent = '3 meters (10 feet) - calibrate for accuracy';
+                return;
+            }
+
+            // Use clientHeight for displayed height (handles zoom and scaling)
+            const displayedHeight = img.clientHeight;
+            const estimated20_20HeightPx = displayedHeight / 11 * 0.8; // Adjusted for line height
+
+            const estimated20_20HeightInches = estimated20_20HeightPx / ppi;
+            const estimated20_20HeightMm = estimated20_20HeightInches * 25.4;
+
+            const standard20_20HeightMm = 8.73;
             const standardDistanceM = 6;
-            let recommendedM = standardDistanceM / scaleFactor;
 
-            // Clamp to reasonable range
+            let recommendedM = standardDistanceM * (estimated20_20HeightMm / standard20_20HeightMm);
             recommendedM = Math.max(1, Math.min(10, recommendedM));
 
             const recommendedFt = recommendedM * 3.28084;
 
-            const displayM = recommendedM.toFixed(1);
-            const displayFt = recommendedFt.toFixed(1);
-
-            document.getElementById('recommendedDistance').textContent = `${displayM} meters (${displayFt} feet)`;
+            document.getElementById('recommendedDistance').textContent = `${recommendedM.toFixed(1)} meters (${recommendedFt.toFixed(1)} feet)`;
         }
 
-        // Run calculation when image loads and on resize/zoom
-        const eyeChartImg = document.getElementById('eyeChartImg');
-        if (eyeChartImg) {
-            eyeChartImg.onload = calculateRecommendedDistance;
-        }
-
+        // Run on load, resize, and tab show
+        window.addEventListener('load', calculateRecommendedDistance);
         window.addEventListener('resize', calculateRecommendedDistance);
-        document.addEventListener('DOMContentLoaded', calculateRecommendedDistance);
-
-        // Also recalculate when tab is shown
         document.querySelector('#eye-tab').addEventListener('shown.bs.tab', calculateRecommendedDistance);
     </script>
 </body>
