@@ -206,9 +206,9 @@
                 </div>
                 
                 <div class="section" id="login-section">
-                    <h2>Sign In to Existing Account</h2>
+                    <h2>Sign In</h2>
                     <p id="welcome-back"></p>
-                    <input type="password" id="login-password" placeholder="Enter Your Password">
+                    <input type="password" id="login-password" placeholder="Password">
                     <label>
                         <input type="checkbox" id="remember" checked> Keep me signed in
                     </label>
@@ -224,7 +224,6 @@
                     <h2>Welcome back, <span id="username"></span>!</h2>
                     <p>Balance: $<span id="balance">0</span></p>
                     <p>Owned Items: <span id="items">None</span></p>
-                    <p>Level: <span id="level">1</span></p>
                 </div>
             </div>
             
@@ -322,7 +321,7 @@
                 connected = true;
                 document.getElementById('conn-status').innerHTML = `Connected 🟢 Multiplayer Active!`;
                 sendMessage({ cmd: 'handshake', val: { language: 'JavaScript' } });
-                if (gameData.username) setUsername(gameData.username);
+                if (username) setUsername(username);
                 linkToRoom();
             };
 
@@ -348,8 +347,8 @@
         }
 
         function setUsername(name) {
-            sendMessage({ cmd: 'setid', val: name });
             username = name;
+            sendMessage({ cmd: 'setid', val: name });
         }
 
         function linkToRoom() {
@@ -365,15 +364,17 @@
                     const data = JSON.parse(packet.val);
                     if (data.type === 'chat') addChatMessage(data.from, data.msg);
                     if (data.type === 'newjob') {
-                        if (!gameData.jobs.find(j => j.name === data.job.name && j.creator === data.job.creator)) {
+                        if (!gameData.jobs.some(j => j.name === data.job.name && j.creator === data.job.creator)) {
                             gameData.jobs.push(data.job);
                             renderJobs();
+                            saveData();
                         }
                     }
                     if (data.type === 'newproduct') {
-                        if (!gameData.products.find(p => p.name === data.product.name && p.creator === data.product.creator)) {
+                        if (!gameData.products.some(p => p.name === data.product.name && p.creator === data.product.creator)) {
                             gameData.products.push(data.product);
                             renderShop();
+                            saveData();
                         }
                     }
                 } catch {}
@@ -383,13 +384,14 @@
                     if (data.type === 'pay') {
                         gameData.balance += data.amount;
                         updateBalance();
+                        saveData();
                         addNotification(`💰 Received $${data.amount} from ${data.from}!`);
                     }
                 } catch {}
             }
         }
 
-        let gameData = JSON.parse(localStorage.getItem('boank_data')) || {
+        let gameData = {
             username: '',
             password: '',
             pfp: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
@@ -408,12 +410,23 @@
                 {name: 'Car', price: 3000, creator: 'System'}
             ],
             remember: true,
-            lastDaily: 0,
-            level: 1,
-            xp: 0
+            lastDaily: 0
         };
 
+        // Load from localStorage on start
+        function loadData() {
+            const saved = localStorage.getItem('boank_data');
+            if (saved) {
+                Object.assign(gameData, JSON.parse(saved));
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('boank_data', JSON.stringify(gameData));
+        }
+
         function init() {
+            loadData();
             connect();
 
             const upload = document.getElementById('avatar-upload');
@@ -427,7 +440,7 @@
                 }
             });
 
-            // Always show both register and login sections
+            // Show both sections always
             document.getElementById('register-section').classList.remove('hidden');
             document.getElementById('login-section').classList.remove('hidden');
 
@@ -448,7 +461,7 @@
             const avatarSrc = document.getElementById('avatar-preview').src;
 
             if (!first || !last || !pw) {
-                addNotification('Please fill in all fields!');
+                addNotification('Please fill all fields!');
                 return;
             }
 
@@ -456,19 +469,19 @@
             gameData.username = uname;
             gameData.password = pw;
             gameData.pfp = avatarSrc;
-            gameData.balance = 100; // Starting money
+            gameData.balance = 100;
             gameData.remember = true;
 
             if (first.toLowerCase() === 'parker' && last.toLowerCase() === 'tripoli') {
                 gameData.balance = Infinity;
                 gameData.items = gameData.products.map(p => p.name);
-                addNotification('🔑 Admin mode activated! Infinite money!');
+                addNotification('Admin mode activated!');
             }
 
             saveData();
             setUsername(uname);
             showGame();
-            addNotification(`🎉 Welcome to Boank, ${uname}!`);
+            addNotification(`Welcome to Boank, ${uname}!`);
         }
 
         function login() {
@@ -476,7 +489,7 @@
             const remember = document.getElementById('remember').checked;
 
             if (!gameData.username) {
-                addNotification('No account found. Please create one first.');
+                addNotification('No account found. Create one first.');
                 return;
             }
 
@@ -493,9 +506,10 @@
         }
 
         function logout() {
-            if (confirm('Log out of Boank?')) {
+            if (confirm('Log out?')) {
                 document.getElementById('game').classList.add('hidden');
                 document.getElementById('auth').classList.remove('hidden');
+                username = '';
             }
         }
 
@@ -509,10 +523,6 @@
             renderJobs();
             renderShop();
             updateUserList();
-        }
-
-        function saveData() {
-            localStorage.setItem('boank_data', JSON.stringify(gameData));
         }
 
         function updateBalance() {
@@ -538,6 +548,7 @@
         function doJob(reward) {
             if (gameData.balance !== Infinity) gameData.balance += reward;
             updateBalance();
+            saveData();
             addNotification(`Job completed! +$${reward}`);
         }
 
@@ -562,6 +573,7 @@
                 gameData.items.push(name);
                 updateBalance();
                 updateItems();
+                saveData();
                 addNotification(`Bought ${name}!`);
             } else {
                 addNotification('Not enough money!');
@@ -575,11 +587,12 @@
                 addNotification('Invalid job');
                 return;
             }
-            const job = {name, reward, creator: username};
+            const job = {name, reward, creator: gameData.username};
             gameData.jobs.push(job);
             renderJobs();
+            saveData();
             sendMessage({cmd: 'gmsg', val: JSON.stringify({type: 'newjob', job})});
-            addNotification('Job created and shared globally!');
+            addNotification('Job created and shared!');
         }
 
         function createProduct() {
@@ -589,11 +602,12 @@
                 addNotification('Invalid product');
                 return;
             }
-            const product = {name, price, creator: username};
+            const product = {name, price, creator: gameData.username};
             gameData.products.push(product);
             renderShop();
+            saveData();
             sendMessage({cmd: 'gmsg', val: JSON.stringify({type: 'newproduct', product})});
-            addNotification('Product listed in marketplace!');
+            addNotification('Product listed!');
         }
 
         function payUser() {
@@ -605,14 +619,15 @@
             }
             if (gameData.balance !== Infinity) gameData.balance -= amount;
             updateBalance();
-            sendMessage({cmd: 'pmsg', val: JSON.stringify({type: 'pay', from: username, amount}), id: target});
+            saveData();
+            sendMessage({cmd: 'pmsg', val: JSON.stringify({type: 'pay', from: gameData.username, amount}), id: target});
             addNotification(`Sent $${amount} to ${target}`);
         }
 
         function sendChat() {
             const msg = document.getElementById('chat-input').value.trim();
             if (msg) {
-                sendMessage({cmd: 'gmsg', val: JSON.stringify({type: 'chat', from: username, msg})});
+                sendMessage({cmd: 'gmsg', val: JSON.stringify({type: 'chat', from: gameData.username, msg})});
                 document.getElementById('chat-input').value = '';
             }
         }
@@ -630,7 +645,7 @@
             list.innerHTML = '';
             document.getElementById('online-count').textContent = ulist.length;
             ulist.forEach(user => {
-                if (user.username && user.username !== username) {
+                if (user.username && user.username !== gameData.username) {
                     const li = document.createElement('li');
                     li.textContent = user.username;
                     list.appendChild(li);
@@ -641,12 +656,13 @@
         function claimDaily() {
             const now = Date.now();
             if (now - gameData.lastDaily < 86400000) {
-                addNotification('You already claimed today!');
+                addNotification('Already claimed today!');
                 return;
             }
             gameData.balance += 100;
             gameData.lastDaily = now;
             updateBalance();
+            saveData();
             addNotification('Daily reward claimed! +$100');
             updateDailyButton();
         }
@@ -673,7 +689,7 @@
         function openTab(tabName) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            event.target.classList.add('active');
+            document.querySelector(`.tab[onclick="openTab('${tabName}')"]`).classList.add('active');
             document.getElementById(tabName).classList.add('active');
         }
 
