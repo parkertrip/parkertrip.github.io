@@ -132,11 +132,17 @@
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 30px;
         }
-        #logout {
-            background-color: #e74c3c;
+        #logout, #delete-account {
             width: 100%;
             font-size: 1.3em;
             padding: 18px;
+            margin-top: 20px;
+        }
+        #delete-account {
+            background-color: #e74c3c;
+        }
+        #delete-account:hover {
+            background-color: #c0392b;
         }
         .chat-messages {
             height: 300px;
@@ -194,24 +200,22 @@
         
         <div id="auth">
             <div class="grid">
-                <div class="section" id="register-section">
+                <div class="section">
                     <h2>Create New Account</h2>
                     <input type="text" id="first-name" placeholder="First Name">
                     <input type="text" id="last-name" placeholder="Last Name">
                     <input type="password" id="reg-password" placeholder="Password">
                     <h3>Upload Your Avatar</h3>
                     <input type="file" id="avatar-upload" accept="image/*">
-                    <img id="avatar-preview" class="avatar-preview" src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png" alt="Avatar Preview">
+                    <img id="avatar-preview" class="avatar-preview" src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png">
                     <button onclick="register()">Create Account</button>
                 </div>
                 
-                <div class="section" id="login-section">
+                <div class="section">
                     <h2>Sign In</h2>
                     <p id="welcome-back"></p>
                     <input type="password" id="login-password" placeholder="Password">
-                    <label>
-                        <input type="checkbox" id="remember" checked> Keep me signed in
-                    </label>
+                    <label><input type="checkbox" id="remember" checked> Keep me signed in</label>
                     <button onclick="login()">Log In</button>
                 </div>
             </div>
@@ -219,17 +223,17 @@
         
         <div id="game" class="hidden">
             <div class="section profile">
-                <img id="user-pfp" src="" alt="Your Avatar">
+                <img id="user-pfp" src="">
                 <div>
-                    <h2>Welcome back, <span id="username"></span>!</h2>
+                    <h2>Welcome, <span id="username"></span>!</h2>
                     <p>Balance: $<span id="balance">0</span></p>
-                    <p>Owned Items: <span id="items">None</span></p>
+                    <p>Items: <span id="items">None</span></p>
                 </div>
             </div>
             
             <div class="section daily-reward">
                 <h2>Daily Reward</h2>
-                <button id="claim-daily" onclick="claimDaily()">Claim $100 Today!</button>
+                <button id="claim-daily" onclick="claimDaily()">Claim $100</button>
             </div>
             
             <div class="tabs">
@@ -258,14 +262,14 @@
                     <div class="section">
                         <h2>Create New Job</h2>
                         <input type="text" id="new-job-name" placeholder="Job Name">
-                        <input type="number" id="new-job-reward" placeholder="Reward Amount">
-                        <button onclick="createJob()">Create & Share</button>
+                        <input type="number" id="new-job-reward" placeholder="Reward">
+                        <button onclick="createJob()">Create</button>
                     </div>
                     <div class="section">
                         <h2>Create New Product</h2>
                         <input type="text" id="new-product-name" placeholder="Product Name">
                         <input type="number" id="new-product-price" placeholder="Price">
-                        <button onclick="createProduct()">List Product</button>
+                        <button onclick="createProduct()">Create</button>
                     </div>
                 </div>
             </div>
@@ -274,12 +278,12 @@
                 <div class="grid">
                     <div class="section">
                         <h2>Online Players (<span id="online-count">0</span>)</h2>
-                        <ul id="user-list" class="user-list"></ul>
+                        <ul id="user-list"></ul>
                     </div>
                     <div class="section">
                         <h2>Global Chat</h2>
                         <div id="chat-messages" class="chat-messages"></div>
-                        <input type="text" id="chat-input" placeholder="Type a message...">
+                        <input type="text" id="chat-input" placeholder="Type message...">
                         <button onclick="sendChat()">Send</button>
                     </div>
                     <div class="section">
@@ -294,10 +298,12 @@
             <div id="notifications" class="section"></div>
             
             <button id="logout" onclick="logout()">Log Out</button>
+            <button id="delete-account" onclick="deleteAccount()">Delete Account</button>
         </div>
     </div>
 
     <script>
+        // Multiplayer client
         let socket = null;
         let username = '';
         let ulist = [];
@@ -357,26 +363,12 @@
 
         function handlePacket(packet) {
             if (packet.cmd === 'ulist') {
-                ulist = Array.isArray(packet.val) ? packet.val : [];
+                ulist = packet.val || [];
                 updateUserList();
             } else if (packet.cmd === 'gmsg') {
                 try {
                     const data = JSON.parse(packet.val);
                     if (data.type === 'chat') addChatMessage(data.from, data.msg);
-                    if (data.type === 'newjob') {
-                        if (!gameData.jobs.some(j => j.name === data.job.name && j.creator === data.job.creator)) {
-                            gameData.jobs.push(data.job);
-                            renderJobs();
-                            saveData();
-                        }
-                    }
-                    if (data.type === 'newproduct') {
-                        if (!gameData.products.some(p => p.name === data.product.name && p.creator === data.product.creator)) {
-                            gameData.products.push(data.product);
-                            renderShop();
-                            saveData();
-                        }
-                    }
                 } catch {}
             } else if (packet.cmd === 'pmsg') {
                 try {
@@ -385,39 +377,40 @@
                         gameData.balance += data.amount;
                         updateBalance();
                         saveData();
-                        addNotification(`💰 Received $${data.amount} from ${data.from}!`);
+                        addNotification(`Received $${data.amount} from ${data.from}!`);
                     }
                 } catch {}
             }
         }
 
-        let gameData = {
-            username: '',
-            password: '',
-            pfp: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
-            balance: 0,
-            items: [],
-            jobs: [
-                {name: 'Collect Leaves', reward: 20, creator: 'System'},
-                {name: 'Water Plants', reward: 35, creator: 'System'},
-                {name: 'Clean Park', reward: 50, creator: 'System'},
-                {name: 'Deliver Mail', reward: 70, creator: 'System'}
-            ],
-            products: [
-                {name: 'Cool Hat', price: 100, creator: 'System'},
-                {name: 'Fast Shoes', price: 250, creator: 'System'},
-                {name: 'Bike', price: 600, creator: 'System'},
-                {name: 'Car', price: 3000, creator: 'System'}
-            ],
-            remember: true,
-            lastDaily: 0
-        };
+        // Game Data - loaded at start
+        let gameData = {};
 
-        // Load from localStorage on start
         function loadData() {
             const saved = localStorage.getItem('boank_data');
             if (saved) {
-                Object.assign(gameData, JSON.parse(saved));
+                gameData = JSON.parse(saved);
+            } else {
+                gameData = {
+                    username: '',
+                    password: '',
+                    pfp: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
+                    balance: 0,
+                    items: [],
+                    jobs: [
+                        {name: 'Collect Leaves', reward: 20, creator: 'System'},
+                        {name: 'Water Plants', reward: 35, creator: 'System'},
+                        {name: 'Clean Park', reward: 50, creator: 'System'},
+                        {name: 'Deliver Mail', reward: 70, creator: 'System'}
+                    ],
+                    products: [
+                        {name: 'Cool Hat', price: 100, creator: 'System'},
+                        {name: 'Fast Shoes', price: 250, creator: 'System'},
+                        {name: 'Bike', price: 600, creator: 'System'},
+                        {name: 'Car', price: 3000, creator: 'System'}
+                    ],
+                    lastDaily: 0
+                };
             }
         }
 
@@ -426,32 +419,20 @@
         }
 
         function init() {
-            loadData();
+            loadData(); // Load FIRST - this was the bug!
             connect();
 
-            const upload = document.getElementById('avatar-upload');
-            upload.addEventListener('change', (e) => {
-                if (e.target.files && e.target.files[0]) {
+            document.getElementById('avatar-upload').addEventListener('change', (e) => {
+                if (e.target.files[0]) {
                     const reader = new FileReader();
-                    reader.onload = (ev) => {
-                        document.getElementById('avatar-preview').src = ev.target.result;
-                    };
+                    reader.onload = (ev) => document.getElementById('avatar-preview').src = ev.target.result;
                     reader.readAsDataURL(e.target.files[0]);
                 }
             });
 
-            // Show both sections always
-            document.getElementById('register-section').classList.remove('hidden');
-            document.getElementById('login-section').classList.remove('hidden');
-
             if (gameData.username) {
-                document.getElementById('welcome-back').textContent = `Welcome back, ${gameData.username}! Enter your password to continue.`;
-                document.getElementById('remember').checked = gameData.remember;
-            } else {
-                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('welcome-back').textContent = `Welcome back, ${gameData.username}! Enter password to continue.`;
             }
-
-            updateDailyButton();
         }
 
         function register() {
@@ -461,7 +442,7 @@
             const avatarSrc = document.getElementById('avatar-preview').src;
 
             if (!first || !last || !pw) {
-                addNotification('Please fill all fields!');
+                addNotification('Fill all fields!');
                 return;
             }
 
@@ -470,46 +451,36 @@
             gameData.password = pw;
             gameData.pfp = avatarSrc;
             gameData.balance = 100;
-            gameData.remember = true;
-
-            if (first.toLowerCase() === 'parker' && last.toLowerCase() === 'tripoli') {
-                gameData.balance = Infinity;
-                gameData.items = gameData.products.map(p => p.name);
-                addNotification('Admin mode activated!');
-            }
-
             saveData();
             setUsername(uname);
             showGame();
-            addNotification(`Welcome to Boank, ${uname}!`);
+            addNotification(`Welcome, ${uname}!`);
         }
 
         function login() {
             const pw = document.getElementById('login-password').value;
-            const remember = document.getElementById('remember').checked;
-
-            if (!gameData.username) {
-                addNotification('No account found. Create one first.');
-                return;
-            }
 
             if (pw !== gameData.password) {
                 addNotification('Wrong password!');
                 return;
             }
 
-            gameData.remember = remember;
-            saveData();
             setUsername(gameData.username);
             showGame();
-            addNotification('Logged in successfully!');
+            addNotification('Logged in!');
         }
 
         function logout() {
             if (confirm('Log out?')) {
                 document.getElementById('game').classList.add('hidden');
                 document.getElementById('auth').classList.remove('hidden');
-                username = '';
+            }
+        }
+
+        function deleteAccount() {
+            if (confirm('Delete account forever?')) {
+                localStorage.removeItem('boank_data');
+                location.reload();
             }
         }
 
@@ -539,7 +510,7 @@
             gameData.jobs.forEach(job => {
                 const div = document.createElement('div');
                 div.className = 'job-item';
-                div.innerHTML = `<strong>${job.name}</strong> by ${job.creator} — Reward: $${job.reward}
+                div.innerHTML = `<strong>${job.name}</strong> by ${job.creator} — $${job.reward}
                     <button onclick="doJob(${job.reward})">Do Job</button>`;
                 list.appendChild(div);
             });
@@ -549,7 +520,7 @@
             if (gameData.balance !== Infinity) gameData.balance += reward;
             updateBalance();
             saveData();
-            addNotification(`Job completed! +$${reward}`);
+            addNotification(`+$${reward}`);
         }
 
         function renderShop() {
@@ -570,7 +541,7 @@
         function buyProduct(name, price) {
             if (gameData.balance === Infinity || gameData.balance >= price) {
                 if (gameData.balance !== Infinity) gameData.balance -= price;
-                gameData.items.push(name);
+                if (!gameData.items.includes(name)) gameData.items.push(name);
                 updateBalance();
                 updateItems();
                 saveData();
@@ -583,45 +554,33 @@
         function createJob() {
             const name = document.getElementById('new-job-name').value.trim();
             const reward = parseInt(document.getElementById('new-job-reward').value);
-            if (!name || isNaN(reward) || reward <= 0) {
-                addNotification('Invalid job');
-                return;
-            }
+            if (!name || reward <= 0) return addNotification('Invalid');
             const job = {name, reward, creator: gameData.username};
             gameData.jobs.push(job);
             renderJobs();
             saveData();
             sendMessage({cmd: 'gmsg', val: JSON.stringify({type: 'newjob', job})});
-            addNotification('Job created and shared!');
         }
 
         function createProduct() {
             const name = document.getElementById('new-product-name').value.trim();
             const price = parseInt(document.getElementById('new-product-price').value);
-            if (!name || isNaN(price) || price <= 0) {
-                addNotification('Invalid product');
-                return;
-            }
+            if (!name || price <= 0) return addNotification('Invalid');
             const product = {name, price, creator: gameData.username};
             gameData.products.push(product);
             renderShop();
             saveData();
             sendMessage({cmd: 'gmsg', val: JSON.stringify({type: 'newproduct', product})});
-            addNotification('Product listed!');
         }
 
         function payUser() {
             const target = document.getElementById('pay-username').value.trim();
             const amount = parseInt(document.getElementById('pay-amount').value);
-            if (!target || isNaN(amount) || amount <= 0 || (gameData.balance !== Infinity && gameData.balance < amount)) {
-                addNotification('Invalid payment');
-                return;
-            }
+            if (!target || amount <= 0 || (gameData.balance !== Infinity && gameData.balance < amount)) return addNotification('Invalid');
             if (gameData.balance !== Infinity) gameData.balance -= amount;
             updateBalance();
             saveData();
             sendMessage({cmd: 'pmsg', val: JSON.stringify({type: 'pay', from: gameData.username, amount}), id: target});
-            addNotification(`Sent $${amount} to ${target}`);
         }
 
         function sendChat() {
@@ -645,9 +604,10 @@
             list.innerHTML = '';
             document.getElementById('online-count').textContent = ulist.length;
             ulist.forEach(user => {
-                if (user.username && user.username !== gameData.username) {
+                const name = typeof user === 'object' ? user.username : user;
+                if (name && name !== gameData.username) {
                     const li = document.createElement('li');
-                    li.textContent = user.username;
+                    li.textContent = name;
                     list.appendChild(li);
                 }
             });
@@ -656,34 +616,21 @@
         function claimDaily() {
             const now = Date.now();
             if (now - gameData.lastDaily < 86400000) {
-                addNotification('Already claimed today!');
+                addNotification('Already claimed!');
                 return;
             }
             gameData.balance += 100;
             gameData.lastDaily = now;
             updateBalance();
             saveData();
-            addNotification('Daily reward claimed! +$100');
-            updateDailyButton();
-        }
-
-        function updateDailyButton() {
-            const btn = document.getElementById('claim-daily');
-            if (Date.now() - gameData.lastDaily < 86400000) {
-                btn.disabled = true;
-                btn.textContent = 'Already Claimed Today';
-            } else {
-                btn.disabled = false;
-                btn.textContent = 'Claim $100 Daily Reward!';
-            }
+            addNotification('+ $100 daily!');
         }
 
         function addNotification(msg) {
-            const notifs = document.getElementById('notifications');
             const div = document.createElement('div');
             div.className = 'notification';
             div.innerHTML = msg + ' <button onclick="this.parentElement.remove()">✕</button>';
-            notifs.prepend(div);
+            document.getElementById('notifications').prepend(div);
         }
 
         function openTab(tabName) {
