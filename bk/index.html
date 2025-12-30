@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boank</title>
+    <link rel="icon" href="https://cdn.pixabay.com/photo/2015/10/14/18/43/bank-988164_1280.png">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+            margin: 0;
+            padding: 0;
+            color: #2c3e50;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        h1 {
+            text-align: center;
+            color: #00c28c;
+            font-size: 3em;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 3px solid #00c28c;
+            padding-bottom: 12px;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+        }
+        .section {
+            margin-bottom: 50px;
+            padding: 25px;
+            background: #f8fbff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            background-color: #00c28c;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background-color: #00a070;
+            transform: translateY(-3px);
+        }
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        input[type="text"], input[type="password"], input[type="number"] {
+            padding: 14px;
+            margin: 12px 0;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 1.1em;
+        }
+        input:focus {
+            border-color: #00c28c;
+            outline: none;
+        }
+        .avatar-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 20px auto;
+            display: block;
+            border: 4px solid #00c28c;
+            object-fit: cover;
+        }
+        .notification {
+            background: #fff3cd;
+            color: #856404;
+            padding: 18px;
+            margin: 20px 0;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .job-item, .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        .user-list li {
+            padding: 15px;
+            background: #e8f6f3;
+            margin: 12px 0;
+            border-radius: 10px;
+        }
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            background: #e8f6f3;
+            padding: 30px;
+            border-radius: 16px;
+        }
+        .profile img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid #00c28c;
+            object-fit: cover;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        #logout {
+            background-color: #e74c3c;
+            width: 100%;
+            font-size: 1.3em;
+            padding: 18px;
+        }
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+        }
+        .chat-message {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+        }
+        .daily-reward {
+            text-align: center;
+            background: linear-gradient(135deg, #ffd700, #ffec8b);
+            color: #333;
+            padding: 30px;
+            border-radius: 16px;
+        }
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 15px 30px;
+            background: #ecf0f1;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background: #00c28c;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🪙 Boank - The Ultimate Bank Game</h1>
+        
+        <div class="section" id="connection-section">
+            <p style="text-align:center; font-size:1.2em;">Connection Status: <span id="conn-status">Loading...</span></p>
+        </div>
+        
+        <div id="auth">
+            <div class="grid">
+                <div class="section" id="register-section">
+                    <h2>Create New Account</h2>
+                    <input type="text" id="first-name" placeholder="First Name">
+                    <input type="text" id="last-name" placeholder="Last Name">
+                    <input type="password" id="reg-password" placeholder="Password">
+                    <h3>Upload Your Avatar</h3>
+                    <input type="file" id="avatar-upload" accept="image/*">
+                    <img id="avatar-preview" class="avatar-preview" src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png" alt="Avatar Preview">
+                    <button onclick="register()">Create Account</button>
+                </div>
+                
+                <div class="section" id="login-section">
+                    <h2>Sign In to Existing Account</h2>
+                    <p id="welcome-back"></p>
+                    <input type="password" id="login-password" placeholder="Enter Your Password">
+                    <label>
+                        <input type="checkbox" id="remember" checked> Keep me signed in
+                    </label>
+                    <button onclick="login()">Log In</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="game" class="hidden">
+            <div class="section profile">
+                <img id="user-pfp" src="" alt="Your Avatar">
+                <div>
+                    <h2>Welcome back, <span id="username"></span>!</h2>
+                    <p>Balance: $<span id="balance">0</span></p>
+                    <p>Owned Items: <span id="items">None</span></p>
+                    <p>Level: <span id="level">1</span></p>
+                </div>
+            </div>
+            
+            <div class="section daily-reward">
+                <h2>Daily Reward</h2>
+                <button id="claim-daily" onclick="claimDaily()">Claim $100 Today!</button>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" onclick="openTab('jobs')">Jobs</div>
+                <div class="tab" onclick="openTab('shop')">Marketplace</div>
+                <div class="tab" onclick="openTab('create')">Create</div>
+                <div class="tab" onclick="openTab('multiplayer')">Multiplayer</div>
+            </div>
+            
+            <div id="jobs" class="tab-content active">
+                <div class="section">
+                    <h2>Available Jobs</h2>
+                    <div id="jobs-list"></div>
+                </div>
+            </div>
+            
+            <div id="shop" class="tab-content">
+                <div class="section">
+                    <h2>Marketplace</h2>
+                    <div id="shop-list"></div>
+                </div>
+            </div>
+            
+            <div id="create" class="tab-content">
+                <div class="grid">
+                    <div class="section">
+                        <h2>Create New Job</h2>
+                        <input type="text" id="new-job-name" placeholder="Job Name">
+                        <input type="number" id="new-job-reward" placeholder="Reward Amount">
+                        <button onclick="createJob()">Create & Share</button>
+                    </div>
+                    <div class="section">
+                        <h2>Create New Product</h2>
+                        <input type="text" id="new-product-name" placeholder="Product Name">
+                        <input type="number" id="new-product-price" placeholder="Price">
+                        <button onclick="createProduct()">List Product</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="multiplayer" class="tab-content">
+                <div class="grid">
+                    <div class="section">
+                        <h2>Online Players (<span id="online-count">0</span>)</h2>
+                        <ul id="user-list" class="user-list"></ul>
+                    </div>
+                    <div class="section">
+                        <h2>Global Chat</h2>
+                        <div id="chat-messages" class="chat-messages"></div>
+                        <input type="text" id="chat-input" placeholder="Type a message...">
+                        <button onclick="sendChat()">Send</button>
+                    </div>
+                    <div class="section">
+                        <h2>Send Money</h2>
+                        <input type="text" id="pay-username" placeholder="Username">
+                        <input type="number" id="pay-amount" placeholder="Amount">
+                        <button onclick="payUser()">Send</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="notifications" class="section"></div>
+            
+            <button id="logout" onclick="logout()">Log Out</button>
+        </div>
+    </div>
+
+    <script>
+        let socket = null;
+        let username = '';
+        let ulist = [];
+        let connected = false;
+
+        const servers = [
+            'wss://cloudlink.mikedev101.cc/0.2.0',
+            'wss://cl.mikedev101.cc/',
+            'wss://cl1.mubilop.tech/'
+        ];
+        let currentServerIndex = 0;
+
+        function connect() {
+            if (socket) socket.close();
+            const url = servers[currentServerIndex];
+            document.getElementById('conn-status').textContent = `Trying ${url}...`;
+
+            socket = new WebSocket(url);
+
+            socket.onopen = () => {
+                connected = true;
+                document.getElementById('conn-status').innerHTML = `Connected 🟢 Multiplayer Active!`;
+                sendMessage({ cmd: 'handshake', val: { language: 'JavaScript' } });
+                if (gameData.username) setUsername(gameData.username);
+                linkToRoom();
+            };
+
+            socket.onmessage = (event) => {
+                try {
+                    const packet = JSON.parse(event.data);
+                    handlePacket(packet);
+                } catch (e) {}
+            };
+
+            socket.onclose = () => {
+                connected = false;
+                document.getElementById('conn-status').textContent = 'Disconnected - trying next server...';
+                currentServerIndex = (currentServerIndex + 1) % servers.length;
+                setTimeout(connect, 3000);
+            };
+        }
+
+        function sendMessage(msg) {
+            if (connected && socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify(msg));
+            }
+        }
+
+        function setUsername(name) {
+            sendMessage({ cmd: 'setid', val: name });
+            username = name;
+        }
+
+        function linkToRoom() {
+            sendMessage({ cmd: 'link', val: ['Boank'] });
+        }
+
+        function handlePacket(packet) {
+            if (packet.cmd === 'ulist') {
+                ulist = Array.isArray(packet.val) ? packet.val : [];
+                updateUserList();
+            } else if (packet.cmd === 'gmsg') {
+                try {
+                    const data = JSON.parse(packet.val);
+                    if (data.type === 'chat') addChatMessage(data.from, data.msg);
+                    if (data.type === 'newjob') {
+                        if (!gameData.jobs.find(j => j.name === data.job.name && j.creator === data.job.creator)) {
+                            gameData.jobs.push(data.job);
+                            renderJobs();
+                        }
+                    }
+                    if (data.type === 'newproduct') {
+                        if (!gameData.products.find(p => p.name === data.product.name && p.creator === data.product.creator)) {
+                            gameData.products.push(data.product);
+                            renderShop();
+                        }
+                    }
+                } catch {}
+            } else if (packet.cmd === 'pmsg') {
+                try {
+                    const data = JSON.parse(packet.val);
+                    if (data.type === 'pay') {
+                        gameData.balance += data.amount;
+                        updateBalance();
+                        addNotification(`💰 Received $${data.amount} from ${data.from}!`);
+                    }
+                } catch {}
+            }
+        }
+
+        let gameData = JSON.parse(localStorage.getItem('boank_data')) || {
+            username: '',
+            password: '',
+            pfp: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
+            balance: 0,
+            items: [],
+            jobs: [
+                {name: 'Collect Leaves', reward: 20, creator: 'System'},
+                {name: 'Water Plants', reward: 35, creator: 'System'},
+                {name: 'Clean Park', reward: 50, creator: 'System'},
+                {name: 'Deliver Mail', reward: 70, creator: 'System'}
+            ],
+            products: [
+                {name: 'Cool Hat', price: 100, creator: 'System'},
+                {name: 'Fast Shoes', price: 250, creator: 'System'},
+                {name: 'Bike', price: 600, creator: 'System'},
+                {name: 'Car', price: 3000, creator: 'System'}
+            ],
+            remember: true,
+            lastDaily: 0,
+            level: 1,
+            xp: 0
+        };
+
+        function init() {
+            connect();
+
+            const upload = document.getElementById('avatar-upload');
+            upload.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        document.getElementById('avatar-preview').src = ev.target.result;
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+
+            // Always show both register and login sections
+            document.getElementById('register-section').classList.remove('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+
+            if (gameData.username) {
+                document.getElementById('welcome-back').textContent = `Welcome back, ${gameData.username}! Enter your password to continue.`;
+                document.getElementById('remember').checked = gameData.remember;
+            } else {
+                document.getElementById('login-section').classList.add('hidden');
+            }
+
+            updateDailyButton();
+        }
+
+        function register() {
+            const first = document.getElementById('first-name').value.trim();
+            const last = document.getElementById('last-name').value.trim();
+            const pw = document.getElementById('reg-password').value;
+            const avatarSrc = document.getElementById('avatar-preview').src;
+
+            if (!first || !last || !pw) {
+                addNotification('Please fill in all fields!');
+                return;
+            }
+
+            const uname = `${first} ${last}`;
+            gameData.username = uname;
+            gameData.password = pw;
+            gameData.pfp = avatarSrc;
+            gameData.balance = 100; // Starting money
+            gameData.remember = true;
+
+            if (first.toLowerCase() === 'parker' && last.toLowerCase() === 'tripoli') {
+                gameData.balance = Infinity;
+                gameData.items = gameData.products.map(p => p.name);
+                addNotification('🔑 Admin mode activated! Infinite money!');
+            }
+
+            saveData();
+            setUsername(uname);
+            showGame();
+            addNotification(`🎉 Welcome to Boank, ${uname}!`);
+        }
+
+        function login() {
+            const pw = document.getElementById('login-password').value;
+            const remember = document.getElementById('remember').checked;
+
+            if (!gameData.username) {
+                addNotification('No account found. Please create one first.');
+                return;
+            }
+
+            if (pw !== gameData.password) {
+                addNotification('Wrong password!');
+                return;
+            }
+
+            gameData.remember = remember;
+            saveData();
+            setUsername(gameData.username);
+            showGame();
+            addNotification('Logged in successfully!');
+        }
+
+        function logout() {
+            if (confirm('Log out of Boank?')) {
+                document.getElementById('game').classList.add('hidden');
+                document.getElementById('auth').classList.remove('hidden');
+            }
+        }
+
+        function showGame() {
+            document.getElementById('auth').classList.add('hidden');
+            document.getElementById('game').classList.remove('hidden');
+            document.getElementById('username').textContent = gameData.username;
+            document.getElementById('user-pfp').src = gameData.pfp;
+            updateBalance();
+            updateItems();
+            renderJobs();
+            renderShop();
+            updateUserList();
+        }
+
+        function saveData() {
+            localStorage.setItem('boank_data', JSON.stringify(gameData));
+        }
+
+        function updateBalance() {
+            document.getElementById('balance').textContent = gameData.balance === Infinity ? '∞' : gameData.balance.toLocaleString();
+        }
+
+        function updateItems() {
+            document.getElementById('items').textContent = gameData.items.length ? gameData.items.join(', ') : 'None';
+        }
+
+        function renderJobs() {
+            const list = document.getElementById('jobs-list');
+            list.innerHTML = '';
+            gameData.jobs.forEach(job => {
+                const div = document.createElement('div');
+                div.className = 'job-item';
+                div.innerHTML = `<strong>${job.name}</strong> by ${job.creator} — Reward: $${job.reward}
+                    <button onclick="doJob(${job.reward})">Do Job</button>`;
+                list.appendChild(div);
+            });
+        }
+
+        function doJob(reward) {
+            if (gameData.balance !== Infinity) gameData.balance += reward;
+            updateBalance();
+            addNotification(`Job completed! +$${reward}`);
+        }
+
+        function renderShop() {
+            const list = document.getElementById('shop-list');
+            list.innerHTML = '';
+            gameData.products.forEach(product => {
+                const owned = gameData.items.includes(product.name);
+                const div = document.createElement('div');
+                div.className = 'product-item';
+                div.innerHTML = `<strong>${product.name}</strong> by ${product.creator} — $${product.price}
+                    <button ${owned ? 'disabled' : ''} onclick="buyProduct('${product.name}', ${product.price})">
+                        ${owned ? 'Owned' : 'Buy'}
+                    </button>`;
+                list.appendChild(div);
+            });
+        }
+
+        function buyProduct(name, price) {
+            if (gameData.balance === Infinity || gameData.balance >= price) {
+                if (gameData.balance !== Infinity) gameData.balance -= price;
+                gameData.items.push(name);
+                updateBalance();
+                updateItems();
+                addNotification(`Bought ${name}!`);
+            } else {
+                addNotification('Not enough money!');
+            }
+        }
+
+        function createJob() {
+            const name = document.getElementById('new-job-name').value.trim();
+            const reward = parseInt(document.getElementById('new-job-reward').value);
+            if (!name || isNaN(reward) || reward <= 0) {
+                addNotification('Invalid job');
+                return;
+            }
+            const job = {name, reward, creator: username};
+            gameData.jobs.push(job);
+            renderJobs();
+            sendMessage({cmd: 'gmsg', val: JSON.stringify({type: 'newjob', job})});
+            addNotification('Job created and shared globally!');
+        }
+
+        function createProduct() {
+            const name = document.getElementById('new-product-name').value.trim();
+            const price = parseInt(document.getElementById('new-product-price').value);
+            if (!name || isNaN(price) || price <= 0) {
+                addNotification('Invalid product');
+                return;
+            }
+            const product = {name, price, creator: username};
+            gameData.products.push(product);
+            renderShop();
+            sendMessage({cmd: 'gmsg', val: JSON.stringify({type: 'newproduct', product})});
+            addNotification('Product listed in marketplace!');
+        }
+
+        function payUser() {
+            const target = document.getElementById('pay-username').value.trim();
+            const amount = parseInt(document.getElementById('pay-amount').value);
+            if (!target || isNaN(amount) || amount <= 0 || (gameData.balance !== Infinity && gameData.balance < amount)) {
+                addNotification('Invalid payment');
+                return;
+            }
+            if (gameData.balance !== Infinity) gameData.balance -= amount;
+            updateBalance();
+            sendMessage({cmd: 'pmsg', val: JSON.stringify({type: 'pay', from: username, amount}), id: target});
+            addNotification(`Sent $${amount} to ${target}`);
+        }
+
+        function sendChat() {
+            const msg = document.getElementById('chat-input').value.trim();
+            if (msg) {
+                sendMessage({cmd: 'gmsg', val: JSON.stringify({type: 'chat', from: username, msg})});
+                document.getElementById('chat-input').value = '';
+            }
+        }
+
+        function addChatMessage(from, msg) {
+            const div = document.createElement('div');
+            div.className = 'chat-message';
+            div.textContent = `${from}: ${msg}`;
+            document.getElementById('chat-messages').appendChild(div);
+            document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+        }
+
+        function updateUserList() {
+            const list = document.getElementById('user-list');
+            list.innerHTML = '';
+            document.getElementById('online-count').textContent = ulist.length;
+            ulist.forEach(user => {
+                if (user.username && user.username !== username) {
+                    const li = document.createElement('li');
+                    li.textContent = user.username;
+                    list.appendChild(li);
+                }
+            });
+        }
+
+        function claimDaily() {
+            const now = Date.now();
+            if (now - gameData.lastDaily < 86400000) {
+                addNotification('You already claimed today!');
+                return;
+            }
+            gameData.balance += 100;
+            gameData.lastDaily = now;
+            updateBalance();
+            addNotification('Daily reward claimed! +$100');
+            updateDailyButton();
+        }
+
+        function updateDailyButton() {
+            const btn = document.getElementById('claim-daily');
+            if (Date.now() - gameData.lastDaily < 86400000) {
+                btn.disabled = true;
+                btn.textContent = 'Already Claimed Today';
+            } else {
+                btn.disabled = false;
+                btn.textContent = 'Claim $100 Daily Reward!';
+            }
+        }
+
+        function addNotification(msg) {
+            const notifs = document.getElementById('notifications');
+            const div = document.createElement('div');
+            div.className = 'notification';
+            div.innerHTML = msg + ' <button onclick="this.parentElement.remove()">✕</button>';
+            notifs.prepend(div);
+        }
+
+        function openTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        init();
+    </script>
+</body>
+</html>
