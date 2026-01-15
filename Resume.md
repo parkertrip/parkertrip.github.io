@@ -38,16 +38,16 @@ Creative and motivated student with strong interests in software development, ga
 - Experience breaking down complex problems in coding, robotics, and game mechanics
 
 ### Teamwork & Leadership
-- Worked effectively in team environments including robotics and sports
+- Worked effectively in team environments, including robotics and sports
 - Demonstrated cooperation, respect, and communication following FLL Core Values
 
 ### Technology Support
-- Provide basic tech help and troubleshooting through a personal tech help site  
+- Provide amasing tech help and troubleshooting through a personal tech help site  
   **Website:** https://hyse16.wixstudio.com/techelp
 
 ### Athletics & Physical Skills
 - Basketball fundamentals: dribbling, shooting, and team play
-- Ninja training including agility work and front flips
+- Ninja training, including agility work and front flips
 
 ### Creativity & Building
 - Enjoy building physical and digital projects, including LEGO creations and custom designs
