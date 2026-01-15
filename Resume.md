@@ -2,158 +2,116 @@
 
 ## Contact Information
 
+**Name:** Parker James Tripoli  
+**Email:** parkertripoli@gmail.com  
+**Phone:** Not available  
+**Location:** US, CA  
 
-
-
-
-Name: Parker James Tripoli
-
-
-
-Email: parkertripoli@gmail.com
-
-
-
-Phone: none right now
-
-
-
-## Location: US, CA
+---
 
 ## Objective
 
-Enthusiastic and creative student with a love for technology, game development, robotics, and basketball, seeking opportunities to apply my skills in programming, problem-solving, and teamwork in tech-related programs, clubs, or projects.
+Creative and motivated student with strong interests in software development, game creation, robotics, and technology support. Seeking opportunities to learn, build real-world projects, and contribute skills in programming, problem-solving, and teamwork through tech programs, clubs, or independent projects.
+
+---
 
 ## Skills
 
+### Programming & Software Development
+- Experience building software and websites using **Python, JavaScript, HTML, and CSS**
+- Created a **note-taking app**, a **small encyclopedia**, and a **custom web browser with extension support**
+- Built and managed a **Minecraft server**
+- Comfortable learning new tools quickly using a flexible, hands-on approach (“vibecoding”)
 
+### Game Development
+- Designed and developed multiple games using **PenguinMod** and web technologies
+- Implemented gameplay systems such as shops, achievements, progression, and user input
+- Focused on clean design, usability, and fun player experiences
 
+### Robotics
+- First LEGO League (FLL) experience building and programming LEGO robots
+- Skilled in efficient robot design and testing
+- Contributed to award-winning engineering and project solutions
 
+### Problem-Solving
+- Strong debugging and logical thinking skills
+- Experience breaking down complex problems in coding, robotics, and game mechanics
 
-### Programming & Game Development: Proficient in creating video games and software mostly python, js ,css, html, and block-based platforms like Penguin Mod. Experienced in designing interactive projects with mechanics like progression and user input.
+### Teamwork & Leadership
+- Worked effectively in team environments including robotics and sports
+- Demonstrated cooperation, respect, and communication following FLL Core Values
 
+### Technology Support
+- Provide basic tech help and troubleshooting through a personal tech help site  
+  **Website:** https://hyse16.wixstudio.com/techelp
 
+### Athletics & Physical Skills
+- Basketball fundamentals: dribbling, shooting, and team play
+- Ninja training including agility work and front flips
 
-### Robotics: Skilled in building and programming LEGO robots for First LEGO League competitions, with expertise in efficient robot design and innovative project solutions.
+### Creativity & Building
+- Enjoy building physical and digital projects, including LEGO creations and custom designs
+- Strong interest in creating original ideas and bringing them to life
 
-
-
-### Problem-Solving: Strong analytical skills demonstrated through debugging code, designing game mechanics, and developing creative solutions in robotics challenges.
-
-
-
-### Teamwork & Leadership: Collaborated effectively in team settings, including First LEGO League and basketball, showcasing Core Values like cooperation and respect.
-
-
-
-### Athletic Skills: Proficient in basketball, with strengths in dribbling, shooting, and team play, and trained in ninja techniques, including front flips and agility exercises.
-
-
-
-## Creativity: Experienced in crafting LEGO creations, physical builds, and digital projects, with a knack for innovative design.
+---
 
 ## Experience
 
-### Game Developer (Personal Projects)
+### Software & Game Developer (Personal Projects)  
+**Self-Directed | 2020 – Present**
 
-Self-Directed, 2020–Present
+- Developed browser-based games using HTML, CSS, and JavaScript
+- Created **“Zozer,”** a platformer game in PenguinMod featuring shop and achievement systems
+- Built a **note-taking application**, **encyclopedia project**, and **custom web browser**
+- Hosted and managed a **Minecraft server**
+- Improved user interfaces, added sound effects, and refined gameplay for better user engagement
 
+---
 
+### First LEGO League Team Member — *Robot Subs*  
+**2024**
 
+- Designed, built, and programmed LEGO robots for competition
+- Advanced to **regionals**
+- Helped earn:
+  - **Rising All-Star Award**
+  - **Engineering Excellence Award**
+- Demonstrated teamwork, innovation, and problem-solving under competition constraints
 
+---
 
-### Designed and developed browser-based games, including a farming game with planting, watering, and harvesting mechanics using HTML, CSS, and JavaScript on Replit.
+### Basketball Player  
+**i9 Sports Youth League | 2021 – Present**
 
+- Participated in regular practices and games
+- Developed teamwork, strategy, and sportsmanship
+- Maintained an active and healthy lifestyle
 
+---
 
-### Created "Zozer," Platfoumer game in PenguinMod, featuring a Shop and Achevements mechanics.
+### Ninja Class Participant  
+**Gymminy Kids | 2022 – Present**
 
+- Attend weekly training sessions
+- Learned front flips, agility techniques, and coordination skills
+- Built confidence and physical control through consistent practice
 
-
-### Integrated sound effects and enhanced user interfaces to improve gameplay experiences, showcasing attention to detail and user engagement.
-
-## First LEGO League Team Member, Robot Subs
-
-Participant, 2024–2024
-
-
-
-
-
-### Collaborated with a team to design, build, and program LEGO robots for competition, advancing to regionals.
-
-
-
-### Contributed to winning the Rising All-Star Award, recognizing potential for future success, and the Engineering Excellence Award for efficient robot design and innovative solutions addressing the season’s challenge.
-
-
-
-### Demonstrated Core Values through teamwork, problem-solving, and effective communication.
-
-## Basketball Player
-
-Youth League, i9 Sports, 2021–Present
-
-
-
-
-
-### Actively participated in team practices and games, developing skills in dribbling, shooting, and strategic play.
-
-
-
-### Fostered teamwork and sportsmanship, contributing to a positive team environment.
-
-## Ninja Class
-
-Gymminy Kids, 2022–Present
-
-
-
-
-
-### Attended weekly classes to learn ninja techniques, including front flips and agility exercises, under professional coaching.
-
-
-
-### Developed physical fitness, coordination, and confidence through consistent training.
+---
 
 ## Achievements
 
+- **Rising All-Star Award** — First LEGO League  
+- **Engineering Excellence Award** — First LEGO League  
+- Successfully created and published multiple games and software projects  
+- Built and maintained a Minecraft server  
+- Launched a personal tech help website
 
-
-
-
-### Rising All-Star Award, First LEGO League (2023): Recognized by judges for outstanding potential and team performance.
-
-
-
-### Engineering Excellence Award, First LEGO League (2023): Awarded for efficient robot design and innovative project solutions.
-
-
-
-### Successfully created and published multiple browser-based games, including a farming game and "Zozer"
+---
 
 ## Interests
 
-
-
-
-
-### Video game design and programming
-
-
-
-### Robotics and engineering
-
-
-
-### Basketball and team sports
-
-
-
-### Ninja training and physical fitness
-
-
-
-### Creative building
+- Software development & programming  
+- Game design  
+- Robotics & engineering  
+- Basketball and fitness  
+- Creative building (LEGO, digital projects, and inventions)
