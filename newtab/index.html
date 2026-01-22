@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NEON VOID — NEW TAB</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="https://i.ibb.co/TMgQkWN2/NV.png">
+  <link rel="apple-touch-icon" href="https://i.ibb.co/TMgQkWN2/NV.png">
+  <link rel="shortcut icon" href="https://i.ibb.co/TMgQkWN2/NV.png">
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    html, body { cursor: none !important; }
+
+    body {
+      min-height:100vh;
+      background:#0d0015;
+      color:#f0f;
+      font-family:"Courier New",Consolas,monospace;
+      overflow-x:hidden;
+      background-image: radial-gradient(circle at 15% 50%, #ff00aa44 0%, transparent 15%), radial-gradient(circle at 85% 30%, #00ffff44 0%, transparent 25%), radial-gradient(circle at 40% 80%, #ffaa0044 0%, transparent 20%), radial-gradient(circle at 60% 20%, #00ff0044 0%, transparent 15%), radial-gradient(circle at 50% 50%, #9000ff44 0%, transparent 35%), radial-gradient(circle at 25% 75%, #ffff0044 0%, transparent 20%);
+      background-size:300% 300%;
+      animation:bgDrift 12s ease infinite;
+    }
+    @keyframes bgDrift { 0%,100% {background-position:0% 50%;} 50% {background-position:100% 50%;} }
+
+    /* Neon Cursor */
+    .cursor {
+      position:fixed; width:24px; height:24px; border:2px solid #00ffff; border-radius:50%; pointer-events:none;
+      transform:translate(-50%,-50%); z-index:999999; mix-blend-mode:difference;
+      box-shadow:0 0 12px #00ffff, 0 0 24px #00ffff, 0 0 40px #ff00aa88;
+      transition:width 0.15s, height 0.15s, border-color 0.3s;
+    }
+    .cursor.hover { width:48px; height:48px; border-color:#ff00aa; background:rgba(255,0,170,0.2); }
+
+    canvas { position:fixed; inset:0; z-index:1; opacity:0.98; mix-blend-mode:screen; pointer-events:none; }
+    .overlay { position:fixed; inset:0; z-index:2; pointer-events:none; background:linear-gradient(to bottom, transparent 5%, #0d0015ff 95%); }
+
+    .header { position:relative; z-index:5; padding:4rem 2rem 2rem; text-align:center; }
+    h1 { font-size:clamp(5rem,18vw,14rem); font-weight:900; letter-spacing:-0.06em; background:linear-gradient(90deg,#ff00aa,#00ffff,#ffff00,#00ff00,#ff00aa,#9000ff,#ff00aa); background-size:700%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:neonFlow 4s linear infinite; text-transform:uppercase; line-height:0.85; position:relative; filter:drop-shadow(0 0 10px #9000ff); }
+    h1::before { content:attr(data-text); position:absolute; left:0; top:0; filter:blur(3px); opacity:0.5; animation:glitch 2s infinite; }
+    @keyframes glitch { 0%,100%{transform:translate(0);} 20%{transform:translate(-2px,2px);} 40%{transform:translate(2px,-2px);} 60%{transform:translate(-2px,2px);} 80%{transform:translate(2px,-2px);} }
+    @keyframes neonFlow { 0%{background-position:0% 50%;} 100%{background-position:700% 50%;} }
+    .subtitle { margin:1rem 0 2rem; font-size:clamp(1.4rem,4vw,2.5rem); color:#00ffea; text-shadow:0 0 14px #00ffea99,0 0 35px #00ffea66; letter-spacing:0.25em; font-weight:300; }
+
+    .search-container { margin:2rem auto; width:clamp(320px,60%,900px); max-width:90%; }
+    .search-form { display:flex; gap:1rem; }
+    .search-input { flex:1; padding:1.2rem 1.6rem; font-size:1.2rem; background:rgba(0,0,0,0.6); border:2px solid #00ffff88; color:#fff; text-shadow:0 0 8px #00ffff; backdrop-filter:blur(12px); outline:none; transition:all 0.35s; border-radius:6px; }
+    .search-input:focus { border-color:#00ffffee; box-shadow:0 0 35px #00ffffbb; }
+    .search-btn { padding:1.2rem 2.2rem; background:transparent; border:2px solid #ff00aa88; color:#ff00aa; cursor:pointer; font-size:1.2rem; text-transform:uppercase; letter-spacing:0.15em; transition:all 0.35s; border-radius:6px; }
+    .search-btn:hover { box-shadow:0 0 60px #ff00aadd; border-color:#ff00aadd; }
+
+    .links { display:flex; flex-wrap:wrap; justify-content:center; gap:2rem 3rem; max-width:90%; margin:2rem auto; }
+    .neon-btn { padding:1rem 2.4rem; font-size:1.4rem; color:#fff; text-decoration:none; text-transform:uppercase; letter-spacing:0.3em; border:2px solid #00ffff88; background:rgba(0,0,0,0.5); backdrop-filter:blur(10px); transition:all 0.3s ease; text-shadow:0 0 16px currentColor; box-shadow:inset 0 0 35px #00ffff55, 0 0 60px #00ffff88; animation:pulse 1.6s infinite alternate; border-radius:8px; }
+    @keyframes pulse { 0%{transform:scale(1);} 100%{transform:scale(1.04);} }
+    .neon-btn:hover { transform:translateY(-8px) scale(1.1); box-shadow:inset 0 0 70px #00ffffbb, 0 0 140px #00ffffee; }
+
+    .widgets-container { position:relative; z-index:5; padding:2rem; max-width:1000px; margin:0 auto; }
+    .widget { margin-bottom:3rem; padding:2rem; background:rgba(0,0,0,0.7); border:2px solid #00ff0088; box-shadow:0 0 50px #00ff0088; color:#fff; text-shadow:0 0 12px #00ff00; border-radius:10px; }
+    .widget h3 { font-size:2rem; color:#00ff00; text-shadow:0 0 16px #00ff00bb; margin-bottom:1.5rem; border-bottom:1px solid #00ff0044; padding-bottom:0.8rem; }
+    .news-list, .crypto-list { list-style:none; display:flex; flex-direction:column; gap:1.2rem; font-size:1.1rem; }
+    .crypto-item { color:#ffff00; font-weight:bold; }
+
+    ::-webkit-scrollbar { width:10px; }
+    ::-webkit-scrollbar-track { background:rgba(13,0,21,0.8); border-left:1px solid #00ffff22; }
+    ::-webkit-scrollbar-thumb { background:linear-gradient(#00ffff88,#ff00aa88); border-radius:10px; box-shadow:0 0 12px #00ffff66; }
+    ::-webkit-scrollbar-thumb:hover { background:linear-gradient(#00ffffcc,#ff00aacc); box-shadow:0 0 20px #ffff00aa; }
+
+    .edit-btns { position:fixed; bottom:2rem; right:2rem; display:flex; flex-direction:column; gap:1.5rem; z-index:10; }
+    .edit-btn { padding:1rem 2rem; font-size:1.2rem; color:#ffff00; border:2px solid #ffff0088; background:rgba(0,0,0,0.6); cursor:pointer; text-transform:uppercase; letter-spacing:0.15em; box-shadow:0 0 35px #ffff0088; transition:all 0.35s; border-radius:8px; }
+    .edit-btn:hover { box-shadow:0 0 70px #ffff00dd; transform:scale(1.1); }
+    .edit-widgets-btn { color:#00ff00; border-color:#00ff0088; box-shadow:0 0 35px #00ff0088; }
+    .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:20; justify-content:center; align-items:center; }
+    .modal-content { background:rgba(13,0,21,0.98); padding:3rem; border:2px solid #00ffffdd; box-shadow:0 0 80px #00ffffbb; width:80%; max-width:700px; color:#fff; border-radius:12px; }
+    .modal label { display:block; margin:1rem 0 0.5rem; color:#00ffea; font-size:1.1rem; }
+    .modal input, .modal textarea { width:100%; padding:1rem; background:transparent; border:1px solid #ff00aa; color:#fff; margin-bottom:1rem; border-radius:6px; font-family:inherit; }
+    .modal textarea { min-height:200px; resize:vertical; }
+    .modal button { padding:1rem 2rem; background:transparent; border:2px solid #00ff00; color:#00ff00; cursor:pointer; margin-right:1rem; border-radius:6px; transition:all 0.3s; }
+    .modal button:hover { box-shadow:0 0 40px #00ff00bb; }
+    .clock { position:fixed; top:2rem; right:2rem; font-size:3rem; color:#00ff9d; text-shadow:0 0 25px #00ff9dbb; letter-spacing:0.2em; font-weight:bold; z-index:10; }
+
+    @media (max-width:768px) { .header {padding:3rem 1rem 1.5rem;} h1 {font-size:clamp(4rem,15vw,10rem);} .search-form {flex-direction:column;} .search-btn {width:100%;} .widgets-container {padding:1rem;} .edit-btns {right:1rem; bottom:1rem;} .clock {font-size:2rem; top:1rem; right:1rem;} }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="clock" id="clock"></div>
+<div class="overlay"></div>
+<canvas id="c"></canvas>
+
+<div class="header">
+  <h1 data-text="NEON VOID">NEON VOID</h1>
+  <div class="subtitle">SLOTH WEB GRID — ALL FEATURES BACK</div>
+
+  <div class="search-container">
+    <form class="search-form" action="https://cse.google.com/cse" method="get" target="_blank">
+      <input type="hidden" name="cx" value="666b70a81f11c4eb9">
+      <input class="search-input" type="text" name="gsc.q" placeholder="Search Sloth Web..." required>
+      <button class="search-btn" type="submit">GO</button>
+    </form>
+  </div>
+
+  <div class="links" id="links"></div>
+</div>
+
+<div class="widgets-container" id="widgets"></div>
+
+<div class="edit-btns">
+  <button class="edit-btn edit-widgets-btn" onclick="openWidgetsModal()">EDIT WIDGETS</button>
+  <button class="edit-btn" onclick="openSitesModal()">EDIT SITES</button>
+</div>
+
+<div class="modal" id="sites-modal">
+  <div class="modal-content">
+    <h2>Manage Top Sites</h2>
+    <p>Format: Name,URL (one per line)</p>
+    <textarea id="sites-text"></textarea>
+    <button onclick="saveSites()">Save</button>
+    <button onclick="closeSitesModal()">Close</button>
+  </div>
+</div>
+
+<div class="modal" id="widgets-modal">
+  <div class="modal-content">
+    <h2>Manage Widgets</h2>
+    <p>Toggle your widgets:</p>
+    <label><input type="checkbox" id="widget-news"> News</label>
+    <label><input type="checkbox" id="widget-weather"> Weather</label>
+    <label><input type="checkbox" id="widget-crypto"> Crypto Prices (Top 10)</label>
+    <label><input type="checkbox" id="widget-calendar"> Calendar (Embed URL)</label>
+    <label for="calendar-embed-url">Google Calendar Embed URL (public):</label>
+    <input type="text" id="calendar-embed-url" placeholder="https://calendar.google.com/calendar/embed?...">
+    <label for="weather-city">Weather City:</label>
+    <input type="text" id="weather-city" value="Los Angeles">
+    <button onclick="saveWidgets()">Save & Reload</button>
+    <button onclick="closeWidgetsModal()">Close</button>
+  </div>
+</div>
+
+<script>
+// Clock
+function updateClock() {
+  const now = new Date();
+  document.getElementById("clock").textContent = now.toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit',hour12:true});
+}
+setInterval(updateClock,1000);
+updateClock();
+
+// Sites
+const defaultSites = [{name:'X',url:'https://x.com/home'},{name:'YouTube',url:'https://www.youtube.com'},{name:'GitHub',url:'https://github.com'},{name:'ChatGPT',url:'https://chatgpt.com'},{name:'Google',url:'https://www.google.com'},{name:'Reddit',url:'https://www.reddit.com'}];
+function loadSites() {
+  const sites = JSON.parse(localStorage.getItem('topSites')) || defaultSites;
+  document.getElementById('links').innerHTML = sites.map(s => `<a href="${s.url}" class="neon-btn" target="_blank">${s.name}</a>`).join('');
+}
+function openSitesModal() {
+  const sites = JSON.parse(localStorage.getItem('topSites')) || defaultSites;
+  document.getElementById('sites-text').value = sites.map(s=>`${s.name},${s.url}`).join('\n');
+  document.getElementById('sites-modal').style.display='flex';
+}
+function closeSitesModal() { document.getElementById('sites-modal').style.display='none'; }
+function saveSites() {
+  const text = document.getElementById('sites-text').value.trim();
+  if(text){
+    const sites = text.split('\n').map(l=>{const [n,u]=l.split(',').map(t=>t.trim());return n&&u?{name:n,url:u}:null;}).filter(Boolean);
+    localStorage.setItem('topSites',JSON.stringify(sites));
+    loadSites();
+  }
+  closeSitesModal();
+}
+loadSites();
+
+// Widgets
+const defaultWidgets = {news:true, weather:true, crypto:true, calendar:false, weatherCity:'Los Angeles', calendarEmbedUrl:''};
+function loadWidgets() {
+  const w = JSON.parse(localStorage.getItem('widgets')) || defaultWidgets;
+  const cont = document.getElementById('widgets');
+  cont.innerHTML = '';
+
+  if(w.news){ cont.innerHTML += `<div class="widget"><h3>Latest News</h3><ul class="news-list" id="news-list"><li>Loading...</li></ul></div>`; fetchNews(); }
+  if(w.weather){ cont.innerHTML += `<div class="widget"><h3>Weather</h3><div id="weather-info">Loading for ${w.weatherCity}...</div></div>`; fetchWeather(w.weatherCity); }
+  if(w.crypto){ cont.innerHTML += `<div class="widget"><h3>Crypto Prices (Top 10)</h3><ul class="crypto-list" id="crypto-list"><li>Loading prices...</li></ul></div>`; fetchCrypto(); setInterval(fetchCrypto, 60000); }
+  if(w.calendar && w.calendarEmbedUrl){ cont.innerHTML += `<div class="widget"><h3>Calendar</h3><iframe src="${w.calendarEmbedUrl}" style="width:100%; height:500px; border:none; border-radius:8px;"></iframe></div>`; }
+}
+async function fetchNews(){
+  try{
+    const proxy = 'https://corsproxy.io/?';
+    const rss = 'https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en';
+    const res = await fetch(proxy + encodeURIComponent(rss));
+    const xmlText = await res.text();
+    const xml = new DOMParser().parseFromString(xmlText, 'text/xml');
+    const items = xml.querySelectorAll('item');
+    document.getElementById('news-list').innerHTML = Array.from(items).slice(0,15).map(item => {
+      const title = item.querySelector('title')?.textContent || '';
+      const link = item.querySelector('link')?.textContent || '#';
+      return `<li><a href="${link}" target="_blank">${title}</a></li>`;
+    }).join('');
+  }catch(e){ document.getElementById('news-list').innerHTML = '<li>Error loading news (try local server)</li>'; }
+}
+async function fetchWeather(city){
+  try{
+    const res = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=j1`);
+    const d = await res.json();
+    const c = d.current_condition[0];
+    document.getElementById('weather-info').innerHTML = `<p>${city}: ${c.temp_C}°C / ${c.temp_F}°F - ${c.weatherDesc[0].value}</p><p>Humidity: ${c.humidity}% | Wind: ${c.windspeedKmph} km/h</p>`;
+  }catch(e){ document.getElementById('weather-info').innerHTML = 'Error loading weather'; }
+}
+async function fetchCrypto(){
+  try{
+    const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false');
+    const data = await res.json();
+    document.getElementById('crypto-list').innerHTML = data.map(coin => `<li class="crypto-item">${coin.symbol.toUpperCase()}: $${coin.current_price.toLocaleString()} (${coin.price_change_percentage_24h.toFixed(2)}%)</li>`).join('');
+  }catch(e){ document.getElementById('crypto-list').innerHTML = '<li>Error loading crypto prices</li>'; }
+}
+function openWidgetsModal(){
+  const w = JSON.parse(localStorage.getItem('widgets')) || defaultWidgets;
+  document.getElementById('widget-news').checked = w.news;
+  document.getElementById('widget-weather').checked = w.weather;
+  document.getElementById('widget-crypto').checked = w.crypto;
+  document.getElementById('widget-calendar').checked = w.calendar;
+  document.getElementById('weather-city').value = w.weatherCity;
+  document.getElementById('calendar-embed-url').value = w.calendarEmbedUrl || '';
+  document.getElementById('widgets-modal').style.display = 'flex';
+}
+function closeWidgetsModal(){ document.getElementById('widgets-modal').style.display='none'; }
+function saveWidgets(){
+  const w = {
+    news: document.getElementById('widget-news').checked,
+    weather: document.getElementById('widget-weather').checked,
+    crypto: document.getElementById('widget-crypto').checked,
+    calendar: document.getElementById('widget-calendar').checked,
+    weatherCity: document.getElementById('weather-city').value.trim() || 'Los Angeles',
+    calendarEmbedUrl: document.getElementById('calendar-embed-url').value.trim()
+  };
+  localStorage.setItem('widgets', JSON.stringify(w));
+  loadWidgets();
+  closeWidgetsModal();
+}
+loadWidgets();
+
+// Cursor
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+document.querySelectorAll('a, button, input').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+});
+
+// Particles & Grid (full)
+const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+let w, h;
+function resize(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+window.addEventListener("resize", resize); resize();
+const particles = [];
+const count = Math.min(400, Math.floor(w * h / 4000));
+class Particle {
+  constructor() { this.reset(); }
+  reset() { this.x = Math.random() * w; this.y = Math.random() * h; this.vx = (Math.random() - 0.5) * 1.8; this.vy = (Math.random() - 0.5) * 1.8; this.size = Math.random() * 4 + 1; this.life = Math.random() * 0.8 + 0.2; this.hue = Math.random() * 200 + 160; }
+  update() { this.x += this.vx; this.y += this.vy; this.life -= 0.0015; if (this.life <= 0 || this.x < 0 || this.x > w || this.y < 0 || this.y > h) this.reset(); }
+  draw() { ctx.globalAlpha = this.life; ctx.fillStyle = `hsl(${this.hue},100%,75%)`; ctx.shadowColor = `hsl(${this.hue},100%,75%)`; ctx.shadowBlur = 50; ctx.fillRect(this.x - this.size/2, this.y - this.size/2, this.size, this.size); }
+}
+for (let i = 0; i < count; i++) particles.push(new Particle());
+function animate() {
+  ctx.fillStyle = "rgba(13,0,21,0.04)"; ctx.fillRect(0,0,w,h);
+  ctx.strokeStyle = "#00ffff1a"; ctx.lineWidth = 1.5; const spacing = 35;
+  for (let x = 0; x < w; x += spacing) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+  for (let y = 0; y < h; y += spacing) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</body>
+</html>
