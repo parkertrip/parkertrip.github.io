@@ -94,12 +94,11 @@
 
 <div class="header">
   <h1 data-text="NEON VOID">NEON VOID</h1>
-  <div class="subtitle">SLOTH WEB GRID — ALL FEATURES BACK</div>
+  <div class="subtitle">SLOTH WEB GRID</div>
 
   <div class="search-container">
-    <form class="search-form" action="https://cse.google.com/cse" method="get" target="_blank">
-      <input type="hidden" name="cx" value="666b70a81f11c4eb9">
-      <input class="search-input" type="text" name="gsc.q" placeholder="Search Sloth Web..." required>
+    <form id="searchForm" class="search-form">
+      <input class="search-input" type="text" placeholder="Search Sloth Web..." required>
       <button class="search-btn" type="submit">GO</button>
     </form>
   </div>
@@ -114,6 +113,7 @@
   <button class="edit-btn" onclick="openSitesModal()">EDIT SITES</button>
 </div>
 
+<!-- Sites Modal -->
 <div class="modal" id="sites-modal">
   <div class="modal-content">
     <h2>Manage Top Sites</h2>
@@ -124,6 +124,7 @@
   </div>
 </div>
 
+<!-- Widgets Modal -->
 <div class="modal" id="widgets-modal">
   <div class="modal-content">
     <h2>Manage Widgets</h2>
@@ -142,16 +143,23 @@
 </div>
 
 <script>
-// Clock
+// ─── Clock ────────────────────────────────────────────────
 function updateClock() {
   const now = new Date();
   document.getElementById("clock").textContent = now.toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit',hour12:true});
 }
-setInterval(updateClock,1000);
+setInterval(updateClock, 1000);
 updateClock();
 
-// Sites
-const defaultSites = [{name:'X',url:'https://x.com/home'},{name:'YouTube',url:'https://www.youtube.com'},{name:'GitHub',url:'https://github.com'},{name:'ChatGPT',url:'https://chatgpt.com'},{name:'Google',url:'https://www.google.com'},{name:'Reddit',url:'https://www.reddit.com'}];
+// ─── Sites ────────────────────────────────────────────────
+const defaultSites = [
+  {name:'X',url:'https://x.com/home'},
+  {name:'YouTube',url:'https://www.youtube.com'},
+  {name:'GitHub',url:'https://github.com'},
+  {name:'ChatGPT',url:'https://chatgpt.com'},
+  {name:'Google',url:'https://www.google.com'},
+  {name:'Reddit',url:'https://www.reddit.com'}
+];
 function loadSites() {
   const sites = JSON.parse(localStorage.getItem('topSites')) || defaultSites;
   document.getElementById('links').innerHTML = sites.map(s => `<a href="${s.url}" class="neon-btn" target="_blank">${s.name}</a>`).join('');
@@ -173,20 +181,40 @@ function saveSites() {
 }
 loadSites();
 
-// Widgets
-const defaultWidgets = {news:true, weather:true, crypto:true, calendar:false, weatherCity:'Los Angeles', calendarEmbedUrl:''};
+// ─── Widgets ──────────────────────────────────────────────
+const defaultWidgets = {
+  news: true,
+  weather: true,
+  crypto: true,
+  calendar: false,
+  weatherCity: 'Los Angeles',
+  calendarEmbedUrl: ''
+};
+
 function loadWidgets() {
   const w = JSON.parse(localStorage.getItem('widgets')) || defaultWidgets;
   const cont = document.getElementById('widgets');
   cont.innerHTML = '';
 
-  if(w.news){ cont.innerHTML += `<div class="widget"><h3>Latest News</h3><ul class="news-list" id="news-list"><li>Loading...</li></ul></div>`; fetchNews(); }
-  if(w.weather){ cont.innerHTML += `<div class="widget"><h3>Weather</h3><div id="weather-info">Loading for ${w.weatherCity}...</div></div>`; fetchWeather(w.weatherCity); }
-  if(w.crypto){ cont.innerHTML += `<div class="widget"><h3>Crypto Prices (Top 10)</h3><ul class="crypto-list" id="crypto-list"><li>Loading prices...</li></ul></div>`; fetchCrypto(); setInterval(fetchCrypto, 60000); }
-  if(w.calendar && w.calendarEmbedUrl){ cont.innerHTML += `<div class="widget"><h3>Calendar</h3><iframe src="${w.calendarEmbedUrl}" style="width:100%; height:500px; border:none; border-radius:8px;"></iframe></div>`; }
+  if(w.news) {
+    cont.innerHTML += `<div class="widget"><h3>Latest News</h3><ul class="news-list" id="news-list"><li>Loading...</li></ul></div>`;
+    fetchNews();
+  }
+  if(w.weather) {
+    cont.innerHTML += `<div class="widget"><h3>Weather</h3><div id="weather-info">Loading for ${w.weatherCity}...</div></div>`;
+    fetchWeather(w.weatherCity);
+  }
+  if(w.crypto) {
+    cont.innerHTML += `<div class="widget"><h3>Crypto Prices (Top 10)</h3><ul class="crypto-list" id="crypto-list"><li>Loading prices...</li></ul></div>`;
+    fetchCrypto(); setInterval(fetchCrypto, 60000);
+  }
+  if(w.calendar && w.calendarEmbedUrl) {
+    cont.innerHTML += `<div class="widget"><h3>Calendar</h3><iframe src="${w.calendarEmbedUrl}" style="width:100%; height:500px; border:none; border-radius:8px;"></iframe></div>`;
+  }
 }
-async function fetchNews(){
-  try{
+
+async function fetchNews() {
+  try {
     const proxy = 'https://corsproxy.io/?';
     const rss = 'https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en';
     const res = await fetch(proxy + encodeURIComponent(rss));
@@ -198,24 +226,35 @@ async function fetchNews(){
       const link = item.querySelector('link')?.textContent || '#';
       return `<li><a href="${link}" target="_blank">${title}</a></li>`;
     }).join('');
-  }catch(e){ document.getElementById('news-list').innerHTML = '<li>Error loading news (try local server)</li>'; }
+  } catch(e) {
+    document.getElementById('news-list').innerHTML = '<li>Error loading news</li>';
+  }
 }
-async function fetchWeather(city){
-  try{
+
+async function fetchWeather(city) {
+  try {
     const res = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=j1`);
     const d = await res.json();
     const c = d.current_condition[0];
     document.getElementById('weather-info').innerHTML = `<p>${city}: ${c.temp_C}°C / ${c.temp_F}°F - ${c.weatherDesc[0].value}</p><p>Humidity: ${c.humidity}% | Wind: ${c.windspeedKmph} km/h</p>`;
-  }catch(e){ document.getElementById('weather-info').innerHTML = 'Error loading weather'; }
+  } catch(e) {
+    document.getElementById('weather-info').innerHTML = 'Error loading weather';
+  }
 }
-async function fetchCrypto(){
-  try{
+
+async function fetchCrypto() {
+  try {
     const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false');
     const data = await res.json();
-    document.getElementById('crypto-list').innerHTML = data.map(coin => `<li class="crypto-item">${coin.symbol.toUpperCase()}: $${coin.current_price.toLocaleString()} (${coin.price_change_percentage_24h.toFixed(2)}%)</li>`).join('');
-  }catch(e){ document.getElementById('crypto-list').innerHTML = '<li>Error loading crypto prices</li>'; }
+    document.getElementById('crypto-list').innerHTML = data.map(coin => 
+      `<li class="crypto-item">${coin.symbol.toUpperCase()}: $${coin.current_price.toLocaleString()} (${coin.price_change_percentage_24h.toFixed(2)}% 24h)</li>`
+    ).join('');
+  } catch(e) {
+    document.getElementById('crypto-list').innerHTML = '<li>Error loading crypto prices</li>';
+  }
 }
-function openWidgetsModal(){
+
+function openWidgetsModal() {
   const w = JSON.parse(localStorage.getItem('widgets')) || defaultWidgets;
   document.getElementById('widget-news').checked = w.news;
   document.getElementById('widget-weather').checked = w.weather;
@@ -225,8 +264,8 @@ function openWidgetsModal(){
   document.getElementById('calendar-embed-url').value = w.calendarEmbedUrl || '';
   document.getElementById('widgets-modal').style.display = 'flex';
 }
-function closeWidgetsModal(){ document.getElementById('widgets-modal').style.display='none'; }
-function saveWidgets(){
+function closeWidgetsModal() { document.getElementById('widgets-modal').style.display = 'none'; }
+function saveWidgets() {
   const w = {
     news: document.getElementById('widget-news').checked,
     weather: document.getElementById('widget-weather').checked,
@@ -241,15 +280,18 @@ function saveWidgets(){
 }
 loadWidgets();
 
-// Cursor
+// ─── Custom Cursor ────────────────────────────────────────
 const cursor = document.getElementById('cursor');
-document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+});
 document.querySelectorAll('a, button, input').forEach(el => {
   el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
   el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
 });
 
-// Particles & Grid (full)
+// ─── Particles & Grid ─────────────────────────────────────
 const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
 let w, h;
 function resize(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
@@ -258,9 +300,9 @@ const particles = [];
 const count = Math.min(400, Math.floor(w * h / 4000));
 class Particle {
   constructor() { this.reset(); }
-  reset() { this.x = Math.random() * w; this.y = Math.random() * h; this.vx = (Math.random() - 0.5) * 1.8; this.vy = (Math.random() - 0.5) * 1.8; this.size = Math.random() * 4 + 1; this.life = Math.random() * 0.8 + 0.2; this.hue = Math.random() * 200 + 160; }
+  reset() { this.x = Math.random()*w; this.y = Math.random()*h; this.vx = (Math.random()-0.5)*1.8; this.vy = (Math.random()-0.5)*1.8; this.size = Math.random()*4+1; this.life = Math.random()*0.8+0.2; this.hue = Math.random()*200+160; }
   update() { this.x += this.vx; this.y += this.vy; this.life -= 0.0015; if (this.life <= 0 || this.x < 0 || this.x > w || this.y < 0 || this.y > h) this.reset(); }
-  draw() { ctx.globalAlpha = this.life; ctx.fillStyle = `hsl(${this.hue},100%,75%)`; ctx.shadowColor = `hsl(${this.hue},100%,75%)`; ctx.shadowBlur = 50; ctx.fillRect(this.x - this.size/2, this.y - this.size/2, this.size, this.size); }
+  draw() { ctx.globalAlpha = this.life; ctx.fillStyle = `hsl(${this.hue},100%,75%)`; ctx.shadowColor = `hsl(${this.hue},100%,75%)`; ctx.shadowBlur = 50; ctx.fillRect(this.x-this.size/2, this.y-this.size/2, this.size, this.size); }
 }
 for (let i = 0; i < count; i++) particles.push(new Particle());
 function animate() {
@@ -272,6 +314,19 @@ function animate() {
   requestAnimationFrame(animate);
 }
 animate();
+
+// ─── Clean Search (no hash junk in URL) ───────────────────
+document.getElementById('searchForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const query = this.querySelector('input[type="text"]').value.trim();
+  if (!query) return;
+
+  const base = 'https://cse.google.com/cse?cx=666b70a81f11c4eb9';
+  const cleanUrl = `${base}&q=${encodeURIComponent(query)}`;
+
+  // Open in same tab without hash parameters
+  window.location.href = cleanUrl;
+});
 </script>
 </body>
 </html>
