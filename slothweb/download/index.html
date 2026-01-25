@@ -1,3 +1,212 @@
-Mac/Apple computer:    https://github.com/parkertripoli-wq/sloth-web/blob/main/installer_mac.sh
-Windows/Microsoft:    https://github.com/parkertripoli-wq/sloth-web/blob/main/installer_windows.bat
-Linux/Linux distrobuton:    https://github.com/parkertripoli-wq/sloth-web/blob/main/installer_linux.sh
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download Sloth Web - The Ultimate Browser</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/slothweb/images/favicon/sloth_web.ico" type="image/x-icon">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0d0d1a;
+      color: #e0e7ff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: default;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1a1a2e;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(#00f2ff, #ff00c8);
+      border-radius: 6px;
+      border: 3px solid #1a1a2e;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00c8ff;
+    }
+    header {
+      width: 100%;
+      background: linear-gradient(90deg, #00f2ff, #ff00c8);
+      padding: 30px 0;
+      text-align: center;
+      font-size: 3em;
+      font-weight: bold;
+      color: #0d0d1a;
+      box-shadow: 0 4px 20px rgba(0,242,255,0.4);
+    }
+    section {
+      width: 90%;
+      max-width: 1200px;
+      margin: 50px 0;
+      text-align: center;
+    }
+    h2 {
+      color: #00f2ff;
+      font-size: 2.5em;
+      margin-bottom: 30px;
+    }
+    p {
+      font-size: 1.3em;
+      line-height: 1.6;
+      margin: 20px 0;
+    }
+    .os-selector {
+      background: rgba(18,18,37,0.85);
+      padding: 30px;
+      border-radius: 20px;
+      border: 1px solid rgba(0,242,255,0.3);
+      box-shadow: 0 0 40px rgba(0,242,255,0.4);
+      margin-bottom: 40px;
+    }
+    select {
+      background: #1a1a2e;
+      color: #e0e7ff;
+      padding: 12px 20px;
+      border: 1px solid #00f2ff;
+      border-radius: 8px;
+      font-size: 1.2em;
+      cursor: pointer;
+    }
+    .download-btn {
+      background: linear-gradient(45deg, #00f2ff, #ff00c8);
+      color: #0d0d1a;
+      padding: 20px 50px;
+      border-radius: 50px;
+      font-size: 1.8em;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 15px 40px rgba(0,242,255,0.5);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: inline-block;
+      margin-top: 20px;
+    }
+    .download-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 60px rgba(0,242,255,0.7);
+    }
+    footer {
+      width: 100%;
+      background: #1a1a2e;
+      padding: 30px 0;
+      text-align: center;
+      font-size: 1em;
+      margin-top: auto;
+    }
+    /* Custom Right-Click Menu */
+    #custom-menu {
+      position: absolute;
+      background: rgba(18,18,37,0.95);
+      border: 1px solid #00f2ff;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,242,255,0.5);
+      padding: 10px 0;
+      z-index: 1000;
+      min-width: 200px;
+      display: none;
+    }
+    .menu-item {
+      padding: 12px 20px;
+      color: #e0e7ff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .menu-item:hover {
+      background: rgba(0,242,255,0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Download Sloth Web
+  </header>
+
+  <section class="os-selector">
+    <h2>Detected OS: <span id="detected-os">Detecting...</span></h2>
+    <p>If the detection is wrong (e.g., spoofed user agent), select your OS below:</p>
+    <select id="os-select">
+      <option value="windows">Windows</option>
+      <option value="linux">Linux</option>
+      <option value="mac">Mac</option>
+    </select>
+    <br>
+    <a class="download-btn" id="download-link" href="#" onclick="downloadInstaller()">Download Installer</a>
+  </section>
+
+  <footer>
+    Made with ❤️ for the web
+  </footer>
+
+  <!-- Custom Right-Click Menu -->
+  <div id="custom-menu">
+    <div class="menu-item" onclick="location.reload()">Refresh</div>
+    <div class="menu-item" onclick="window.location.href='mailto:parkertripoli@gmail.com'">Contact us</div>
+    <div class="menu-item" onclick="window.open('https://parkertrip.github.io/slothweb/download/', '_blank')">Download</div>
+    <div class="menu-item" onclick="window.close()">Close</div>
+  </div>
+
+  <script>
+    const menu = document.getElementById('custom-menu');
+    document.addEventListener('contextmenu', e => {
+      e.preventDefault();
+      menu.style.display = 'block';
+      menu.style.left = e.pageX + 'px';
+      menu.style.top = e.pageY + 'px';
+    });
+    document.addEventListener('click', e => {
+      if (e.target.closest('#custom-menu') === null) {
+        menu.style.display = 'none';
+      }
+    });
+
+    // OS Detection
+    let detectedOS = 'unknown';
+    const platform = navigator.platform.toUpperCase();
+    if (platform.indexOf('WIN') >= 0) detectedOS = 'windows';
+    if (platform.indexOf('MAC') >= 0) detectedOS = 'mac';
+    if (platform.indexOf('LINUX') >= 0) detectedOS = 'linux';
+
+    document.getElementById('detected-os').textContent = detectedOS.charAt(0).toUpperCase() + detectedOS.slice(1);
+    document.getElementById('os-select').value = detectedOS;
+
+    // Download Function
+    function downloadInstaller() {
+      const os = document.getElementById('os-select').value;
+      let url, filename;
+
+      if (os === 'windows') {
+        url = 'https://raw.githubusercontent.com/parkertripoli-wq/sloth-web/refs/heads/main/installer_windows.bat';
+        filename = 'installer_windows.bat';
+      } else if (os === 'linux') {
+        url = 'https://raw.githubusercontent.com/parkertripoli-wq/sloth-web/main/installer_linux.sh';
+        filename = 'installer_linux.sh';
+      } else if (os === 'mac') {
+        url = 'https://raw.githubusercontent.com/parkertripoli-wq/sloth-web/refs/heads/main/installer_mac.sh';
+        filename = 'installer_mac.sh';
+      } else {
+        alert('Please select an OS');
+        return;
+      }
+
+      fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = filename;
+          link.click();
+        })
+        .catch(error => console.error('Download failed', error));
+    }
+  </script>
+</body>
+</html>
