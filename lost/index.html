@@ -1,13 +1,1011 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta http-equiv="refresh" content="0; url=https://docs.google.com/document/d/1LUnNX4DtI499Ev_1dtbARvjrwcVdkweKOFMfPcWIcLA/edit?tab=t.9h6bkbkfkhfl/">
-  <title>Redirecting...</title>
-  <script>
-    window.location.href = "https://docs.google.com/document/d/1LUnNX4DtI499Ev_1dtbARvjrwcVdkweKOFMfPcWIcLA/edit?tab=t.9h6bkbkfkhfl";
-  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>[̲̅L][̲̅O][̲̅S][̲̅T]</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/lost/images/%5B%CC%B2%CC%85L%5D%5B%CC%B2%CC%85O%5D%5B%CC%B2%CC%85S%5D%5B%CC%B2%CC%85T%5D.png">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Rubik+Puddles&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --purple: #9900ff;
+      --purple2: #cc66ff;
+      --glow: rgba(153, 0, 255, 0.7);
+
+      --bg1: #040009;
+      --bg2: #0b0015;
+      --card: rgba(20, 0, 40, 0.55);
+
+      --border: rgba(153, 0, 255, 0.25);
+      --border2: rgba(153, 0, 255, 0.65);
+
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.72);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #06000c;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--purple), #55008f);
+      border-radius: 20px;
+      border: 2px solid #06000c;
+      box-shadow: 0px 0px 12px var(--glow);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #b44dff, var(--purple));
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Outfit", sans-serif;
+      background: radial-gradient(circle at top, #24003a, var(--bg1));
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* Background */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      background: var(--purple);
+      opacity: 0.16;
+      filter: blur(120px);
+      animation: float 10s infinite ease-in-out;
+    }
+
+    .orb:nth-child(1) { top: 10%; left: 10%; }
+    .orb:nth-child(2) { bottom: 5%; right: 12%; animation-delay: 2s; }
+    .orb:nth-child(3) { top: 45%; left: 60%; width: 520px; height: 520px; animation-delay: 4s; }
+
+    @keyframes float {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(40px, -50px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    /* Sparkles */
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 50%;
+      box-shadow: 0px 0px 10px rgba(255,255,255,0.6);
+      animation: sparkleMove 8s infinite linear;
+      opacity: 0.5;
+    }
+
+    @keyframes sparkleMove {
+      from { transform: translateY(0px); opacity: 0.1; }
+      50% { opacity: 0.8; }
+      to { transform: translateY(-900px); opacity: 0; }
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(10, 0, 20, 0.72);
+      border-bottom: 1px solid rgba(153, 0, 255, 0.2);
+      backdrop-filter: blur(14px);
+      padding: 16px 20px;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-title {
+      font-family: "Rubik Puddles", cursive;
+      font-size: 1.7rem;
+      color: var(--purple);
+      text-shadow: 0px 0px 14px var(--glow);
+      user-select: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: rgba(255,255,255,0.8);
+      font-weight: 700;
+      transition: 0.2s ease;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover {
+      color: white;
+      background: rgba(153, 0, 255, 0.15);
+      box-shadow: 0px 0px 10px rgba(153, 0, 255, 0.25);
+    }
+
+    header {
+      text-align: center;
+      padding: 90px 20px 50px;
+    }
+
+    .title {
+      font-family: "Rubik Puddles", cursive;
+      font-size: 5.4rem;
+      color: var(--purple);
+      text-shadow: 0px 0px 30px var(--glow);
+      letter-spacing: 6px;
+      animation: popIn 1.2s ease;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .subtitle {
+      margin-top: 18px;
+      font-size: 1.2rem;
+      color: var(--muted);
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
+    }
+
+    .highlight {
+      color: var(--purple2);
+      font-weight: 900;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 30px 20px 70px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 25px;
+      box-shadow: 0px 0px 22px rgba(153, 0, 255, 0.15);
+      transition: 0.25s ease;
+      backdrop-filter: blur(12px);
+      margin-bottom: 25px;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(153, 0, 255, 0.65);
+      box-shadow: 0px 0px 40px rgba(153, 0, 255, 0.3);
+    }
+
+    h2 {
+      font-size: 1.7rem;
+      color: var(--purple);
+      text-shadow: 0px 0px 12px rgba(153, 0, 255, 0.4);
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* Search */
+    .search-bar {
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .search-bar input {
+      flex: 1;
+      min-width: 220px;
+      padding: 14px 14px;
+      border-radius: 16px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(153, 0, 255, 0.25);
+      outline: none;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .search-bar input:focus {
+      border-color: rgba(153, 0, 255, 0.75);
+      box-shadow: 0px 0px 20px rgba(153, 0, 255, 0.25);
+    }
+
+    /* Layout */
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 22px;
+      margin-top: 25px;
+    }
+
+    /* Book List */
+    .book-list {
+      list-style: none;
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 520px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    .book-item {
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(153, 0, 255, 0.2);
+      background: rgba(0,0,0,0.22);
+      cursor: pointer;
+      transition: 0.2s ease;
+      position: relative;
+    }
+
+    .book-item:hover {
+      border-color: rgba(153, 0, 255, 0.7);
+      box-shadow: 0px 0px 18px rgba(153, 0, 255, 0.25);
+      transform: translateX(6px);
+    }
+
+    .book-item.active {
+      border-color: rgba(153, 0, 255, 0.9);
+      box-shadow: 0px 0px 30px rgba(153, 0, 255, 0.45);
+      background: rgba(153, 0, 255, 0.12);
+    }
+
+    .book-name {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .book-info {
+      margin-top: 6px;
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.75);
+    }
+
+    /* Tags */
+    .tag {
+      font-size: 0.75rem;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-weight: 900;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.3);
+      color: rgba(255,255,255,0.85);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .tag.new {
+      border-color: rgba(0, 255, 180, 0.5);
+      box-shadow: 0px 0px 10px rgba(0, 255, 180, 0.15);
+    }
+
+    .tag.popular {
+      border-color: rgba(255, 200, 0, 0.5);
+      box-shadow: 0px 0px 10px rgba(255, 200, 0, 0.15);
+    }
+
+    .tag.coming {
+      border-color: rgba(153, 0, 255, 0.7);
+      box-shadow: 0px 0px 10px rgba(153, 0, 255, 0.2);
+    }
+
+    /* Viewer */
+    .viewer {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Cover Page Flip */
+    .cover {
+      width: 100%;
+      height: 330px;
+      border-radius: 18px;
+      border: 1px solid rgba(153, 0, 255, 0.25);
+      overflow: hidden;
+      background: rgba(0,0,0,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0px 0px 30px rgba(153, 0, 255, 0.15);
+      perspective: 1200px;
+    }
+
+    .cover-inner {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.7s ease;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+    .cover.flip .cover-inner {
+      transform: rotateY(180deg);
+    }
+
+    .cover-front, .cover-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .cover-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cover-back {
+      transform: rotateY(180deg);
+      background: rgba(0,0,0,0.35);
+      text-align: center;
+      padding: 25px;
+    }
+
+    .cover-back span {
+      color: var(--purple2);
+    }
+
+    .viewer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .book-title {
+      font-size: 2rem;
+      font-weight: 1000;
+      color: white;
+      text-shadow: 0px 0px 14px rgba(153, 0, 255, 0.35);
+    }
+
+    .fav-btn {
+      font-size: 1rem;
+      padding: 10px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 900;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.35);
+      color: rgba(255,255,255,0.8);
+      transition: 0.2s ease;
+      user-select: none;
+    }
+
+    .fav-btn:hover {
+      transform: scale(1.05);
+      border-color: rgba(153, 0, 255, 0.7);
+      box-shadow: 0px 0px 18px rgba(153, 0, 255, 0.25);
+      color: white;
+    }
+
+    .fav-btn.active {
+      background: rgba(153, 0, 255, 0.25);
+      border-color: rgba(153, 0, 255, 0.8);
+      color: white;
+      box-shadow: 0px 0px 25px rgba(153, 0, 255, 0.35);
+    }
+
+    .viewer-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 140px;
+      text-align: center;
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-weight: 900;
+      border: 1px solid rgba(255,255,255,0.12);
+      cursor: pointer;
+      transition: 0.25s ease;
+      user-select: none;
+    }
+
+    .btn-preview {
+      background: rgba(153, 0, 255, 0.2);
+      color: white;
+      box-shadow: 0px 0px 20px rgba(153, 0, 255, 0.2);
+    }
+
+    .btn-preview:hover {
+      background: rgba(153, 0, 255, 0.35);
+      box-shadow: 0px 0px 30px rgba(153, 0, 255, 0.5);
+      transform: translateY(-4px);
+    }
+
+    .btn-open {
+      background: linear-gradient(135deg, var(--purple), #4b007a);
+      color: white;
+      box-shadow: 0px 0px 20px rgba(153, 0, 255, 0.35);
+    }
+
+    .btn-open:hover {
+      box-shadow: 0px 0px 40px rgba(153, 0, 255, 0.7);
+      transform: translateY(-4px) scale(1.02);
+    }
+
+    /* Preview */
+    .preview-box {
+      margin-top: 18px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(153, 0, 255, 0.25);
+      box-shadow: 0px 0px 30px rgba(153, 0, 255, 0.15);
+      background: rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    iframe {
+      width: 100%;
+      height: 520px;
+      border: none;
+      background: black;
+    }
+
+    /* Loader */
+    .loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(10px);
+      z-index: 5;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.2s ease;
+    }
+
+    .loader.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .spinner {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: 6px solid rgba(255,255,255,0.2);
+      border-top-color: var(--purple2);
+      animation: spin 1s linear infinite;
+      box-shadow: 0px 0px 18px rgba(153, 0, 255, 0.4);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Music */
+    .music-box {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(153, 0, 255, 0.2);
+      background: rgba(0,0,0,0.22);
+    }
+
+    .music-box button {
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(153, 0, 255, 0.2);
+      color: white;
+      transition: 0.2s ease;
+    }
+
+    .music-box button:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 0px 18px rgba(153, 0, 255, 0.4);
+    }
+
+    .music-box input[type="range"] {
+      flex: 1;
+      min-width: 150px;
+      accent-color: var(--purple2);
+    }
+
+    /* Favorites */
+    .fav-list {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .fav-chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(153, 0, 255, 0.18);
+      border: 1px solid rgba(153, 0, 255, 0.35);
+      font-weight: 900;
+      cursor: pointer;
+      transition: 0.2s ease;
+      user-select: none;
+    }
+
+    .fav-chip:hover {
+      transform: translateY(-3px);
+      box-shadow: 0px 0px 20px rgba(153, 0, 255, 0.3);
+    }
+
+    footer {
+      text-align: center;
+      padding: 35px 20px;
+      color: rgba(255,255,255,0.55);
+      border-top: 1px solid rgba(153, 0, 255, 0.15);
+      background: rgba(5, 0, 10, 0.55);
+      backdrop-filter: blur(10px);
+    }
+
+    footer span {
+      color: var(--purple2);
+      font-weight: 900;
+    }
+
+    /* Responsive */
+    @media(max-width: 950px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .title {
+        font-size: 3.8rem;
+      }
+      iframe {
+        height: 450px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <p>If you are not redirected automatically, <a href="https://docs.google.com/document/d/1LUnNX4DtI499Ev_1dtbARvjrwcVdkweKOFMfPcWIcLA/edit?tab=t.9h6bkbkfkhfl">click here</a>.</p>
+
+  <div class="bg">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+
+    <div class="sparkle" style="left:10%; top:95%; animation-delay:0s;"></div>
+    <div class="sparkle" style="left:25%; top:97%; animation-delay:1s;"></div>
+    <div class="sparkle" style="left:45%; top:93%; animation-delay:2s;"></div>
+    <div class="sparkle" style="left:65%; top:96%; animation-delay:3s;"></div>
+    <div class="sparkle" style="left:80%; top:94%; animation-delay:4s;"></div>
+    <div class="sparkle" style="left:92%; top:98%; animation-delay:5s;"></div>
+  </div>
+
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-title">LOST</div>
+      <div class="nav-links">
+        <a href="#library">Library</a>
+        <a href="#preview">Preview</a>
+        <a href="#favorites">Favorites</a>
+        <a href="#credits">Credits</a>
+      </div>
+    </div>
+  </nav>
+
+  <header>
+    <h1 class="title">LOST</h1>
+    <p class="subtitle">
+      A mysterious book universe where every page pulls you deeper.
+      Welcome to <span class="highlight">LOST</span>.
+    </p>
+  </header>
+
+  <main>
+
+    <section class="card" id="library">
+      <h2>📚 Book Library</h2>
+      <p>
+        Search, choose a book, favorite it, preview it, or open it instantly.
+      </p>
+
+      <div class="search-bar">
+        <input id="searchInput" type="text" placeholder="Search books... (ex: Lost, Froggie)" oninput="renderBooks()">
+      </div>
+
+      <div class="layout">
+
+        <!-- Book List -->
+        <div>
+          <ul class="book-list" id="bookList"></ul>
+          <p style="margin-top: 14px; font-size: 0.95rem; color: rgba(255,255,255,0.6);">
+            More books coming soon...
+          </p>
+        </div>
+
+        <!-- Viewer -->
+        <div class="viewer">
+          <div class="cover" id="coverBox">
+            <div class="cover-inner" id="coverInner">
+              <div class="cover-front" id="coverFront"></div>
+              <div class="cover-back" id="coverBack">
+                📌 Cover <span>Coming Soon</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="viewer-top">
+            <div class="book-title" id="bookTitle">Loading...</div>
+            <div class="fav-btn" id="favButton" onclick="toggleFavorite()">♡ Favorite</div>
+          </div>
+
+          <div class="viewer-buttons">
+            <div class="btn btn-preview" onclick="openPreview()">👁 Preview</div>
+            <div class="btn btn-open" onclick="openBook()">📖 Open</div>
+          </div>
+
+          <div class="music-box">
+            <div style="font-weight:900;">🎧 Background Music</div>
+            <button onclick="toggleMusic()" id="musicBtn">Play</button>
+            <input type="range" min="0" max="1" step="0.01" value="0.2" oninput="setVolume(this.value)">
+          </div>
+
+          <p style="color: rgba(255,255,255,0.65); font-size: 0.95rem;">
+            Preview loads below in the preview section.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="card" id="preview">
+      <h2>👁️ Book Preview</h2>
+      <p id="previewText">
+        Choose a book and press Preview.
+      </p>
+
+      <div class="preview-box">
+        <div class="loader" id="loader">
+          <div class="spinner"></div>
+        </div>
+        <iframe id="previewFrame" src=""></iframe>
+      </div>
+    </section>
+
+    <section class="card" id="favorites">
+      <h2>❤️ Favorites</h2>
+      <p>
+        Your favorites are saved automatically on your device.
+      </p>
+
+      <div class="fav-list" id="favList">
+        <div style="color: rgba(255,255,255,0.6); font-weight:800;">
+          No favorites yet...
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="credits">
+      <h2>👑 Credits</h2>
+      <p>The LOST universe is built by an awesome team:</p>
+
+      <div style="margin-top: 14px; display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+        <div style="padding:14px 16px; border-radius:16px; border:1px solid rgba(153,0,255,0.2); background:rgba(0,0,0,0.22);">
+          <div style="font-weight:900; font-size:1.1rem;">✍️ Writers</div>
+          <div style="margin-top:6px; color:rgba(255,255,255,0.75); font-weight:700;">Ciena, Parker</div>
+        </div>
+
+        <div style="padding:14px 16px; border-radius:16px; border:1px solid rgba(153,0,255,0.2); background:rgba(0,0,0,0.22);">
+          <div style="font-weight:900; font-size:1.1rem;">🧾 Formatters</div>
+          <div style="margin-top:6px; color:rgba(255,255,255,0.75); font-weight:700;">Parker, Ciena</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>
+      <span>LOST</span> • Book Streaming Style Website • Purple Theme • Made with power 💜
+    </p>
+  </footer>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" loop>
+    <!-- Free ambient music from pixabay (safe & reliable) -->
+    <source src="https://cdn.pixabay.com/download/audio/2022/10/03/audio_9b2e5d2e5c.mp3?filename=ambient-113192.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // BOOK DATABASE (easy to add more)
+    const books = [
+      {
+        id: "lost-book-1",
+        title: "LOST - Book 1",
+        desc: "The beginning of the LOST series.",
+        cover: "https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/lost/images/Screenshot%202026-02-18%20150106.png",
+        preview: "https://docs.google.com/document/d/e/2PACX-1vRSQDZbJ7UyYlEqgcldXRuM7pkUk962sAiNuGW6R8ND4fmDKQsHmlevQVv4fb_-rvgyvJlYbiKteF2e/pub",
+        open: "https://docs.google.com/document/d/1LUnNX4DtI499Ev_1dtbARvjrwcVdkweKOFMfPcWIcLA/edit?tab=t.0",
+        tags: ["new", "popular"]
+      },
+      {
+        id: "froggie-puggie",
+        title: "Froggie And Puggie",
+        desc: "By Easton • Funny, fun, and chaotic.",
+        cover: "",
+        preview: "https://docs.google.com/document/d/e/2PACX-1vREsCBANfH89V3DL_TfUez8BW6gPytMyCTp61BCdd60_O4wa1YjMbwqsBq-q3w_VxLkJC7Wuohi6Rqt/pub",
+        open: "https://docs.google.com/document/u/0/d/1Ipp6t2Rz9VKFfwadrA87O15c7VUgR-f8jss4byTuBwk/edit",
+        tags: ["coming"]
+      }
+    ];
+
+    let selectedBook = books[0];
+
+    // Favorites
+    function getFavorites() {
+      return JSON.parse(localStorage.getItem("lostFavorites") || "[]");
+    }
+
+    function saveFavorites(favs) {
+      localStorage.setItem("lostFavorites", JSON.stringify(favs));
+    }
+
+    function isFavorited(id) {
+      return getFavorites().includes(id);
+    }
+
+    function toggleFavorite() {
+      let favs = getFavorites();
+
+      if (favs.includes(selectedBook.id)) {
+        favs = favs.filter(f => f !== selectedBook.id);
+      } else {
+        favs.push(selectedBook.id);
+      }
+
+      saveFavorites(favs);
+      updateFavButton();
+      renderFavorites();
+    }
+
+    function updateFavButton() {
+      const btn = document.getElementById("favButton");
+
+      if (isFavorited(selectedBook.id)) {
+        btn.classList.add("active");
+        btn.textContent = "♥ Favorited";
+      } else {
+        btn.classList.remove("active");
+        btn.textContent = "♡ Favorite";
+      }
+    }
+
+    function renderFavorites() {
+      const favList = document.getElementById("favList");
+      const favs = getFavorites();
+
+      favList.innerHTML = "";
+
+      if (favs.length === 0) {
+        favList.innerHTML = `<div style="color: rgba(255,255,255,0.6); font-weight:800;">No favorites yet...</div>`;
+        return;
+      }
+
+      favs.forEach(id => {
+        const book = books.find(b => b.id === id);
+        if (!book) return;
+
+        const chip = document.createElement("div");
+        chip.className = "fav-chip";
+        chip.textContent = "⭐ " + book.title;
+
+        chip.onclick = () => {
+          selectBook(book.id);
+          document.getElementById("library").scrollIntoView({behavior:"smooth"});
+        };
+
+        favList.appendChild(chip);
+      });
+    }
+
+    // Tags
+    function tagHTML(tag) {
+      if (tag === "new") return `<span class="tag new">NEW</span>`;
+      if (tag === "popular") return `<span class="tag popular">POPULAR</span>`;
+      if (tag === "coming") return `<span class="tag coming">COMING SOON</span>`;
+      return `<span class="tag">${tag}</span>`;
+    }
+
+    // Render Books with Search
+    function renderBooks() {
+      const list = document.getElementById("bookList");
+      const query = document.getElementById("searchInput").value.toLowerCase().trim();
+
+      list.innerHTML = "";
+
+      const filtered = books.filter(book => {
+        return book.title.toLowerCase().includes(query) || book.desc.toLowerCase().includes(query);
+      });
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<div style="padding:14px; color:rgba(255,255,255,0.7); font-weight:800;">
+          No books found.
+        </div>`;
+        return;
+      }
+
+      filtered.forEach(book => {
+        const li = document.createElement("li");
+        li.className = "book-item";
+
+        if (book.id === selectedBook.id) li.classList.add("active");
+
+        li.onclick = () => selectBook(book.id);
+
+        li.innerHTML = `
+          <div class="book-name">
+            <span>${book.title}</span>
+            <span style="display:flex; gap:6px; flex-wrap:wrap;">
+              ${book.tags.map(tagHTML).join("")}
+            </span>
+          </div>
+          <div class="book-info">${book.desc}</div>
+        `;
+
+        list.appendChild(li);
+      });
+    }
+
+    // Page Flip Cover + Select Book
+    function selectBook(id) {
+      const book = books.find(b => b.id === id);
+      if (!book) return;
+
+      selectedBook = book;
+
+      const coverBox = document.getElementById("coverBox");
+      coverBox.classList.add("flip");
+
+      setTimeout(() => {
+        document.getElementById("bookTitle").textContent = book.title;
+        document.getElementById("previewText").innerHTML =
+          `Currently selected: <span class="highlight">${book.title}</span>`;
+
+        const coverFront = document.getElementById("coverFront");
+        const coverBack = document.getElementById("coverBack");
+
+        if (book.cover && book.cover.trim() !== "") {
+          coverFront.innerHTML = `<img src="${book.cover}" alt="Cover">`;
+          coverBack.innerHTML = `📌 Cover <span>Coming Soon</span>`;
+        } else {
+          coverFront.innerHTML = `<div style="padding:20px; text-align:center;">📌 Cover <span style="color:var(--purple2)">Coming Soon</span></div>`;
+          coverBack.innerHTML = `📌 Cover <span>Coming Soon</span>`;
+        }
+
+        updateFavButton();
+        renderBooks();
+
+        setTimeout(() => {
+          coverBox.classList.remove("flip");
+        }, 250);
+
+      }, 400);
+    }
+
+    // Preview Loader + Iframe
+    function openPreview() {
+      const loader = document.getElementById("loader");
+      const frame = document.getElementById("previewFrame");
+
+      loader.classList.add("active");
+      frame.src = "";
+
+      setTimeout(() => {
+        frame.src = selectedBook.preview;
+        document.getElementById("preview").scrollIntoView({behavior:"smooth"});
+      }, 300);
+    }
+
+    document.getElementById("previewFrame").addEventListener("load", () => {
+      document.getElementById("loader").classList.remove("active");
+    });
+
+    // Open Book
+    function openBook() {
+      window.open(selectedBook.open, "_blank");
+    }
+
+    // Music
+    const music = document.getElementById("bgMusic");
+    const musicBtn = document.getElementById("musicBtn");
+
+    function toggleMusic() {
+      if (music.paused) {
+        music.play();
+        musicBtn.textContent = "Pause";
+      } else {
+        music.pause();
+        musicBtn.textContent = "Play";
+      }
+    }
+
+    function setVolume(value) {
+      music.volume = value;
+    }
+
+    // Startup
+    window.onload = () => {
+      renderBooks();
+      renderFavorites();
+      selectBook(books[0].id);
+      setVolume(0.2);
+    };
+  </script>
+
 </body>
-</html>   
+</html>
