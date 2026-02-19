@@ -6,352 +6,235 @@
 
   <title>[̲̅L][̲̅O][̲̅S][̲̅T] Library</title>
 
-  <link rel="icon" type="image/png"
-    href="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/lost/images/%5B%CC%B2%CC%85L%5D%5B%CC%B2%CC%85O%5D%5B%CC%B2%CC%85S%5D%5B%CC%B2%CC%85T%5D.png">
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/lost/images/%5B%CC%B2%CC%85L%5D%5B%CC%B2%CC%85O%5D%5B%CC%B2%CC%85S%5D%5B%CC%B2%CC%85T%5D.png">
 
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#9900ff">
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/main/lost/manifest.json">
 
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Rubik+Puddles&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --accent: #9900ff;
       --accent2: #cc66ff;
-      --glow: rgba(153, 0, 255, 0.65);
-
-      --bg1: #040009;
-      --bg2: #0b0015;
-
-      --card: rgba(15, 0, 30, 0.72);
-      --card2: rgba(20, 0, 40, 0.92);
-
-      --border: rgba(153, 0, 255, 0.22);
+      --bg1: #05000a;
+      --bg2: #0c0016;
+      --card: rgba(18, 0, 30, 0.55);
+      --border: rgba(153, 0, 255, 0.25);
       --border2: rgba(153, 0, 255, 0.55);
-
-      --text: rgba(255,255,255,0.93);
-      --muted: rgba(255,255,255,0.7);
-
-      --good: rgba(0,255,180,0.9);
-      --warn: rgba(255,200,0,0.9);
-      --bad: rgba(255,80,120,0.9);
-      --blue: rgba(100,160,255,0.9);
-
-      --isLight: 0;
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.68);
+      --shadow: rgba(153, 0, 255, 0.35);
     }
 
     body.light {
-      --bg1: #f6f1ff;
+      --bg1: #f7f0ff;
       --bg2: #ffffff;
-      --card: rgba(255,255,255,0.82);
-      --card2: rgba(255,255,255,0.95);
-      --text: rgba(15,15,25,0.92);
-      --muted: rgba(15,15,25,0.65);
-      --border: rgba(153, 0, 255, 0.22);
-      --border2: rgba(153, 0, 255, 0.55);
-      --isLight: 1;
+      --card: rgba(255,255,255,0.7);
+      --border: rgba(153, 0, 255, 0.25);
+      --border2: rgba(153, 0, 255, 0.45);
+      --text: rgba(20,20,20,0.9);
+      --muted: rgba(20,20,20,0.65);
+      --shadow: rgba(153, 0, 255, 0.25);
     }
 
-    ::-webkit-scrollbar { width: 12px; }
-    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.15); }
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, var(--accent), #40006b);
-      border-radius: 999px;
-      border: 2px solid rgba(0,0,0,0.1);
-      box-shadow: 0px 0px 15px var(--glow);
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(180deg, var(--accent2), var(--accent));
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      scroll-behavior: smooth;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: "Outfit", sans-serif;
-      background: radial-gradient(circle at top, rgba(153,0,255,0.15), var(--bg1));
+      background: radial-gradient(circle at top, var(--bg2), var(--bg1));
       color: var(--text);
       overflow-x: hidden;
-      transition: 0.25s ease;
+      min-height: 100vh;
+      transition: 0.3s ease;
     }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 12px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.25); }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--accent), #4b007d);
+      border-radius: 20px;
+      border: 2px solid rgba(0,0,0,0.25);
+      box-shadow: 0px 0px 15px var(--shadow);
+    }
+
+    a { color: var(--accent2); text-decoration: none; font-weight: 800; }
+    a:hover { text-decoration: underline; }
 
     .bg {
       position: fixed;
       inset: 0;
-      z-index: -10;
+      z-index: -2;
       overflow: hidden;
     }
 
     .orb {
       position: absolute;
-      width: 650px;
-      height: 650px;
+      width: 520px;
+      height: 520px;
       border-radius: 50%;
       background: var(--accent);
-      opacity: 0.10;
-      filter: blur(170px);
-      animation: float 10s infinite ease-in-out;
+      opacity: 0.12;
+      filter: blur(140px);
+      animation: float 12s infinite ease-in-out;
     }
 
-    .orb:nth-child(1) { top: 5%; left: 10%; }
-    .orb:nth-child(2) { bottom: 10%; right: 10%; animation-delay: 2s; }
-    .orb:nth-child(3) { top: 45%; left: 55%; animation-delay: 4s; width: 750px; height: 750px; }
+    .orb:nth-child(1) { top: 10%; left: 10%; }
+    .orb:nth-child(2) { bottom: 5%; right: 10%; animation-delay: 2s; }
+    .orb:nth-child(3) { top: 45%; left: 60%; width: 600px; height: 600px; animation-delay: 4s; }
 
     @keyframes float {
       0% { transform: translate(0, 0); }
-      50% { transform: translate(70px, -50px); }
+      50% { transform: translate(50px, -60px); }
       100% { transform: translate(0, 0); }
-    }
-
-    .shelves {
-      position: fixed;
-      inset: 0;
-      z-index: -9;
-      background:
-        repeating-linear-gradient(
-          to bottom,
-          rgba(80, 30, 120, 0.07) 0px,
-          rgba(80, 30, 120, 0.07) 140px,
-          rgba(20, 0, 30, 0.12) 140px,
-          rgba(20, 0, 30, 0.12) 160px
-        );
-      opacity: 0.65;
-      pointer-events: none;
-      transition: 0.25s ease;
-    }
-
-    body.light .shelves {
-      opacity: 0.35;
     }
 
     nav {
       position: sticky;
       top: 0;
       z-index: 999;
-      background: rgba(10, 0, 20, 0.78);
+      padding: 14px 20px;
+      background: rgba(10, 0, 20, 0.75);
       border-bottom: 1px solid rgba(153, 0, 255, 0.25);
-      backdrop-filter: blur(18px);
-      padding: 14px 18px;
-      transition: 0.25s ease;
+      backdrop-filter: blur(16px);
     }
 
     body.light nav {
-      background: rgba(255,255,255,0.78);
+      background: rgba(255,255,255,0.7);
     }
 
     .nav-inner {
-      max-width: 1400px;
+      max-width: 1250px;
       margin: auto;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      align-items: center;
+      gap: 15px;
       flex-wrap: wrap;
     }
 
-    .nav-title {
+    .logo {
       font-family: "Rubik Puddles", cursive;
-      font-size: 1.9rem;
+      font-size: 1.7rem;
       color: var(--accent);
-      text-shadow: 0px 0px 18px var(--glow);
+      text-shadow: 0px 0px 18px var(--shadow);
       user-select: none;
     }
 
-    .nav-sub {
-      font-size: 0.85rem;
-      color: var(--muted);
-      font-weight: 900;
-      letter-spacing: 2px;
-      margin-top: 2px;
-    }
-
-    .nav-right {
+    .nav-actions {
       display: flex;
+      align-items: center;
       gap: 10px;
       flex-wrap: wrap;
-      align-items: center;
     }
 
-    .pill {
+    .btn {
       padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(153, 0, 255, 0.12);
-      border: 1px solid rgba(153, 0, 255, 0.25);
-      font-weight: 900;
-      cursor: pointer;
-      transition: 0.2s ease;
+      border-radius: 14px;
+      border: 1px solid rgba(153,0,255,0.3);
+      background: rgba(0,0,0,0.25);
       color: var(--text);
-      user-select: none;
+      cursor: pointer;
+      font-weight: 900;
+      transition: 0.2s ease;
+      box-shadow: 0px 0px 18px rgba(153,0,255,0.12);
     }
 
-    .pill:hover {
-      background: rgba(153, 0, 255, 0.22);
+    body.light .btn {
+      background: rgba(255,255,255,0.65);
+    }
+
+    .btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0px 0px 15px rgba(153, 0, 255, 0.25);
+      border-color: rgba(153,0,255,0.75);
+      box-shadow: 0px 0px 25px rgba(153,0,255,0.25);
+    }
+
+    .btn.purple {
+      background: linear-gradient(135deg, var(--accent), #5a00a0);
+      border: none;
+      color: white;
+    }
+
+    .btn.red {
+      background: rgba(255,50,50,0.12);
+      border-color: rgba(255,50,50,0.35);
     }
 
     header {
       text-align: center;
-      padding: 85px 20px 40px;
+      padding: 90px 20px 50px;
       max-width: 1100px;
       margin: auto;
     }
 
     .title {
       font-family: "Rubik Puddles", cursive;
-      font-size: 5.2rem;
+      font-size: 5rem;
       color: var(--accent);
-      text-shadow: 0px 0px 40px var(--glow);
-      letter-spacing: 6px;
-      animation: popIn 1.2s ease;
-    }
-
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
+      text-shadow: 0px 0px 30px var(--shadow);
     }
 
     .subtitle {
       margin-top: 18px;
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       color: var(--muted);
       line-height: 1.7;
-      font-weight: 800;
+      font-weight: 600;
     }
 
-    .highlight {
+    .subtitle span {
       color: var(--accent2);
-      font-weight: 1000;
+      font-weight: 900;
     }
 
     main {
-      max-width: 1400px;
+      max-width: 1250px;
       margin: auto;
       padding: 20px 20px 90px;
     }
 
-    .sectionTitle {
-      font-size: 1.6rem;
-      font-weight: 1000;
-      margin: 25px 0 12px;
-      color: var(--text);
-      text-shadow: 0px 0px 18px rgba(153, 0, 255, 0.25);
+    .section {
+      margin-top: 30px;
     }
 
-    .controls {
+    .section-title {
+      font-size: 1.8rem;
+      color: var(--accent);
+      text-shadow: 0px 0px 12px rgba(153,0,255,0.25);
+      margin-bottom: 12px;
+    }
+
+    .search-row {
       display: flex;
-      flex-wrap: wrap;
       gap: 12px;
-      align-items: center;
-      justify-content: space-between;
+      flex-wrap: wrap;
       margin-bottom: 18px;
     }
 
-    .search {
+    .search-row input, .search-row select {
       flex: 1;
-      min-width: 240px;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    input[type="text"], input[type="color"] {
-      flex: 1;
+      min-width: 180px;
       padding: 14px 16px;
       border-radius: 16px;
-      border: 1px solid rgba(153, 0, 255, 0.25);
-      outline: none;
-      font-size: 1rem;
+      border: 1px solid rgba(153,0,255,0.25);
       background: rgba(0,0,0,0.25);
       color: var(--text);
       font-weight: 800;
-      transition: 0.2s ease;
-    }
-
-    body.light input[type="text"] {
-      background: rgba(0,0,0,0.04);
-    }
-
-    input[type="text"]:focus {
-      border-color: rgba(153, 0, 255, 0.85);
-      box-shadow: 0px 0px 20px rgba(153, 0, 255, 0.25);
-    }
-
-    select {
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(153, 0, 255, 0.25);
       outline: none;
-      background: rgba(0,0,0,0.25);
-      color: var(--text);
-      font-weight: 900;
-      cursor: pointer;
     }
 
-    body.light select {
-      background: rgba(0,0,0,0.04);
-    }
-
-    .filters {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 18px;
-    }
-
-    .tagFilter {
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(153, 0, 255, 0.10);
-      border: 1px solid rgba(153, 0, 255, 0.25);
-      font-weight: 900;
-      cursor: pointer;
-      transition: 0.2s ease;
-      user-select: none;
-      color: var(--text);
-    }
-
-    .tagFilter:hover {
-      background: rgba(153, 0, 255, 0.20);
-      transform: translateY(-2px);
-    }
-
-    .tagFilter.active {
-      background: rgba(153, 0, 255, 0.35);
-      border-color: rgba(153, 0, 255, 0.75);
-      box-shadow: 0px 0px 18px rgba(153, 0, 255, 0.25);
+    body.light .search-row input, body.light .search-row select {
+      background: rgba(255,255,255,0.7);
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 18px;
-      margin-top: 10px;
-    }
-
-    .list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-top: 10px;
-    }
-
-    .slideIn {
-      opacity: 0;
-      transform: translateY(50px) scale(0.96);
-      transition: 0.6s ease;
-    }
-
-    .slideIn.visible {
-      opacity: 1;
-      transform: translateY(0px) scale(1);
     }
 
     .book {
@@ -359,893 +242,1010 @@
       border: 1px solid var(--border);
       border-radius: 22px;
       padding: 14px;
-      box-shadow: 0px 0px 22px rgba(153, 0, 255, 0.12);
+      box-shadow: 0px 0px 18px rgba(153,0,255,0.12);
       transition: 0.25s ease;
       cursor: pointer;
       position: relative;
       overflow: hidden;
-      backdrop-filter: blur(10px);
+      transform-style: preserve-3d;
     }
 
     .book:hover {
-      transform: translateY(-6px) scale(1.01);
-      border-color: rgba(153, 0, 255, 0.7);
-      box-shadow: 0px 0px 40px rgba(153, 0, 255, 0.3);
+      transform: translateY(-5px) scale(1.02);
+      border-color: rgba(153,0,255,0.6);
+      box-shadow: 0px 0px 35px rgba(153,0,255,0.25);
     }
 
+    /* Page flip effect */
     .cover {
       width: 100%;
-      height: 230px;
-      border-radius: 18px;
+      height: 280px;
+      border-radius: 16px;
       background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: hidden;
       position: relative;
       perspective: 1000px;
-    }
-
-    body.light .cover {
-      background: rgba(0,0,0,0.04);
     }
 
     .cover img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 18px;
-      transition: 0.35s ease;
+      transition: 0.6s ease;
+      transform-origin: left center;
+      border-radius: 16px;
     }
 
-    .brokenCover {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      font-weight: 1000;
-      color: rgba(255,255,255,0.65);
+    .book:hover .cover img {
+      transform: rotateY(-18deg);
+      box-shadow: 8px 0px 20px rgba(0,0,0,0.45);
+    }
+
+    .cover.soon {
+      font-weight: 900;
+      color: rgba(255,255,255,0.75);
       text-align: center;
-      padding: 20px;
-      line-height: 1.4;
-      background: rgba(0,0,0,0.35);
+      padding: 10px;
     }
 
-    body.light .brokenCover {
-      background: rgba(0,0,0,0.05);
-      color: rgba(0,0,0,0.65);
-    }
-
-    .page {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.0));
-      transform-origin: left;
-      transform: rotateY(0deg);
-      transition: 0.55s ease;
-      opacity: 0.0;
-    }
-
-    .book:hover .page {
-      transform: rotateY(-55deg);
-      opacity: 0.55;
+    body.light .cover.soon {
+      color: rgba(0,0,0,0.7);
     }
 
     .book-title {
       font-size: 1.05rem;
-      font-weight: 1000;
       margin-top: 10px;
+      font-weight: 900;
       color: var(--text);
     }
 
     .book-desc {
-      font-size: 0.88rem;
-      color: var(--muted);
       margin-top: 6px;
-      line-height: 1.35;
-      min-height: 50px;
-      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 1.4;
+      min-height: 52px;
     }
 
-    .miniTags {
-      margin-top: 10px;
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .miniTag {
-      padding: 5px 10px;
+    .tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 6px 10px;
       border-radius: 999px;
       font-size: 0.75rem;
       font-weight: 1000;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(0,0,0,0.18);
-      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(10px);
     }
 
-    body.light .miniTag {
-      background: rgba(0,0,0,0.05);
-      border-color: rgba(0,0,0,0.08);
-    }
+    .tag.NEW { color: #00ffcc; }
+    .tag.POPULAR { color: #ffd700; }
+    .tag.COMINGSOON { color: #ff77ff; }
+    .tag.TRENDING { color: #ff6666; }
 
-    .miniTag.NEW { color: var(--good); }
-    .miniTag.POPULAR { color: var(--warn); }
-    .miniTag.COMINGSOON { color: var(--bad); }
-    .miniTag.GENRE { color: var(--blue); }
-
-    .favBtn {
+    .fav {
       position: absolute;
       top: 12px;
       right: 12px;
-      background: rgba(0,0,0,0.45);
+      font-size: 1.2rem;
+      background: rgba(0,0,0,0.35);
       border: 1px solid rgba(255,255,255,0.15);
-      padding: 8px 10px;
-      border-radius: 14px;
-      font-size: 1rem;
+      border-radius: 999px;
+      padding: 6px 10px;
       cursor: pointer;
       transition: 0.2s ease;
       user-select: none;
-      z-index: 2;
     }
 
-    body.light .favBtn {
-      background: rgba(255,255,255,0.7);
-      border-color: rgba(0,0,0,0.12);
+    .fav:hover {
+      transform: scale(1.1);
+      border-color: rgba(153,0,255,0.6);
     }
 
-    .favBtn.active {
-      background: rgba(153, 0, 255, 0.35);
-      border-color: rgba(153,  0, 255, 0.75);
-      box-shadow: 0px 0px 18px rgba(153, 0, 255, 0.25);
-    }
-
-    .stars {
+    .rating-stars {
+      margin-top: 10px;
       display: flex;
       gap: 4px;
-      margin-top: 10px;
       font-size: 1.1rem;
+      user-select: none;
     }
 
     .star {
       cursor: pointer;
+      opacity: 0.5;
       transition: 0.15s ease;
-      user-select: none;
-      opacity: 0.6;
     }
 
-    .star:hover {
-      transform: scale(1.1);
+    .star.active {
       opacity: 1;
+      text-shadow: 0px 0px 12px rgba(255,255,255,0.3);
     }
 
-    .star.filled {
-      opacity: 1;
-      text-shadow: 0px 0px 12px rgba(255, 220, 100, 0.5);
-    }
-
-    /* MODAL */
+    /* Modal */
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.65);
-      backdrop-filter: blur(10px);
       display: none;
       align-items: center;
       justify-content: center;
+      background: rgba(0,0,0,0.65);
       z-index: 9999;
       padding: 20px;
     }
 
-    .modal.active {
-      display: flex;
-    }
+    .modal.show { display: flex; }
 
-    .modalBox {
+    .modal-box {
       width: 100%;
       max-width: 1050px;
-      background: var(--card2);
-      border: 1px solid rgba(153, 0, 255, 0.35);
+      background: rgba(10,0,20,0.92);
+      border: 1px solid rgba(153,0,255,0.3);
       border-radius: 26px;
       overflow: hidden;
-      box-shadow: 0px 0px 70px rgba(153, 0, 255, 0.35);
-      animation: modalPop 0.35s ease;
+      box-shadow: 0px 0px 60px rgba(153,0,255,0.25);
+      backdrop-filter: blur(20px);
+      animation: pop 0.25s ease;
     }
 
-    @keyframes modalPop {
-      from { transform: scale(0.8) rotateX(15deg); opacity: 0; }
-      to { transform: scale(1) rotateX(0deg); opacity: 1; }
+    body.light .modal-box {
+      background: rgba(255,255,255,0.92);
     }
 
-    .modalTop {
-      display: grid;
-      grid-template-columns: 280px 1fr;
+    @keyframes pop {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-top {
+      display: flex;
       gap: 20px;
-      padding: 22px;
-      border-bottom: 1px solid rgba(153, 0, 255, 0.2);
+      padding: 20px;
+      flex-wrap: wrap;
     }
 
-    .modalCover {
-      width: 100%;
+    .modal-cover {
+      width: 260px;
       height: 360px;
-      border-radius: 20px;
-      background: rgba(0,0,0,0.3);
-      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
       overflow: hidden;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(153,0,255,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: var(--muted);
     }
 
-    body.light .modalCover {
-      background: rgba(0,0,0,0.05);
-    }
-
-    .modalCover img {
+    .modal-cover img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .modalInfo h3 {
+    .modal-info {
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .modal-info h3 {
       font-size: 2rem;
-      color: var(--text);
-      text-shadow: 0px 0px 20px rgba(153, 0, 255, 0.25);
+      color: var(--accent);
+      text-shadow: 0px 0px 15px rgba(153,0,255,0.25);
     }
 
-    .modalInfo p {
-      margin-top: 12px;
+    .modal-info p {
+      margin-top: 10px;
       color: var(--muted);
-      line-height: 1.6;
       font-size: 1rem;
-      font-weight: 800;
+      font-weight: 650;
+      line-height: 1.6;
     }
 
-    .modalBtns {
-      margin-top: 16px;
+    .modal-buttons {
+      margin-top: 15px;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
     }
 
-    .btn {
-      padding: 12px 16px;
-      border-radius: 16px;
-      font-weight: 1000;
-      cursor: pointer;
-      border: 1px solid rgba(153, 0, 255, 0.35);
-      background: rgba(153, 0, 255, 0.15);
-      color: var(--text);
-      transition: 0.2s ease;
-    }
-
-    .btn:hover {
-      background: rgba(153, 0, 255, 0.3);
-      transform: translateY(-2px);
-      box-shadow: 0px 0px 18px rgba(153, 0, 255, 0.25);
-    }
-
-    .btn.secondary {
-      background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.15);
-    }
-
-    body.light .btn.secondary {
-      background: rgba(0,0,0,0.05);
-      border-color: rgba(0,0,0,0.1);
-    }
-
-    .btn.secondary:hover {
-      background: rgba(255,255,255,0.08);
-    }
-
-    .btn.red {
-      background: rgba(255, 70, 110, 0.18);
-      border: 1px solid rgba(255, 70, 110, 0.35);
-    }
-
-    .btn.green {
-      background: rgba(0, 255, 180, 0.16);
-      border: 1px solid rgba(0, 255, 180, 0.35);
-    }
-
-    .modalBottom {
-      padding: 0;
-      height: 520px;
-      background: rgba(0,0,0,0.25);
-      position: relative;
+    .modal-bottom {
+      padding: 15px 20px 20px;
+      border-top: 1px solid rgba(153,0,255,0.2);
     }
 
     iframe {
       width: 100%;
-      height: 100%;
+      height: 520px;
       border: none;
+      border-radius: 18px;
       background: rgba(0,0,0,0.2);
     }
 
-    .loader {
-      position: absolute;
-      inset: 0;
+    .loading {
       display: none;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 14px;
-      background: rgba(0,0,0,0.75);
-      z-index: 5;
-    }
-
-    .loader.active {
-      display: flex;
-    }
-
-    .spin {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      border: 6px solid rgba(255,255,255,0.15);
-      border-top-color: var(--accent);
-      animation: spin 0.8s linear infinite;
-      box-shadow: 0px 0px 18px rgba(153, 0, 255, 0.35);
-    }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .loaderText {
-      font-weight: 1000;
-      color: rgba(255,255,255,0.85);
-      text-shadow: 0px 0px 15px rgba(153, 0, 255, 0.25);
-    }
-
-    /* POPUPS */
-    .panel {
-      position: fixed;
-      inset: 0;
-      z-index: 9998;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: rgba(0,0,0,0.72);
-      backdrop-filter: blur(12px);
-    }
-
-    .panel.active {
-      display: flex;
-    }
-
-    .box {
-      width: 100%;
-      max-width: 850px;
-      border-radius: 24px;
-      background: var(--card2);
-      border: 1px solid rgba(153, 0, 255, 0.35);
-      padding: 24px;
-      box-shadow: 0px 0px 70px rgba(153, 0, 255, 0.35);
-      animation: modalPop 0.35s ease;
-      max-height: 85vh;
-      overflow-y: auto;
-    }
-
-    .box h2 {
-      color: var(--accent2);
-      font-size: 2rem;
-      font-weight: 1000;
-      margin-bottom: 12px;
-    }
-
-    .box p {
-      color: var(--muted);
-      line-height: 1.6;
-      margin-bottom: 12px;
-      font-weight: 800;
-    }
-
-    pre {
-      background: rgba(0,0,0,0.35);
-      border: 1px solid rgba(255,255,255,0.12);
-      padding: 14px;
-      border-radius: 18px;
-      overflow-x: auto;
-      color: var(--text);
+      text-align: center;
+      padding: 30px;
       font-weight: 900;
-      font-size: 0.9rem;
-      margin-top: 10px;
+      color: var(--accent2);
+      font-size: 1.1rem;
+      animation: pulse 1s infinite ease-in-out;
     }
 
-    .copyBtn {
-      margin-top: 10px;
-      display: inline-block;
-      padding: 10px 14px;
-      border-radius: 14px;
-      background: rgba(153, 0, 255, 0.18);
-      border: 1px solid rgba(153, 0, 255, 0.35);
-      cursor: pointer;
-      font-weight: 1000;
-      transition: 0.2s ease;
-      user-select: none;
-      color: var(--text);
-    }
-
-    .copyBtn:hover {
-      background: rgba(153, 0, 255, 0.3);
-      transform: translateY(-2px);
+    @keyframes pulse {
+      0% { opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { opacity: 0.3; }
     }
 
     footer {
-      margin-top: 70px;
-      padding: 30px 20px;
+      padding: 50px 20px;
       text-align: center;
       color: var(--muted);
-      border-top: 1px solid rgba(153, 0, 255, 0.15);
-      background: rgba(0,0,0,0.2);
+      border-top: 1px solid rgba(153,0,255,0.2);
+      background: rgba(0,0,0,0.15);
     }
 
-    body.light footer {
-      background: rgba(0,0,0,0.03);
+    footer b {
+      color: var(--accent2);
     }
 
-    /* MOBILE */
-    @media(max-width: 900px) {
+    /* Carousel row */
+    .carousel {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding: 10px;
+      scroll-behavior: smooth;
+    }
+
+    .carousel::-webkit-scrollbar {
+      height: 10px;
+    }
+
+    .carousel .book {
+      min-width: 220px;
+      max-width: 220px;
+    }
+
+    /* PWA install toast */
+    .toast {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      background: rgba(10,0,20,0.9);
+      border: 1px solid rgba(153,0,255,0.35);
+      padding: 14px 16px;
+      border-radius: 18px;
+      box-shadow: 0px 0px 30px rgba(153,0,255,0.25);
+      display: none;
+      z-index: 99999;
+      max-width: 320px;
+    }
+
+    body.light .toast {
+      background: rgba(255,255,255,0.92);
+    }
+
+    .toast.show {
+      display: block;
+      animation: pop 0.25s ease;
+    }
+
+    .toast h4 {
+      font-size: 1.1rem;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .toast p {
+      color: var(--muted);
+      font-weight: 650;
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+    }
+
+    .small {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .color-picker {
+      width: 46px;
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid rgba(153,0,255,0.35);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .color-picker input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    @media(max-width: 850px) {
       .title { font-size: 3.5rem; }
-      .modalTop { grid-template-columns: 1fr; }
-      .modalCover { height: 260px; }
-      .modalBottom { height: 420px; }
+      iframe { height: 450px; }
     }
   </style>
 </head>
 
 <body>
-
-  <div class="bg" id="bg">
+  <div class="bg">
     <div class="orb"></div>
     <div class="orb"></div>
     <div class="orb"></div>
   </div>
 
-  <div class="shelves"></div>
-
   <nav>
     <div class="nav-inner">
-      <div>
-        <div class="nav-title">LOST</div>
-        <div class="nav-sub">LIBRARY PLATFORM</div>
-      </div>
+      <div class="logo">[̲̅L][̲̅O][̲̅S][̲̅T]</div>
 
-      <div class="nav-right">
-        <div class="pill" onclick="toggleTheme()">🌙 Theme</div>
-        <div class="pill" onclick="openThemePicker()">🎨 Color</div>
-        <div class="pill" onclick="exportFavorites()">🧾 Export</div>
-        <div class="pill" onclick="openImport()">📤 Import</div>
-        <div class="pill" onclick="openCollections()">📦 Collections</div>
-        <div class="pill" onclick="showOnlyFavorites()">⭐ Favorites</div>
-        <div class="pill" onclick="continueReading()">📖 Continue</div>
-        <div class="pill" id="installBtn" style="display:none;">📲 Install</div>
-        <div class="pill" onclick="resetFilters()">♻ Reset</div>
-        <div class="pill" onclick="reloadBooks()">🔄 Reload</div>
+      <div class="nav-actions">
+        <button class="btn" onclick="openProfile()">👤 Profile</button>
+        <button class="btn" onclick="openCollections()">📁 Collections</button>
+        <button class="btn" onclick="exportFavorites()">🧾 Export</button>
+        <button class="btn" onclick="document.getElementById('importFile').click()">📤 Import</button>
+        <input id="importFile" type="file" accept=".json" style="display:none" onchange="importFavorites(event)">
+        <button class="btn" onclick="toggleMusic()">🎧 Music</button>
+        <button class="btn" onclick="toggleTheme()">🌙 Theme</button>
+
+        <div class="color-picker" title="Pick accent color">
+          <input type="color" id="colorPicker">
+        </div>
+
+        <button class="btn purple" onclick="scrollToLibrary()">📚 Browse</button>
       </div>
     </div>
   </nav>
 
   <header>
-    <div class="title">LOST</div>
-    <div class="subtitle">
-      Welcome to <span class="highlight">LOST Library</span> 💜📚  
-      A futuristic bookshelf platform with favorites, ratings, collections,
-      and instant preview reading.
-    </div>
+    <div class="title">[̲̅L][̲̅O][̲̅S][̲̅T]</div>
+    <p class="subtitle">
+      Welcome to <span>LOST Library</span> — a community bookshelf where anyone can publish books through GitHub.
+      Browse, rate, favorite, collect, and preview stories like a real futuristic bookstore.
+    </p>
+    <p class="small">
+      Writers: <b>Ciena</b>, <b>Parker</b> · Formatters: <b>Parker</b>, <b>Ciena</b>
+    </p>
   </header>
 
-  <main>
+  <main id="librarySection">
 
-    <div class="sectionTitle">✨ Book of the Day</div>
-    <div id="spotlight" class="book" style="max-width:650px;margin:auto;"></div>
-
-    <div class="sectionTitle">📚 Browse the Library</div>
-
-    <div class="controls">
-      <div class="search">
-        <input id="searchInput" type="text" placeholder="Search books, tags, genres..." />
-        <select id="sortSelect">
-          <option value="newest">Newest</option>
-          <option value="az">A → Z</option>
-          <option value="za">Z → A</option>
-          <option value="favorites">Favorites First</option>
-          <option value="rating">Highest Rated</option>
-        </select>
-      </div>
+    <div class="section">
+      <div class="section-title">🔥 Trending Right Now</div>
+      <div class="carousel" id="trendingRow"></div>
     </div>
 
-    <div class="filters" id="genreFilters"></div>
+    <div class="section">
+      <div class="section-title">⭐ Top Rated</div>
+      <div class="carousel" id="topRatedRow"></div>
+    </div>
 
-    <div id="bookContainer" class="grid"></div>
+    <div class="section">
+      <div class="section-title">📁 Collections Carousel</div>
+      <div class="carousel" id="collectionsRow"></div>
+    </div>
 
-    <div class="sectionTitle">🕒 Recently Viewed</div>
-    <div id="recentContainer" class="grid"></div>
+    <div class="section">
+      <div class="section-title">📚 Browse the Library</div>
+
+      <div class="search-row">
+        <input id="searchInput" placeholder="Search books by title, tags, description..." />
+        <select id="sortSelect">
+          <option value="default">Sort: Default</option>
+          <option value="az">Sort: A → Z</option>
+          <option value="za">Sort: Z → A</option>
+          <option value="rated">Sort: Highest Rated</option>
+          <option value="fav">Sort: Most Favorited</option>
+        </select>
+        <button class="btn" onclick="clearSearch()">Clear</button>
+      </div>
+
+      <div class="grid" id="bookGrid"></div>
+    </div>
 
   </main>
 
   <footer>
-    <div>💜 LOST Library Platform</div>
-    <div style="margin-top:8px;font-weight:900;">
-      Writers: Ciena, Parker <br>
-      Formatters: Parker, Ciena
-    </div>
+    <p><b>LOST Library</b> — Hosted on GitHub Pages.</p>
+    <p class="small">Users can publish books by editing <b>books.json</b> and opening a Pull Request.</p>
   </footer>
 
-  <!-- MODAL -->
-  <div class="modal" id="modal">
-    <div class="modalBox">
-      <div class="modalTop">
-        <div class="modalCover" id="modalCoverBox">
-          <img id="modalCoverImg" src="" alt="Cover">
-        </div>
+  <!-- Book Modal -->
+  <div class="modal" id="bookModal">
+    <div class="modal-box">
+      <div class="modal-top">
+        <div class="modal-cover" id="modalCover"></div>
 
-        <div class="modalInfo">
+        <div class="modal-info">
           <h3 id="modalTitle">Book Title</h3>
           <p id="modalDesc">Book description...</p>
 
-          <div class="modalBtns">
-            <button class="btn" id="previewBtn">📖 Preview</button>
-            <button class="btn secondary" id="fullscreenBtn">🖥 Fullscreen</button>
-            <button class="btn secondary" id="openBtn">🔗 Open</button>
-            <button class="btn secondary" id="downloadBtn" style="display:none;">⬇ Download PDF</button>
-            <button class="btn red" id="favModalBtn">⭐ Favorite</button>
-            <button class="btn secondary" id="addCollectionBtn">📦 Add to Collection</button>
-            <button class="btn green" id="summaryBtn">🧠 Summary</button>
-            <button class="btn secondary" onclick="closeModal()">✖ Close</button>
+          <div class="modal-buttons">
+            <button class="btn purple" onclick="openPreview()">👁 Preview</button>
+            <button class="btn" onclick="openBook()">📖 Open</button>
+            <button class="btn" onclick="toggleFavorite(currentBookId)">❤️ Favorite</button>
+            <button class="btn" onclick="aiSummary()">🧠 AI Summary</button>
+            <button class="btn" onclick="fullscreenPreview()">🖥 Fullscreen</button>
+            <button class="btn" id="pdfBtn" style="display:none;" onclick="downloadPDF()">⬇ Download PDF</button>
+            <button class="btn red" onclick="closeModal()">✖ Close</button>
           </div>
 
-          <div class="stars" id="ratingStars"></div>
-
-          <div style="margin-top:14px;font-weight:900;color:var(--muted);" id="summaryBox"></div>
+          <p class="small" id="continueReadingText"></p>
         </div>
       </div>
 
-      <div class="modalBottom">
-        <div class="loader" id="loader">
-          <div class="spin"></div>
-          <div class="loaderText">Loading preview...</div>
-        </div>
+      <div class="modal-bottom">
+        <div class="loading" id="loadingText">✨ Loading Preview...</div>
         <iframe id="previewFrame" src=""></iframe>
       </div>
     </div>
   </div>
 
-  <!-- COLLECTIONS PANEL -->
-  <div class="panel" id="collectionsPanel">
-    <div class="box">
-      <h2>📦 Collections</h2>
-      <p>Create Netflix-style folders and save books inside.</p>
+  <!-- Profile Modal -->
+  <div class="modal" id="profileModal">
+    <div class="modal-box" style="max-width:900px;">
+      <div class="modal-top">
+        <div class="modal-info" style="width:100%;">
+          <h3>👤 Your Library Profile</h3>
+          <p id="profileStats">Loading stats...</p>
 
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <input id="newCollectionInput" type="text" placeholder="New collection name..." />
-        <button class="btn" onclick="createCollection()">➕ Create</button>
-        <button class="btn secondary" onclick="closeCollections()">✖ Close</button>
-      </div>
-
-      <div id="collectionList" style="margin-top:16px;"></div>
-    </div>
-  </div>
-
-  <!-- IMPORT PANEL -->
-  <div class="panel" id="importPanel">
-    <div class="box">
-      <h2>📤 Import Favorites</h2>
-      <p>Paste your exported JSON favorites file here.</p>
-
-      <textarea id="importBox" style="width:100%;height:180px;border-radius:18px;padding:14px;font-weight:900;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);color:var(--text);outline:none;"></textarea>
-
-      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
-        <button class="btn" onclick="importFavorites()">✅ Import</button>
-        <button class="btn secondary" onclick="closeImport()">✖ Close</button>
+          <div class="modal-buttons">
+            <button class="btn purple" onclick="closeProfile()">Done</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- THEME PICKER -->
-  <div class="panel" id="themePanel">
-    <div class="box">
-      <h2>🎨 Custom Theme Color</h2>
-      <p>Pick your accent color. Saved locally.</p>
+  <!-- Collections Modal -->
+  <div class="modal" id="collectionsModal">
+    <div class="modal-box" style="max-width:950px;">
+      <div class="modal-top">
+        <div class="modal-info" style="width:100%;">
+          <h3>📁 Collections</h3>
+          <p>Create folders and add books like Netflix lists.</p>
 
-      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-        <input id="colorPicker" type="color" value="#9900ff" style="width:80px;height:60px;padding:0;border-radius:14px;">
-        <button class="btn" onclick="applyColor()">✅ Apply</button>
-        <button class="btn secondary" onclick="closeThemePicker()">✖ Close</button>
-        <button class="btn red" onclick="resetColor()">♻ Reset</button>
+          <div class="search-row">
+            <input id="collectionName" placeholder="New collection name..." />
+            <button class="btn purple" onclick="createCollection()">+ Create</button>
+          </div>
+
+          <div id="collectionList"></div>
+
+          <div class="modal-buttons">
+            <button class="btn red" onclick="closeCollections()">✖ Close</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- PWA Install Toast -->
+  <div class="toast" id="installToast">
+    <h4>Install LOST Library</h4>
+    <p>Get the app experience with offline support.</p>
+    <button class="btn purple" onclick="installPWA()">⬇ Install</button>
+    <button class="btn" onclick="hideInstall()">Later</button>
+  </div>
+
+  <audio id="bgMusic" loop>
+    <source src="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/main/lost/music.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
-    const BOOKS_URL = "https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/lost/books.json";
+    // =========================
+    // CONFIG
+    // =========================
+    const BOOKS_URL = "https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/main/lost/books.json?v=" + Date.now();
 
-    let allBooks = [];
-    let filteredBooks = [];
-    let selectedGenre = "ALL";
-    let favoritesOnly = false;
-
-    const container = document.getElementById("bookContainer");
-    const recentContainer = document.getElementById("recentContainer");
-    const spotlight = document.getElementById("spotlight");
-
-    const searchInput = document.getElementById("searchInput");
-    const sortSelect = document.getElementById("sortSelect");
-
-    const modal = document.getElementById("modal");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalDesc = document.getElementById("modalDesc");
-    const modalCoverImg = document.getElementById("modalCoverImg");
-
-    const previewFrame = document.getElementById("previewFrame");
-    const loader = document.getElementById("loader");
-
-    const previewBtn = document.getElementById("previewBtn");
-    const openBtn = document.getElementById("openBtn");
-    const favModalBtn = document.getElementById("favModalBtn");
-    const fullscreenBtn = document.getElementById("fullscreenBtn");
-    const downloadBtn = document.getElementById("downloadBtn");
-    const addCollectionBtn = document.getElementById("addCollectionBtn");
-    const summaryBtn = document.getElementById("summaryBtn");
-
-    const summaryBox = document.getElementById("summaryBox");
-
-    const collectionsPanel = document.getElementById("collectionsPanel");
-    const importPanel = document.getElementById("importPanel");
-    const themePanel = document.getElementById("themePanel");
-    const genreFilters = document.getElementById("genreFilters");
-
-    const ratingStars = document.getElementById("ratingStars");
-
+    // =========================
+    // STATE
+    // =========================
+    let books = [];
     let currentBook = null;
+    let currentBookId = null;
+    let deferredPrompt = null;
 
-    const DEFAULT_COVER = "https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/lost/images/Screenshot%202026-02-18%20150106.png";
-
-    /* ---------------- THEME ---------------- */
-    function loadTheme() {
-      const mode = localStorage.getItem("lost_theme_mode") || "dark";
-      if (mode === "light") document.body.classList.add("light");
-      else document.body.classList.remove("light");
-
-      const accent = localStorage.getItem("lost_theme_accent");
-      if (accent) {
-        document.documentElement.style.setProperty("--accent", accent);
-        document.documentElement.style.setProperty("--accent2", lighten(accent, 60));
-        document.documentElement.style.setProperty("--glow", hexToGlow(accent));
+    // =========================
+    // LOCAL STORAGE HELPERS
+    // =========================
+    function loadJSON(key, fallback) {
+      try {
+        return JSON.parse(localStorage.getItem(key)) ?? fallback;
+      } catch {
+        return fallback;
       }
-
-      const picker = document.getElementById("colorPicker");
-      if (picker) picker.value = accent || "#9900ff";
     }
 
-    function toggleTheme() {
-      document.body.classList.toggle("light");
-      localStorage.setItem("lost_theme_mode", document.body.classList.contains("light") ? "light" : "dark");
+    function saveJSON(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
     }
 
-    function openThemePicker() {
-      themePanel.classList.add("active");
-    }
-
-    function closeThemePicker() {
-      themePanel.classList.remove("active");
-    }
-
-    function resetColor() {
-      localStorage.removeItem("lost_theme_accent");
-      loadTheme();
-      alert("✅ Reset theme color!");
-    }
-
-    function applyColor() {
-      const val = document.getElementById("colorPicker").value;
-      localStorage.setItem("lost_theme_accent", val);
-      loadTheme();
-      alert("✅ Accent color applied!");
-    }
-
-    function lighten(hex, percent) {
-      let num = parseInt(hex.replace("#", ""), 16);
-      let r = (num >> 16) + percent;
-      let g = ((num >> 8) & 0x00FF) + percent;
-      let b = (num & 0x0000FF) + percent;
-      r = Math.min(255, r);
-      g = Math.min(255, g);
-      b = Math.min(255, b);
-      return "#" + (b | (g << 8) | (r << 16)).toString(16).padStart(6, "0");
-    }
-
-    function hexToGlow(hex) {
-      const r = parseInt(hex.substring(1, 3), 16);
-      const g = parseInt(hex.substring(3, 5), 16);
-      const b = parseInt(hex.substring(5, 7), 16);
-      return `rgba(${r}, ${g}, ${b}, 0.65)`;
-    }
-
-    /* ---------------- FAVORITES ---------------- */
+    // =========================
+    // FAVORITES FIXED
+    // =========================
     function getFavorites() {
-      try { return JSON.parse(localStorage.getItem("lost_favorites") || "[]"); }
-      catch { return []; }
+      return loadJSON("lost_favorites", []);
     }
 
-    function saveFavorites(favs) {
-      localStorage.setItem("lost_favorites", JSON.stringify(favs));
+    function isFavorite(bookId) {
+      return getFavorites().includes(bookId);
     }
 
-    function isFavorite(book) {
-      return getFavorites().includes(book.title);
-    }
-
-    function toggleFavorite(book) {
+    function toggleFavorite(bookId) {
       let favs = getFavorites();
-      if (favs.includes(book.title)) favs = favs.filter(t => t !== book.title);
-      else favs.push(book.title);
-      saveFavorites(favs);
-      renderBooks();
-      updateModalFavButton();
-    }
-
-    function updateModalFavButton() {
-      if (!currentBook) return;
-      favModalBtn.textContent = isFavorite(currentBook) ? "⭐ Unfavorite" : "⭐ Favorite";
-    }
-
-    /* ---------------- CONTINUE READING ---------------- */
-    function saveContinue(book) {
-      localStorage.setItem("lost_continue_book", book.title);
-      localStorage.setItem("lost_continue_preview", book.preview || "");
-    }
-
-    function continueReading() {
-      const title = localStorage.getItem("lost_continue_book");
-      if (!title) return alert("😢 No continue reading data yet.");
-      const book = allBooks.find(b => b.title === title);
-      if (book) openBook(book, true);
-      else alert("❌ Book no longer exists.");
-    }
-
-    /* ---------------- RATINGS ---------------- */
-    function getRatings() {
-      try { return JSON.parse(localStorage.getItem("lost_ratings") || "{}"); }
-      catch { return {}; }
-    }
-
-    function saveRatings(data) {
-      localStorage.setItem("lost_ratings", JSON.stringify(data));
-    }
-
-    function getBookRating(book) {
-      const ratings = getRatings();
-      return ratings[book.title] || 0;
-    }
-
-    function setBookRating(book, rating) {
-      const ratings = getRatings();
-      ratings[book.title] = rating;
-      saveRatings(ratings);
-      renderBooks();
-      updateRatingStars();
-    }
-
-    function updateRatingStars() {
-      if (!currentBook) return;
-      ratingStars.innerHTML = "";
-      const rating = getBookRating(currentBook);
-
-      for (let i = 1; i <= 5; i++) {
-        const s = document.createElement("div");
-        s.className = "star " + (i <= rating ? "filled" : "");
-        s.textContent = "⭐";
-        s.onclick = () => setBookRating(currentBook, i);
-        ratingStars.appendChild(s);
+      if (favs.includes(bookId)) {
+        favs = favs.filter(x => x !== bookId);
+      } else {
+        favs.push(bookId);
       }
+      saveJSON("lost_favorites", favs);
+      renderAll();
     }
 
-    /* ---------------- COLLECTIONS ---------------- */
+    // =========================
+    // RATINGS
+    // =========================
+    function getRatings() {
+      return loadJSON("lost_ratings", {});
+    }
+
+    function setRating(bookId, stars) {
+      const ratings = getRatings();
+      ratings[bookId] = stars;
+      saveJSON("lost_ratings", ratings);
+      renderAll();
+    }
+
+    function getRating(bookId) {
+      return getRatings()[bookId] || 0;
+    }
+
+    // =========================
+    // COLLECTIONS
+    // =========================
     function getCollections() {
-      try { return JSON.parse(localStorage.getItem("lost_collections") || "{}"); }
-      catch { return {}; }
+      return loadJSON("lost_collections", {});
     }
 
-    function saveCollections(data) {
-      localStorage.setItem("lost_collections", JSON.stringify(data));
+    function saveCollections(obj) {
+      saveJSON("lost_collections", obj);
     }
 
     function createCollection() {
-      const name = document.getElementById("newCollectionInput").value.trim();
-      if (!name) return alert("❌ Name cannot be empty.");
-
-      const data = getCollections();
-      if (data[name]) return alert("❌ That collection already exists!");
-
-      data[name] = [];
-      saveCollections(data);
-
-      document.getElementById("newCollectionInput").value = "";
-      renderCollections();
+      const name = document.getElementById("collectionName").value.trim();
+      if (!name) return alert("Enter a collection name!");
+      const collections = getCollections();
+      if (collections[name]) return alert("That collection already exists!");
+      collections[name] = [];
+      saveCollections(collections);
+      document.getElementById("collectionName").value = "";
+      renderCollectionsList();
+      renderAll();
     }
 
-    function addToCollection(collectionName, bookTitle) {
-      const data = getCollections();
-      if (!data[collectionName]) data[collectionName] = [];
-      if (!data[collectionName].includes(bookTitle)) data[collectionName].push(bookTitle);
-      saveCollections(data);
-      renderCollections();
+    function addToCollection(collectionName, bookId) {
+      const collections = getCollections();
+      if (!collections[collectionName]) collections[collectionName] = [];
+      if (!collections[collectionName].includes(bookId)) {
+        collections[collectionName].push(bookId);
+      }
+      saveCollections(collections);
+      renderCollectionsList();
+      renderAll();
     }
 
-    function removeFromCollection(collectionName, bookTitle) {
-      const data = getCollections();
-      if (!data[collectionName]) return;
-      data[collectionName] = data[collectionName].filter(t => t !== bookTitle);
-      saveCollections(data);
-      renderCollections();
+    function removeCollection(collectionName) {
+      const collections = getCollections();
+      delete collections[collectionName];
+      saveCollections(collections);
+      renderCollectionsList();
+      renderAll();
     }
 
-    function deleteCollection(collectionName) {
-      const data = getCollections();
-      delete data[collectionName];
-      saveCollections(data);
-      renderCollections();
+    // =========================
+    // CONTINUE READING
+    // =========================
+    function saveContinueReading(bookId) {
+      saveJSON("lost_continue", { bookId, time: Date.now() });
     }
 
-    function renderCollections() {
-      const list = document.getElementById("collectionList");
-      const data = getCollections();
-      list.innerHTML = "";
+    function getContinueReading() {
+      return loadJSON("lost_continue", null);
+    }
 
-      const names = Object.keys(data);
+    // =========================
+    // THEME SYSTEM
+    // =========================
+    function loadTheme() {
+      const theme = localStorage.getItem("lost_theme") || "dark";
+      if (theme === "light") document.body.classList.add("light");
+      else document.body.classList.remove("light");
+
+      const accent = localStorage.getItem("lost_accent");
+      if (accent) {
+        document.documentElement.style.setProperty("--accent", accent);
+      }
+    }
+
+    function toggleTheme() {
+      if (document.body.classList.contains("light")) {
+        document.body.classList.remove("light");
+        localStorage.setItem("lost_theme", "dark");
+      } else {
+        document.body.classList.add("light");
+        localStorage.setItem("lost_theme", "light");
+      }
+    }
+
+    // =========================
+    // MUSIC
+    // =========================
+    let musicOn = false;
+    function toggleMusic() {
+      const music = document.getElementById("bgMusic");
+      if (!musicOn) {
+        music.play();
+        music.volume = 0.3;
+        musicOn = true;
+      } else {
+        music.pause();
+        musicOn = false;
+      }
+    }
+
+    // =========================
+    // FETCH BOOKS FIXED
+    // =========================
+    async function loadBooks() {
+      try {
+        const res = await fetch(BOOKS_URL, { cache: "no-store" });
+        books = await res.json();
+
+        // auto add IDs if missing
+        books = books.map((b, i) => ({
+          id: b.id || ("book_" + i),
+          title: b.title || "Untitled",
+          cover: b.cover || "",
+          description: b.description || "No description yet.",
+          link: b.link || "",
+          preview: b.preview || "",
+          pdf: b.pdf || "",
+          tags: Array.isArray(b.tags) ? b.tags : []
+        }));
+
+        renderAll();
+      } catch (err) {
+        alert("Failed to load books.json! Check the raw link.");
+        console.error(err);
+      }
+    }
+
+    // =========================
+    // AUTO TAG DETECTION
+    // =========================
+    function detectTags(book) {
+      const detected = [];
+      const title = book.title.toLowerCase();
+
+      if (title.includes("book 2") || title.includes("book two")) detected.push("BOOK 2");
+      if (title.includes("book 3") || title.includes("book three")) detected.push("BOOK 3");
+      if (title.includes("volume")) detected.push("VOLUME");
+
+      return detected;
+    }
+
+    // =========================
+    // RENDER BOOK CARD
+    // =========================
+    function renderBookCard(book) {
+      const fav = isFavorite(book.id);
+      const rating = getRating(book.id);
+
+      const tag = (book.tags[0] || "").replaceAll(" ", "").toUpperCase();
+
+      const coverHTML = book.cover
+        ? `<img src="${book.cover}" onerror="this.style.display='none'; this.parentElement.classList.add('soon'); this.parentElement.innerHTML='Cover Coming Soon';">`
+        : `Cover Coming Soon`;
+
+      const detected = detectTags(book);
+      const extraTagHTML = detected.length ? `<div class="tag NEW">${detected[0]}</div>` : "";
+
+      let starsHTML = "";
+      for (let i = 1; i <= 5; i++) {
+        starsHTML += `<span class="star ${i <= rating ? "active" : ""}" onclick="event.stopPropagation(); setRating('${book.id}', ${i})">⭐</span>`;
+      }
+
+      return `
+        <div class="book shelfItem" onclick="openBookModal('${book.id}')">
+          ${tag ? `<div class="tag ${tag}">${book.tags[0]}</div>` : ""}
+          ${extraTagHTML}
+          <div class="fav" onclick="event.stopPropagation(); toggleFavorite('${book.id}')">${fav ? "💜" : "🤍"}</div>
+          <div class="cover ${book.cover ? "" : "soon"}">${coverHTML}</div>
+          <div class="book-title">${book.title}</div>
+          <div class="book-desc">${book.description}</div>
+          <div class="rating-stars">${starsHTML}</div>
+        </div>
+      `;
+    }
+
+    // =========================
+    // RENDER ALL
+    // =========================
+    function renderAll() {
+      renderGrid();
+      renderTrending();
+      renderTopRated();
+      renderCollectionsRow();
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById("bookGrid");
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const sort = document.getElementById("sortSelect").value;
+
+      let filtered = books.filter(b => {
+        const hay = (b.title + " " + b.description + " " + (b.tags.join(" "))).toLowerCase();
+        return hay.includes(search);
+      });
+
+      if (sort === "az") filtered.sort((a,b)=>a.title.localeCompare(b.title));
+      if (sort === "za") filtered.sort((a,b)=>b.title.localeCompare(a.title));
+      if (sort === "rated") filtered.sort((a,b)=>getRating(b.id)-getRating(a.id));
+      if (sort === "fav") filtered.sort((a,b)=>(isFavorite(b.id)?1:0)-(isFavorite(a.id)?1:0));
+
+      grid.innerHTML = filtered.map(renderBookCard).join("");
+    }
+
+    function renderTrending() {
+      const row = document.getElementById("trendingRow");
+      const favs = getFavorites();
+
+      let trending = books.filter(b => favs.includes(b.id));
+      if (trending.length === 0) trending = books.slice(0, 8);
+
+      row.innerHTML = trending.slice(0, 12).map(renderBookCard).join("");
+    }
+
+    function renderTopRated() {
+      const row = document.getElementById("topRatedRow");
+      const sorted = [...books].sort((a,b)=>getRating(b.id)-getRating(a.id));
+      row.innerHTML = sorted.slice(0, 12).map(renderBookCard).join("");
+    }
+
+    function renderCollectionsRow() {
+      const row = document.getElementById("collectionsRow");
+      const collections = getCollections();
+      const names = Object.keys(collections);
 
       if (names.length === 0) {
-        list.innerHTML = "<p style='margin-top:10px;color:rgba(255,255,255,0.7);font-weight:900;'>No collections yet.</p>";
+        row.innerHTML = `<div style="padding:20px;color:var(--muted);font-weight:900;">No collections yet. Make one in 📁 Collections.</div>`;
         return;
       }
 
+      const items = [];
       names.forEach(name => {
-        const books = data[name] || [];
+        const firstBookId = collections[name][0];
+        const book = books.find(b => b.id === firstBookId);
 
-        const div = document.createElement("div");
-        div.style.marginTop = "14px";
-        div.style.padding = "14px";
-        div.style.borderRadius = "18px";
-        div.style.border = "1px solid rgba(255,255,255,0.12)";
-        div.style.background = "rgba(0,0,0,0.25)";
-
-        let html = `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
-          <div style="font-weight:1000;color:var(--text);font-size:1.2rem;">${name}</div>
-          <button class="btn red" onclick="deleteCollection('${name.replace(/'/g, "\\'")}')">🗑 Delete</button>
-        </div>`;
-
-        if (books.length === 0) {
-          html += `<p style="margin-top:8px;color:var(--muted);font-weight:900;">No books inside.</p>`;
-        } else {
-          html += `<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;">`;
-          books.forEach(bt => {
-            html += `<div style="padding:8px 12px;border-radius:999px;background:rgba(153,0,255,0.15);border:1px solid rgba(153,0,255,0.25);font-weight:1000;color:var(--text);">
-              ${bt}
-              <span style="margin-left:8px;cursor:pointer;color:rgba(255,80,120,0.9);" onclick="removeFromCollection('${name.replace(/'/g, "\\'")}', '${bt.replace(/'/g, "\\'")}')">✖</span>
-            </div>`;
-          });
-          html += `</div>`;
-        }
-
-        div.innerHTML = html;
-        list.appendChild(div);
+        items.push(`
+          <div class="book" onclick="openCollections()">
+            <div class="tag POPULAR">${name}</div>
+            <div class="cover soon">${book ? `<img src="${book.cover}">` : "Collection"}</div>
+            <div class="book-title">${name}</div>
+            <div class="book-desc">${collections[name].length} books saved</div>
+          </div>
+        `);
       });
+
+      row.innerHTML = items.join("");
     }
 
+    // =========================
+    // MODAL
+    // =========================
+    function openBookModal(bookId) {
+      currentBookId = bookId;
+      currentBook = books.find(b => b.id === bookId);
+
+      if (!currentBook) return;
+
+      document.getElementById("modalTitle").textContent = currentBook.title;
+      document.getElementById("modalDesc").textContent = currentBook.description;
+
+      const coverBox = document.getElementById("modalCover");
+      coverBox.innerHTML = "";
+
+      if (currentBook.cover) {
+        coverBox.innerHTML = `<img src="${currentBook.cover}" onerror="this.remove(); document.getElementById('modalCover').textContent='Cover Coming Soon';">`;
+      } else {
+        coverBox.textContent = "Cover Coming Soon";
+      }
+
+      // PDF Button
+      if (currentBook.pdf) {
+        document.getElementById("pdfBtn").style.display = "inline-block";
+      } else {
+        document.getElementById("pdfBtn").style.display = "none";
+      }
+
+      // Continue Reading Info
+      const cont = getContinueReading();
+      const contText = document.getElementById("continueReadingText");
+
+      if (cont && cont.bookId === bookId) {
+        contText.innerHTML = "📌 Continue Reading: You last opened this book recently.";
+      } else {
+        contText.innerHTML = "";
+      }
+
+      document.getElementById("previewFrame").src = "";
+      document.getElementById("bookModal").classList.add("show");
+    }
+
+    function closeModal() {
+      document.getElementById("bookModal").classList.remove("show");
+      document.getElementById("previewFrame").src = "";
+    }
+
+    function openPreview() {
+      if (!currentBook.preview) return alert("No preview available!");
+
+      const iframe = document.getElementById("previewFrame");
+      const loading = document.getElementById("loadingText");
+
+      loading.style.display = "block";
+      iframe.style.display = "none";
+
+      iframe.src = currentBook.preview;
+
+      iframe.onload = () => {
+        loading.style.display = "none";
+        iframe.style.display = "block";
+      };
+
+      saveContinueReading(currentBookId);
+    }
+
+    function openBook() {
+      if (!currentBook.link) return alert("No full book link available!");
+      window.open(currentBook.link, "_blank");
+      saveContinueReading(currentBookId);
+    }
+
+    function fullscreenPreview() {
+      const iframe = document.getElementById("previewFrame");
+      if (!iframe.src) return alert("Open preview first!");
+
+      window.open(iframe.src, "_blank");
+    }
+
+    function downloadPDF() {
+      if (!currentBook.pdf) return;
+      window.open(currentBook.pdf, "_blank");
+    }
+
+    // =========================
+    // AI SUMMARY (FAKE LOCAL)
+    // =========================
+    function aiSummary() {
+      if (!currentBook) return;
+
+      const base = currentBook.description || "A mysterious story.";
+      const fake = `
+📖 AI Summary (Offline Mode)
+
+"${currentBook.title}" is a story that explores mystery, emotion, and adventure.
+Based on the description, this book focuses on:
+
+✨ Main Theme: Discovery + suspense  
+🧠 Mood: Mysterious / Creative  
+📌 What to expect: ${base}
+
+(This is a fake AI summary generated locally.)
+      `.trim();
+
+      alert(fake);
+    }
+
+    // =========================
+    // PROFILE PAGE
+    // =========================
+    function openProfile() {
+      const favs = getFavorites();
+      const ratings = getRatings();
+      const collections = getCollections();
+      const cont = getContinueReading();
+
+      let ratedCount = Object.keys(ratings).length;
+      let colCount = Object.keys(collections).length;
+
+      let continueText = cont ? `Continue Reading: ${cont.bookId}` : "No continue reading saved.";
+
+      document.getElementById("profileStats").innerHTML = `
+        💜 Favorites: <b>${favs.length}</b><br>
+        ⭐ Rated Books: <b>${ratedCount}</b><br>
+        📁 Collections: <b>${colCount}</b><br><br>
+        📌 ${continueText}
+      `;
+
+      document.getElementById("profileModal").classList.add("show");
+    }
+
+    function closeProfile() {
+      document.getElementById("profileModal").classList.remove("show");
+    }
+
+    // =========================
+    // COLLECTIONS MODAL
+    // =========================
     function openCollections() {
-      collectionsPanel.classList.add("active");
-      renderCollections();
+      renderCollectionsList();
+      document.getElementById("collectionsModal").classList.add("show");
     }
 
     function closeCollections() {
-      collectionsPanel.classList.remove("active");
+      document.getElementById("collectionsModal").classList.remove("show");
     }
 
-    /* ---------------- EXPORT / IMPORT FAVORITES ---------------- */
+    function renderCollectionsList() {
+      const list = document.getElementById("collectionList");
+      const collections = getCollections();
+
+      const names = Object.keys(collections);
+      if (names.length === 0) {
+        list.innerHTML = `<p class="small">No collections yet. Create one above.</p>`;
+        return;
+      }
+
+      let html = "";
+
+      names.forEach(name => {
+        html += `
+          <div style="margin-top:18px;padding:14px;border-radius:18px;border:1px solid rgba(153,0,255,0.25);background:rgba(0,0,0,0.18);">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+              <b style="font-size:1.1rem;color:var(--accent2);">${name}</b>
+              <button class="btn red" onclick="removeCollection('${name}')">Delete</button>
+            </div>
+
+            <div class="small" style="margin-top:8px;">Add a book:</div>
+            <select onchange="addToCollection('${name}', this.value)" style="width:100%;margin-top:6px;padding:12px;border-radius:14px;border:1px solid rgba(153,0,255,0.25);background:rgba(0,0,0,0.25);color:var(--text);font-weight:900;">
+              <option value="">Select book...</option>
+              ${books.map(b => `<option value="${b.id}">${b.title}</option>`).join("")}
+            </select>
+
+            <div class="small" style="margin-top:10px;">Books in this collection: ${collections[name].length}</div>
+          </div>
+        `;
+      });
+
+      list.innerHTML = html;
+    }
+
+    // =========================
+    // EXPORT / IMPORT FAVORITES
+    // =========================
     function exportFavorites() {
       const data = {
-        exportedAt: new Date().toISOString(),
-        favorites: getFavorites()
+        favorites: getFavorites(),
+        ratings: getRatings(),
+        collections: getCollections(),
+        theme: localStorage.getItem("lost_theme") || "dark",
+        accent: localStorage.getItem("lost_accent") || "#9900ff"
       };
 
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
@@ -1253,461 +1253,127 @@
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = "lost-favorites.json";
+      a.download = "lost-library-export.json";
       a.click();
 
       URL.revokeObjectURL(url);
     }
 
-    function openImport() {
-      importPanel.classList.add("active");
-    }
+    function importFavorites(event) {
+      const file = event.target.files[0];
+      if (!file) return;
 
-    function closeImport() {
-      importPanel.classList.remove("active");
-    }
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
 
-    function importFavorites() {
-      const raw = document.getElementById("importBox").value.trim();
-      if (!raw) return alert("❌ Paste JSON first.");
+          if (data.favorites) saveJSON("lost_favorites", data.favorites);
+          if (data.ratings) saveJSON("lost_ratings", data.ratings);
+          if (data.collections) saveJSON("lost_collections", data.collections);
+          if (data.theme) localStorage.setItem("lost_theme", data.theme);
+          if (data.accent) localStorage.setItem("lost_accent", data.accent);
 
-      try {
-        const parsed = JSON.parse(raw);
-        if (!parsed.favorites || !Array.isArray(parsed.favorites)) {
-          return alert("❌ Invalid file. Missing favorites array.");
+          loadTheme();
+          renderAll();
+          alert("✅ Import complete!");
+        } catch {
+          alert("❌ Invalid JSON file.");
         }
-
-        saveFavorites(parsed.favorites);
-        alert("✅ Favorites imported!");
-        closeImport();
-        renderBooks();
-
-      } catch (err) {
-        alert("❌ Invalid JSON.");
-      }
-    }
-
-    /* ---------------- RECENT ---------------- */
-    function getRecent() {
-      try { return JSON.parse(localStorage.getItem("lost_recent") || "[]"); }
-      catch { return []; }
-    }
-
-    function saveRecent(list) {
-      localStorage.setItem("lost_recent", JSON.stringify(list.slice(0, 8)));
-    }
-
-    function addRecent(book) {
-      let list = getRecent();
-      list = list.filter(t => t !== book.title);
-      list.unshift(book.title);
-      saveRecent(list);
-    }
-
-    function renderRecent() {
-      recentContainer.innerHTML = "";
-
-      const recentTitles = getRecent();
-      const recentBooks = recentTitles.map(t => allBooks.find(b => b.title === t)).filter(Boolean);
-
-      if (recentBooks.length === 0) {
-        recentContainer.innerHTML = "<div style='grid-column:1/-1;text-align:center;font-weight:1000;color:var(--muted)'>No recent books yet.</div>";
-        return;
-      }
-
-      recentBooks.forEach(book => {
-        const div = document.createElement("div");
-        div.className = "book slideIn";
-        div.innerHTML = createBookHTML(book);
-
-        div.onclick = () => openBook(book);
-
-        div.querySelector(".favBtn").onclick = (e) => {
-          e.stopPropagation();
-          toggleFavorite(book);
-        };
-
-        recentContainer.appendChild(div);
-      });
-
-      observeSlideIn();
-    }
-
-    /* ---------------- AUTO TAGS (NOW DOES NOT OVERWRITE YOUR TAGS!) ---------------- */
-    function autoTags(book) {
-      let tags = [];
-
-      const lower = book.title.toLowerCase();
-
-      if (lower.includes("book 1")) tags.push("BOOK 1");
-      if (lower.includes("book 2")) tags.push("BOOK 2");
-      if (lower.includes("book 3")) tags.push("BOOK 3");
-      if (lower.includes("book 4")) tags.push("BOOK 4");
-      if (lower.includes("book 5")) tags.push("BOOK 5");
-
-      if (!book.cover || book.cover.trim() === "") tags.push("COMINGSOON");
-      if (!book.preview || book.preview.trim() === "") tags.push("NOPREVIEW");
-
-      return tags;
-    }
-
-    function mergeTags(originalTags, autoGenerated) {
-      let tags = [];
-      if (Array.isArray(originalTags)) tags = tags.concat(originalTags);
-      if (Array.isArray(autoGenerated)) tags = tags.concat(autoGenerated);
-
-      tags = tags.map(t => String(t).toUpperCase().trim());
-      tags = [...new Set(tags)];
-
-      return tags;
-    }
-
-    /* ---------------- FETCH BOOKS ---------------- */
-    async function loadBooks() {
-      container.innerHTML = "<div style='grid-column:1/-1;text-align:center;font-weight:1000;color:var(--muted)'>📚 Loading library...</div>";
-
-      try {
-        const res = await fetch(BOOKS_URL + "?cacheBust=" + Date.now());
-        const data = await res.json();
-
-        allBooks = data.map((b, i) => {
-          const book = {
-            title: b.title || "Untitled Book",
-            cover: b.cover || "",
-            description: b.description || "No description yet.",
-            link: b.link || "",
-            preview: b.preview || "",
-            tags: b.tags || [],
-            genre: b.genre || "Unsorted",
-            added: b.added || (Date.now() - i * 100000)
-          };
-
-          const generated = autoTags(book);
-          book.tags = mergeTags(book.tags, generated);
-
-          return book;
-        });
-
-        buildGenreFilters();
-        buildSpotlight();
-        renderBooks();
-        renderRecent();
-
-      } catch (err) {
-        container.innerHTML = "<div style='grid-column:1/-1;text-align:center;font-weight:1000;color:rgba(255,120,120,0.9)'>❌ Failed to load books.json</div>";
-        console.error(err);
-      }
-    }
-
-    function reloadBooks() {
-      loadBooks();
-    }
-
-    /* ---------------- SPOTLIGHT ---------------- */
-    function buildSpotlight() {
-      if (allBooks.length === 0) return;
-
-      const book = allBooks[Math.floor(Math.random() * allBooks.length)];
-      spotlight.innerHTML = createBookHTML(book, true);
-
-      spotlight.onclick = () => openBook(book);
-
-      spotlight.querySelector(".favBtn").onclick = (e) => {
-        e.stopPropagation();
-        toggleFavorite(book);
       };
+      reader.readAsText(file);
     }
 
-    /* ---------------- GENRE FILTERS ---------------- */
-    function buildGenreFilters() {
-      const genres = ["ALL", ...new Set(allBooks.map(b => b.genre))];
-
-      genreFilters.innerHTML = "";
-
-      genres.forEach(g => {
-        const btn = document.createElement("div");
-        btn.className = "tagFilter";
-        if (g === "ALL") btn.classList.add("active");
-        btn.textContent = g;
-        btn.dataset.genre = g;
-
-        btn.onclick = () => {
-          document.querySelectorAll("#genreFilters .tagFilter").forEach(x => x.classList.remove("active"));
-          btn.classList.add("active");
-
-          selectedGenre = g;
-          favoritesOnly = false;
-          renderBooks();
-        };
-
-        genreFilters.appendChild(btn);
-      });
+    // =========================
+    // SEARCH
+    // =========================
+    function clearSearch() {
+      document.getElementById("searchInput").value = "";
+      renderAll();
     }
 
-    /* ---------------- BOOK HTML ---------------- */
-    function createBookHTML(book, spotlightMode=false) {
-      const coverImg = book.cover && book.cover.trim() !== "" ? book.cover : DEFAULT_COVER;
-
-      const tagsHTML = (book.tags || []).map(t => {
-        let className = t.replace(/\s/g, "");
-        return `<span class="miniTag ${className}">${t}</span>`;
-      }).join("");
-
-      const genreHTML = book.genre ? `<span class="miniTag GENRE">${book.genre}</span>` : "";
-
-      const rating = getBookRating(book);
-      const ratingHTML = `<div style="margin-top:8px;font-weight:1000;color:var(--muted);">
-        Rating: <span style="color:rgba(255,220,120,0.95)">${"⭐".repeat(rating)}${"☆".repeat(5-rating)}</span>
-      </div>`;
-
-      return `
-        <div class="favBtn ${isFavorite(book) ? "active" : ""}">⭐</div>
-        <div class="cover" style="${spotlightMode ? "height:300px" : ""}">
-          <img src="${coverImg}" alt="Cover" onerror="this.outerHTML='<div class=brokenCover>❌ Cover Failed To Load<br><br>Check your URL in books.json</div>'">
-          <div class="page"></div>
-        </div>
-        <div class="book-title">${book.title}</div>
-        <div class="book-desc">${book.description}</div>
-        <div class="miniTags">
-          ${genreHTML}
-          ${tagsHTML}
-        </div>
-        ${ratingHTML}
-      `;
+    function scrollToLibrary() {
+      document.getElementById("librarySection").scrollIntoView({ behavior: "smooth" });
     }
 
-    /* ---------------- FILTER + SORT ---------------- */
-    function applyFilters() {
-      let query = searchInput.value.toLowerCase().trim();
-      filteredBooks = [...allBooks];
-
-      if (favoritesOnly) filteredBooks = filteredBooks.filter(b => isFavorite(b));
-      if (selectedGenre !== "ALL") filteredBooks = filteredBooks.filter(b => b.genre === selectedGenre);
-
-      if (query.length > 0) {
-        filteredBooks = filteredBooks.filter(b =>
-          b.title.toLowerCase().includes(query) ||
-          b.description.toLowerCase().includes(query) ||
-          b.genre.toLowerCase().includes(query) ||
-          (b.tags || []).join(" ").toLowerCase().includes(query)
-        );
-      }
-
-      const sortMode = sortSelect.value;
-
-      if (sortMode === "az") filteredBooks.sort((a, b) => a.title.localeCompare(b.title));
-      else if (sortMode === "za") filteredBooks.sort((a, b) => b.title.localeCompare(a.title));
-      else if (sortMode === "favorites") filteredBooks.sort((a, b) => (isFavorite(b) ? 1 : 0) - (isFavorite(a) ? 1 : 0));
-      else if (sortMode === "rating") filteredBooks.sort((a, b) => getBookRating(b) - getBookRating(a));
-      else filteredBooks.sort((a, b) => (b.added || 0) - (a.added || 0));
-    }
-
-    /* ---------------- SLIDE IN ---------------- */
-    function observeSlideIn() {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) entry.target.classList.add("visible");
-        });
-      }, { threshold: 0.15 });
-
-      document.querySelectorAll(".slideIn").forEach(el => observer.observe(el));
-    }
-
-    /* ---------------- RENDER ---------------- */
-    function renderBooks() {
-      applyFilters();
-      container.innerHTML = "";
-
-      if (filteredBooks.length === 0) {
-        container.innerHTML = "<div style='grid-column:1/-1;text-align:center;font-weight:1000;color:var(--muted)'>😢 No books found.</div>";
-        return;
-      }
-
-      filteredBooks.forEach(book => {
-        const div = document.createElement("div");
-        div.className = "book slideIn";
-        div.innerHTML = createBookHTML(book);
-
-        div.querySelector(".favBtn").onclick = (e) => {
-          e.stopPropagation();
-          toggleFavorite(book);
-        };
-
-        div.onclick = () => openBook(book);
-
-        container.appendChild(div);
-      });
-
-      observeSlideIn();
-    }
-
-    /* ---------------- MODAL ---------------- */
-    function openBook(book, autoPreview=false) {
-      currentBook = book;
-      modal.classList.add("active");
-
-      modalTitle.textContent = book.title;
-      modalDesc.textContent = book.description;
-
-      summaryBox.innerHTML = "";
-
-      const coverImg = book.cover && book.cover.trim() !== "" ? book.cover : DEFAULT_COVER;
-      modalCoverImg.src = coverImg;
-
-      previewFrame.src = "";
-      loader.classList.remove("active");
-
-      previewBtn.onclick = () => loadPreview(book.preview);
-      openBtn.onclick = () => window.open(book.link, "_blank");
-      favModalBtn.onclick = () => toggleFavorite(book);
-
-      fullscreenBtn.onclick = () => {
-        if (previewFrame.requestFullscreen) previewFrame.requestFullscreen();
-        else alert("❌ Fullscreen not supported.");
-      };
-
-      // PDF detection
-      if (book.link && book.link.toLowerCase().endsWith(".pdf")) {
-        downloadBtn.style.display = "inline-block";
-        downloadBtn.onclick = () => window.open(book.link, "_blank");
-      } else {
-        downloadBtn.style.display = "none";
-      }
-
-      addCollectionBtn.onclick = () => {
-        const collections = getCollections();
-        const names = Object.keys(collections);
-
-        if (names.length === 0) {
-          alert("❌ You have no collections yet. Create one first!");
-          return;
-        }
-
-        const choice = prompt("Type a collection name:\n\n" + names.join("\n"));
-        if (!choice) return;
-
-        if (!collections[choice]) {
-          alert("❌ That collection does not exist.");
-          return;
-        }
-
-        addToCollection(choice, book.title);
-        alert("✅ Added to collection: " + choice);
-      };
-
-      summaryBtn.onclick = () => {
-        summaryBox.innerHTML = "<b>🧠 AI Summary:</b><br><br>" + generateFakeSummary(book);
-      };
-
-      updateModalFavButton();
-      updateRatingStars();
-
-      addRecent(book);
-      renderRecent();
-
-      if (autoPreview) loadPreview(book.preview);
-    }
-
-    function loadPreview(previewUrl) {
-      if (!previewUrl || previewUrl.trim() === "") {
-        alert("❌ No preview available.");
-        return;
-      }
-
-      loader.classList.add("active");
-      previewFrame.src = previewUrl;
-
-      previewFrame.onload = () => {
-        setTimeout(() => loader.classList.remove("active"), 450);
-      };
-
-      saveContinue(currentBook);
-    }
-
-    function closeModal() {
-      modal.classList.remove("active");
-      previewFrame.src = "";
-      currentBook = null;
-    }
-
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) closeModal();
+    // =========================
+    // COLOR PICKER
+    // =========================
+    document.getElementById("colorPicker").addEventListener("input", (e) => {
+      const color = e.target.value;
+      document.documentElement.style.setProperty("--accent", color);
+      localStorage.setItem("lost_accent", color);
     });
 
-    /* ---------------- FAKE AI SUMMARY ---------------- */
-    function generateFakeSummary(book) {
-      const vibes = [
-        "mysterious and emotional",
-        "fast-paced and exciting",
-        "funny and wholesome",
-        "dark and suspenseful",
-        "magical and adventurous",
-        "dramatic and intense"
-      ];
-
-      const vibe = vibes[Math.floor(Math.random() * vibes.length)];
-
-      const titleWords = book.title.split(" ").slice(0, 3).join(" ");
-
-      return `
-        <span style="color:var(--accent2);font-weight:1000;">${book.title}</span> is a <b>${vibe}</b> story that pulls you into a world where every chapter reveals something unexpected.
-        <br><br>
-        Readers will follow the journey of <b>${titleWords}</b>, uncovering secrets, strange twists, and moments that feel like you're living inside the book.
-        <br><br>
-        ⭐ Recommended if you like stories that feel <b>immersive</b>, <b>emotional</b>, and impossible to stop reading.
-      `;
-    }
-
-    /* ---------------- NAV ---------------- */
-    function showOnlyFavorites() {
-      favoritesOnly = true;
-      renderBooks();
-    }
-
-    function resetFilters() {
-      favoritesOnly = false;
-      selectedGenre = "ALL";
-      searchInput.value = "";
-      sortSelect.value = "newest";
-
-      document.querySelectorAll("#genreFilters .tagFilter").forEach(b => b.classList.remove("active"));
-      const allBtn = document.querySelector('#genreFilters .tagFilter[data-genre="ALL"]');
-      if (allBtn) allBtn.classList.add("active");
-
-      renderBooks();
-    }
-
-    /* ---------------- SEARCH ---------------- */
-    searchInput.addEventListener("input", renderBooks);
-    sortSelect.addEventListener("change", renderBooks);
-
-    /* ---------------- INSTALL PWA ---------------- */
-    let deferredPrompt = null;
-    const installBtn = document.getElementById("installBtn");
-
+    // =========================
+    // INSTALL PWA
+    // =========================
     window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      installBtn.style.display = "inline-block";
+      document.getElementById("installToast").classList.add("show");
     });
 
-    installBtn.addEventListener("click", async () => {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      installBtn.style.display = "none";
-    });
-
-    /* ---------------- SW ---------------- */
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("sw.js").catch(err => console.log("SW error:", err));
+    function hideInstall() {
+      document.getElementById("installToast").classList.remove("show");
     }
 
-    /* ---------------- START ---------------- */
-    loadTheme();
-    loadBooks();
-  </script>
+    async function installPWA() {
+      if (!deferredPrompt) return alert("Install not available yet.");
+      deferredPrompt.prompt();
+      deferredPrompt = null;
+      hideInstall();
+    }
 
+    // =========================
+    // SERVICE WORKER (RAW GITHUB)
+    // =========================
+    async function registerSW() {
+      if ("serviceWorker" in navigator) {
+        try {
+          await navigator.serviceWorker.register("https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/main/lost/sw.js");
+          console.log("SW registered!");
+        } catch (e) {
+          console.warn("SW failed", e);
+        }
+      }
+    }
+
+    // =========================
+    // CLICK OUTSIDE MODALS CLOSE
+    // =========================
+    document.getElementById("bookModal").addEventListener("click", (e) => {
+      if (e.target.id === "bookModal") closeModal();
+    });
+
+    document.getElementById("collectionsModal").addEventListener("click", (e) => {
+      if (e.target.id === "collectionsModal") closeCollections();
+    });
+
+    document.getElementById("profileModal").addEventListener("click", (e) => {
+      if (e.target.id === "profileModal") closeProfile();
+    });
+
+    // =========================
+    // INIT
+    // =========================
+    document.getElementById("searchInput").addEventListener("input", renderAll);
+    document.getElementById("sortSelect").addEventListener("change", renderAll);
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeModal();
+        closeCollections();
+        closeProfile();
+      }
+    });
+
+    loadTheme();
+    const savedAccent = localStorage.getItem("lost_accent");
+    if (savedAccent) document.getElementById("colorPicker").value = savedAccent;
+
+    loadBooks();
+    registerSW();
+  </script>
 </body>
 </html>
