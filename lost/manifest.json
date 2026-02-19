@@ -1,0 +1,16 @@
+{
+  "name": "LOST Library",
+  "short_name": "LOST",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#040009",
+  "theme_color": "#9900ff",
+  "description": "A futuristic library platform for reading, favoriting, and collecting books.",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/lost/images/%5B%CC%B2%CC%85L%5D%5B%CC%B2%CC%85O%5D%5B%CC%B2%CC%85S%5D%5B%CC%B2%CC%85T%5D.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
