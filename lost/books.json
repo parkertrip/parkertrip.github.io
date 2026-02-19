@@ -1,0 +1,18 @@
+[
+  {
+    "title": "LOST - Book 1",
+    "cover": "https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/lost/images/Screenshot%202026-02-18%20150106.png",
+    "description": "The beginning of the LOST series.",
+    "link": "https://docs.google.com/document/d/1LUnNX4DtI499Ev_1dtbARvjrwcVdkweKOFMfPcWIcLA/edit?tab=t.0",
+    "preview": "https://docs.google.com/document/d/e/2PACX-1vRSQDZbJ7UyYlEqgcldXRuM7pkUk962sAiNuGW6R8ND4fmDKQsHmlevQVv4fb_-rvgyvJlYbiKteF2e/pub",
+    "tags": ["NEW", "POPULAR", "Official LOST book"]
+  },
+  {
+    "title": "Froggie And Puggie",
+    "cover": "",
+    "description": "By Easton. A fun story about Froggie and Puggie.",
+    "link": "https://docs.google.com/document/u/0/d/1Ipp6t2Rz9VKFfwadrA87O15c7VUgR-f8jss4byTuBwk/edit",
+    "preview": "https://docs.google.com/document/d/e/2PACX-1vREsCBANfH89V3DL_TfUez8BW6gPytMyCTp61BCdd60_O4wa1YjMbwqsBq-q3w_VxLkJC7Wuohi6Rqt/pub",
+    "tags": ["Animals", "Frog", "Pug"]
+  }
+]
