@@ -4,16 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>[̲̅L][̲̅O][̲̅S][̲̅T] Library</title>
+  <title>LOST Library</title>
 
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/lost/images/%5B%CC%B2%CC%85L%5D%5B%CC%B2%CC%85O%5D%5B%CC%B2%CC%85S%5D%5B%CC%B2%CC%85T%5D.png">
 
-  <!-- PWA Manifest -->
+  <!-- Manifest -->
   <link rel="manifest" href="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/main/lost/manifest.json">
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Rubik+Puddles&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -27,17 +27,19 @@
       --text: rgba(255,255,255,0.92);
       --muted: rgba(255,255,255,0.68);
       --shadow: rgba(153, 0, 255, 0.35);
+      --good: rgba(0,255,170,0.85);
+      --bad: rgba(255,80,80,0.85);
     }
 
     body.light {
-      --bg1: #f7f0ff;
+      --bg1: #f8f1ff;
       --bg2: #ffffff;
-      --card: rgba(255,255,255,0.7);
+      --card: rgba(255,255,255,0.72);
       --border: rgba(153, 0, 255, 0.25);
       --border2: rgba(153, 0, 255, 0.45);
       --text: rgba(20,20,20,0.9);
       --muted: rgba(20,20,20,0.65);
-      --shadow: rgba(153, 0, 255, 0.25);
+      --shadow: rgba(153, 0, 255, 0.2);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -52,7 +54,7 @@
     }
 
     /* Scrollbar */
-    ::-webkit-scrollbar { width: 12px; }
+    ::-webkit-scrollbar { width: 12px; height: 12px; }
     ::-webkit-scrollbar-track { background: rgba(0,0,0,0.25); }
     ::-webkit-scrollbar-thumb {
       background: linear-gradient(180deg, var(--accent), #4b007d);
@@ -61,13 +63,14 @@
       box-shadow: 0px 0px 15px var(--shadow);
     }
 
-    a { color: var(--accent2); text-decoration: none; font-weight: 800; }
+    a { color: var(--accent2); text-decoration: none; font-weight: 900; }
     a:hover { text-decoration: underline; }
 
+    /* Background Orbs */
     .bg {
       position: fixed;
       inset: 0;
-      z-index: -2;
+      z-index: -3;
       overflow: hidden;
     }
 
@@ -92,6 +95,7 @@
       100% { transform: translate(0, 0); }
     }
 
+    /* Top Nav */
     nav {
       position: sticky;
       top: 0;
@@ -102,9 +106,7 @@
       backdrop-filter: blur(16px);
     }
 
-    body.light nav {
-      background: rgba(255,255,255,0.7);
-    }
+    body.light nav { background: rgba(255,255,255,0.72); }
 
     .nav-inner {
       max-width: 1250px;
@@ -112,16 +114,17 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 15px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     .logo {
       font-family: "Rubik Puddles", cursive;
-      font-size: 1.7rem;
+      font-size: 2rem;
       color: var(--accent);
       text-shadow: 0px 0px 18px var(--shadow);
       user-select: none;
+      cursor: pointer;
     }
 
     .nav-actions {
@@ -141,11 +144,10 @@
       font-weight: 900;
       transition: 0.2s ease;
       box-shadow: 0px 0px 18px rgba(153,0,255,0.12);
+      user-select: none;
     }
 
-    body.light .btn {
-      background: rgba(255,255,255,0.65);
-    }
+    body.light .btn { background: rgba(255,255,255,0.7); }
 
     .btn:hover {
       transform: translateY(-2px);
@@ -164,9 +166,32 @@
       border-color: rgba(255,50,50,0.35);
     }
 
+    .btn.green {
+      background: rgba(0,255,170,0.12);
+      border-color: rgba(0,255,170,0.35);
+    }
+
+    .color-picker {
+      width: 46px;
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid rgba(153,0,255,0.35);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .color-picker input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
     header {
       text-align: center;
-      padding: 90px 20px 50px;
+      padding: 70px 20px 35px;
       max-width: 1100px;
       margin: auto;
     }
@@ -176,6 +201,7 @@
       font-size: 5rem;
       color: var(--accent);
       text-shadow: 0px 0px 30px var(--shadow);
+      letter-spacing: 4px;
     }
 
     .subtitle {
@@ -183,29 +209,36 @@
       font-size: 1.2rem;
       color: var(--muted);
       line-height: 1.7;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .subtitle span {
       color: var(--accent2);
-      font-weight: 900;
+      font-weight: 1000;
     }
 
     main {
       max-width: 1250px;
       margin: auto;
-      padding: 20px 20px 90px;
+      padding: 15px 20px 90px;
     }
 
     .section {
-      margin-top: 30px;
+      margin-top: 35px;
     }
 
     .section-title {
-      font-size: 1.8rem;
+      font-size: 1.9rem;
       color: var(--accent);
       text-shadow: 0px 0px 12px rgba(153,0,255,0.25);
       margin-bottom: 12px;
+      font-weight: 1000;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 14px;
     }
 
     .search-row {
@@ -223,14 +256,21 @@
       border: 1px solid rgba(153,0,255,0.25);
       background: rgba(0,0,0,0.25);
       color: var(--text);
-      font-weight: 800;
+      font-weight: 900;
       outline: none;
+      transition: 0.2s ease;
     }
 
     body.light .search-row input, body.light .search-row select {
-      background: rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.75);
     }
 
+    .search-row input:focus, .search-row select:focus {
+      border-color: rgba(153,0,255,0.85);
+      box-shadow: 0px 0px 20px rgba(153,0,255,0.25);
+    }
+
+    /* Book Grid */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -251,12 +291,24 @@
     }
 
     .book:hover {
-      transform: translateY(-5px) scale(1.02);
+      transform: translateY(-6px) scale(1.02);
       border-color: rgba(153,0,255,0.6);
       box-shadow: 0px 0px 35px rgba(153,0,255,0.25);
     }
 
-    /* Page flip effect */
+    /* Shelf Slide effect */
+    .shelfItem {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: 0.8s ease;
+    }
+
+    .shelfItem.visible {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+
+    /* Page Flip */
     .cover {
       width: 100%;
       height: 280px;
@@ -268,6 +320,10 @@
       overflow: hidden;
       position: relative;
       perspective: 1000px;
+      font-weight: 900;
+      color: var(--muted);
+      text-align: center;
+      padding: 12px;
     }
 
     .cover img {
@@ -284,21 +340,10 @@
       box-shadow: 8px 0px 20px rgba(0,0,0,0.45);
     }
 
-    .cover.soon {
-      font-weight: 900;
-      color: rgba(255,255,255,0.75);
-      text-align: center;
-      padding: 10px;
-    }
-
-    body.light .cover.soon {
-      color: rgba(0,0,0,0.7);
-    }
-
     .book-title {
       font-size: 1.05rem;
       margin-top: 10px;
-      font-weight: 900;
+      font-weight: 1000;
       color: var(--text);
     }
 
@@ -306,7 +351,7 @@
       margin-top: 6px;
       font-size: 0.9rem;
       color: var(--muted);
-      font-weight: 600;
+      font-weight: 700;
       line-height: 1.4;
       min-height: 52px;
     }
@@ -328,12 +373,13 @@
     .tag.POPULAR { color: #ffd700; }
     .tag.COMINGSOON { color: #ff77ff; }
     .tag.TRENDING { color: #ff6666; }
+    .tag.PINNED { color: #66ccff; }
 
     .fav {
       position: absolute;
       top: 12px;
       right: 12px;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       background: rgba(0,0,0,0.35);
       border: 1px solid rgba(255,255,255,0.15);
       border-radius: 999px;
@@ -348,6 +394,25 @@
       border-color: rgba(153,0,255,0.6);
     }
 
+    .pin {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      font-size: 1rem;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 999px;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      user-select: none;
+    }
+
+    .pin:hover {
+      transform: scale(1.1);
+      border-color: rgba(153,0,255,0.6);
+    }
+
     .rating-stars {
       margin-top: 10px;
       display: flex;
@@ -358,13 +423,27 @@
 
     .star {
       cursor: pointer;
-      opacity: 0.5;
+      opacity: 0.45;
       transition: 0.15s ease;
     }
 
     .star.active {
       opacity: 1;
       text-shadow: 0px 0px 12px rgba(255,255,255,0.3);
+    }
+
+    /* Carousel */
+    .carousel {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding: 10px;
+      scroll-behavior: smooth;
+    }
+
+    .carousel .book {
+      min-width: 220px;
+      max-width: 220px;
     }
 
     /* Modal */
@@ -393,9 +472,7 @@
       animation: pop 0.25s ease;
     }
 
-    body.light .modal-box {
-      background: rgba(255,255,255,0.92);
-    }
+    body.light .modal-box { background: rgba(255,255,255,0.92); }
 
     @keyframes pop {
       from { transform: scale(0.9); opacity: 0; }
@@ -421,6 +498,8 @@
       justify-content: center;
       font-weight: 900;
       color: var(--muted);
+      text-align: center;
+      padding: 10px;
     }
 
     .modal-cover img {
@@ -438,13 +517,14 @@
       font-size: 2rem;
       color: var(--accent);
       text-shadow: 0px 0px 15px rgba(153,0,255,0.25);
+      font-weight: 1000;
     }
 
     .modal-info p {
       margin-top: 10px;
       color: var(--muted);
       font-size: 1rem;
-      font-weight: 650;
+      font-weight: 750;
       line-height: 1.6;
     }
 
@@ -472,7 +552,7 @@
       display: none;
       text-align: center;
       padding: 30px;
-      font-weight: 900;
+      font-weight: 1000;
       color: var(--accent2);
       font-size: 1.1rem;
       animation: pulse 1s infinite ease-in-out;
@@ -490,93 +570,124 @@
       color: var(--muted);
       border-top: 1px solid rgba(153,0,255,0.2);
       background: rgba(0,0,0,0.15);
+      font-weight: 750;
     }
 
-    footer b {
-      color: var(--accent2);
-    }
+    footer b { color: var(--accent2); }
 
-    /* Carousel row */
-    .carousel {
-      display: flex;
-      gap: 14px;
-      overflow-x: auto;
-      padding: 10px;
-      scroll-behavior: smooth;
-    }
-
-    .carousel::-webkit-scrollbar {
-      height: 10px;
-    }
-
-    .carousel .book {
-      min-width: 220px;
-      max-width: 220px;
-    }
-
-    /* PWA install toast */
-    .toast {
+    /* Toast Notifications */
+    .toast-area {
       position: fixed;
-      bottom: 18px;
-      right: 18px;
-      background: rgba(10,0,20,0.9);
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 999999;
+    }
+
+    .toast {
+      min-width: 260px;
+      max-width: 360px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(10,0,20,0.92);
+      border: 1px solid rgba(153,0,255,0.35);
+      box-shadow: 0px 0px 30px rgba(153,0,255,0.2);
+      backdrop-filter: blur(18px);
+      animation: toastIn 0.3s ease;
+    }
+
+    body.light .toast { background: rgba(255,255,255,0.92); }
+
+    @keyframes toastIn {
+      from { transform: translateX(-30px); opacity: 0; }
+      to { transform: translateX(0px); opacity: 1; }
+    }
+
+    .toast-title {
+      font-weight: 1000;
+      color: var(--accent);
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .toast-text {
+      color: var(--muted);
+      font-weight: 750;
+      font-size: 0.92rem;
+    }
+
+    /* Page Panels */
+    .panel {
+      display: none;
+      animation: pop 0.25s ease;
+    }
+
+    .panel.show {
+      display: block;
+    }
+
+    /* Genre tags */
+    .genre-badge {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 1000;
+      border: 1px solid rgba(153,0,255,0.25);
+      background: rgba(0,0,0,0.22);
+      margin: 6px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    body.light .genre-badge {
+      background: rgba(255,255,255,0.65);
+    }
+
+    .genre-badge:hover {
+      transform: translateY(-2px);
+      border-color: rgba(153,0,255,0.65);
+      box-shadow: 0px 0px 20px rgba(153,0,255,0.2);
+    }
+
+    /* Install Prompt */
+    .installBox {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(10,0,20,0.92);
       border: 1px solid rgba(153,0,255,0.35);
       padding: 14px 16px;
       border-radius: 18px;
       box-shadow: 0px 0px 30px rgba(153,0,255,0.25);
       display: none;
       z-index: 99999;
-      max-width: 320px;
-    }
-
-    body.light .toast {
-      background: rgba(255,255,255,0.92);
-    }
-
-    .toast.show {
-      display: block;
+      max-width: 340px;
+      backdrop-filter: blur(20px);
       animation: pop 0.25s ease;
     }
 
-    .toast h4 {
+    body.light .installBox { background: rgba(255,255,255,0.92); }
+
+    .installBox.show { display: block; }
+
+    .installBox h4 {
       font-size: 1.1rem;
       color: var(--accent);
       margin-bottom: 6px;
+      font-weight: 1000;
     }
 
-    .toast p {
+    .installBox p {
       color: var(--muted);
-      font-weight: 650;
+      font-weight: 750;
       font-size: 0.95rem;
       margin-bottom: 10px;
     }
 
-    .small {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-top: 10px;
-    }
-
-    .color-picker {
-      width: 46px;
-      height: 42px;
-      border-radius: 12px;
-      border: 1px solid rgba(153,0,255,0.35);
-      overflow: hidden;
-      cursor: pointer;
-    }
-
-    .color-picker input {
-      width: 100%;
-      height: 100%;
-      border: none;
-      outline: none;
-      background: transparent;
-      cursor: pointer;
-    }
-
     @media(max-width: 850px) {
-      .title { font-size: 3.5rem; }
+      .title { font-size: 3.4rem; }
       iframe { height: 450px; }
     }
   </style>
@@ -589,79 +700,122 @@
     <div class="orb"></div>
   </div>
 
+  <div class="toast-area" id="toastArea"></div>
+
   <nav>
     <div class="nav-inner">
-      <div class="logo">[̲̅L][̲̅O][̲̅S][̲̅T]</div>
+      <div class="logo" onclick="showPanel('homePanel')">LOST</div>
 
       <div class="nav-actions">
+        <button class="btn" onclick="showPanel('homePanel')">📚 Library</button>
+        <button class="btn" onclick="showPanel('genresPanel')">🎭 Genres</button>
+        <button class="btn" onclick="showPanel('statsPanel')">📊 Stats</button>
+
         <button class="btn" onclick="openProfile()">👤 Profile</button>
         <button class="btn" onclick="openCollections()">📁 Collections</button>
-        <button class="btn" onclick="exportFavorites()">🧾 Export</button>
+
+        <button class="btn" onclick="downloadFavoritesList()">📥 Favorites</button>
+
+        <button class="btn" onclick="exportData()">🧾 Export</button>
         <button class="btn" onclick="document.getElementById('importFile').click()">📤 Import</button>
-        <input id="importFile" type="file" accept=".json" style="display:none" onchange="importFavorites(event)">
+        <input id="importFile" type="file" accept=".json" style="display:none" onchange="importData(event)">
+
         <button class="btn" onclick="toggleMusic()">🎧 Music</button>
         <button class="btn" onclick="toggleTheme()">🌙 Theme</button>
 
         <div class="color-picker" title="Pick accent color">
           <input type="color" id="colorPicker">
         </div>
-
-        <button class="btn purple" onclick="scrollToLibrary()">📚 Browse</button>
       </div>
     </div>
   </nav>
 
   <header>
-    <div class="title">[̲̅L][̲̅O][̲̅S][̲̅T]</div>
+    <div class="title">LOST</div>
     <p class="subtitle">
       Welcome to <span>LOST Library</span> — a community bookshelf where anyone can publish books through GitHub.
-      Browse, rate, favorite, collect, and preview stories like a real futuristic bookstore.
-    </p>
-    <p class="small">
-      Writers: <b>Ciena</b>, <b>Parker</b> · Formatters: <b>Parker</b>, <b>Ciena</b>
+      Rate, favorite, pin, collect, preview, and explore genres like a futuristic bookstore.
     </p>
   </header>
 
-  <main id="librarySection">
+  <main>
 
-    <div class="section">
-      <div class="section-title">🔥 Trending Right Now</div>
-      <div class="carousel" id="trendingRow"></div>
-    </div>
+    <!-- HOME PANEL -->
+    <div class="panel show" id="homePanel">
 
-    <div class="section">
-      <div class="section-title">⭐ Top Rated</div>
-      <div class="carousel" id="topRatedRow"></div>
-    </div>
+      <div class="section">
+        <div class="section-title">📚 All Books</div>
+        <div class="section-sub">Search, sort, and explore everything available.</div>
 
-    <div class="section">
-      <div class="section-title">📁 Collections Carousel</div>
-      <div class="carousel" id="collectionsRow"></div>
-    </div>
+        <div class="search-row">
+          <input id="searchInput" placeholder="Search books by title, tags, genres..." />
+          <select id="sortSelect">
+            <option value="default">Sort: Default</option>
+            <option value="az">Sort: A → Z</option>
+            <option value="za">Sort: Z → A</option>
+            <option value="rated">Sort: Highest Rated</option>
+            <option value="fav">Sort: Favorites First</option>
+            <option value="pinned">Sort: Pinned First</option>
+          </select>
+          <button class="btn" onclick="clearSearch()">Clear</button>
+        </div>
 
-    <div class="section">
-      <div class="section-title">📚 Browse the Library</div>
-
-      <div class="search-row">
-        <input id="searchInput" placeholder="Search books by title, tags, description..." />
-        <select id="sortSelect">
-          <option value="default">Sort: Default</option>
-          <option value="az">Sort: A → Z</option>
-          <option value="za">Sort: Z → A</option>
-          <option value="rated">Sort: Highest Rated</option>
-          <option value="fav">Sort: Most Favorited</option>
-        </select>
-        <button class="btn" onclick="clearSearch()">Clear</button>
+        <div class="grid" id="bookGrid"></div>
       </div>
 
-      <div class="grid" id="bookGrid"></div>
+      <div class="section">
+        <div class="section-title">📌 Pinned Books</div>
+        <div class="carousel" id="pinnedRow"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">🔥 Trending Right Now</div>
+        <div class="carousel" id="trendingRow"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">⭐ Top Rated</div>
+        <div class="carousel" id="topRatedRow"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">📁 Collections Carousel</div>
+        <div class="carousel" id="collectionsRow"></div>
+      </div>
+
+    </div>
+
+    <!-- GENRES PANEL -->
+    <div class="panel" id="genresPanel">
+      <div class="section">
+        <div class="section-title">🎭 Genres</div>
+        <div class="section-sub">Click a genre to filter the library instantly.</div>
+
+        <div id="genresList"></div>
+
+        <div class="section" style="margin-top:20px;">
+          <div class="section-title">📚 Books in Genre</div>
+          <div class="grid" id="genreGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS PANEL -->
+    <div class="panel" id="statsPanel">
+      <div class="section">
+        <div class="section-title">📊 Library Dashboard</div>
+        <div class="section-sub">Your stats + library stats.</div>
+
+        <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr));" id="statsGrid"></div>
+      </div>
     </div>
 
   </main>
 
   <footer>
     <p><b>LOST Library</b> — Hosted on GitHub Pages.</p>
-    <p class="small">Users can publish books by editing <b>books.json</b> and opening a Pull Request.</p>
+    <p>Publish books by editing <b>books.json</b> and opening a Pull Request.</p>
+    <p style="margin-top:10px;">🧙 Tip: click the title <b>LOST</b> 5 times fast...</p>
   </footer>
 
   <!-- Book Modal -->
@@ -677,14 +831,19 @@
           <div class="modal-buttons">
             <button class="btn purple" onclick="openPreview()">👁 Preview</button>
             <button class="btn" onclick="openBook()">📖 Open</button>
-            <button class="btn" onclick="toggleFavorite(currentBookId)">❤️ Favorite</button>
-            <button class="btn" onclick="aiSummary()">🧠 AI Summary</button>
             <button class="btn" onclick="fullscreenPreview()">🖥 Fullscreen</button>
-            <button class="btn" id="pdfBtn" style="display:none;" onclick="downloadPDF()">⬇ Download PDF</button>
+            <button class="btn green" id="pdfBtn" style="display:none;" onclick="downloadPDF()">⬇ PDF</button>
+
+            <button class="btn" onclick="toggleFavorite(currentBookId)">❤️ Favorite</button>
+            <button class="btn" onclick="togglePinned(currentBookId)">📌 Pin</button>
+
+            <button class="btn" onclick="aiSummary()">🧠 Summary</button>
+            <button class="btn" onclick="quickAddToCollection()">📁 Add to Collection</button>
+
             <button class="btn red" onclick="closeModal()">✖ Close</button>
           </div>
 
-          <p class="small" id="continueReadingText"></p>
+          <p style="margin-top:10px;font-weight:900;color:var(--muted);" id="continueReadingText"></p>
         </div>
       </div>
 
@@ -734,10 +893,10 @@
     </div>
   </div>
 
-  <!-- PWA Install Toast -->
-  <div class="toast" id="installToast">
+  <!-- Install Prompt -->
+  <div class="installBox" id="installBox">
     <h4>Install LOST Library</h4>
-    <p>Get the app experience with offline support.</p>
+    <p>Get offline support + app mode.</p>
     <button class="btn purple" onclick="installPWA()">⬇ Install</button>
     <button class="btn" onclick="hideInstall()">Later</button>
   </div>
@@ -758,10 +917,35 @@
     let books = [];
     let currentBook = null;
     let currentBookId = null;
+
     let deferredPrompt = null;
+    let musicOn = false;
 
     // =========================
-    // LOCAL STORAGE HELPERS
+    // TOAST SYSTEM (NO ALERTS)
+    // =========================
+    function toast(title, text) {
+      const area = document.getElementById("toastArea");
+
+      const t = document.createElement("div");
+      t.className = "toast";
+
+      t.innerHTML = `
+        <div class="toast-title">${title}</div>
+        <div class="toast-text">${text}</div>
+      `;
+
+      area.appendChild(t);
+
+      setTimeout(() => {
+        t.style.opacity = "0";
+        t.style.transform = "translateX(-30px)";
+        setTimeout(() => t.remove(), 300);
+      }, 3000);
+    }
+
+    // =========================
+    // STORAGE HELPERS
     // =========================
     function loadJSON(key, fallback) {
       try {
@@ -776,7 +960,7 @@
     }
 
     // =========================
-    // FAVORITES FIXED
+    // FAVORITES
     // =========================
     function getFavorites() {
       return loadJSON("lost_favorites", []);
@@ -788,12 +972,42 @@
 
     function toggleFavorite(bookId) {
       let favs = getFavorites();
+
       if (favs.includes(bookId)) {
         favs = favs.filter(x => x !== bookId);
+        toast("Removed Favorite", "Book removed from favorites.");
       } else {
         favs.push(bookId);
+        toast("Added Favorite", "Book added to favorites.");
       }
+
       saveJSON("lost_favorites", favs);
+      renderAll();
+    }
+
+    // =========================
+    // PINNED
+    // =========================
+    function getPinned() {
+      return loadJSON("lost_pinned", []);
+    }
+
+    function isPinned(bookId) {
+      return getPinned().includes(bookId);
+    }
+
+    function togglePinned(bookId) {
+      let pins = getPinned();
+
+      if (pins.includes(bookId)) {
+        pins = pins.filter(x => x !== bookId);
+        toast("Unpinned", "Book removed from pinned list.");
+      } else {
+        pins.push(bookId);
+        toast("Pinned", "Book pinned to top.");
+      }
+
+      saveJSON("lost_pinned", pins);
       renderAll();
     }
 
@@ -808,6 +1022,7 @@
       const ratings = getRatings();
       ratings[bookId] = stars;
       saveJSON("lost_ratings", ratings);
+      toast("Rating Saved", `You rated this book ${stars} stars.`);
       renderAll();
     }
 
@@ -816,7 +1031,7 @@
     }
 
     // =========================
-    // COLLECTIONS
+    // COLLECTIONS (FIXED)
     // =========================
     function getCollections() {
       return loadJSON("lost_collections", {});
@@ -828,23 +1043,39 @@
 
     function createCollection() {
       const name = document.getElementById("collectionName").value.trim();
-      if (!name) return alert("Enter a collection name!");
+      if (!name) return toast("Collection Error", "Enter a collection name.");
+
       const collections = getCollections();
-      if (collections[name]) return alert("That collection already exists!");
+
+      if (collections[name]) {
+        toast("Already Exists", "That collection already exists.");
+        return;
+      }
+
       collections[name] = [];
       saveCollections(collections);
+
       document.getElementById("collectionName").value = "";
+      toast("Collection Created", `"${name}" was created.`);
       renderCollectionsList();
       renderAll();
     }
 
     function addToCollection(collectionName, bookId) {
+      if (!bookId) return;
+
       const collections = getCollections();
       if (!collections[collectionName]) collections[collectionName] = [];
-      if (!collections[collectionName].includes(bookId)) {
-        collections[collectionName].push(bookId);
+
+      if (collections[collectionName].includes(bookId)) {
+        toast("Already Added", "That book is already in this collection.");
+        return;
       }
+
+      collections[collectionName].push(bookId);
       saveCollections(collections);
+
+      toast("Added to Collection", `Added book to "${collectionName}".`);
       renderCollectionsList();
       renderAll();
     }
@@ -853,8 +1084,23 @@
       const collections = getCollections();
       delete collections[collectionName];
       saveCollections(collections);
+
+      toast("Deleted Collection", `"${collectionName}" removed.`);
       renderCollectionsList();
       renderAll();
+    }
+
+    function quickAddToCollection() {
+      const collections = getCollections();
+      const names = Object.keys(collections);
+
+      if (names.length === 0) {
+        toast("No Collections", "Create a collection first.");
+        return;
+      }
+
+      const name = names[0];
+      addToCollection(name, currentBookId);
     }
 
     // =========================
@@ -869,7 +1115,7 @@
     }
 
     // =========================
-    // THEME SYSTEM
+    // THEME
     // =========================
     function loadTheme() {
       const theme = localStorage.getItem("lost_theme") || "dark";
@@ -877,46 +1123,47 @@
       else document.body.classList.remove("light");
 
       const accent = localStorage.getItem("lost_accent");
-      if (accent) {
-        document.documentElement.style.setProperty("--accent", accent);
-      }
+      if (accent) document.documentElement.style.setProperty("--accent", accent);
     }
 
     function toggleTheme() {
       if (document.body.classList.contains("light")) {
         document.body.classList.remove("light");
         localStorage.setItem("lost_theme", "dark");
+        toast("Theme Changed", "Dark mode enabled.");
       } else {
         document.body.classList.add("light");
         localStorage.setItem("lost_theme", "light");
+        toast("Theme Changed", "Light mode enabled.");
       }
     }
 
     // =========================
     // MUSIC
     // =========================
-    let musicOn = false;
     function toggleMusic() {
       const music = document.getElementById("bgMusic");
+
       if (!musicOn) {
         music.play();
         music.volume = 0.3;
         musicOn = true;
+        toast("Music Enabled", "Background music is playing.");
       } else {
         music.pause();
         musicOn = false;
+        toast("Music Disabled", "Music stopped.");
       }
     }
 
     // =========================
-    // FETCH BOOKS FIXED
+    // FETCH BOOKS
     // =========================
     async function loadBooks() {
       try {
         const res = await fetch(BOOKS_URL, { cache: "no-store" });
         books = await res.json();
 
-        // auto add IDs if missing
         books = books.map((b, i) => ({
           id: b.id || ("book_" + i),
           title: b.title || "Untitled",
@@ -925,28 +1172,18 @@
           link: b.link || "",
           preview: b.preview || "",
           pdf: b.pdf || "",
-          tags: Array.isArray(b.tags) ? b.tags : []
+          tags: Array.isArray(b.tags) ? b.tags : [],
+          genres: Array.isArray(b.genres) ? b.genres : []
         }));
 
+        toast("Library Loaded", `Loaded ${books.length} books.`);
         renderAll();
+        renderGenres();
+        renderStats();
       } catch (err) {
-        alert("Failed to load books.json! Check the raw link.");
+        toast("Load Failed", "books.json failed to load.");
         console.error(err);
       }
-    }
-
-    // =========================
-    // AUTO TAG DETECTION
-    // =========================
-    function detectTags(book) {
-      const detected = [];
-      const title = book.title.toLowerCase();
-
-      if (title.includes("book 2") || title.includes("book two")) detected.push("BOOK 2");
-      if (title.includes("book 3") || title.includes("book three")) detected.push("BOOK 3");
-      if (title.includes("volume")) detected.push("VOLUME");
-
-      return detected;
     }
 
     // =========================
@@ -954,16 +1191,14 @@
     // =========================
     function renderBookCard(book) {
       const fav = isFavorite(book.id);
+      const pinned = isPinned(book.id);
       const rating = getRating(book.id);
 
-      const tag = (book.tags[0] || "").replaceAll(" ", "").toUpperCase();
+      const mainTag = (book.tags[0] || "").replaceAll(" ", "").toUpperCase();
 
       const coverHTML = book.cover
-        ? `<img src="${book.cover}" onerror="this.style.display='none'; this.parentElement.classList.add('soon'); this.parentElement.innerHTML='Cover Coming Soon';">`
+        ? `<img src="${book.cover}" onerror="this.remove(); this.parentElement.innerHTML='Cover Coming Soon';">`
         : `Cover Coming Soon`;
-
-      const detected = detectTags(book);
-      const extraTagHTML = detected.length ? `<div class="tag NEW">${detected[0]}</div>` : "";
 
       let starsHTML = "";
       for (let i = 1; i <= 5; i++) {
@@ -972,10 +1207,12 @@
 
       return `
         <div class="book shelfItem" onclick="openBookModal('${book.id}')">
-          ${tag ? `<div class="tag ${tag}">${book.tags[0]}</div>` : ""}
-          ${extraTagHTML}
+          ${pinned ? `<div class="tag PINNED">PINNED</div>` : (mainTag ? `<div class="tag ${mainTag}">${book.tags[0]}</div>` : "")}
+
           <div class="fav" onclick="event.stopPropagation(); toggleFavorite('${book.id}')">${fav ? "💜" : "🤍"}</div>
-          <div class="cover ${book.cover ? "" : "soon"}">${coverHTML}</div>
+          <div class="pin" onclick="event.stopPropagation(); togglePinned('${book.id}')">${pinned ? "📌" : "📍"}</div>
+
+          <div class="cover">${coverHTML}</div>
           <div class="book-title">${book.title}</div>
           <div class="book-desc">${book.description}</div>
           <div class="rating-stars">${starsHTML}</div>
@@ -988,9 +1225,11 @@
     // =========================
     function renderAll() {
       renderGrid();
+      renderPinned();
       renderTrending();
       renderTopRated();
       renderCollectionsRow();
+      shelfSlideEffect();
     }
 
     function renderGrid() {
@@ -999,7 +1238,7 @@
       const sort = document.getElementById("sortSelect").value;
 
       let filtered = books.filter(b => {
-        const hay = (b.title + " " + b.description + " " + (b.tags.join(" "))).toLowerCase();
+        const hay = (b.title + " " + b.description + " " + b.tags.join(" ") + " " + b.genres.join(" ")).toLowerCase();
         return hay.includes(search);
       });
 
@@ -1007,16 +1246,26 @@
       if (sort === "za") filtered.sort((a,b)=>b.title.localeCompare(a.title));
       if (sort === "rated") filtered.sort((a,b)=>getRating(b.id)-getRating(a.id));
       if (sort === "fav") filtered.sort((a,b)=>(isFavorite(b.id)?1:0)-(isFavorite(a.id)?1:0));
+      if (sort === "pinned") filtered.sort((a,b)=>(isPinned(b.id)?1:0)-(isPinned(a.id)?1:0));
 
       grid.innerHTML = filtered.map(renderBookCard).join("");
+    }
+
+    function renderPinned() {
+      const row = document.getElementById("pinnedRow");
+      const pins = getPinned();
+      const pinnedBooks = books.filter(b => pins.includes(b.id));
+
+      row.innerHTML = pinnedBooks.length
+        ? pinnedBooks.map(renderBookCard).join("")
+        : `<div style="padding:18px;color:var(--muted);font-weight:900;">No pinned books yet.</div>`;
     }
 
     function renderTrending() {
       const row = document.getElementById("trendingRow");
       const favs = getFavorites();
-
       let trending = books.filter(b => favs.includes(b.id));
-      if (trending.length === 0) trending = books.slice(0, 8);
+      if (trending.length === 0) trending = books.slice(0, 10);
 
       row.innerHTML = trending.slice(0, 12).map(renderBookCard).join("");
     }
@@ -1033,19 +1282,16 @@
       const names = Object.keys(collections);
 
       if (names.length === 0) {
-        row.innerHTML = `<div style="padding:20px;color:var(--muted);font-weight:900;">No collections yet. Make one in 📁 Collections.</div>`;
+        row.innerHTML = `<div style="padding:18px;color:var(--muted);font-weight:900;">No collections yet. Create one!</div>`;
         return;
       }
 
       const items = [];
       names.forEach(name => {
-        const firstBookId = collections[name][0];
-        const book = books.find(b => b.id === firstBookId);
-
         items.push(`
           <div class="book" onclick="openCollections()">
             <div class="tag POPULAR">${name}</div>
-            <div class="cover soon">${book ? `<img src="${book.cover}">` : "Collection"}</div>
+            <div class="cover">📁 Collection</div>
             <div class="book-title">${name}</div>
             <div class="book-desc">${collections[name].length} books saved</div>
           </div>
@@ -1076,19 +1322,13 @@
         coverBox.textContent = "Cover Coming Soon";
       }
 
-      // PDF Button
-      if (currentBook.pdf) {
-        document.getElementById("pdfBtn").style.display = "inline-block";
-      } else {
-        document.getElementById("pdfBtn").style.display = "none";
-      }
+      document.getElementById("pdfBtn").style.display = currentBook.pdf ? "inline-block" : "none";
 
-      // Continue Reading Info
       const cont = getContinueReading();
       const contText = document.getElementById("continueReadingText");
 
       if (cont && cont.bookId === bookId) {
-        contText.innerHTML = "📌 Continue Reading: You last opened this book recently.";
+        contText.innerHTML = "📌 Continue Reading: you opened this recently.";
       } else {
         contText.innerHTML = "";
       }
@@ -1103,7 +1343,7 @@
     }
 
     function openPreview() {
-      if (!currentBook.preview) return alert("No preview available!");
+      if (!currentBook.preview) return toast("No Preview", "This book does not have a preview.");
 
       const iframe = document.getElementById("previewFrame");
       const loading = document.getElementById("loadingText");
@@ -1119,24 +1359,26 @@
       };
 
       saveContinueReading(currentBookId);
+      toast("Preview Opened", "Preview loaded successfully.");
     }
 
     function openBook() {
-      if (!currentBook.link) return alert("No full book link available!");
+      if (!currentBook.link) return toast("No Link", "This book does not have a full link.");
       window.open(currentBook.link, "_blank");
       saveContinueReading(currentBookId);
+      toast("Book Opened", "Opened full book in new tab.");
     }
 
     function fullscreenPreview() {
       const iframe = document.getElementById("previewFrame");
-      if (!iframe.src) return alert("Open preview first!");
-
+      if (!iframe.src) return toast("No Preview", "Open preview first.");
       window.open(iframe.src, "_blank");
     }
 
     function downloadPDF() {
       if (!currentBook.pdf) return;
       window.open(currentBook.pdf, "_blank");
+      toast("PDF Download", "PDF opened in new tab.");
     }
 
     // =========================
@@ -1146,41 +1388,31 @@
       if (!currentBook) return;
 
       const base = currentBook.description || "A mysterious story.";
-      const fake = `
-📖 AI Summary (Offline Mode)
+      toast("AI Summary", "Generated offline summary.");
 
-"${currentBook.title}" is a story that explores mystery, emotion, and adventure.
-Based on the description, this book focuses on:
-
-✨ Main Theme: Discovery + suspense  
-🧠 Mood: Mysterious / Creative  
-📌 What to expect: ${base}
-
-(This is a fake AI summary generated locally.)
-      `.trim();
-
-      alert(fake);
+      setTimeout(() => {
+        toast("Summary Result", `"${currentBook.title}" is about mystery, emotion, and discovery. Expect: ${base}`);
+      }, 600);
     }
 
     // =========================
-    // PROFILE PAGE
+    // PROFILE
     // =========================
     function openProfile() {
       const favs = getFavorites();
       const ratings = getRatings();
       const collections = getCollections();
-      const cont = getContinueReading();
+      const pins = getPinned();
 
       let ratedCount = Object.keys(ratings).length;
       let colCount = Object.keys(collections).length;
 
-      let continueText = cont ? `Continue Reading: ${cont.bookId}` : "No continue reading saved.";
-
       document.getElementById("profileStats").innerHTML = `
         💜 Favorites: <b>${favs.length}</b><br>
         ⭐ Rated Books: <b>${ratedCount}</b><br>
-        📁 Collections: <b>${colCount}</b><br><br>
-        📌 ${continueText}
+        📁 Collections: <b>${colCount}</b><br>
+        📌 Pinned Books: <b>${pins.length}</b><br>
+        📚 Total Books in Library: <b>${books.length}</b>
       `;
 
       document.getElementById("profileModal").classList.add("show");
@@ -1208,7 +1440,7 @@ Based on the description, this book focuses on:
 
       const names = Object.keys(collections);
       if (names.length === 0) {
-        list.innerHTML = `<p class="small">No collections yet. Create one above.</p>`;
+        list.innerHTML = `<p style="color:var(--muted);font-weight:900;">No collections yet. Create one above.</p>`;
         return;
       }
 
@@ -1222,13 +1454,17 @@ Based on the description, this book focuses on:
               <button class="btn red" onclick="removeCollection('${name}')">Delete</button>
             </div>
 
-            <div class="small" style="margin-top:8px;">Add a book:</div>
-            <select onchange="addToCollection('${name}', this.value)" style="width:100%;margin-top:6px;padding:12px;border-radius:14px;border:1px solid rgba(153,0,255,0.25);background:rgba(0,0,0,0.25);color:var(--text);font-weight:900;">
+            <div style="margin-top:10px;color:var(--muted);font-weight:900;">Add a book:</div>
+
+            <select id="sel_${name}" onchange="addToCollection('${name}', this.value); this.value='';"
+              style="width:100%;margin-top:6px;padding:12px;border-radius:14px;border:1px solid rgba(153,0,255,0.25);background:rgba(0,0,0,0.25);color:var(--text);font-weight:900;">
               <option value="">Select book...</option>
               ${books.map(b => `<option value="${b.id}">${b.title}</option>`).join("")}
             </select>
 
-            <div class="small" style="margin-top:10px;">Books in this collection: ${collections[name].length}</div>
+            <div style="margin-top:10px;color:var(--muted);font-weight:900;">
+              Books in this collection: ${collections[name].length}
+            </div>
           </div>
         `;
       });
@@ -1237,11 +1473,96 @@ Based on the description, this book focuses on:
     }
 
     // =========================
-    // EXPORT / IMPORT FAVORITES
+    // GENRES PAGE
     // =========================
-    function exportFavorites() {
+    function getAllGenres() {
+      const set = new Set();
+      books.forEach(b => (b.genres || []).forEach(g => set.add(g)));
+      return [...set].sort((a,b)=>a.localeCompare(b));
+    }
+
+    function renderGenres() {
+      const list = document.getElementById("genresList");
+      const all = getAllGenres();
+
+      if (all.length === 0) {
+        list.innerHTML = `<div style="color:var(--muted);font-weight:1000;">No genres found in books.json yet.</div>`;
+        return;
+      }
+
+      list.innerHTML = all.map(g => `<span class="genre-badge" onclick="filterGenre('${g}')">${g}</span>`).join("");
+    }
+
+    function filterGenre(genre) {
+      showPanel("genresPanel");
+      const grid = document.getElementById("genreGrid");
+      const filtered = books.filter(b => (b.genres || []).includes(genre));
+      grid.innerHTML = filtered.map(renderBookCard).join("");
+      shelfSlideEffect();
+      toast("Genre Filter", `Showing genre: ${genre}`);
+    }
+
+    // =========================
+    // STATS DASHBOARD
+    // =========================
+    function renderStats() {
+      const grid = document.getElementById("statsGrid");
+
+      const favs = getFavorites();
+      const pins = getPinned();
+      const ratings = getRatings();
+      const collections = getCollections();
+
+      const totalGenres = getAllGenres().length;
+      const totalRated = Object.keys(ratings).length;
+      const totalCollections = Object.keys(collections).length;
+
+      const avgRating = totalRated > 0
+        ? (Object.values(ratings).reduce((a,b)=>a+b,0) / totalRated).toFixed(2)
+        : "N/A";
+
+      grid.innerHTML = `
+        <div class="book"><div class="book-title">📚 Total Books</div><div class="book-desc">${books.length}</div></div>
+        <div class="book"><div class="book-title">💜 Favorites</div><div class="book-desc">${favs.length}</div></div>
+        <div class="book"><div class="book-title">📌 Pinned</div><div class="book-desc">${pins.length}</div></div>
+        <div class="book"><div class="book-title">⭐ Rated Books</div><div class="book-desc">${totalRated}</div></div>
+        <div class="book"><div class="book-title">📊 Avg Rating</div><div class="book-desc">${avgRating}</div></div>
+        <div class="book"><div class="book-title">🎭 Genres</div><div class="book-desc">${totalGenres}</div></div>
+        <div class="book"><div class="book-title">📁 Collections</div><div class="book-desc">${totalCollections}</div></div>
+      `;
+    }
+
+    // =========================
+    // DOWNLOAD FAVORITES LIST
+    // =========================
+    function downloadFavoritesList() {
+      const favs = getFavorites();
+      const favBooks = books.filter(b => favs.includes(b.id));
+
+      if (favBooks.length === 0) {
+        toast("No Favorites", "You have no favorite books.");
+        return;
+      }
+
+      const blob = new Blob([JSON.stringify(favBooks, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "lost-favorites-books.json";
+      a.click();
+
+      URL.revokeObjectURL(url);
+      toast("Downloaded", "Favorites list downloaded.");
+    }
+
+    // =========================
+    // EXPORT / IMPORT
+    // =========================
+    function exportData() {
       const data = {
         favorites: getFavorites(),
+        pinned: getPinned(),
         ratings: getRatings(),
         collections: getCollections(),
         theme: localStorage.getItem("lost_theme") || "dark",
@@ -1257,9 +1578,10 @@ Based on the description, this book focuses on:
       a.click();
 
       URL.revokeObjectURL(url);
+      toast("Export Complete", "Your library data was exported.");
     }
 
-    function importFavorites(event) {
+    function importData(event) {
       const file = event.target.files[0];
       if (!file) return;
 
@@ -1269,6 +1591,7 @@ Based on the description, this book focuses on:
           const data = JSON.parse(reader.result);
 
           if (data.favorites) saveJSON("lost_favorites", data.favorites);
+          if (data.pinned) saveJSON("lost_pinned", data.pinned);
           if (data.ratings) saveJSON("lost_ratings", data.ratings);
           if (data.collections) saveJSON("lost_collections", data.collections);
           if (data.theme) localStorage.setItem("lost_theme", data.theme);
@@ -1276,12 +1599,26 @@ Based on the description, this book focuses on:
 
           loadTheme();
           renderAll();
-          alert("✅ Import complete!");
+          renderStats();
+          renderGenres();
+
+          toast("Import Complete", "Your data was imported successfully.");
         } catch {
-          alert("❌ Invalid JSON file.");
+          toast("Import Failed", "Invalid JSON file.");
         }
       };
+
       reader.readAsText(file);
+    }
+
+    // =========================
+    // PANELS
+    // =========================
+    function showPanel(panelId) {
+      document.querySelectorAll(".panel").forEach(p => p.classList.remove("show"));
+      document.getElementById(panelId).classList.add("show");
+      toast("Navigation", "Switched page.");
+      shelfSlideEffect();
     }
 
     // =========================
@@ -1290,10 +1627,7 @@ Based on the description, this book focuses on:
     function clearSearch() {
       document.getElementById("searchInput").value = "";
       renderAll();
-    }
-
-    function scrollToLibrary() {
-      document.getElementById("librarySection").scrollIntoView({ behavior: "smooth" });
+      toast("Search Cleared", "Showing all books.");
     }
 
     // =========================
@@ -1303,44 +1637,39 @@ Based on the description, this book focuses on:
       const color = e.target.value;
       document.documentElement.style.setProperty("--accent", color);
       localStorage.setItem("lost_accent", color);
+      toast("Accent Changed", "Theme color updated.");
     });
 
     // =========================
-    // INSTALL PWA
+    // SHELF SLIDE EFFECT
     // =========================
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById("installToast").classList.add("show");
-    });
+    function shelfSlideEffect() {
+      const items = document.querySelectorAll(".shelfItem");
 
-    function hideInstall() {
-      document.getElementById("installToast").classList.remove("show");
-    }
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add("visible");
+        });
+      }, { threshold: 0.1 });
 
-    async function installPWA() {
-      if (!deferredPrompt) return alert("Install not available yet.");
-      deferredPrompt.prompt();
-      deferredPrompt = null;
-      hideInstall();
+      items.forEach(i => obs.observe(i));
     }
 
     // =========================
-    // SERVICE WORKER (RAW GITHUB)
+    // EASTER EGG
     // =========================
-    async function registerSW() {
-      if ("serviceWorker" in navigator) {
-        try {
-          await navigator.serviceWorker.register("https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/main/lost/sw.js");
-          console.log("SW registered!");
-        } catch (e) {
-          console.warn("SW failed", e);
-        }
+    let clickCount = 0;
+    document.querySelector(".logo").addEventListener("click", () => {
+      clickCount++;
+      if (clickCount >= 5) {
+        toast("🧙 Secret Unlocked", "You found the hidden wizard mode...");
+        document.documentElement.style.setProperty("--accent2", "#00ffcc");
+        clickCount = 0;
       }
-    }
+    });
 
     // =========================
-    // CLICK OUTSIDE MODALS CLOSE
+    // MODAL CLICK OUTSIDE CLOSE
     // =========================
     document.getElementById("bookModal").addEventListener("click", (e) => {
       if (e.target.id === "bookModal") closeModal();
@@ -1355,8 +1684,56 @@ Based on the description, this book focuses on:
     });
 
     // =========================
+    // PWA INSTALL
+    // =========================
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById("installBox").classList.add("show");
+    });
+
+    function hideInstall() {
+      document.getElementById("installBox").classList.remove("show");
+    }
+
+    async function installPWA() {
+      if (!deferredPrompt) {
+        toast("Install Unavailable", "PWA install is not available yet.");
+        return;
+      }
+
+      deferredPrompt.prompt();
+      deferredPrompt = null;
+      hideInstall();
+      toast("Installed", "Thanks for installing LOST Library!");
+    }
+
+    // =========================
+    // SERVICE WORKER
+    // =========================
+    async function registerSW() {
+      if ("serviceWorker" in navigator) {
+        try {
+          await navigator.serviceWorker.register("https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/main/lost/sw.js");
+          console.log("SW registered!");
+        } catch (e) {
+          console.warn("SW failed", e);
+        }
+      }
+    }
+
+    // =========================
     // INIT
     // =========================
+    function loadTheme() {
+      const theme = localStorage.getItem("lost_theme") || "dark";
+      if (theme === "light") document.body.classList.add("light");
+      else document.body.classList.remove("light");
+
+      const accent = localStorage.getItem("lost_accent");
+      if (accent) document.documentElement.style.setProperty("--accent", accent);
+    }
+
     document.getElementById("searchInput").addEventListener("input", renderAll);
     document.getElementById("sortSelect").addEventListener("change", renderAll);
 
