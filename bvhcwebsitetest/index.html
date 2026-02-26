@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buena Vista HC - Compassionate Care Across California</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/parkertripoli-wq/bvhc/refs/heads/main/Buena%20Vista%20HC.png">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+  <style>
+    :root {
+      --primary: #006d77;
+      --primary-dark: #004d55;
+      --accent: #ff9f1c;
+      --accent-dark: #e68a00;
+      --light: #f8f9fa;
+      --dark: #2c3e50;
+      --gray: #6c757d;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+      color: var(--dark);
+      margin: 0;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Very polished custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 109, 119, 0.06);
+      border-radius: 10px;
+      margin: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+      border-radius: 10px;
+      border: 3px solid rgba(0, 109, 119, 0.06);
+      transition: all 0.3s;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+      border: 3px solid transparent;
+    }
+
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary) rgba(0, 109, 119, 0.06);
+    }
+
+    .navbar {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+      transition: all 0.4s ease;
+    }
+    .navbar.scrolled {
+      padding: 0.75rem 0;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .navbar-brand {
+      font-weight: 900;
+      font-size: 1.75rem;
+      letter-spacing: 1.5px;
+      color: white !important;
+    }
+    .unicode-small {
+      font-size: 0.78rem;
+      opacity: 0.8;
+      margin-left: 10px;
+      letter-spacing: 1.2px;
+    }
+
+    .nav-link {
+      font-weight: 600;
+      color: white !important;
+      padding: 0.6rem 1.3rem !important;
+      transition: all 0.3s ease;
+    }
+    .nav-link:hover {
+      color: var(--accent) !important;
+      transform: translateY(-2px);
+    }
+
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(rgba(0,109,119,0.82), rgba(0,109,119,0.92)),
+                  url('https://vistahayward.com/wp-content/uploads/2026/01/VistaPA-800x800-1.jpg') center/cover no-repeat fixed;
+      color: white;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 80%, rgba(255,159,28,0.18), transparent 70%);
+      opacity: 0.7;
+    }
+    .hero-content { position: relative; z-index: 2; padding: 0 15px; }
+
+    .hero h1 {
+      font-size: clamp(3.2rem, 8vw, 5.5rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      text-shadow: 0 10px 40px rgba(0,0,0,0.7);
+      animation: fadeInDown 1.3s ease-out;
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      border: none;
+      padding: 18px 50px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      border-radius: 60px;
+      box-shadow: 0 12px 40px rgba(255,159,28,0.45);
+      transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+      animation: pulseGlow 2.5s infinite;
+    }
+    .btn-accent:hover {
+      transform: translateY(-8px) scale(1.07);
+      box-shadow: 0 25px 60px rgba(255,159,28,0.55);
+      background: #ffb733;
+    }
+
+    .section { padding: 120px 0; }
+    .section-title {
+      font-weight: 900;
+      color: var(--primary);
+      font-size: 3rem;
+      position: relative;
+      display: inline-block;
+      margin-bottom: 3.5rem;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 6px;
+    }
+
+    .facility-card {
+      border: none;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.14);
+      transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      background: white;
+    }
+    .facility-card:hover {
+      transform: translateY(-22px) rotate(1.5deg);
+      box-shadow: 0 40px 90px rgba(0,109,119,0.28);
+    }
+    .facility-card img {
+      height: 280px;
+      object-fit: cover;
+      transition: transform 1s ease;
+    }
+    .facility-card:hover img { transform: scale(1.15); }
+
+    /* Custom Right-Click Menu */
+    #custom-context-menu {
+      position: fixed;
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(12px);
+      border-radius: 12px;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+      min-width: 220px;
+      z-index: 9999;
+      overflow: hidden;
+      display: none;
+      transform: scale(0.7);
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border: 1px solid rgba(0,109,119,0.15);
+    }
+    #custom-context-menu.show {
+      display: block;
+      transform: scale(1);
+      opacity: 1;
+    }
+    .context-item {
+      padding: 14px 24px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--dark);
+      font-weight: 600;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .context-item:last-child { border-bottom: none; }
+    .context-item:hover {
+      background: rgba(0,109,119,0.08);
+      color: var(--primary);
+      padding-left: 32px;
+    }
+    .context-item i { margin-right: 12px; width: 22px; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Right-Click Menu -->
+  <div id="custom-context-menu">
+    <div class="context-item" onclick="document.getElementById('home').scrollIntoView({behavior:'smooth'})"><i class="fas fa-home"></i> Home</div>
+    <div class="context-item" onclick="document.getElementById('closest').scrollIntoView({behavior:'smooth'})"><i class="fas fa-map-marker-alt"></i> Closest</div>
+    <div class="context-item" onclick="document.getElementById('locations').scrollIntoView({behavior:'smooth'})"><i class="fas fa-building"></i> Facilities</div>
+    <div class="context-item" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})"><i class="fas fa-info-circle"></i> About</div>
+    <div class="context-item" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})"><i class="fas fa-stethoscope"></i> Services</div>
+    <div class="context-item" onclick="document.getElementById('resources').scrollIntoView({behavior:'smooth'})"><i class="fas fa-book"></i> Resources</div>
+    <div class="context-item" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"><i class="fas fa-envelope"></i> Contact</div>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        Buena Vista HC <span class="unicode-small">ʙᴜᴇɴᴀ ᴠɪꜱᴛᴀ ʜᴄ</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#closest">Closest</a></li>
+          <li class="nav-item"><a class="nav-link" href="#locations">Facilities</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="#resources">Resources</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <section id="home" class="hero">
+    <div class="container hero-content">
+      <h1 class="mb-4">Compassionate Care with a Personal Touch</h1>
+      <p class="lead">Premier skilled nursing and rehabilitation centers across California — where quality meets warmth.</p>
+      <a href="#closest" class="btn btn-lg btn-accent text-white mt-5">Find Your Nearest Facility</a>
+    </div>
+  </section>
+
+  <section id="closest" class="section bg-white">
+    <div class="container">
+      <h2 class="section-title text-center">Facilities Closest to You</h2>
+      <p id="location-note" class="text-center text-muted lead mb-5">Detecting your location...</p>
+
+      <!-- Carousel with no auto-slide -->
+      <div id="carouselClosest" class="carousel slide shadow-lg" data-bs-interval="false">
+        <div class="carousel-indicators" id="closest-indicators"></div>
+        <div class="carousel-inner" id="closest-slides"></div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselClosest" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselClosest" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+      <div class="text-center mt-5">
+        <button class="btn btn-outline-primary btn-lg px-5 py-3" data-bs-toggle="modal" data-bs-target="#zipModal">Use ZIP Code</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="locations" class="section">
+    <div class="container">
+      <h2 class="section-title text-center">Our Facilities</h2>
+      <input type="text" id="search-facility" class="form-control form-control-lg mb-5 shadow-sm" placeholder="Search by name or city...">
+      <div class="row g-4" id="all-facilities"></div>
+    </div>
+  </section>
+
+  <section id="about" class="section bg-white">
+    <div class="container text-center">
+      <h2 class="section-title">About Buena Vista HC</h2>
+      <p class="lead mx-auto" style="max-width:900px;">A dedicated network of skilled nursing and post-acute care centers throughout California, committed to delivering exceptional, personalized care in comfortable, supportive environments.</p>
+    </div>
+  </section>
+
+  <section id="services" class="section">
+    <div class="container">
+      <h2 class="section-title text-center">Our Services</h2>
+      <div class="row text-center g-4">
+        <div class="col-md-3 animate__animated animate__fadeInLeft"><i class="fas fa-user-nurse fa-4x text-primary mb-4"></i><h5>Skilled Nursing</h5></div>
+        <div class="col-md-3 animate__animated animate__fadeInUp"><i class="fas fa-dumbbell fa-4x text-primary mb-4"></i><h5>Rehabilitation Therapy</h5></div>
+        <div class="col-md-3 animate__animated animate__fadeInDown"><i class="fas fa-home fa-4x text-primary mb-4"></i><h5>Long-Term Care</h5></div>
+        <div class="col-md-3 animate__animated animate__fadeInRight"><i class="fas fa-heart fa-4x text-primary mb-4"></i><h5>Personalized Attention</h5></div>
+      </div>
+      <p class="text-center mt-5 text-muted fs-5">Specific offerings vary by location — explore each facility's website for complete details.</p>
+    </div>
+  </section>
+
+  <section id="resources" class="section bg-white">
+    <div class="container">
+      <h2 class="section-title text-center">Resources</h2>
+      <div class="accordion shadow-sm" id="faq">
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#q1">How do I schedule a tour?</button></h2>
+          <div id="q1" class="accordion-collapse collapse show"><div class="accordion-body">Click "Visit Site" on any facility and use their contact or tour request form.</div></div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#q2">Do you accept Medicare/Medicaid?</button></h2>
+          <div id="q2" class="accordion-collapse collapse"><div class="accordion-body">Yes — the majority of our centers are Medicare-certified. Check the specific facility for insurance details.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="container text-center">
+      <h2 class="section-title">Get in Touch</h2>
+      <p class="lead">Select a facility from above and visit their website for direct contact, tours, admissions, or any questions. Each center manages its own communications.</p>
+    </div>
+  </section>
+
+  <footer class="text-center py-5 bg-dark text-white">
+    <div class="container">
+      <p class="mb-0">Buena Vista HC – California Skilled Nursing & Rehabilitation</p>
+    </div>
+  </footer>
+
+  <!-- ZIP Modal -->
+  <div class="modal fade" id="zipModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold fs-4">Enter Your ZIP Code</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body pt-2">
+          <input type="text" id="zipInput" class="form-control form-control-lg rounded-pill text-center" placeholder="92101" maxlength="5">
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-secondary px-5 py-3 rounded-pill" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-accent text-white px-5 py-3 rounded-pill" onclick="updateFromZip()">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Facilities data
+    const facilities = [
+      { name: "Double Tree Post Acute", url: "https://doubletreepa.com/", address: "7400 24th Street, Sacramento, CA", phone: "916-422-4825", desc: "Short-term rehabilitation and skilled nursing with compassionate, family-like care.", lat: 38.5816, lon: -121.4944, img: "https://pebblecdn.sfo3.digitaloceanspaces.com/sites/123/2019/05/07182109/yolo-2000x1000-11.jpg" },
+      { name: "Vista Post-Acute", url: "https://vistahayward.com/", address: "3269 D Street, Hayward, CA 94541", desc: "Exceptional skilled nursing with stunning Bay views and a peaceful hillside setting.", lat: 37.6688, lon: -122.0808, img: "https://vistahayward.com/wp-content/uploads/2026/01/VistaPA-800x800-1.jpg" },
+      { name: "Casa Coloma Health Care Center", url: "https://casacoloma.com/", address: "10410 Coloma Road, Rancho Cordova, CA 95670", phone: "916-363-4843", desc: "Compassionate, respectful, and innovative short-term rehab and skilled nursing.", lat: 38.5891, lon: -121.3027, img: "https://pebblecdn.sfo3.digitaloceanspaces.com/sites/21/2021/04/13101352/yolo-2000x1000-43.jpg" },
+      { name: "River Bend Nursing Center", url: "https://riverbendnursingcenter.com/", address: "2215 Oakmont Way, West Sacramento, CA 95691", phone: "916-371-1890", desc: "24-hour skilled nursing and sub-acute care to support smooth hospital-to-home transitions.", lat: 38.5805, lon: -121.5302, img: "https://s3.amazonaws.com/gazelle.cdn.yolocare.com/sites/470/2019/05/yolo-2000x1000-20.jpg" },
+      { name: "SoCal Post-Acute Care", url: "https://socalpostacutecare.com/", address: "7931 Sorensen Ave, Whittier, CA 90606", phone: "562-698-0451", desc: "59-bed Medicare-certified facility with 5-star quality ratings.", lat: 33.9825, lon: -118.0410, img: "https://pebblecdn.sfo3.digitaloceanspaces.com/sites/36/2021/05/27164521/yolo-2000x1000-52.jpg" },
+      { name: "Riverside Village Healthcare Center", url: "https://riversidevillagehealthcare.com/", address: "17040 Arnold Drive, Riverside, CA 92518", phone: "951-238-6803", desc: "5-star rated skilled nursing, rehabilitation, and long-term care.", lat: 33.9533, lon: -117.3961, img: "https://riversidevillagehealthcare.com/wp-content/uploads/2020/06/yolo-730x350-100.jpg" },
+      { name: "Haven Post Acute", url: "https://havenpostacute.com/", address: "1311 East Date St., San Bernardino, CA 92404", phone: "909-882-3316", desc: "99-bed Medicare-certified skilled nursing and rehabilitation services.", lat: 34.1158, lon: -117.3024, img: "https://pebblecdn.sfo3.digitaloceanspaces.com/sites/139/2023/05/22205354/yolo-2000x1000-80.jpg" },
+      { name: "Forest Hill Post Acute", url: "https://foresthillpostacute.com/", address: "551 Gibson Ave, Pacific Grove, CA 93950", phone: "831-646-6495", desc: "Short-term rehabilitation and long-term care in a peaceful setting.", lat: 36.6178, lon: -121.9167, img: "https://pebblecdn.sfo3.digitaloceanspaces.com/sites/110/2025/04/28141721/yolo-950x450-26.jpg" },
+      { name: "Ocean View Post Acute", url: "https://oceanviewpa.com/", address: "200 Lighthouse Avenue, Pacific Grove, CA 93950", phone: "831-375-2695", desc: "51-bed skilled nursing facility with ocean views at Lover’s Point.", lat: 36.6178, lon: -121.9167, img: "https://oceanviewpa.com/wp-content/uploads/2025/04/yolo-1080x450-82.jpg" },
+      { name: "Katherine Healthcare", url: "https://katherinehc.com/", address: "315 Alameda Ave, Salinas, CA 93901", phone: "831-424-1878", desc: "Trusted skilled nursing and rehabilitation since 1931.", lat: 36.6777, lon: -121.6555, img: "https://pebblecdn.sfo3.digitaloceanspaces.com/sites/177/2024/03/08235703/yolo-700x800-14.jpg" },
+      { name: "Springs Road Healthcare", url: "https://springsroadhc.com/", address: "1527 Springs Rd, Vallejo, CA 94591", phone: "707-643-2793", desc: "5-star rated skilled nursing and rehabilitation services.", lat: 38.1041, lon: -122.2566, img: "https://pebblecdn.sfo3.digitaloceanspaces.com/sites/119/2023/08/31161348/yolo-800x800-79.jpg" },
+      { name: "Heartwood Avenue Healthcare", url: "https://heartwoodavehc.com/", address: "1044 Heartwood Ave, Vallejo, CA 94591", phone: "707-643-2267", desc: "60-bed Medicare-certified skilled nursing facility.", lat: 38.1041, lon: -122.2566, img: "https://pebblecdn.sfo3.digitaloceanspaces.com/sites/120/2023/06/30081126/yolo-250x250-24.jpg" }
+    ];
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+      if (!lat1 || !lon1 || !lat2 || !lon2) return null;
+      const R = 3958.8;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    async function getUserLocation() {
+      return new Promise(resolve => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            pos => resolve({lat: pos.coords.latitude, lon: pos.coords.longitude, note: 'your location'}),
+            () => fallbackIP(resolve)
+          );
+        } else {
+          fallbackIP(resolve);
+        }
+      });
+    }
+
+    async function fallbackIP(resolve) {
+      try {
+        const res = await fetch('https://ip-api.com/json/');
+        const data = await res.json();
+        resolve({lat: data.lat, lon: data.lon, note: 'approximate area'});
+      } catch {
+        resolve({lat: null, lon: null, note: 'location unavailable'});
+      }
+    }
+
+    function render(loc, sorted) {
+      const noteEl = document.getElementById('location-note');
+      if (noteEl) noteEl.textContent = `Showing facilities near you (${loc.note})`;
+
+      // Carousel
+      const slidesEl = document.getElementById('closest-slides');
+      const indEl = document.getElementById('closest-indicators');
+      if (slidesEl && indEl) {
+        slidesEl.innerHTML = '';
+        indEl.innerHTML = '';
+
+        sorted.slice(0,5).forEach((f,i) => {
+          const dist = getDistance(loc.lat, loc.lon, f.lat, f.lon);
+          indEl.innerHTML += `<button type="button" data-bs-target="#carouselClosest" data-bs-slide-to="${i}" class="${i===0?'active':''}" aria-label="Slide ${i+1}"></button>`;
+          slidesEl.innerHTML += `
+            <div class="carousel-item ${i===0?'active':''}">
+              <div class="card facility-card shadow-lg mx-auto" style="max-width:520px;">
+                <img src="${f.img}" class="card-img-top" alt="${f.name}" onerror="this.src='https://via.placeholder.com/520x280?text=${encodeURIComponent(f.name)}';">
+                <div class="card-body text-center p-4">
+                  <h4 class="fw-bold mb-3">${f.name}</h4>
+                  <p class="text-muted mb-3">${f.desc}</p>
+                  <p class="mb-2"><i class="fas fa-map-marker-alt me-2"></i>${f.address}</p>
+                  <p class="distance mb-4">${dist ? `≈ ${Math.round(dist)} miles` : 'Distance unavailable'}</p>
+                  <a href="${f.url}" target="_blank" class="btn btn-accent text-white w-100 py-3">Visit Facility Site</a>
+                </div>
+              </div>
+            </div>`;
+        });
+      }
+
+      // Grid
+      const grid = document.getElementById('all-facilities');
+      if (grid) {
+        grid.innerHTML = '';
+        sorted.forEach(f => {
+          const dist = getDistance(loc.lat, loc.lon, f.lat, f.lon);
+          grid.innerHTML += `
+            <div class="col-md-6 col-lg-4">
+              <div class="card facility-card h-100">
+                <img src="${f.img}" class="card-img-top" alt="${f.name}" onerror="this.src='https://via.placeholder.com/520x280?text=${encodeURIComponent(f.name)}';">
+                <div class="card-body p-4">
+                  <h5 class="card-title fw-bold">${f.name}</h5>
+                  <p class="card-text text-muted small mb-3">${f.desc}</p>
+                  <p class="mb-2"><i class="fas fa-map-marker-alt me-2 text-primary"></i>${f.address}</p>
+                  <p class="distance">${dist ? `≈ ${Math.round(dist)} miles` : 'Distance unavailable'}</p>
+                </div>
+                <div class="card-footer bg-white border-0 p-4 pt-0 text-center">
+                  <a href="${f.url}" target="_blank" class="btn btn-accent text-white w-100 py-3">View Facility</a>
+                </div>
+              </div>
+            </div>`;
+        });
+      }
+    }
+
+    async function load() {
+      try {
+        const loc = await getUserLocation();
+        const sorted = [...facilities].sort((a,b) => {
+          const da = getDistance(loc.lat, loc.lon, a.lat, a.lon);
+          const db = getDistance(loc.lat, loc.lon, b.lat, b.lon);
+          return (da ?? Infinity) - (db ?? Infinity);
+        });
+        render(loc, sorted);
+
+        // Search filter
+        const searchInput = document.getElementById('search-facility');
+        if (searchInput) {
+          searchInput.addEventListener('input', e => {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll('#all-facilities > div').forEach(el => {
+              el.style.display = el.textContent.toLowerCase().includes(term) ? '' : 'none';
+            });
+          });
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+          document.querySelector('.navbar').classList.toggle('scrolled', window.scrollY > 100);
+        });
+      } catch (err) {
+        console.error("Error loading facilities:", err);
+        const noteEl = document.getElementById('location-note');
+        if (noteEl) noteEl.textContent = "Location unavailable — showing all facilities.";
+        render({lat: null, lon: null, note: 'location unavailable'}, [...facilities]);
+      }
+    }
+
+    async function updateFromZip() {
+      const zip = document.getElementById('zipInput')?.value?.trim();
+      if (!zip || zip.length !== 5 || !/^\d{5}$/.test(zip)) {
+        alert('Please enter a valid 5-digit ZIP code');
+        return;
+      }
+      try {
+        const res = await fetch(`https://api.zippopotam.us/us/${zip}`);
+        if (!res.ok) throw new Error('Invalid ZIP');
+        const data = await res.json();
+        const loc = {lat: parseFloat(data.places[0].latitude), lon: parseFloat(data.places[0].longitude), note: `ZIP ${zip}`};
+        const sorted = [...facilities].sort((a,b) => {
+          const da = getDistance(loc.lat, loc.lon, a.lat, a.lon);
+          const db = getDistance(loc.lat, loc.lon, b.lat, b.lon);
+          return (da ?? Infinity) - (db ?? Infinity);
+        });
+        render(loc, sorted);
+        const modal = bootstrap.Modal.getInstance(document.getElementById('zipModal'));
+        if (modal) modal.hide();
+      } catch (err) {
+        console.error(err);
+        alert('Could not locate that ZIP code — please try another');
+      }
+    }
+
+    // Custom Right-Click Menu
+    const contextMenu = document.getElementById('custom-context-menu');
+    document.addEventListener('contextmenu', e => {
+      e.preventDefault();
+      contextMenu.style.left = e.pageX + 'px';
+      contextMenu.style.top = e.pageY + 'px';
+      contextMenu.classList.add('show');
+    });
+    document.addEventListener('click', () => {
+      contextMenu.classList.remove('show');
+    });
+
+    // Start when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      load();
+    });
+  </script>
+</body>
+</html>
