@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLAY WITH PARKER & EASTON • NEON MERCH HQ</title>
+    
+    <!-- YOUR OFFICIAL NEON FAVICON -->
+    <link rel="icon" type="image/png" href="https://imgproxy.fourthwall.com/S8ofPKqoBzeUL7Y8r0GbVk6ydvEn8mVGLO3oleTQrZg/w:320/dpr:2/sm:1/enc/pRLGZuraHyorzJwk/AsMAtADlHB7uQt7S/NjRbZvVU-QNrgoqT/aODiJI00sRNznOkg/iqN5DG88tbvJ5NkS/AK7kyxppmedadx92/SMHxK9J-FXgfNRsF/ubChMivwQgf5IJZT/vjribpsAEESoOYNx/pJ1BiCOpLm_moPF0/OhBhKo06tK2NdWiq/c0JOmOgIfLoekGHU/ulxa_yl3yYcVNdUR/R2mbFGHlmeTlQtMT/A0WjhQ2R_aLALFTO/W3cpchv1uzb02_ZX">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        :root {
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff00aa;
+        }
+        
+        body {
+            font-family: 'Press Start 2P', system-ui;
+            background: #000;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .neon-cyan { 
+            text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan);
+        }
+        .neon-pink { 
+            text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink), 0 0 40px var(--neon-pink);
+        }
+        
+        .product-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 3px solid #111;
+        }
+        .product-card:hover {
+            transform: scale(1.04) rotate(2deg);
+            box-shadow: 0 0 40px var(--neon-cyan), 0 0 80px var(--neon-pink);
+            border-color: var(--neon-cyan);
+        }
+        
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(var(--neon-cyan), var(--neon-pink));
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+        
+        .hero-glow {
+            text-shadow: 0 0 30px #fff, 0 0 60px var(--neon-cyan), 0 0 100px var(--neon-pink);
+        }
+        
+        .search-input {
+            background: #111;
+            border: 3px solid var(--neon-cyan);
+        }
+        .search-input:focus {
+            box-shadow: 0 0 30px var(--neon-cyan);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- NAVBAR -->
+    <nav class="bg-black/90 border-b-4 border-cyan-400 sticky top-0 z-50 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <i class="fa-solid fa-gamepad text-4xl neon-cyan"></i>
+                <div>
+                    <h1 class="text-3xl font-bold tracking-[4px] neon-cyan">PARKER & EASTON</h1>
+                    <p class="text-xs text-pink-400 tracking-widest">NEON MERCH HQ</p>
+                </div>
+            </div>
+            
+            <div class="flex gap-8 text-sm uppercase tracking-widest font-bold">
+                <a onclick="showShop()" class="cursor-pointer hover:text-cyan-400 neon-cyan">SHOP</a>
+                <a onclick="openCart()" class="cursor-pointer hover:text-cyan-400">CART</a>
+                <a onclick="openDonate()" class="cursor-pointer hover:text-cyan-400">DONATE</a>
+            </div>
+            
+            <button onclick="openCart()" 
+                    class="bg-cyan-400 text-black px-7 py-3 font-bold flex items-center gap-3 text-lg border-4 border-black hover:bg-white transition">
+                <i class="fa-solid fa-cart-shopping"></i>
+                CART
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="relative h-screen flex items-center justify-center overflow-hidden bg-[radial-gradient(circle,#00f3ff15_0%,transparent_70%)]">
+        <div class="text-center z-10 px-6">
+            <h2 class="text-6xl md:text-8xl font-bold tracking-[-4px] leading-none hero-glow neon-cyan">
+                PLAY WITH<br>PARKER & EASTON
+            </h2>
+            <p class="text-2xl text-pink-400 mt-6 mb-12 tracking-widest">LIVE FOURTHWALL MERCH</p>
+            <button onclick="showShop()" 
+                    class="bg-black border-4 border-pink-400 text-pink-400 px-14 py-5 text-2xl font-bold hover:bg-pink-400 hover:text-black transition">
+                BROWSE MERCH →
+            </button>
+        </div>
+    </header>
+
+    <!-- SHOP SECTION -->
+    <section id="shop-section" class="max-w-7xl mx-auto px-6 py-16">
+        <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12 border-b border-pink-400 pb-6">
+            <div>
+                <h3 class="text-4xl font-bold tracking-widest neon-cyan">ALL PRODUCTS</h3>
+                <p id="product-count" class="text-pink-400">Loading live from Fourthwall...</p>
+            </div>
+            
+            <div class="flex gap-4 w-full md:w-auto">
+                <input id="search-input" 
+                       type="text" 
+                       placeholder="SEARCH..." 
+                       class="search-input w-full md:w-80 px-6 py-4 text-base focus:outline-none"
+                       onkeyup="filterProducts()">
+                
+                <select id="sort-select" onchange="filterProducts()" 
+                        class="bg-black border-3 border-pink-400 px-6 py-4 text-sm focus:outline-none">
+                    <option value="default">NEWEST</option>
+                    <option value="price-low">PRICE LOW-HIGH</option>
+                    <option value="price-high">PRICE HIGH-LOW</option>
+                    <option value="name">A-Z</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- LOADING -->
+        <div id="loading" class="hidden text-center py-20">
+            <i class="fa-solid fa-spinner fa-spin text-5xl neon-cyan"></i>
+            <p class="mt-6 text-pink-400">Pulling live stock from Fourthwall...</p>
+        </div>
+
+        <!-- PRODUCTS GRID -->
+        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <!-- JS populated - smaller & cleaner -->
+        </div>
+    </section>
+
+    <!-- SOCIAL -->
+    <section class="bg-black border-t-4 border-b-4 border-pink-400 py-16">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h3 class="text-3xl font-bold neon-pink mb-10">CONNECT WITH US</h3>
+            <div class="flex flex-wrap justify-center gap-12 text-6xl">
+                <a href="https://youtube.com/channel/UCBIKCP3co5024u1GtzvDgNw?sub_confirmation=1" target="_blank" class="hover:scale-110 transition">📺</a>
+                <a href="https://rumble.com/user/PlayWithParkerAndEaston" target="_blank" class="hover:scale-110 transition">⚡</a>
+                <a href="https://discord.gg/J8tYxCFGhR" target="_blank" class="hover:scale-110 transition">💬</a>
+                <a href="https://x.com/huckenbacher" target="_blank" class="hover:scale-110 transition">𝕏</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-black py-10 text-center text-xs text-zinc-400">
+        Live synced with your Fourthwall shop • Clean preview popups • Fan-made neon frontend
+    </footer>
+
+    <script>
+        const SHOP_DOMAIN = "https://play-with-parker-easton-shop.fourthwall.com";
+        let allProducts = [];
+        let filteredProducts = [];
+
+        // IMPROVED PREVIEW WINDOW - clean & centered
+        function openPreview(url, title = "SHOP PREVIEW") {
+            const w = 1280;
+            const h = 860;
+            const left = (screen.width - w) / 2;
+            const top = (screen.height - h) / 2 - 40;
+            
+            const popup = window.open(
+                url,
+                "_blank",
+                `width=${w},height=${h},left=${left},top=${top},toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=yes,status=no`
+            );
+            
+            if (!popup) alert("Popup blocked! Click the popup icon in your address bar and allow popups for this site.");
+            else popup.focus();
+        }
+
+        function openCart() { openPreview(`${SHOP_DOMAIN}/cart`, "YOUR CART"); }
+        function openDonate() { openPreview(`${SHOP_DOMAIN}/donate`, "DONATE"); }
+
+        // BETTER FETCH - direct + error handling + confirmed single page
+        async function fetchJson(url) {
+            try {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error("HTTP error");
+                return await res.json();
+            } catch (e) {
+                console.error("Fetch failed:", e);
+                return { products: [] };
+            }
+        }
+
+        async function loadAllProducts() {
+            const grid = document.getElementById("products-grid");
+            const loading = document.getElementById("loading");
+            const countEl = document.getElementById("product-count");
+            
+            loading.classList.remove("hidden");
+            grid.innerHTML = "";
+            allProducts = [];
+
+            let page = 1;
+            while (true) {
+                const endpoint = page === 1 
+                    ? `${SHOP_DOMAIN}/collections/all.json` 
+                    : `${SHOP_DOMAIN}/collections/all/${page}.json`;
+                
+                const data = await fetchJson(endpoint);
+                if (!data.products || data.products.length === 0) break;
+                
+                allProducts = [...allProducts, ...data.products];
+                page++;
+            }
+
+            loading.classList.add("hidden");
+            filteredProducts = [...allProducts];
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById("products-grid");
+            grid.innerHTML = "";
+
+            filteredProducts.forEach(product => {
+                // FIXED PRICE LOGIC - uses official product.price string (confirmed from FW JSON)
+                let price = "—";
+                if (product.price) {
+                    price = `$${parseFloat(product.price).toFixed(2)}`;
+                } else if (product.variants && product.variants.length > 0) {
+                    const cents = product.variants[0].price?.cents || 0;
+                    price = `$${(cents / 100).toFixed(2)}`;
+                }
+
+                const cardHTML = `
+                    <div onclick="openPreview('${SHOP_DOMAIN}${product.url}', '${product.title}')" 
+                         class="product-card bg-zinc-900 rounded-2xl overflow-hidden cursor-pointer group">
+                        <div class="aspect-square bg-black relative">
+                            <img src="${product.image || 'https://via.placeholder.com/400?text=No+Image'}" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                                 alt="${product.title}">
+                            ${!product.available ? `
+                            <div class="absolute top-4 right-4 bg-red-600 text-[10px] px-4 py-1 font-bold tracking-widest">SOLD OUT</div>` : ''}
+                        </div>
+                        <div class="p-5">
+                            <h4 class="font-bold text-base leading-tight line-clamp-2 h-10">${product.title}</h4>
+                            <div class="mt-4 flex justify-between items-center">
+                                <div class="text-2xl font-bold neon-pink">${price}</div>
+                                <div class="text-[10px] px-4 py-1 bg-black border border-cyan-400 text-cyan-400 group-hover:bg-cyan-400 group-hover:text-black transition">PREVIEW</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+
+            document.getElementById("product-count").innerHTML = 
+                `Showing <span class="neon-pink">${filteredProducts.length}</span> of <span class="neon-cyan">${allProducts.length}</span> live items`;
+        }
+
+        function filterProducts() {
+            const term = document.getElementById("search-input").value.toLowerCase().trim();
+            const sort = document.getElementById("sort-select").value;
+
+            let results = allProducts.filter(p => 
+                p.title.toLowerCase().includes(term)
+            );
+
+            if (sort === "price-low") results.sort((a, b) => parseFloat(a.price || 0) - parseFloat(b.price || 0));
+            if (sort === "price-high") results.sort((a, b) => parseFloat(b.price || 0) - parseFloat(a.price || 0));
+            if (sort === "name") results.sort((a, b) => a.title.localeCompare(b.title));
+
+            filteredProducts = results;
+            renderProducts();
+        }
+
+        function showShop() {
+            document.getElementById("shop-section").scrollIntoView({ behavior: "smooth" });
+        }
+
+        // START
+        window.onload = () => {
+            loadAllProducts();
+        };
+
+        // Keyboard search
+        document.addEventListener("keydown", e => {
+            if (e.key === "/" && document.activeElement.tagName !== "INPUT") {
+                e.preventDefault();
+                document.getElementById("search-input").focus();
+            }
+        });
+    </script>
+</body>
+</html>
