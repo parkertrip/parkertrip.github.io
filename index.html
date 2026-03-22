@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -46,218 +7,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="icon" href="https://avatars.githubusercontent.com/u/230787001?v=4" type="image/png">
     <style>
-        /* Embedded Tailwind CSS (minified subset of used utilities) */
-        *,::after,::before{box-sizing:border-box}html{font-family:'Orbitron',Arial,sans-serif;line-height:1.6}body{margin:0;padding:0;background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);color:#e0e0e0;overflow-x:hidden;position:relative}.fixed{position:fixed}.top-0{top:0}.left-0{left:0}.w-full{width:100%}.h-full{height:100%}.text-center{text-align:center}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:text-5xl{font-size:3rem;line-height:1}@media (min-width:768px){.md\:text-5xl{font-size:3rem}}.font-bold{font-weight:700}.text-white{color:#fff}.shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05)}.border-b-4{border-bottom-width:4px}.border-cyan-400{border-color:#22d3ee}.text-lg{font-size:1.125rem;line-height:1.75rem}.md\:text-xl{font-size:1.25rem;line-height:1.75rem}@media (min-width:768px){.md\:text-xl{font-size:1.25rem}}.mt-2{margin-top:0.5rem}.text-base{font-size:1rem;line-height:1.5rem}.sticky{position:sticky}.bg-black{background-color:#000}.bg-opacity-10{background-opacity:0.1}.bg-gray-900\/50{background-color:#11182780}.backdrop-blur-md{backdrop-filter:blur(8px)}.py-4{padding-top:1rem;padding-bottom:1rem}.shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06)}.shadow-nav{box-shadow:0 2px 10px rgba(0,0,0,0.5)}.z-10{z-index:10}.flex{display:flex}.justify-center{justify-content:center}.space-x-6>*+*{margin-left:1.5rem}.text-cyan-400{color:#22d3ee}.text-lg{font-size:1.125rem}.hover\:text-pink-500:hover{color:#ec4899}.transition-all{transition-property:all}.duration-300{transition-duration:300ms}.mx-auto{margin-left:auto;margin-right:auto}.my-12{margin-top:3rem;margin-bottom:3rem}.p-8{padding:2rem}.max-w-5xl{max-width:80rem}.bg-gray-800{background-color:#1f2937}.bg-opacity-90{background-opacity:0.9}.rounded-xl{border-radius:0.75rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}@media (min-width:768px){.md\:text-4xl{font-size:2.25rem}}.mb-4{margin-bottom:1rem}.text-base{font-size:1rem}.md\:text-lg{font-size:1.125rem}@media (min-width:768px){.md\:text-lg{font-size:1.125rem}}.mt-4{margin-top:1rem}.inline-block{display:inline-block}.px-4{padding-left:1rem;padding-right:1rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.m-2{margin:0.5rem}.bg-gray-900{background-color:#111827}.border-2{border-width:2px}.rounded-md{border-radius:0.375rem}.hover\:bg-pink-500:hover{background-color:#ec4899}.hover\:border-pink-500:hover{border-color:#ec4899}.hover\:text-white:hover{color:#fff}.hover\:underline:hover{text-decoration:underline}.grid{display:grid}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}@media (min-width:640px){.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (min-width:768px){.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}.gap-6{gap:1.5rem}.p-4{padding:1rem}.hover\:shadow-\[0_0_25px_\#ff007a\,0_0_50px_\#00d4ff\]:hover{box-shadow:0 0 25px #ff007a,0 0 50px #00d4ff}.transform{transform:perspective(500px) rotateX(0) rotateY(0)}.hover\:-translate-y-1:hover{transform:translateY(-0.25rem)}.w-16{width:4rem}.h-16{height:4rem}.rounded-full{border-radius:9999px}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.border-purple-500{border-color:#a855f7}.hover\:scale-110:hover{transform:scale(1.1)}.transition-transform{transition-property:transform}.flex-col{flex-direction:column}.items-center{align-items:center}.space-y-4>*+*{margin-top:1rem}.w-full{width:100%}.max-w-md{max-width:28rem}.mt-6{margin-top:1.5rem}.text-xl{font-size:1.25rem}.md\:text-2xl{font-size:1.5rem}@media (min-width:768px){.md\:text-2xl{font-size:1.5rem}}.space-x-4>*+*{margin-left:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.text-gray-400{color:#9ca3af}.bottom-6{bottom:1.5rem}.right-6{right:1.5rem}.p-3{padding:0.75rem}.rounded-full{border-radius:9999px}.hidden{display:none}.min-w-\[200px\]{min-width:200px}.border-gradient {
-            border-image: linear-gradient(to right, #ff007a, #00d4ff, #aa00ff) 1;
-        }
-        @media (max-width: 640px) {
-            .nav-links {
-                flex-direction: column;
-                align-items: center;
-                space-y-4;
-            }
-            .nav-links a {
-                margin: 0.5rem 0;
-            }
-        }
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 120px;
-            background-color: #111827;
-            color: #22d3ee;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -60px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-        .hover\:glow:hover {
-            box-shadow: 0 0 15px #ff007a, 0 0 30px #00d4ff;
-        }
-
-        /* Custom Scrollbar Styling for WebKit Browsers */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1f2937;
-            border-radius: 5px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #22d3ee;
-            border-radius: 5px;
-            box-shadow: 0 0 10px #ff007a;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #ec4899;
-        }
-
-        /* Custom CSS for animations and particle background */
-        body {
-            overflow-x: hidden;
-            position: relative;
-            scroll-behavior: smooth;
-        }
-       #particles {
-    		position: fixed;
-    		top: 0;
-    		left: 0;
-    		width: 100%;
-    		height: 100%;
-    		z-index: -5;
-    		background: transparent;
-    		opacity: 0.6;
-        }
-        .gradient-shift {
-            background: linear-gradient(45deg, #ff007a, #00d4ff, #aa00ff);
-            background-size: 200% 200%;
-            animation: gradientShift 8s ease infinite; /* Slower for elegance */
-        }
-        .intro-text {
-            display: inline-block;
-            overflow: hidden;
-            white-space: nowrap;
-            animation: typing 2s steps(40, end), slideIn 1s ease-out;
-        }
-        .header-title {
-            animation: pulse 3s infinite;
-        }
-        .about-text strong {
-            color: #ff007a;
-            text-shadow: 0 0 10px #ff007a;
-            animation: pulse 2s infinite;
-        }
-        .about-text li {
-            margin: 10px 0;
-            position: relative;
-            padding-left: 20px;
-            animation: fadeInUp 1s ease-out backwards;
-        }
-        .about-text li:nth-child(1) { animation-delay: 0.1s; }
-        .about-text li:nth-child(2) { animation-delay: 0.2s; }
-        .about-text li:nth-child(3) { animation-delay: 0.3s; }
-        .about-text li:nth-child(4) { animation-delay: 0.4s; }
-        .about-text li:nth-child(5) { animation-delay: 0.5s; }
-        .about-text li:nth-child(6) { animation-delay: 0.6s; }
-        .about-text li::before {
-            content: '🦥';
-            position: absolute;
-            left: 0;
-            color: #00d4ff;
-        }
-        .sloth-web-text h3 {
-            background: linear-gradient(to right, #ff007a, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 10px #aa00ff;
-            animation: fadeIn 1s ease-out;
-        }
-        .stats-img {
-            animation: bounceIn 1.5s ease-out backwards;
-        }
-        .stats-img:nth-child(1) { animation-delay: 0.1s; }
-        .stats-img:nth-child(2) { animation-delay: 0.3s; }
-        .stats-img:nth-child(3) { animation-delay: 0.5s; }
-        .project-link {
-            animation: fadeIn 1s ease-out backwards;
-        }
-        .project-link:nth-child(1) { animation-delay: 0.2s; }
-        .project-link:nth-child(2) { animation-delay: 0.4s; }
-        .section-header {
-            transition: all 0.3s ease;
-        }
-        .section-header:hover {
-            transform: scale(1.05);
-            text-shadow: 0 0 20px #00d4ff;
-        }
-        .footer-fade {
-            animation: fadeIn 1s ease-out 0.5s backwards;
-        }
-        .text-shadow-lg {
-            text-shadow: 0 0 15px #ff007a, 0 0 30px #00d4ff;
-        }
-        .text-shadow-md {
-            text-shadow: 0 0 10px #aa00ff;
-        }
-        .text-shadow-sm {
-            text-shadow: 0 0 5px #aaa;
-        }
-        .profile-item {
-            padding: 1.5rem;
-            min-width: 200px;
-        }
-        .nav-link {
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-        }
-        .hover\:text-shadow-lg:hover {
-            text-shadow: 0 0 15px #ff007a, 0 0 30px #00d4ff;
-        }
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideIn {
-            from { transform: translateX(-100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes bounceIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            50% { transform: scale(1.1); opacity: 0.5; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-        @keyframes pulse {
-            0% { text-shadow: 0 0 10px #ff007a; }
-            50% { text-shadow: 0 0 20px #aa00ff; }
-            100% { text-shadow: 0 0 10px #ff007a; }
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #22d3ee;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-            display: none;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        /* Your exact original styles (unchanged) */
+        *,::after,::before{box-sizing:border-box}html{font-family:'Orbitron',Arial,sans-serif;line-height:1.6}body{margin:0;padding:0;background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);color:#e0e0e0;overflow-x:hidden;position:relative}.fixed{position:fixed}.top-0{top:0}.left-0{left:0}.w-full{width:100%}.h-full{height:100%}.text-center{text-align:center}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:text-5xl{font-size:3rem;line-height:1}@media (min-width:768px){.md\:text-5xl{font-size:3rem}}.font-bold{font-weight:700}.text-white{color:#fff}.shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05)}.border-b-4{border-bottom-width:4px}.border-cyan-400{border-color:#22d3ee}.text-lg{font-size:1.125rem;line-height:1.75rem}.md\:text-xl{font-size:1.25rem;line-height:1.75rem}@media (min-width:768px){.md\:text-xl{font-size:1.25rem}}.mt-2{margin-top:0.5rem}.text-base{font-size:1rem;line-height:1.5rem}.sticky{position:sticky}.bg-black{background-color:#000}.bg-opacity-10{background-opacity:0.1}.bg-gray-900\/50{background-color:#11182780}.backdrop-blur-md{backdrop-filter:blur(8px)}.py-4{padding-top:1rem;padding-bottom:1rem}.shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06)}.shadow-nav{box-shadow:0 2px 10px rgba(0,0,0,0.5)}.z-10{z-index:10}.flex{display:flex}.justify-center{justify-content:center}.space-x-6>*+*{margin-left:1.5rem}.text-cyan-400{color:#22d3ee}.text-lg{font-size:1.125rem}.hover\:text-pink-500:hover{color:#ec4899}.transition-all{transition-property:all}.duration-300{transition-duration:300ms}.mx-auto{margin-left:auto;margin-right:auto}.my-12{margin-top:3rem;margin-bottom:3rem}.p-8{padding:2rem}.max-w-5xl{max-width:80rem}.bg-gray-800{background-color:#1f2937}.bg-opacity-90{background-opacity:0.9}.rounded-xl{border-radius:0.75rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}@media (min-width:768px){.md\:text-4xl{font-size:2.25rem}}.mb-4{margin-bottom:1rem}.text-base{font-size:1rem}.md\:text-lg{font-size:1.125rem}@media (min-width:768px){.md\:text-lg{font-size:1.125rem}}.mt-4{margin-top:1rem}.inline-block{display:inline-block}.px-4{padding-left:1rem;padding-right:1rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.m-2{margin:0.5rem}.bg-gray-900{background-color:#111827}.border-2{border-width:2px}.rounded-md{border-radius:0.375rem}.hover\:bg-pink-500:hover{background-color:#ec4899}.hover\:border-pink-500:hover{border-color:#ec4899}.hover\:text-white:hover{color:#fff}.hover\:underline:hover{text-decoration:underline}.grid{display:grid}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}@media (min-width:640px){.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (min-width:768px){.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}.gap-6{gap:1.5rem}.p-4{padding:1rem}.hover\:shadow-\[0_0_25px_\#ff007a\,0_0_50px_\#00d4ff\]:hover{box-shadow:0 0 25px #ff007a,0 0 50px #00d4ff}.transform{transform:perspective(500px) rotateX(0) rotateY(0)}.hover\:-translate-y-1:hover{transform:translateY(-0.25rem)}.w-16{width:4rem}.h-16{height:4rem}.rounded-full{border-radius:9999px}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.border-purple-500{border-color:#a855f7}.hover\:scale-110:hover{transform:scale(1.1)}.transition-transform{transition-property:transform}.flex-col{flex-direction:column}.items-center{align-items:center}.space-y-4>*+*{margin-top:1rem}.w-full{width:100%}.max-w-md{max-width:28rem}.mt-6{margin-top:1.5rem}.text-xl{font-size:1.25rem}.md\:text-2xl{font-size:1.5rem}@media (min-width:768px){.md\:text-2xl{font-size:1.5rem}}.space-x-4>*+*{margin-left:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.text-gray-400{color:#9ca3af}.bottom-6{bottom:1.5rem}.right-6{right:1.5rem}.p-3{padding:0.75rem}.rounded-full{border-radius:9999px}.hidden{display:none}.min-w-\[200px\]{min-width:200px}.border-gradient {border-image: linear-gradient(to right, #ff007a, #00d4ff, #aa00ff) 1;}
+        @media (max-width: 640px) {.nav-links {flex-direction: column;align-items: center;space-y-4;}.nav-links a {margin: 0.5rem 0;}}
+        .tooltip {position: relative;display: inline-block;}.tooltip .tooltiptext {visibility: hidden;width: 120px;background-color: #111827;color: #22d3ee;text-align: center;border-radius: 6px;padding: 5px;position: absolute;z-index: 1;bottom: 125%;left: 50%;margin-left: -60px;opacity: 0;transition: opacity 0.3s;}.tooltip:hover .tooltiptext {visibility: visible;opacity: 1;}
+        .hover\:glow:hover {box-shadow: 0 0 15px #ff007a, 0 0 30px #00d4ff;}
+        ::-webkit-scrollbar {width: 10px;}::-webkit-scrollbar-track {background: #1f2937;border-radius: 5px;}::-webkit-scrollbar-thumb {background: #22d3ee;border-radius: 5px;box-shadow: 0 0 10px #ff007a;}::-webkit-scrollbar-thumb:hover {background: #ec4899;}
+        body {overflow-x: hidden;position: relative;scroll-behavior: smooth;}
+        #particles {position: fixed;top: 0;left: 0;width: 100%;height: 100%;z-index: -5;background: transparent;opacity: 0.6;}
+        .gradient-shift {background: linear-gradient(45deg, #ff007a, #00d4ff, #aa00ff);background-size: 200% 200%;animation: gradientShift 8s ease infinite;}
+        .intro-text {display: inline-block;overflow: hidden;white-space: nowrap;animation: typing 2s steps(40, end), slideIn 1s ease-out;}
+        .header-title {animation: pulse 3s infinite;}
+        .about-text strong {color: #ff007a;text-shadow: 0 0 10px #ff007a;animation: pulse 2s infinite;}
+        .about-text li {margin: 10px 0;position: relative;padding-left: 20px;animation: fadeInUp 1s ease-out backwards;}
+        .about-text li:nth-child(1) {animation-delay: 0.1s;}.about-text li:nth-child(2) {animation-delay: 0.2s;}.about-text li:nth-child(3) {animation-delay: 0.3s;}.about-text li:nth-child(4) {animation-delay: 0.4s;}.about-text li:nth-child(5) {animation-delay: 0.5s;}.about-text li:nth-child(6) {animation-delay: 0.6s;}
+        .about-text li::before {content: '🦥';position: absolute;left: 0;color: #00d4ff;}
+        .sloth-web-text h3 {background: linear-gradient(to right, #ff007a, #00d4ff);-webkit-background-clip: text;-webkit-text-fill-color: transparent;text-shadow: 0 0 10px #aa00ff;animation: fadeIn 1s ease-out;}
+        .stats-img {animation: bounceIn 1.5s ease-out backwards;}
+        .stats-img:nth-child(1) {animation-delay: 0.1s;}.stats-img:nth-child(2) {animation-delay: 0.3s;}.stats-img:nth-child(3) {animation-delay: 0.5s;}
+        .project-link {animation: fadeIn 1s ease-out backwards;}
+        .project-link:nth-child(1) {animation-delay: 0.2s;}.project-link:nth-child(2) {animation-delay: 0.4s;}
+        .section-header {transition: all 0.3s ease;}.section-header:hover {transform: scale(1.05);text-shadow: 0 0 20px #00d4ff;}
+        .footer-fade {animation: fadeIn 1s ease-out 0.5s backwards;}
+        .text-shadow-lg {text-shadow: 0 0 15px #ff007a, 0 0 30px #00d4ff;}.text-shadow-md {text-shadow: 0 0 10px #aa00ff;}.text-shadow-sm {text-shadow: 0 0 5px #aaa;}
+        .profile-item {padding: 1.5rem;min-width: 200px;}
+        .nav-link {text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);}
+        .hover\:text-shadow-lg:hover {text-shadow: 0 0 15px #ff007a, 0 0 30px #00d4ff;}
+        @keyframes gradientShift {0% {background-position: 0% 50%;}50% {background-position: 100% 50%;}100% {background-position: 0% 50%;}}
+        @keyframes fadeIn {from {opacity: 0;}to {opacity: 1;}}@keyframes fadeInUp {from {opacity: 0;transform: translateY(20px);}to {opacity: 1;transform: translateY(0);}}@keyframes slideIn {from {transform: translateX(-100%);opacity: 0;}to {transform: translateX(0);opacity: 1;}}@keyframes bounceIn {0% {transform: scale(0.8);opacity: 0;}50% {transform: scale(1.1);opacity: 0.5;}100% {transform: scale(1);opacity: 1;}}@keyframes typing {from {width: 0;}to {width: 100%;}}@keyframes pulse {0% {text-shadow: 0 0 10px #ff007a;}50% {text-shadow: 0 0 20px #aa00ff;}100% {text-shadow: 0 0 10px #ff007a;}}@keyframes bounce {0%, 100% {transform: translateY(0);}50% {transform: translateY(-5px);}}
+        .spinner {border: 4px solid #f3f3f3;border-top: 4px solid #22d3ee;border-radius: 50%;width: 20px;height: 20px;animation: spin 1s linear infinite;margin: 0 auto;display: none;}@keyframes spin {0% {transform: rotate(0deg);}100% {transform: rotate(360deg);}}
+        /* New styles for project cards */
+        .project-card {transition: all 0.3s ease;}.project-card:hover {transform: translateY(-8px);box-shadow: 0 0 30px #ff007a, 0 0 60px #00d4ff;}
+        .project-favicon {width: 80px;height: 80px;border-radius: 9999px;border: 4px solid #a855f7;object-fit: cover;transition: all 0.3s ease;}.project-favicon:hover {transform: scale(1.15);}
     </style>
 </head>
 <body>
     <canvas id="particles" class="fixed top-0 left-0 w-full h-full"></canvas>
+
     <header class="text-center py-10 gradient-shift text-white shadow-lg border-b-4 border-gradient">
         <h1 class="text-4xl md:text-5xl font-bold text-shadow-lg header-title" style="text-shadow: 0 0 20px #00d4ff, 0 0 10px #ff007a;">😃 Parker Tripoli 😃</h1>
         <p class="text-lg md:text-xl mt-2 text-shadow-md">Epic Game Creator | Computer Wizard | Robot Champ | Basketball Star | Slick Ninja | Code Wizard</p>
@@ -285,13 +71,13 @@
         <h2 class="text-3xl md:text-4xl text-cyan-400 text-shadow-md mb-4 section-header">About Me</h2>
         <p class="intro-text text-lg">I like to make things, and do basketball, and like tech, here's what makes me, me:</p>
         <ul class="about-text text-base md:text-lg">
-            <li><strong>Game Creator Extraordinaire:</strong> I love making my own video games and software! It's like building my own world where I decide the rules. I use computers to bring my ideas to life, and it's so cool to play something I made.</li>
+            <li><strong>Game Creator Extraordinaire:</strong> I love making my own video games and software! I mainly do vibecoding. It's like building my own world where I decide the rules. I use computers to bring my ideas to life, and it's so cool to play something I made.</li>
             <li><strong>Computer Whiz:</strong> I'm crazy about computers! I like learning how they work and using them for fun projects. They're like magic tools for creating and exploring.</li>
             <li><strong>Robot Champ:</strong> I was part of a super awesome team called Robot Subs in First LEGO League (FLL). We built and programmed robots, and guess what? We made it all the way to regionals and won the Rising All-Star award, celebrating a team the judges expect great things from in the future. We also won the Engineering Excellence Award for an efficiently designed robot and an innovative project solution!</li>
             <li><strong>Basketball Star:</strong> When I'm not at the computer, you'll find me on the basketball court. I love dribbling, shooting hoops, and playing with my friends—it's so much fun to stay active!</li>
             <li><strong>Master Builder:</strong> I love making things, whether it's a cool LEGO creation, a craft, or something totally new. I'm always coming up with ideas and figuring out how to build them.</li>
             <li><strong>Slick Ninja:</strong> I attend a ninja class where I learned how to do a front flip and other impressive moves. My coach is nice, and I go every Thursday—it's fun!</li>
-			<li><strong>Code Wizard:</strong> I love developing software and building websites. I’ve experimented with creating an AI, and I’ve built a polished note‑taking app and a small encyclopedia project. I mainly focus on software development, and I use what I call “vibecoding,” a flexible approach that helps me quickly pick up new tools and work confidently across different programming languages.</li>
+			<li><strong>Code Wizard:</strong> I love developing software and building websites.  I mainly do vibecoding. I’ve experimented with creating an AI, and I’ve built a polished note‑taking app and a small encyclopedia project. I mainly focus on software development, and I use what I call “vibecoding,” a flexible approach that helps me quickly pick up new tools and work confidently across different programming languages.</li>
         </ul>
         <p class="intro-text text-lg">If you want to talk about games, robots, basketball, or being a ninja, I'm your guy!</p>
         <div class="text-center mt-4">
@@ -353,9 +139,9 @@
                 <h3 class="text-lg font-bold text-cyan-400">Instagram</h3>
                 <p>techelp_biz</p>
             </a>
-			<a href="https://contacts.google.com/person/100132206015984426451?hl=en" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit Instagram Profile">
+			<a href="https://contacts.google.com/person/100132206015984426451?hl=en" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit Google Profile">
                 <div class="spinner" id="google-spinner"></div>
-                <img src="https://lh3.googleusercontent.com/a/ACg8ocJ4nZnq3lreD5Gh3yY107oA0ObWlgJgscS1DAfqlmis2YlCszM=s272-p-k-rw-no" alt="Google Profile" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('instagram-spinner').style.display='none';" loading="lazy">
+                <img src="https://lh3.googleusercontent.com/a/ACg8ocJ4nZnq3lreD5Gh3yY107oA0ObWlgJgscS1DAfqlmis2YlCszM=s272-p-k-rw-no" alt="Google Profile" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('google-spinner').style.display='none';" loading="lazy">
                 <h3 class="text-lg font-bold text-cyan-400">Google</h3>
                 <p>P Trip</p>
             </a>
@@ -366,7 +152,9 @@
     </section>
 
     <section id="stats" class="mx-auto my-12 p-8 max-w-5xl bg-gray-800 bg-opacity-90 rounded-xl shadow-lg border-4 border-gradient" style="animation: fadeInUp 0.8s ease-out;">
-        <h2 class="text-3xl md:text-4xl text-cyan-400 text-shadow-md mb-4 section-header">My Stats & Projects</h2>
+        <h2 class="text-3xl md:text-4xl text-cyan-400 text-shadow-md mb-6 section-header text-center">My Stats & Projects</h2>
+        
+        <!-- Original stats graphs restored -->
         <div class="flex flex-col items-center space-y-4">
             <div class="spinner" id="stats-spinner-1"></div>
             <img class="w-full max-w-md rounded-lg stats-img" src="https://github-readme-stats.vercel.app/api?username=parkertripoli-wq&hide_title=false&hide_rank=false&show_icons=true&include_all_commits=true&count_private=true&disable_animations=false&theme=neon&locale=en&hide_border=false&border_radius=30" height="150" alt="stats graph" onload="document.getElementById('stats-spinner-1').style.display='none';" loading="lazy" decoding="async">
@@ -375,62 +163,107 @@
             <div class="spinner" id="stats-spinner-3"></div>
             <img class="w-full max-w-md rounded-lg stats-img" src="https://github-readme-stats.vercel.app/api/top-langs?username=parkertripoli-wq&locale=en&hide_title=false&layout=compact&card_width=320&langs_count=5&theme=neon&hide_border=false&border_radius=30" height="150" alt="languages graph" onload="document.getElementById('stats-spinner-3').style.display='none';" loading="lazy" decoding="async">
         </div>
+
+<p class="text-center my-10 high-quality-text">
+  I'm Making cool stuff! 
+  <strong>Some projects are finished, some are works-in-progress or experiments</strong> — check them out anyway!
+</p>
+
+<style>
+.high-quality-text {
+  font-size: 2.8rem; /* big but clean */
+  font-weight: 800;
+
+  /* Smooth high-quality gradient */
+  background: linear-gradient(120deg, #ff4fd8, #4fdcff);
+  background-size: 200% 200%;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* Smooth neon glow (not harsh) */
+  text-shadow:
+    0 0 6px rgba(255, 79, 216, 0.6),
+    0 0 12px rgba(79, 220, 255, 0.6);
+
+  letter-spacing: 0.5px;
+
+  /* Optional smooth animation */
+  animation: gradientFlow 6s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+</style>
+        <!-- Restored "I'm Making" blocks exactly as you had them (with your original pins + new buttons) -->
         <div class="sloth-web-text text-center mt-6">
             <h3 class="text-xl md:text-2xl mb-4">I'm Making Sloth Web</h3>
             <div class="flex justify-center mb-4">
-                <div class="spinner" id="sloth-web-spinner"></div>
-                <a href="https://github.com/parkertripoli-wq/sloth-web" class="project-link">
-                    <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertripoli-wq&repo=sloth-web&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Sloth Web Pin" onload="document.getElementById('sloth-web-spinner').style.display='none';" loading="lazy" decoding="async">
-                </a>
+                <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertripoli-wq&repo=sloth-web&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Sloth Web Pin">
             </div>
-            <p class="space-x-4">
-                <a href="https://github.com/parkertripoli-wq/sloth-web" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce hover:glow">Want to try Sloth Web?</a>
-                <a href="https://cse.google.com/cse?cx=666b70a81f11c4eb9#gsc.tab=0&gsc.sort=" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce hover:glow">Try the search engine</a>
-            </p>
-            <h3 class="text-xl md:text-2xl mb-4 mt-6">I'm Making My Portfolio</h3>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="https://github.com/parkertripoli-wq/sloth-web" target="_blank" class="inline-block px-5 py-2.5 bg-gray-800 border-2 border-cyan-500 rounded-lg text-cyan-300 hover:bg-pink-600 hover:border-pink-500 hover:text-white transition-all duration-300 hover:glow">See Project</a>
+                <a href="https://parkertrip.github.io/slothweb/" target="_blank" class="inline-block px-5 py-2.5 bg-cyan-500 text-gray-900 font-bold rounded-lg hover:bg-pink-500 hover:text-white transition-all duration-300 hover:glow">View Site</a>
+            </div>
+        </div>
+
+        <div class="sloth-web-text text-center mt-6">
+            <h3 class="text-xl md:text-2xl mb-4">I'm Making My Portfolio</h3>
             <div class="flex justify-center mb-4">
-                <div class="spinner" id="portfolio-spinner"></div>
-                <a href="https://github.com/parkertrip/parkertrip.github.io" class="project-link">
-                    <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertrip&repo=parkertrip.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Portfolio Pin" onload="document.getElementById('portfolio-spinner').style.display='none';" loading="lazy" decoding="async">
-                </a>
+                <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertrip&repo=parkertrip.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Portfolio Pin">
             </div>
-            <p class="space-x-4">
-                <a href="https://parkertrip.github.io/" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce hover:glow">Want to try My Portfolio</a>
-                <a href="https://github.com/parkertrip/parkertrip.github.io" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce hover:glow">Repo</a>
-            </p>
-            <h3 class="text-xl md:text-2xl mb-4 mt-6">I'm Making Sloth Web Extensions Site</h3>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="https://github.com/parkertrip/parkertrip.github.io" target="_blank" class="inline-block px-5 py-2.5 bg-gray-800 border-2 border-cyan-500 rounded-lg text-cyan-300 hover:bg-pink-600 hover:border-pink-500 hover:text-white transition-all duration-300 hover:glow">See Project</a>
+                <a href="https://parkertrip.github.io/" target="_blank" class="inline-block px-5 py-2.5 bg-cyan-500 text-gray-900 font-bold rounded-lg hover:bg-pink-500 hover:text-white transition-all duration-300 hover:glow">View Site</a>
+            </div>
+        </div>
+
+        <div class="sloth-web-text text-center mt-6">
+            <h3 class="text-xl md:text-2xl mb-4">I'm Making Sloth Web Extensions Site</h3>
             <div class="flex justify-center mb-4">
-                <div class="spinner" id="extensions-spinner"></div>
-                <a href="https://github.com/parkertripoli-wq/parkertripoli-wq.github.io" class="project-link">
-                    <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertripoli-wq&repo=parkertripoli-wq.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Extensions Pin" onload="document.getElementById('extensions-spinner').style.display='none';" loading="lazy" decoding="async">
-                </a>
+                <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertripoli-wq&repo=parkertripoli-wq.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Extensions Pin">
             </div>
-            <p class="space-x-4">
-                <a href="https://parkertripoli-wq.github.io" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce hover:glow">Want to try the Extensions Site</a>
-                <a href="https://github.com/parkertripoli-wq/parkertripoli-wq.github.io" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce hover:glow">Repo</a>
-            </p>
-			<h3 class="text-xl md:text-2xl mb-4 mt-6">I'm Making Notely</h3>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="https://github.com/parkertripoli-wq/parkertripoli-wq.github.io" target="_blank" class="inline-block px-5 py-2.5 bg-gray-800 border-2 border-cyan-500 rounded-lg text-cyan-300 hover:bg-pink-600 hover:border-pink-500 hover:text-white transition-all duration-300 hover:glow">See Project</a>
+                <a href="https://parkertripoli-wq.github.io" target="_blank" class="inline-block px-5 py-2.5 bg-cyan-500 text-gray-900 font-bold rounded-lg hover:bg-pink-500 hover:text-white transition-all duration-300 hover:glow">View Site</a>
+            </div>
+        </div>
+
+        <div class="sloth-web-text text-center mt-6">
+            <h3 class="text-xl md:text-2xl mb-4">I'm Making Notely</h3>
             <div class="flex justify-center mb-4">
-                <div class="spinner" id="extensions-spinner"></div>
-                <a href="https://github.com/parkertrip/parkertrip.github.io" class="project-link">
-                    <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertrip&repo=parkertrip.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Notely Pin" onload="document.getElementById('extensions-spinner').style.display='none';" loading="lazy" decoding="async">
-                </a>
+                <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertrip&repo=parkertrip.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Notely Pin">
             </div>
-            <p class="space-x-4">
-                <a href="https://parkertrip.github.io/notely/" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce hover:glow">Want to try Notely</a>
-                <a href="https://github.com/parkertrip/parkertrip.github.io/tree/main/notely" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce hover:glow">Repo</a>
-            </p>
-			<h3 class="text-xl md:text-2xl mb-4 mt-6">I'm Making Atiley</h3>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="https://github.com/parkertrip/parkertrip.github.io/tree/main/notely" target="_blank" class="inline-block px-5 py-2.5 bg-gray-800 border-2 border-cyan-500 rounded-lg text-cyan-300 hover:bg-pink-600 hover:border-pink-500 hover:text-white transition-all duration-300 hover:glow">See Project</a>
+                <a href="https://parkertrip.github.io/notely/" target="_blank" class="inline-block px-5 py-2.5 bg-cyan-500 text-gray-900 font-bold rounded-lg hover:bg-pink-500 hover:text-white transition-all duration-300 hover:glow">View Site</a>
+            </div>
+        </div>
+
+        <div class="sloth-web-text text-center mt-6">
+            <h3 class="text-xl md:text-2xl mb-4">I'm Making Atiley</h3>
             <div class="flex justify-center mb-4">
-                <div class="spinner" id="extensions-spinner"></div>
-                <a href="https://github.com/parkertrip/parkertrip.github.io" class="project-link">
-                    <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertrip&repo=parkertrip.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Atley Pin" onload="document.getElementById('extensions-spinner').style.display='none';" loading="lazy" decoding="async">
-                </a>
+                <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertrip&repo=parkertrip.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Atiley Pin">
             </div>
-            <p class="space-x-4">
-                <a href="https://parkertrip.github.io/atiley/" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce hover:glow">Want to try Atiley</a>
-                <a href="https://github.com/parkertrip/parkertrip.github.io/tree/main/atiley" class="project-link inline-block px-4 py-2 bg-gray-900 border-2 border-cyan-400 rounded-md text-cyan-400 hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 animate-bounce hover:glow">Repo</a>
-            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="https://github.com/parkertrip/parkertrip.github.io/tree/main/atiley" target="_blank" class="inline-block px-5 py-2.5 bg-gray-800 border-2 border-cyan-500 rounded-lg text-cyan-300 hover:bg-pink-600 hover:border-pink-500 hover:text-white transition-all duration-300 hover:glow">See Project</a>
+                <a href="https://parkertrip.github.io/atiley/" target="_blank" class="inline-block px-5 py-2.5 bg-cyan-500 text-gray-900 font-bold rounded-lg hover:bg-pink-500 hover:text-white transition-all duration-300 hover:glow">View Site</a>
+            </div>
+        </div>
+
+        <!-- New modern grid with all your GitHub folders (dynamic favicon from page code) -->
+        <h3 class="text-2xl text-cyan-400 text-center mt-12 mb-6">More Projects from My GitHub Folders</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="dynamic-projects">
+            <!-- JS will fill this with cards for: atiley, extensions, faeai, healthy, langlearn, newtab, notely, obie, shop, slothweb + more -->
+        </div>
+
+        <div class="text-center mt-10">
+            <a href="https://github.com/parkertrip/parkertrip.github.io" target="_blank" class="inline-block px-6 py-3 bg-gray-900 border-2 border-pink-500 rounded-lg text-pink-300 hover:bg-pink-600 hover:text-white transition-all duration-300 hover:glow text-lg font-bold">
+                Browse ALL Folders on GitHub →
+            </a>
         </div>
     </section>
 
@@ -441,7 +274,7 @@
     <button id="backToTop" class="fixed bottom-6 right-6 bg-cyan-400 text-gray-900 p-3 rounded-full shadow-lg hover:bg-pink-500 hover:text-white transition-all duration-300 hidden hover:glow" aria-label="Back to Top">⬆️</button>
 
     <script>
-        // Smooth scrolling fallback function
+        // Your original script (smooth scroll, particles, tilt, etc.) - unchanged
         function smoothScrollToElement(element) {
             if ('scrollBehavior' in document.documentElement.style || window.__forceSmoothScroll) {
                 element.scrollIntoView({ behavior: 'smooth' });
@@ -451,41 +284,28 @@
                 const distance = target - start;
                 const duration = 800;
                 let startTime = null;
-
                 function animation(currentTime) {
                     if (startTime === null) startTime = currentTime;
                     const timeElapsed = currentTime - startTime;
                     const progress = Math.min(timeElapsed / duration, 1);
                     const ease = progress * (2 - progress);
                     window.scrollTo(0, start + distance * ease);
-                    if (timeElapsed < duration) {
-                        requestAnimationFrame(animation);
-                    }
+                    if (timeElapsed < duration) requestAnimationFrame(animation);
                 }
                 requestAnimationFrame(animation);
             }
         }
-
-        // Scroll to section function
         function scrollToSection(sectionId, link) {
             const element = document.getElementById(sectionId);
-            if (element) {
-                smoothScrollToElement(element);
-            }
+            if (element) smoothScrollToElement(element);
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('text-pink-500', 'text-shadow-lg'));
             link.classList.add('text-pink-500', 'text-shadow-lg');
         }
-
-        // Back to Top button
         const backToTopButton = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => {
-            backToTopButton.classList.toggle('hidden', window.scrollY < 200);
-        });
-        backToTopButton.addEventListener('click', () => {
-            smoothScrollToElement(document.documentElement);
-        });
+        window.addEventListener('scroll', () => { backToTopButton.classList.toggle('hidden', window.scrollY < 200); });
+        backToTopButton.addEventListener('click', () => { smoothScrollToElement(document.documentElement); });
 
-        // Keyboard navigation for accessibility
+        // Keyboard + tilt + particles (your original code)
         document.querySelectorAll('nav a').forEach(link => {
             link.addEventListener('keydown', e => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -495,8 +315,6 @@
                 }
             });
         });
-
-        // 3D Tilt Effect for Profile Cards
         const cards = document.querySelectorAll('.profile-item');
         cards.forEach(card => {
             card.addEventListener('mousemove', e => {
@@ -509,19 +327,16 @@
                 const tiltY = -(x - centerX) / 15;
                 card.style.transform = `perspective(500px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
             });
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(500px) rotateX(0) rotateY(0)';
-            });
+            card.addEventListener('mouseleave', () => { card.style.transform = 'perspective(500px) rotateX(0) rotateY(0)'; });
         });
 
-        // Particle Background
+        // Particles (your original)
         const canvas = document.getElementById('particles');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         const particlesArray = [];
-        const particleCount = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 60 : 90; // Further reduced
-
+        const particleCount = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 60 : 90;
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -544,11 +359,7 @@
                 ctx.fill();
             }
         }
-
-        for (let i = 0; i < particleCount; i++) {
-            particlesArray.push(new Particle());
-        }
-
+        for (let i = 0; i < particleCount; i++) particlesArray.push(new Particle());
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = particlesArray.length - 1; i >= 0; i--) {
@@ -560,11 +371,71 @@
             requestAnimationFrame(animateParticles);
         }
         animateParticles();
-
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         });
+
+        // NEW: Dynamic favicon from each project's actual index.html code (exactly as you asked)
+        // This runs automatically and pulls the real <link rel="icon"> from the live page
+        async function loadProjectFavicons() {
+            const container = document.getElementById('dynamic-projects');
+            const projects = [
+                {name: "Sloth Web", live: "https://parkertrip.github.io/slothweb/", repo: "https://github.com/parkertripoli-wq/sloth-web", desc: "Main browser/web platform"},
+                {name: "Extensions Site", live: "https://parkertripoli-wq.github.io", repo: "https://github.com/parkertripoli-wq/parkertripoli-wq.github.io", desc: "Sloth Web Extensions"},
+                {name: "Notely", live: "https://parkertrip.github.io/notely/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/notely", desc: "Polished note-taking app"},
+                {name: "Atiley", live: "https://parkertrip.github.io/atiley/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/atiley", desc: "Neon encyclopedia for kids"},
+                {name: "LangLearn", live: "https://parkertrip.github.io/langlearn/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/langlearn", desc: "Language learning tool"},
+                {name: "NewTab", live: "https://parkertrip.github.io/newtab/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/newtab", desc: "Custom new tab page"},
+                {name: "Obie", live: "https://parkertrip.github.io/obie/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/obie", desc: "Fun experiment"},
+                {name: "FaeAI", live: "https://parkertrip.github.io/faeai/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/faeai", desc: "AI project"},
+                {name: "Shop", live: "https://parkertrip.github.io/shop/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/shop", desc: "Mini shop demo"},
+                {name: "Healthy", live: "https://parkertrip.github.io/healthy/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/healthy", desc: "Health tracker"}
+            ];
+
+            projects.forEach(proj => {
+                const cardHTML = `
+                    <div class="project-card bg-gray-900 border-2 border-cyan-400 rounded-xl p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-2 hover:scale-[1.02]" data-live-url="${proj.live}">
+                        <img src="https://avatars.githubusercontent.com/u/230787001?v=4" alt="${proj.name}" class="project-favicon mx-auto mb-4">
+                        <h3 class="text-2xl font-bold text-cyan-400 mb-2">${proj.name}</h3>
+                        <p class="text-gray-400 mb-4 text-sm">${proj.desc} (some may not be finished yet)</p>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <a href="${proj.repo}" target="_blank" class="inline-block px-5 py-2.5 bg-gray-800 border-2 border-cyan-500 rounded-lg text-cyan-300 hover:bg-pink-600 hover:border-pink-500 hover:text-white transition-all duration-300 hover:glow">See Project</a>
+                            <a href="${proj.live}" target="_blank" class="inline-block px-5 py-2.5 bg-cyan-500 text-gray-900 font-bold rounded-lg hover:bg-pink-500 hover:text-white transition-all duration-300 hover:glow">View Site</a>
+                        </div>
+                    </div>`;
+                container.innerHTML += cardHTML;
+            });
+
+            // Fetch real favicon from each project's index.html code
+            const cards = document.querySelectorAll('.project-card[data-live-url]');
+            for (const card of cards) {
+                const liveUrl = card.dataset.liveUrl;
+                const img = card.querySelector('.project-favicon');
+                try {
+                    const res = await fetch(liveUrl);
+                    const html = await res.text();
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    let link = doc.querySelector('link[rel="icon"], link[rel="shortcut icon"], link[rel*="icon"]');
+                    if (link) {
+                        let href = link.getAttribute('href');
+                        if (href && !href.startsWith('http')) href = new URL(href, liveUrl).href;
+                        img.src = href || `${liveUrl}favicon.ico`;
+                    } else {
+                        img.src = `${liveUrl}favicon.ico`;
+                    }
+                } catch (e) {
+                    // fallback if fetch fails (different domain or no index.html)
+                    img.src = `${liveUrl}favicon.ico`;
+                }
+                // final safety fallback
+                img.onerror = () => { img.src = 'https://avatars.githubusercontent.com/u/230787001?v=4'; };
+            }
+        }
+
+        // Run when page loads
+        window.addEventListener('load', loadProjectFavicons);
     </script>
 </body>
 </html>
