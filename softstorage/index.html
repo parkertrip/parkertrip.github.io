@@ -1,1 +1,832 @@
- 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoftStorage • Local Drive</title>
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/softstorage/softstorage_logo_1774196045915.png">
+  <!-- Primary CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.min.js" onerror="this.src='https://unpkg.com/fflate@0.8.2/umd.min.js'"></script>
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --card: rgba(255, 255, 255, 0.85);
+      --border: rgba(224, 224, 224, 0.3);
+      --accent: linear-gradient(135deg, #0070f3, #00c6ff);
+      --btn-bg: #0070f3;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --danger: #ef4444;
+      --hover: rgba(239, 246, 255, 0.9);
+      --glass: backdrop-filter: blur(12px) saturate(180%);
+    }
+
+    body.dark {
+      --bg: #0a0a0c;
+      --card: rgba(28, 28, 30, 0.8);
+      --border: rgba(255, 255, 255, 0.1);
+      --btn-bg: #3b82f6;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --hover: rgba(31, 41, 55, 0.9);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body {
+      font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* Header & Branding */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 10px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand img {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: var(--accent);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Buttons */
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 12px;
+      background: var(--btn-bg);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+      filter: brightness(1.1);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button.secondary {
+      background: #4b5563;
+      box-shadow: 0 4px 12px rgba(75, 85, 99, 0.2);
+    }
+
+    button.danger {
+      background: var(--danger);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+    }
+
+    button.icon-only {
+      padding: 10px;
+      width: 42px;
+      justify-content: center;
+    }
+
+    /* Drop Zone */
+    #drop-zone {
+      border: 2px dashed var(--border);
+      border-radius: 20px;
+      padding: 50px 20px;
+      text-align: center;
+      background: var(--card);
+      margin-bottom: 30px;
+      cursor: pointer;
+      transition: all 0.4s;
+      backdrop-filter: blur(12px) saturate(180%);
+      color: var(--muted);
+      border-image: none;
+    }
+
+    #drop-zone:hover {
+      border-color: #3b82f6;
+      background: var(--hover);
+    }
+
+    #drop-zone.drag {
+      border-color: #3b82f6;
+      background: var(--hover);
+      transform: scale(1.02);
+    }
+
+    #drop-zone svg {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+
+    /* File List */
+    #file-list {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    .file-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.3s;
+      cursor: pointer;
+      backdrop-filter: blur(12px) saturate(180%);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .file-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+
+    .preview {
+      height: 180px;
+      background: rgba(0, 0, 0, 0.03);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .preview img,
+    .preview object {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preview .icon {
+      font-size: 5rem;
+      font-weight: bold;
+      opacity: 0.15;
+    }
+
+    .info {
+      padding: 18px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .name {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .actions button {
+      flex: 1;
+      padding: 8px;
+      font-size: 0.85rem;
+      border-radius: 10px;
+    }
+
+    /* Modal Styling */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background: var(--card);
+      border-radius: 24px;
+      width: 92%;
+      max-width: 1100px;
+      max-height: 90vh;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(12px) saturate(180%);
+      border: 1px solid var(--border);
+    }
+
+    .modal-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .close {
+      font-size: 2rem;
+      cursor: pointer;
+      opacity: 0.5;
+      transition: 0.2s;
+    }
+
+    .close:hover {
+      opacity: 1;
+      color: var(--danger);
+    }
+
+    .modal-body {
+      padding: 28px;
+      flex: 1;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .preview-container {
+      width: 100%;
+      height: 60vh;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .modal-footer {
+      padding: 20px 28px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    /* Share Section */
+    .share-link {
+      background: rgba(0, 0, 0, 0.05);
+      padding: 14px;
+      border-radius: 12px;
+      word-break: break-all;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      margin: 14px 0;
+      border: 1px solid var(--border);
+      width: 100%;
+      max-height: 100px;
+      overflow-y: auto;
+      color: var(--text);
+    }
+
+    .share-warning {
+      font-size: 0.8rem;
+      color: #f59e0b;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Status Notifications */
+    #status {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 16px 24px;
+      border-radius: 16px;
+      background: #0070f3;
+      color: white;
+      z-index: 3000;
+      box-shadow: 0 10px 25px rgba(0, 112, 243, 0.3);
+      display: none;
+      animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-weight: 500;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    #status.error {
+      background: var(--danger);
+      box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+    }
+
+    #status.success {
+      background: #10b981;
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Progress Bar */
+    .progress-wrap {
+      width: 100%;
+      max-width: 400px;
+      height: 8px;
+      background: var(--border);
+      border-radius: 10px;
+      margin: 20px 0;
+      overflow: hidden;
+      display: none;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    /* Dark Mode Toggle */
+    .theme-toggle {
+      background: var(--hover);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="brand">
+      <img src="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/softstorage/softstorage_logo_1774196045915.png" alt="Logo"
+        onerror="this.src='https://icons.iconarchive.com/icons/paomedia/small-n-flat/256/cloud-icon.png'">
+      <h1>SoftStorage</h1>
+    </div>
+    <div class="controls">
+      <button class="theme-toggle icon-only" id="themeToggle" title="Toggle Theme">🌓</button>
+      <button class="secondary" onclick="exportAll()" id="exportBtn">
+        <span>Export All (ZIP)</span>
+      </button>
+      <button onclick="document.getElementById('fileInput').click()">
+        <span>Add Files</span>
+      </button>
+      <input type="file" id="fileInput" multiple hidden />
+    </div>
+  </header>
+
+  <div id="drop-zone">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round" style="width:48px;height:48px;margin-bottom:12px;opacity:0.5;">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+      <polyline points="17 8 12 3 7 8"></polyline>
+      <line x1="12" y1="3" x2="12" y2="15"></line>
+    </svg>
+    <p>Drag files here or <b>click to browse</b></p>
+    <p style="font-size: 0.8rem; margin-top: 8px; opacity: 0.7;">Private & local browser storage • No clouds involved
+    </p>
+  </div>
+
+  <div id="file-list"></div>
+
+  <div id="status"></div>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title"></h2>
+        <span class="close" onclick="closeModal()">×</span>
+      </div>
+      <div id="modal-body" class="modal-body"></div>
+      <div id="modal-footer" class="modal-footer"></div>
+    </div>
+  </div>
+
+
+  <script>
+    const DB_NAME = "SoftStorageDB";
+    const STORE_NAME = "files";
+    let db;
+
+    async function initDB() {
+      return new Promise((r, e) => {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = ev => ev.target.result.createObjectStore(STORE_NAME, { keyPath: "name" });
+        req.onsuccess = ev => { db = ev.target.result; r(); };
+        req.onerror = ev => e(ev.target.error);
+      });
+    }
+
+    async function getStore(mode = "readonly") {
+      if (!db) await initDB();
+      const tx = db.transaction(STORE_NAME, mode);
+      tx.onerror = () => showStatus("Database transaction failed", true);
+      return { store: tx.objectStore(STORE_NAME), done: new Promise((r, e) => { tx.oncomplete = r; tx.onerror = e; }) };
+    }
+
+    async function saveFiles(files) {
+      if (!files?.length) return;
+      showStatus("Processing files...");
+      try {
+        const { store, done } = await getStore("readwrite");
+        for (const f of files) {
+          await store.put({
+            name: f.name,
+            lastModified: f.lastModified,
+            type: f.type || "application/octet-stream",
+            size: f.size,
+            data: f
+          });
+        }
+        await done;
+        renderFiles();
+        showStatus(`Successfully saved ${files.length} file(s)!`, false, "success");
+      } catch (err) {
+        showStatus("Save failed: " + err.message, true);
+        console.error(err);
+      }
+    }
+
+    async function renderFiles() {
+      const list = document.getElementById("file-list");
+      list.innerHTML = "";
+      const { store } = await getStore();
+      const req = store.getAll();
+      req.onsuccess = () => {
+        if (!req.result.length) {
+          list.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:var(--muted); padding:80px 20px; border:2px dashed var(--border); border-radius:24px;">
+                       <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.3;">📂</div>
+                       <p style="font-size: 1.2rem;">Your storage is empty. Drag some files here!</p></div>`;
+          return;
+        }
+        for (const f of req.result) {
+          const card = document.createElement("div");
+          card.className = "file-card";
+          const isImg = f.type.startsWith("image/");
+          const sizeStr = f.size > 1024 * 1024 ? (f.size / 1024 / 1024).toFixed(2) + " MB" : (f.size / 1024).toFixed(1) + " KB";
+
+          card.innerHTML = `
+        <div class="preview">${isImg ? `<img src="${URL.createObjectURL(f.data)}" loading="lazy">` : `<div class="icon">${getFileIcon(f.type, f.name)}</div>`}</div>
+        <div class="info">
+          <div class="name" title="${f.name}">${f.name}</div>
+          <div class="meta">${sizeStr} • ${new Date(f.lastModified).toLocaleDateString()}</div>
+          <div class="actions">
+            <button onclick="event.stopPropagation();downloadFile('${f.name}')" title="Download">💾 Save</button>
+            <button onclick="event.stopPropagation();shareFile('${f.name}')" title="Share">🔗 Share</button>
+            <button class="danger" onclick="event.stopPropagation();deleteFile('${f.name}')" title="Delete">🗑️ Delete</button>
+          </div>
+        </div>`;
+          card.onclick = () => openPreview(f);
+          list.appendChild(card);
+        }
+      };
+    }
+
+    function getFileIcon(type, name) {
+      if (type.includes("pdf")) return "📄";
+      if (type.includes("html") || name.endsWith(".html")) return "🌐";
+      if (type.includes("zip") || name.endsWith(".zip")) return "📦";
+      if (type.includes("video")) return "🎬";
+      if (type.includes("audio")) return "🎵";
+      if (type.includes("text") || name.endsWith(".txt")) return "📝";
+      return "📄";
+    }
+
+    async function downloadFile(name) {
+      const { store } = await getStore();
+      store.get(name).onsuccess = e => {
+        const f = e.target.result;
+        if (f) {
+          const u = URL.createObjectURL(f.data);
+          const a = document.createElement("a");
+          a.href = u; a.download = f.name; a.click();
+          setTimeout(() => URL.revokeObjectURL(u), 100);
+        }
+      };
+    }
+
+    function deleteFile(name) {
+      if (!confirm("Delete " + name + "?")) return;
+      getStore("readwrite").then(({ store, done }) => {
+        store.delete(name);
+        done.then(renderFiles).catch(() => showStatus("Error deleting file", true));
+      });
+    }
+
+    // URL-Only Share Logic (No System Dialog)
+    async function shareFile(name) {
+      if (typeof fflate === 'undefined') {
+        showStatus("Library missing. Attempting to reload...", true);
+        loadFflate();
+        return;
+      }
+      showStatus("Generating links...");
+      const { store } = await getStore();
+      store.get(name).onsuccess = async e => {
+        const file = e.target.result;
+        if (!file) return showStatus("File not found", true);
+
+        const buf = await file.data.arrayBuffer();
+        const u8 = new Uint8Array(buf);
+
+        // Max Compression for smallest URL
+        const compressed = fflate.deflateSync(u8, { level: 9 });
+        const b64 = uint8ToB64(compressed).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+
+        const base = window.location.href.split('?')[0].split('#')[0];
+        const dataPart = `data:${file.type};base64url,${b64}`;
+        const viewLink = `${base}#v=${encodeURIComponent(dataPart)}`;
+        const editLink = `${base}#f=${encodeURIComponent(dataPart)}`;
+
+        showModal(`Share: ${file.name}`, `
+          <div style="text-align:left; width:100%">
+            <p><b>Preview Link</b> (View-only)</p>
+            <div class="share-link">${viewLink}</div>
+            <button class="copy-btn" onclick="copyToClipboard('${viewLink}', this)">Copy Preview Link</button>
+
+            <p style="margin-top:24px"><b>Add & Edit Link</b> (Save to Drive)</p>
+            <div class="share-link">${editLink}</div>
+            <button class="copy-btn" onclick="copyToClipboard('${editLink}', this)">Copy Edit Link</button>
+            <p class="share-warning">⚠️ Note: Extremely large files may fail to share via URL. Use Download for backups.</p>
+          </div>
+        `, '<button onclick="closeModal()">Close</button>');
+        showStatus("Done!", false, "success");
+      };
+    }
+
+    function uint8ToB64(u8) {
+      let bin = "";
+      for (let i = 0; i < u8.length; i += 8192) {
+        bin += String.fromCharCode.apply(null, u8.subarray(i, i + 8192));
+      }
+      return btoa(bin);
+    }
+
+    function copyToClipboard(text, btn) {
+      navigator.clipboard.writeText(text).then(() => {
+        const old = btn.innerText;
+        btn.innerText = "Copied! ✅";
+        btn.style.background = "#10b981";
+        setTimeout(() => { btn.innerText = old; btn.style.background = ""; }, 2000);
+      });
+    }
+
+    async function exportAll() {
+      if (typeof fflate === 'undefined') {
+        showStatus("Library missing. Attempting to reload...", true);
+        loadFflate();
+        return;
+      }
+      const btn = document.getElementById("exportBtn");
+      if (btn.disabled) return;
+      btn.disabled = true;
+      showStatus("Gathering all files...");
+
+      try {
+        const { store } = await getStore();
+        const req = store.getAll();
+        req.onsuccess = async ev => {
+          const files = ev.target.result;
+          if (!files?.length) {
+            btn.disabled = false;
+            return showStatus("No files found to export", true);
+          }
+
+          const zipObj = {};
+          let count = 0;
+          for (const f of files) {
+            showStatus(`Processing ${++count}/${files.length}: ${f.name}...`);
+            const b = await f.data.arrayBuffer();
+            zipObj[f.name] = new Uint8Array(b);
+          }
+
+          showStatus("Compressing into ZIP... (Stay on page)");
+          
+          // Using a small delay to ensure status displays
+          setTimeout(() => {
+            try {
+              const zipped = fflate.zipSync(zipObj, { level: 6 });
+              const blob = new Blob([zipped], { type: "application/zip" });
+              const u = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = u; 
+              a.download = `SoftStorage_Backup_${new Date().toISOString().slice(0, 10)}.zip`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              setTimeout(() => URL.revokeObjectURL(u), 1000);
+              showStatus("Export complete! Check your downloads.", false, "success");
+            } catch (zErr) {
+              showStatus("ZIP Error: " + zErr.message, true);
+            }
+            btn.disabled = false;
+          }, 100);
+        };
+      } catch (err) {
+        showStatus("System error during export", true);
+        btn.disabled = false;
+        console.error(err);
+      }
+    }
+
+    async function openPreview(file) {
+      const url = URL.createObjectURL(file.data);
+      const isImg = file.type.startsWith("image/");
+      const isPdf = file.type === "application/pdf";
+      const isHtml = file.type.includes("html") || file.name.endsWith(".html");
+      let html = isImg ? `<img src="${url}">` :
+        isPdf ? `<object data="${url}" type="application/pdf" style="width:100%;height:100%"></object>` :
+          isHtml ? `<iframe src="${url}" sandbox="allow-scripts" style="width:100%;height:100%;border:none"></iframe>` :
+            `<div style="padding:100px;text-align:center;font-size:4rem;opacity:.2">📦<br><span style="font-size:1rem">${file.type}</span></div>`;
+
+      showModal(file.name, `<div class="preview-container">${html}</div>`, `
+    <button onclick="closeModal()" class="secondary">Close</button>
+    ${(isImg || isPdf || isHtml) ? `<button onclick="window.open('${url}','_blank')">Full Page</button>` : ''}
+    <button onclick="downloadFile('${file.name}');closeModal()">💾 Save</button>
+  `);
+    }
+
+    function showModal(t, body, foot = "") {
+      document.getElementById("modal-title").textContent = t;
+      document.getElementById("modal-body").innerHTML = body;
+      document.getElementById("modal-footer").innerHTML = foot;
+      document.getElementById("modal").style.display = "flex";
+    }
+    function closeModal() { document.getElementById("modal").style.display = "none"; }
+
+    function showStatus(msg, err = false, type = "") {
+      const el = document.getElementById("status");
+      el.innerHTML = msg;
+      el.className = err ? "error" : (type || "");
+      el.style.display = "block";
+      if (!err && type !== "progress") setTimeout(() => el.style.display = "none", 4000);
+    }
+
+    // Corrected URL handle
+    async function handleParams() {
+      // Check for params in both ?search and #hash
+      const p = new URLSearchParams(location.search || location.hash.substring(1));
+      const f = p.get("f"), v = p.get("v");
+      if (f) await importData(f, true);
+      else if (v) await importData(v, false);
+    }
+
+    async function importData(dUrl, doSave) {
+      if (typeof fflate === 'undefined') {
+        showStatus("Library missing. Attempting to reload...", true);
+        loadFflate();
+        return;
+      }
+      try {
+        showStatus("Downloading shared content...");
+        
+        // Convert base64url to standard base64 for fetch compatibility
+        let dataStr = dUrl;
+        if (dataStr.includes(";base64url,")) {
+          const parts = dataStr.split(";base64url,");
+          const b64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+          dataStr = parts[0] + ";base64," + b64;
+        }
+
+        const res = await fetch(dataStr);
+        if (!res.ok) throw new Error("Link might be corrupted or too long.");
+        
+        let buf = await res.arrayBuffer();
+        let d = new Uint8Array(buf);
+
+        // Try decompressing (Deflate is our standard for sharing)
+        try { d = fflate.inflateSync(d); } catch (e) {
+          try { d = fflate.unzlibSync(d); } catch (e2) { }
+        }
+
+        const blob = new Blob([d], { type: res.headers.get("Content-Type") || "application/octet-stream" });
+        const filename = "shared-" + Math.random().toString(36).slice(2, 6);
+
+        if (doSave) {
+          showStatus("Adding to Drive and opening for edit...");
+          await saveFiles([new File([blob], filename, { type: blob.type })]);
+        } else {
+          showStatus("Opening preview...", false, "success");
+          openPreview({ name: filename, type: blob.type, size: blob.size, lastModified: Date.now(), data: blob });
+        }
+        window.history.replaceState({}, "", window.location.pathname);
+      } catch (e) {
+        showStatus("Import Error: Link is likely exceeding browser limits. Please download the file instead.", true);
+        console.error(e);
+      }
+    }
+
+    // Theme Toggle
+    document.getElementById("themeToggle").onclick = () => {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+    };
+    if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark");
+
+    // Events
+    document.getElementById("drop-zone").onclick = () => document.getElementById("fileInput").click();
+    document.getElementById("drop-zone").ondragover = e => { e.preventDefault(); e.currentTarget.classList.add("drag"); };
+    document.getElementById("drop-zone").ondragleave = e => e.currentTarget.classList.remove("drag");
+    document.getElementById("drop-zone").ondrop = e => { e.preventDefault(); e.currentTarget.classList.remove("drag"); saveFiles(e.dataTransfer.files); };
+    document.getElementById("fileInput").onchange = e => saveFiles(e.target.files);
+
+    // Library Loader Fallback
+    function loadFflate() {
+      if (typeof fflate !== 'undefined') return;
+      const s = document.createElement('script');
+      s.src = "https://unpkg.com/fflate@0.8.2/umd.min.js";
+      s.onload = () => showStatus("Library loaded!", false, "success");
+      s.onerror = () => {
+        const s2 = document.createElement('script');
+        s2.src = "https://cdnjs.cloudflare.com/ajax/libs/fflate/0.8.2/fflate.min.js";
+        s2.onload = () => showStatus("Library loaded (backup)!", false, "success");
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s);
+    }
+
+    // Start
+    window.addEventListener("load", async () => {
+      try {
+        await initDB();
+        await renderFiles();
+        if (typeof fflate === 'undefined') loadFflate();
+        await handleParams();
+      } catch (err) {
+        showStatus("Initialization error: " + err.message, true);
+      }
+    });
+
+  </script>
+</body>
+
+</html>
