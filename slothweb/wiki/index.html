@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sloth Web Docs</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --bg: #0b1220;
+  --panel: rgba(255,255,255,0.05);
+  --accent: #38bdf8;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+}
+
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui;
+  background: linear-gradient(135deg, #0b1220, #020617);
+  color: var(--text);
+  display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(12px);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 8px;
+  color: var(--muted);
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background: #1f2937;
+  color: white;
+}
+
+/* CONTENT */
+.content {
+  margin-left: 260px;
+  width: 100%;
+}
+
+.main {
+  max-width: 900px;
+  margin: auto;
+  padding: 40px;
+}
+
+/* HEADINGS */
+h1 { font-size: 32px; }
+h2 { color: var(--accent); margin-top: 50px; }
+
+/* BUTTON */
+.btn {
+  display: inline-block;
+  padding: 10px 15px;
+  background: var(--accent);
+  color: black;
+  text-decoration: none;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+/* CARD */
+.card {
+  background: var(--panel);
+  backdrop-filter: blur(10px);
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 15px;
+}
+
+/* CODE */
+.code {
+  background: #020617;
+  padding: 15px;
+  border-radius: 10px;
+  position: relative;
+}
+
+.copy {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: var(--accent);
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+/* SEARCH */
+.search {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: none;
+}
+
+/* VIDEO */
+iframe {
+  width: 100%;
+  height: 400px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <h2>🦥 Sloth Web</h2>
+  <input class="search" placeholder="Search..." onkeyup="searchDocs(this.value)">
+
+  <a href="#dock">Dock</a>
+  <a href="#overview">Overview</a>
+  <a href="#install">Installation</a>
+  <a href="#launch">Launching</a>
+  <a href="#features">Features</a>
+  <a href="#shortcuts">Shortcuts</a>
+  <a href="#extensions">Extensions</a>
+  <a href="#troubleshoot">Troubleshooting</a>
+  <a href="#links">Links</a>
+</div>
+
+<div class="content">
+<div class="main">
+
+<img src="https://avatars.githubusercontent.com/u/230787001?v=4" width="90">
+
+<h1>Sloth Web Documentation</h1>
+
+<!-- DOCK (FROM FILE) -->
+<section id="dock">
+<h2>Dock</h2>
+
+<div class="card">
+<a class="btn" href="https://parkertrip.github.io/slothweb/">Website</a>
+<a class="btn" href="https://parkertrip.github.io/slothweb/download/">Installer</a>
+<a class="btn" href="https://github.com/parkertripoli-wq/sloth-web">Source Code</a>
+</div>
+
+<p><b>Fork/Remix:</b></p>
+<a href="https://github.com/parkertripoli-wq/sloth-web/blob/main/%E1%B4%B5%E1%B6%A0..." target="_blank">
+Open File
+</a>
+
+<h3>Not updating?</h3>
+<iframe src="https://www.youtube.com/embed/jAGZSXCP_3Y"></iframe>
+
+</section>
+
+<!-- OVERVIEW -->
+<section id="overview">
+<h2>Overview</h2>
+<p>
+Sloth Web Browser is a lightweight, customizable web browser built with Python and PyQt5.
+Includes ad blocking, tab management, bookmarks, and downloads.
+</p>
+</section>
+
+<!-- INSTALL -->
+<section id="install">
+<h2>Installation</h2>
+
+<a class="btn" href="https://parkertrip.github.io/slothweb/download/">Download Installer</a>
+
+<div class="card">
+<ul>
+<li>Run installer as Administrator</li>
+<li>Python installs automatically if missing</li>
+<li>Check "Add Python to PATH"</li>
+<li>Creates bwsr folder + installs dependencies</li>
+<li>Adds shortcuts</li>
+</ul>
+</div>
+
+</section>
+
+<!-- LAUNCH -->
+<section id="launch">
+<h2>Launching</h2>
+
+<div class="code">
+<button class="copy" onclick="copy(this)">Copy</button>
+<pre>python bwsr.py</pre>
+</div>
+
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+<h2>Features</h2>
+
+<div class="card">Tab Management</div>
+<div class="card">Ad Blocking</div>
+<div class="card">Bookmarks</div>
+<div class="card">Download Manager</div>
+<div class="card">Theme Switching</div>
+
+</section>
+
+<!-- SHORTCUTS -->
+<section id="shortcuts">
+<h2>Keyboard Shortcuts</h2>
+
+<div class="card">Ctrl+T → New Tab</div>
+<div class="card">Ctrl+R → Reload</div>
+<div class="card">Ctrl+B → Bookmark</div>
+<div class="card">Ctrl+Shift+B → Show Bookmarks</div>
+
+</section>
+
+<!-- EXTENSIONS -->
+<section id="extensions">
+<h2>Extensions</h2>
+
+<ul>
+<li><a href="https://parkertripoli-wq.github.io/">Extension Site</a></li>
+<li>Download .js file</li>
+<li>Place in C:\bwsr\extensions</li>
+<li>Restart browser</li>
+</ul>
+
+</section>
+
+<!-- TROUBLESHOOT -->
+<section id="troubleshoot">
+<h2>Troubleshooting</h2>
+
+<div class="card">
+<b>Python Not Found</b><br>
+Install Python and add to PATH
+</div>
+
+<div class="card">
+<b>Dependencies Fail</b>
+<div class="code">
+<button class="copy" onclick="copy(this)">Copy</button>
+<pre>python -m ensurepip --upgrade
+python -m pip install --upgrade pip</pre>
+</div>
+</div>
+
+<div class="card">
+<b>Shortcuts Not Working</b><br>
+Run installer as Administrator
+</div>
+
+<a class="btn" href="https://github.com/parkertripoli-wq/sloth-web/issues/new/choose">
+Report Issue
+</a>
+
+</section>
+
+<!-- LINKS -->
+<section id="links">
+<h2>Important Links</h2>
+
+<ul>
+<li><a href="https://parkertrip.github.io/slothweb/">Website</a></li>
+<li><a href="https://raw.githubusercontent.com/parkertripoli-wq/sloth-web/refs/heads/main/sloth_web.ico">Logo</a></li>
+<li><a href="https://github.com/parkertripoli-wq/sloth-web/blob/main/bwsr.py">Main File</a></li>
+<li><a href="https://github.com/parkertripoli-wq/sloth-web/blob/main/README.md">Docs</a></li>
+<li><a href="https://raw.githubusercontent.com/parkertripoli-wq/sloth-web/refs/heads/main/version.txt">Version</a></li>
+<li><a href="https://github.com/parkertripoli-wq/sloth-web/blob/main/installer.bat">Installer</a></li>
+</ul>
+
+</section>
+
+</div>
+</div>
+
+<script>
+function copy(btn) {
+  const text = btn.nextElementSibling.innerText;
+  navigator.clipboard.writeText(text);
+  btn.innerText = "Copied!";
+}
+
+function searchDocs(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll("section").forEach(sec => {
+    sec.style.display = sec.innerText.toLowerCase().includes(q) ? "block" : "none";
+  });
+}
+</script>
+
+</body>
+</html>
