@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌌 CHAOS REALM 🌌</title>
+  <link rel="icon" id="favicon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🌌</text></svg>">
+
+  <style>
+    body {
+      margin: 0; padding: 0; overflow: hidden;
+      background: radial-gradient(circle at 50% 20%, #6a00cc, #1a0033, #000);
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      color: white;
+      transition: transform 0.25s, filter 0.6s;
+    }
+    #floating-img {
+      position: absolute; 
+      width: 260px; 
+      height: auto;
+      pointer-events: auto; 
+      z-index: 100;
+      filter: drop-shadow(0 0 65px #c060ff);
+      user-select: none;
+      transition: transform 0.2s ease-out;
+    }
+    .title {
+      position: absolute; top: 35px; left: 50%; transform: translateX(-50%);
+      font-size: 3.1rem; font-weight: bold;
+      text-shadow: 0 0 50px #ff00ff;
+      z-index: 200; pointer-events: none;
+    }
+    canvas { position: absolute; top: 0; left: 0; z-index: 1; }
+    .controls {
+      position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.85); padding: 16px 40px; border-radius: 50px;
+      font-size: 16px; z-index: 300; text-align: center;
+      border: 1px solid rgba(255,100,255,0.6);
+    }
+    .warning {
+      position: absolute; top: 100px; left: 50%; transform: translateX(-50%);
+      background: rgba(255,0,0,0.8); color: white; padding: 12px 30px;
+      border-radius: 12px; font-size: 18px; display: none; z-index: 400;
+      text-align: center; box-shadow: 0 0 30px red;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="canvas"></canvas>
+  <div class="title" id="main-title">🌌 CHAOS REALM 🌌</div>
+  <div class="warning" id="warning">⚠️ MOUSE STOLEN BY THE PACKET ⚠️</div>
+
+  <img id="floating-img" 
+       src="https://i.etsystatic.com/10324120/r/il/b89545/6177792891/il_300x300.6177792891_he8x.jpg" 
+       alt="The Packet">
+
+  <div class="controls">
+    <strong>Controls:</strong> Boop Image 3× = STEAL MOUSE + ESCAPE • 
+    SPACE = Max Chaos • R = Reset • E = Edit Mode • F = Flip • V = Fake Virus
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+
+    const titleEl = document.getElementById('main-title');
+    const img = document.getElementById('floating-img');
+    const warning = document.getElementById('warning');
+
+    let particles = [];
+    let boopCount = 0;
+    let isMouseStolen = false;
+
+    // Image Physics
+    let imgX = w * 0.4;
+    let imgY = h * 0.35;
+    let imgVX = 5;
+    let imgVY = -6;
+    let rotation = 0;
+    let rotSpeed = 0;
+    let scale = 1;
+
+    class Particle {
+      constructor(x, y) {
+        this.x = x; this.y = y;
+        this.vx = (Math.random()-0.5)*22;
+        this.vy = (Math.random()-0.5)*22;
+        this.life = 150;
+        this.size = Math.random()*13 + 7;
+        this.hue = Math.random()*360;
+      }
+      update() {
+        this.x += this.vx; this.y += this.vy;
+        this.vy += 0.28;
+        this.life -= 1.8;
+        this.size *= 0.95;
+      }
+      draw() {
+        ctx.globalAlpha = this.life/150;
+        ctx.fillStyle = `hsl(${this.hue},100%,85%)`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+        ctx.fill();
+      }
+    }
+
+    function createBurst(x, y, count=130, power=2.5) {
+      for (let i = 0; i < count; i++) {
+        const p = new Particle(x, y);
+        p.vx *= power; p.vy *= power;
+        particles.push(p);
+      }
+    }
+
+    function screenShake(power=55) {
+      document.body.style.transition = 'none';
+      document.body.style.transform = `translate(${Math.random()*power-power/2}px, ${Math.random()*power-power/2}px) rotate(${Math.random()*8-4}deg)`;
+      setTimeout(() => document.body.style.transform = '', 150);
+    }
+
+    function flashGlitch() {
+      document.body.style.filter = 'invert(1) hue-rotate(220deg) saturate(5)';
+      setTimeout(() => document.body.style.filter = '', 250);
+    }
+
+    function updateURL() {
+      const paths = ["/packet-stole-your-mouse", "/mouse-theft-in-progress", "/the-packet-has-control", "/run-for-your-life"];
+      try {
+        history.pushState({}, "", paths[Math.floor(Math.random()*paths.length)]);
+      } catch(e) {}
+    }
+
+    function updateTitle() {
+      const titles = ["🌌 CHAOS REALM 🌌", "🌀 THE PACKET IS IN CONTROL 🌀", "💥 MOUSE THEFT DETECTED 💥", "🌠 ESCAPE SEQUENCE INITIATED"];
+      const txt = titles[Math.floor(Math.random()*titles.length)];
+      document.title = txt;
+      titleEl.textContent = txt;
+    }
+
+    function randomFavicon() {
+      const emojis = ['🌌','🌀','💥','🌠','🚀','😵‍💫','🔥','👀','🐭'];
+      const emoji = emojis[Math.floor(Math.random()*emojis.length)];
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="0.9em" font-size="80">${emoji}</text></svg>`;
+      document.getElementById('favicon').href = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+    }
+
+    // ============== EPIC ESCAPE SEQUENCE ==============
+    function startMouseStealEscape() {
+      isMouseStolen = true;
+      warning.style.display = 'block';
+
+      // Hide real cursor
+      document.body.style.cursor = 'none';
+
+      // Make packet dance aggressively and "chase" mouse position
+      let danceInterval = setInterval(() => {
+        rotSpeed += (Math.random() - 0.5) * 140;
+        scale = 1.7 + Math.random() * 0.8;
+        imgVY -= 8;
+      }, 50);
+
+      // Try to move the browser window around
+      let moveCount = 0;
+      const windowMoveInterval = setInterval(() => {
+        try {
+          const newX = Math.random() * (screen.availWidth - 900) + 150;
+          const newY = Math.random() * (screen.availHeight - 700) + 100;
+          window.moveTo(newX, newY);
+          moveCount++;
+          if (moveCount > 12) clearInterval(windowMoveInterval);
+        } catch(e) {}
+      }, 220);
+
+      // Final dramatic escape
+      setTimeout(() => {
+        clearInterval(danceInterval);
+        clearInterval(windowMoveInterval);
+
+        // Launch the packet off screen with huge spin
+        img.style.transition = 'transform 1.6s cubic-bezier(0.1, 0.7, 0.2, 1), opacity 1.4s';
+        img.style.transform = `translateY(-${h + 600}px) rotate(${rotation + 2880}deg) scale(0.15)`;
+        img.style.opacity = '0';
+
+        // Open escaped dancing packet window
+        const escapeWin = window.open('', '_blank', 'width=420,height=420,menubar=no,toolbar=no,location=no,status=no');
+        if (escapeWin) {
+          escapeWin.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head><title>THE PACKET ESCAPED 👀</title></head>
+            <body style="margin:0;background:#000;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;">
+              <img src="${img.src}" style="width:320px;animation: crazydance 0.4s infinite alternate;">
+              <style>
+                @keyframes crazydance {
+                  0%   { transform: rotate(-35deg) scale(1); }
+                  100% { transform: rotate(35deg) scale(1.25); }
+                }
+              </style>
+              <p style="position:absolute;bottom:40px;color:#ff66ff;font-size:20px;">
+                The Packet has stolen your mouse and escaped...
+              </p>
+            </body>
+            </html>
+          `);
+        } else {
+          alert("Pop-up blocked! The Packet couldn't fully escape... 😢");
+        }
+
+        setTimeout(() => {
+          resetEverything();
+        }, 1800);
+      }, 1400);
+    }
+
+    function resetEverything() {
+      boopCount = 0;
+      isMouseStolen = false;
+      document.body.style.cursor = 'default';
+      warning.style.display = 'none';
+
+      img.style.transition = 'none';
+      img.style.transform = 'none';
+      img.style.opacity = '1';
+
+      imgX = w * 0.4;
+      imgY = h * 0.35;
+      imgVX = (Math.random() - 0.5) * 15;
+      imgVY = -9;
+      rotation = 0;
+      rotSpeed = 0;
+      scale = 1;
+    }
+
+    function animate() {
+      ctx.fillStyle = 'rgba(14, 0, 36, 0.18)';
+      ctx.fillRect(0, 0, w, h);
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        particles[i].draw();
+        if (particles[i].life <= 0) particles.splice(i, 1);
+      }
+
+      // Normal chaotic movement
+      imgX += imgVX;
+      imgY += imgVY;
+
+      imgVX += Math.sin(Date.now()/340) * 0.25;
+      imgVY += Math.cos(Date.now()/550) * 0.22;
+
+      if (imgX < 30 || imgX > w - 300) imgVX *= -0.88;
+      if (imgY < 30 || imgY > h - 300) {
+        imgVY *= -0.87;
+        if (imgY > h - 300) imgVY = -Math.abs(imgVY) * 0.97;
+      }
+
+      if (Math.random() < 0.065) {
+        imgVY -= 25 + Math.random() * 20;
+        rotSpeed += (Math.random() - 0.5) * 95;
+      }
+
+      rotSpeed *= 0.90;
+      rotation += rotSpeed;
+
+      img.style.left = `${imgX}px`;
+      img.style.top = `${imgY}px`;
+      img.style.transform = `rotate(${rotation}deg) scale(${scale})`;
+
+      requestAnimationFrame(animate);
+    }
+
+    // ===================== EVENTS =====================
+    document.addEventListener('mousemove', e => {
+      if (!isMouseStolen) {
+        img.style.left = (e.clientX - 130) + 'px';
+        img.style.top = (e.clientY - 130) + 'px';
+      }
+    });
+
+    img.addEventListener('click', e => {
+      e.stopImmediatePropagation();
+      boopCount++;
+
+      createBurst(e.clientX, e.clientY, 180, 4);
+      imgVY -= 45;
+      rotSpeed += (Math.random()-0.5)*150;
+      scale = 1.6 + Math.random()*1.0;
+      screenShake(60);
+      flashGlitch();
+      updateURL();
+      randomFavicon();
+
+      if (boopCount >= 3) {
+        startMouseStealEscape();
+      }
+    });
+
+    document.addEventListener('click', e => {
+      if (!isMouseStolen) {
+        createBurst(e.clientX, e.clientY, 110, 2.3);
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === " ") {
+        createBurst(w/2, h/2, 280, 4.5);
+        screenShake(70);
+        flashGlitch();
+        updateTitle();
+        updateURL();
+        randomFavicon();
+      }
+      if (e.key.toLowerCase() === "r") resetEverything();
+      if (e.key.toLowerCase() === "e") {
+        document.body.contentEditable = document.body.contentEditable === "true" ? "false" : "true";
+      }
+      if (e.key.toLowerCase() === "f") {
+        document.body.style.transition = 'transform 1.4s';
+        document.body.style.transform = 'rotate(180deg)';
+        setTimeout(() => document.body.style.transform = 'rotate(0deg)', 3200);
+      }
+      if (e.key.toLowerCase() === "v") {
+        alert("🦠 THE PACKET HAS TAKEN CONTROL OF YOUR COMPUTER... (jk)");
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    });
+
+    // Start
+    window.onload = () => {
+      animate();
+      createBurst(w/2, h/2, 140);
+
+      setInterval(randomFavicon, 400);
+      setInterval(updateTitle, 1900);
+      setInterval(updateURL, 2200);
+    };
+  </script>
+</body>
+</html>
