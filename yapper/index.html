@@ -10,7 +10,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- AOS Animation Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -26,6 +26,7 @@
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
             --neon-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
             --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --mono: 'JetBrains Mono', monospace;
         }
 
         /* --- Fading Scrollbar --- */
@@ -48,9 +49,19 @@
                 linear-gradient(rgba(0, 242, 255, 0.02) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 242, 255, 0.02) 1px, transparent 1px);
             background-size: 60px 60px;
+            position: relative;
         }
 
         h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+
+        /* --- Background Particles --- */
+        .particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: radial-gradient(circle at center, rgba(112, 0, 255, 0.05) 0%, transparent 70%);
+        }
 
         /* --- Header --- */
         header {
@@ -68,6 +79,7 @@
             color: var(--primary);
             display: flex; align-items: center; gap: 10px;
             text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
         }
 
         .logo img { width: 24px; border-radius: 4px; }
@@ -78,7 +90,7 @@
             font-size: 0.8rem; letter-spacing: 1px;
         }
 
-        nav a:hover { opacity: 1; color: var(--primary); }
+        nav a:hover { opacity: 1; color: var(--primary); text-shadow: var(--neon-shadow); }
 
         /* --- Hero --- */
         .hero {
@@ -94,6 +106,12 @@
             font-size: 1rem; color: var(--primary); font-weight: 700;
             margin-bottom: 20px; display: block;
             text-transform: uppercase; letter-spacing: 3px;
+            animation: pulseText 3s infinite;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.8; text-shadow: none; }
+            50% { opacity: 1; text-shadow: 0 0 15px var(--primary); }
         }
 
         .hero-content h1 {
@@ -105,14 +123,36 @@
             font-size: clamp(1rem, 2vw, 1.2rem); color: var(--text-dim); margin-bottom: 40px;
         }
 
-        .hero-image { flex: 1; display: flex; justify-content: center; width: 100%; }
+        .hero-image { flex: 1; display: flex; justify-content: center; width: 100%; position: relative; }
         .hero-image img {
             width: 100%; max-width: 800px;
             filter: drop-shadow(0 0 30px rgba(0, 242, 255, 0.2));
             animation: float 6s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        /* Glitch effect layer behind hero image */
+        .hero-image::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%; height: 60%;
+            background: var(--gradient);
+            filter: blur(80px);
+            opacity: 0.3;
+            z-index: 1;
+            animation: pulseGlow 4s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.9); }
+            100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.1); }
         }
 
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        .btn-group { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 30px; }
 
         .btn {
             padding: 16px 36px; border-radius: 50px;
@@ -120,7 +160,7 @@
             display: inline-block; transition: var(--transition);
             cursor: pointer; font-size: 0.9rem;
             text-transform: uppercase; letter-spacing: 2px;
-            width: fit-content;
+            text-align: center;
         }
 
         .btn-neon {
@@ -134,8 +174,76 @@
             box-shadow: 0 15px 30px rgba(0, 242, 255, 0.4);
         }
 
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(0, 242, 255, 0.05);
+        }
+
+        /* --- Terminal / Console Effect --- */
+        .terminal-box {
+            background: #000;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-top: 40px;
+            max-width: 500px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terminal-box::before {
+            content: 'SYSTEM.LOG';
+            position: absolute;
+            top: 0; right: 0;
+            background: rgba(0, 242, 255, 0.2);
+            color: var(--primary);
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        .typing-effect {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid var(--primary);
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+            display: inline-block;
+        }
+
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--primary); } }
+
+        /* --- Video Section --- */
+        .video-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 60px auto 0;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            aspect-ratio: 16 / 9;
+            position: relative;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%; border: 0;
+        }
+
         /* --- Sections --- */
-        section { padding: 100px 8%; }
+        section { padding: 100px 8%; position: relative; }
 
         .section-title {
             font-size: clamp(2.5rem, 8vw, 4rem); margin-bottom: 50px;
@@ -152,21 +260,106 @@
             padding: 40px; border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
 
-        .feature-card:hover { transform: translateY(-8px); border-color: var(--primary); }
+        .feature-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 0%;
+            background: var(--gradient); transition: height 0.4s ease;
+        }
+
+        .feature-card:hover { transform: translateY(-8px); border-color: rgba(0, 242, 255, 0.3); background: rgba(0, 242, 255, 0.03); }
+        .feature-card:hover::before { height: 100%; }
         .feature-card h3 { font-size: 1.6rem; margin-bottom: 12px; color: var(--primary); }
         .feature-card p { color: var(--text-dim); font-size: 0.95rem; }
 
+        /* --- Specs Section --- */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px; margin-top: 60px;
+        }
+        
+        .spec-item {
+            background: rgba(255, 255, 255, 0.01);
+            padding: 30px;
+            border-left: 2px solid var(--primary);
+            border-radius: 0 16px 16px 0;
+            transition: var(--transition);
+        }
+
+        .spec-item:hover { background: rgba(0, 242, 255, 0.03); transform: translateX(10px); }
+        .spec-item h4 { font-size: 1.4rem; color: var(--primary); margin-bottom: 10px; font-family: var(--mono); }
+        .spec-item p { color: var(--text-dim); font-size: 1rem; }
+
         /* --- Hardware --- */
         .hardware-flex { display: flex; align-items: center; gap: 60px; }
-        .hardware-img { flex: 1; }
-        .hardware-img img { width: 100%; border-radius: 16px; }
+        .hardware-img { flex: 1; position: relative; }
+        .hardware-img img { width: 100%; border-radius: 16px; position: relative; z-index: 2; }
         .hardware-content { flex: 1; }
 
+        .hardware-img::after {
+            content: ''; position: absolute; bottom: -20px; right: -20px; width: 100%; height: 100%;
+            border: 1px solid var(--primary); border-radius: 16px; z-index: 1; opacity: 0.3;
+        }
+
         .hw-item { margin-bottom: 30px; }
-        .hw-item h3 { font-size: 1.6rem; margin-bottom: 8px; }
+        .hw-item h3 { font-size: 1.6rem; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .hw-item h3::before { content: '>'; color: var(--primary); font-family: var(--mono); }
         .hw-item p { color: var(--text-dim); font-size: 0.95rem; }
+
+        /* --- Pricing Tag --- */
+        .price-badge {
+            display: inline-block;
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid var(--primary);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-top: 20px;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+            font-family: var(--mono);
+        }
+
+        /* --- Ready to Yap --- */
+        .ready-cta {
+            text-align: center;
+            padding: 100px 10%;
+            background: radial-gradient(circle at center, rgba(112, 0, 255, 0.1) 0%, transparent 70%);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin: 50px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ready-cta h2 {
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+        
+        .ready-cta p {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto; margin-right: auto;
+        }
+
+        /* --- Dev Log --- */
+        .dev-log {
+            text-align: center; background: rgba(255,255,255,0.01);
+            padding: 80px 8%; border-radius: 30px;
+            position: relative;
+        }
+        .dev-log p { font-size: clamp(1.4rem, 4vw, 2rem); color: var(--primary); max-width: 800px; margin: 0 auto; line-height: 1.4; font-style: italic; }
 
         /* --- Back to Top --- */
         .back-to-top {
@@ -175,36 +368,43 @@
             color: black; display: flex; align-items: center; justify-content: center;
             border-radius: 50%; cursor: pointer; text-decoration: none;
             font-weight: 800; transition: var(--transition);
-            z-index: 1000; opacity: 0;
+            z-index: 1000; opacity: 0; box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
         }
         .back-to-top.show { opacity: 1; }
-
-        /* --- Dev Log --- */
-        .dev-log {
-            text-align: center; background: rgba(255,255,255,0.01);
-            padding: 80px 8%; border-radius: 30px;
-        }
-        .dev-log p { font-size: clamp(1.4rem, 4vw, 2rem); color: var(--primary); max-width: 800px; margin: 0 auto; line-height: 1.4; }
+        .back-to-top:hover { transform: translateY(-5px); }
 
         /* --- Mobile Friendly Tweaks --- */
         @media (max-width: 1024px) {
             .hero { flex-direction: column; text-align: center; justify-content: center; padding-top: 140px; }
             .hero-image { order: -1; margin-bottom: 40px; }
-            .hero-content { max-width: 100%; }
+            .hero-content { max-width: 100%; display: flex; flex-direction: column; align-items: center; }
+            .terminal-box { text-align: left; }
             .hardware-flex { flex-direction: column; text-align: center; }
+            .hw-item h3 { justify-content: center; }
+            .hw-item h3::before { display: none; }
             header { padding: 15px 5%; }
-            nav { display: none; } /* Simplified for mobile */
+            nav { display: none; }
+            .video-container { width: 100%; border-radius: 10px; }
+            .btn-group { justify-content: center; }
         }
 
         /* --- Modal --- */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.95);
             display: none; align-items: center; justify-content: center; z-index: 2005;
+            backdrop-filter: blur(10px);
         }
         .modal-overlay.active { display: flex; }
         .modal {
-            background: #000; padding: 40px; border: 1px solid var(--primary);
-            text-align: center; border-radius: 16px; width: 90%; max-width: 400px;
+            background: #050505; padding: 50px; border: 1px solid var(--primary);
+            text-align: center; border-radius: 16px; width: 90%; max-width: 450px;
+            box-shadow: 0 0 50px rgba(0, 242, 255, 0.1);
+            position: relative;
+        }
+
+        .modal-status {
+            font-family: var(--mono); color: var(--secondary);
+            font-size: 0.8rem; margin-bottom: 10px; text-transform: uppercase;
         }
 
         footer { padding: 40px; text-align: center; opacity: 0.4; font-size: 0.7rem; letter-spacing: 2px; }
@@ -212,28 +412,50 @@
 </head>
 <body>
 
+    <div class="particles"></div>
+
     <header>
         <div class="logo">
             <img src="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/yapper/images/favicon.png" alt="Y">
             THE YAPPER
         </div>
         <nav>
-            <a href="#features">VOICE</a>
-            <a href="#hardware">GEAR</a>
-            <a href="#dev">DEV</a>
-            <a href="javascript:void(0)" class="amazon-btn">SHOP</a>
+            <a href="#demo">DEMO</a>
+            <a href="#features">SYSTEM</a>
+            <a href="#specs">SPECS</a>
+            <a href="#dev">LOG</a>
+            <a href="javascript:void(0)" class="amazon-btn" style="color: var(--primary);">STORE</a>
         </nav>
     </header>
 
     <section class="hero" id="home">
-        <div class="hero-image" data-aos="zoom-in">
-            <img src="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/yapper/images/the_yapper_glasses_v2.png" alt="Yapper Smart Glasses">
-        </div>
         <div class="hero-content" data-aos="fade-up">
             <span class="slogan">"We have the future in your glasses!"</span>
             <h1>REMOTE<br>VOICE SET</h1>
-            <p>A school project built to bridge the gap between you and your technology. Control your devices anywhere with the power of voice.</p>
-            <a href="javascript:void(0)" class="btn btn-neon amazon-btn">AMAZON STOREFRONT</a>
+            <p>A school project built to bridge the gap between you and your technology. Control your devices anywhere with the power of voice, AR visuals, and cloud connectivity.</p>
+            
+            <div class="price-badge">$99.00 USD</div>
+            
+            <div class="terminal-box">
+                <div style="color: #555;">// Boot sequence initiated...</div>
+                <div style="color: #555;">// Establishing cloud handshake...</div>
+                <div class="typing-effect">> "Hey Yappey, open YouTube."</div>
+            </div>
+
+            <div class="btn-group">
+                <a href="#demo" class="btn btn-neon">Watch Demo</a>
+                <a href="javascript:void(0)" class="btn btn-outline amazon-btn">Amazon Store</a>
+            </div>
+        </div>
+        <div class="hero-image" data-aos="zoom-in" data-aos-delay="200">
+            <img src="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/yapper/images/the_yapper_glasses_v2.png" alt="Yapper Smart Glasses">
+        </div>
+    </section>
+
+    <section id="demo" data-aos="fade-up">
+        <h2 class="section-title" style="text-align: center; font-size: clamp(2rem, 5vw, 3rem);">See The Yapper in Action</h2>
+        <div class="video-container" data-aos="zoom-in" data-aos-delay="100">
+            <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSZSzj8JZj5IlLnQwTjNbZhkIzQiI_T1ZXHrJ40a-GQKSiDbTEzf9GJCQNZA-FoRO2Jio6FxqOFqqS9/embed?start=true&loop=false&delayms=3000" frameborder="0" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
         </div>
     </section>
 
@@ -242,20 +464,18 @@
         <div class="feature-grid">
             <div class="feature-card" data-aos="fade-up">
                 <h3>Vocal Command</h3>
-                <p>"Hey Yappey, open YouTube." Seamless cloud-bridged voice control for your home device.</p>
+                <p>"Hey Yappey, open YouTube." Seamless cloud-bridged voice control for your home device. The onboard mic captures your request with precision.</p>
             </div>
             <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
                 <h3>Cloud Bridge</h3>
-                <p>Link to your devices from miles away. The cloud app keeps your logic connected 24/7.</p>
+                <p>Link to your devices from miles away. The WiFi cloud integration keeps your logic connected 24/7, bridging your phone to your remote setup.</p>
             </div>
             <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
                 <h3>Display Logic</h3>
-                <p>Integrated AR feedback shows you exactly what's happening on your device in real-time.</p>
+                <p>Integrated AR feedback projected directly through the optical prism shows you exactly what's happening on your device in real-time.</p>
             </div>
         </div>
-        <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSZSzj8JZj5IlLnQwTjNbZhkIzQiI_T1ZXHrJ40a-GQKSiDbTEzf9GJCQNZA-FoRO2Jio6FxqOFqqS9/pubembed?start=false&loop=false" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
     </section>
-    
 
     <section id="hardware" data-aos="fade-up">
         <div class="hardware-flex">
@@ -265,24 +485,57 @@
             <div class="hardware-content" data-aos="fade-left">
                 <h2 class="section-title" style="font-size: 2.5rem;">Hardware Core</h2>
                 <div class="hw-item">
-                    <h3>The Pen Case</h3>
-                    <p>Subtle, minimalist, and powerful. Holds the processing core that handles your requests.</p>
+                    <h3>The Pen Case Enclosure</h3>
+                    <p>Subtle, minimalist 3D-printed enclosure. Holds the processing core, battery, and optical hardware in a sleek profile.</p>
                 </div>
                 <div class="hw-item">
-                    <h3>Neural Node</h3>
-                    <p>Optimized circuit board for low-latency Bluetooth and cloud system handshakes.</p>
+                    <h3>ESP32 Neural Node</h3>
+                    <p>Powered by an ESP32 micro-controller flashed via Arduino IDE. Optimized for low-latency Bluetooth pairing to your phone and WiFi cloud handshakes.</p>
                 </div>
                 <div class="hw-item">
-                    <h3>Universal Fit</h3>
-                    <p>modular design created to mount onto any standard pair of glasses seamlessly.</p>
+                    <h3>T-Glass Optics</h3>
+                    <p>Utilizes advanced T-Glass hardware. The optical prism clips seamlessly onto any standard pair of glasses, delivering crisp AR visuals.</p>
                 </div>
             </div>
         </div>
     </section>
 
+    <section id="specs" data-aos="fade-up" style="background: rgba(255,255,255,0.01);">
+        <h2 class="section-title" style="text-align: center; font-size: clamp(2rem, 5vw, 3rem);">Technical Specifications</h2>
+        <p style="text-align: center; color: var(--text-dim); max-width: 700px; margin: 0 auto;">Engineered for lightweight performance and all-day connectivity.</p>
+        
+        <div class="specs-grid">
+            <div class="spec-item" data-aos="fade-up">
+                <h4>Core Processor</h4>
+                <p>ESP32 Micro-controller for robust Bluetooth/WiFi bridging.</p>
+            </div>
+            <div class="spec-item" data-aos="fade-up" data-aos-delay="100">
+                <h4>Optical Display</h4>
+                <p>LilyGO T-Glass Prism display for clear, non-obtrusive augmented reality.</p>
+            </div>
+            <div class="spec-item" data-aos="fade-up" data-aos-delay="200">
+                <h4>Power Source</h4>
+                <p>200mAh Lithium Polymer (LiPo) battery with integrated USB-C charging.</p>
+            </div>
+            <div class="spec-item" data-aos="fade-up" data-aos-delay="300">
+                <h4>Audio Interface</h4>
+                <p>Built-in microphone tuned for "Hey Yappie" wake-word recognition.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="ready-cta" data-aos="zoom-in">
+        <h2>Ready to Yap?</h2>
+        <p>Step into the future of connected reality. Everything you need for seamless remote control, packed into an incredibly capable $99.00 system.</p>
+        <div class="btn-group" style="justify-content: center;">
+            <a href="#demo" class="btn btn-neon">See Demo</a>
+            <a href="javascript:void(0)" class="btn btn-outline amazon-btn">Amazon Pre-Order</a>
+        </div>
+    </section>
+
     <section id="dev" class="dev-log" data-aos="fade-up">
         <p>"I created the yapper as a school project and now it is here."</p>
-        <p style="font-size: 0.8rem; opacity: 0.4; margin-top: 25px; letter-spacing: 4px;">- Parker</p>
+        <p style="font-size: 0.8rem; opacity: 0.4; margin-top: 25px; letter-spacing: 4px; font-family: var(--mono);">>> DEV: PARKER</p>
     </section>
 
     <footer>
@@ -291,11 +544,13 @@
 
     <a href="#home" class="back-to-top" id="backToTop">↑</a>
 
+    <!-- Amazon WIP Modal -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
-            <h2 style="font-size: 2.5rem; margin-bottom: 20px;">COMING SOON</h2>
-            <p style="color: var(--primary); margin-bottom: 25px;">The storefront is opening soon!</p>
-            <div style="cursor: pointer; text-decoration: underline; font-weight: 700;" id="closeModal">RETURN</div>
+            <div class="modal-status">STATUS: WORK IN PROGRESS</div>
+            <h2 style="font-size: 2.5rem; margin-bottom: 20px;">AMAZON STORE</h2>
+            <p style="color: var(--text-dim); margin-bottom: 25px; font-size: 1.1rem;">Our official Amazon storefront is currently under construction. Check back soon for official Yapper kits!</p>
+            <div style="cursor: pointer; color: var(--primary); font-family: var(--mono); font-weight: 700; border: 1px solid var(--primary); padding: 10px; border-radius: 4px; display: inline-block;" id="closeModal">[ CLOSE WINDOW ]</div>
         </div>
     </div>
 
@@ -304,18 +559,23 @@
     <script>
         AOS.init({ duration: 1000, once: true });
 
+        // Back to top logic
         const backToTop = document.getElementById('backToTop');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 400) backToTop.classList.add('show');
             else backToTop.classList.remove('show');
         });
 
+        // Amazon WIP Modal Logic
         const amazonBtns = document.querySelectorAll('.amazon-btn');
         const modalOverlay = document.getElementById('modalOverlay');
         const closeModal = document.getElementById('closeModal');
 
         amazonBtns.forEach(btn => btn.addEventListener('click', () => modalOverlay.classList.add('active')));
         closeModal.addEventListener('click', () => modalOverlay.classList.remove('active'));
+        modalOverlay.addEventListener('click', (e) => {
+            if(e.target === modalOverlay) modalOverlay.classList.remove('active');
+        });
     </script>
 </body>
 </html>
