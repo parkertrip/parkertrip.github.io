@@ -175,9 +175,20 @@
 
         function handleCustomLogin() {
             if (!customUserData) return;
-            currentUser = { uid: customUserData.id || 'custom-' + Date.now(), displayName: customUserData.username || customUserData.name || 'User', photoURL: customUserData.avatar || null, email: customUserData.email || null };
+            currentUser = {
+                uid: customUserData.id || 'custom-' + Date.now(),
+                displayName: customUserData.username || customUserData.name || 'User',
+                photoURL: customUserData.avatar || null,
+                email: customUserData.email || null
+            };
             const userRef = ref(db, `users/${currentUser.uid}`);
-            set(userRef, { uid: currentUser.uid, name: currentUser.displayName, email: currentUser.email, photoURL: currentUser.photoURL, createdAt: Date.now() });
+            set(userRef, {
+                uid: currentUser.uid,
+                name: currentUser.displayName,
+                email: currentUser.email,
+                photoURL: currentUser.photoURL,
+                createdAt: Date.now()
+            });
             document.getElementById('sign-in-screen').classList.add('hidden');
             document.getElementById('main-app').classList.remove('hidden');
             const bar = document.getElementById('user-bar');
@@ -205,7 +216,10 @@
             setTimeout(() => el.classList.add('hidden'), 4000);
         }
 
-        window.signOut = () => { firebaseSignOut(auth); location.reload(); };
+        window.signOut = () => {
+            firebaseSignOut(auth);
+            location.reload();
+        };
 
         function switchToChat(chatId, headerName) {
             currentChatId = chatId;
@@ -250,6 +264,7 @@
                 timestamp: Date.now()
             });
             input.value = '';
+            loadMessages(); // Force immediate refresh
         };
 
         window.sendImage = () => {
@@ -269,6 +284,7 @@
                     isImage: true,
                     timestamp: Date.now()
                 });
+                loadMessages(); // Force immediate refresh
             };
             input.click();
         };
