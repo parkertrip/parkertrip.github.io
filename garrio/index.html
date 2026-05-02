@@ -92,7 +92,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signInAnonymously, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut as firebaseSignOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-        import { getDatabase, ref, onChildAdded, push, onValue, set, off, onDisconnect } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+        import { getDatabase, ref, onChildAdded, push, onValue, set, onDisconnect } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBlMBEG0FEvpeVRJNMrW4ngLzG80mXMloM",
@@ -127,36 +127,25 @@
                     createdAt: Date.now()
                 });
             }
-            if (user.isAnonymous) {
-                onDisconnect(userRef).remove();
-            }
+            if (user.isAnonymous) onDisconnect(userRef).remove();
         }
 
-        window.googleSignIn = () => {
-            const provider = new GoogleAuthProvider();
-            signInWithPopup(auth, provider).catch(err => showError(err.message));
-        };
-
-        window.anonymousSignIn = () => signInAnonymously(auth).catch(err => showError(err.message));
-
+        window.googleSignIn = () => signInWithPopup(auth, new GoogleAuthProvider()).catch(e => showError(e.message));
+        window.anonymousSignIn = () => signInAnonymously(auth).catch(e => showError(e.message));
         window.emailSignIn = () => {
             const email = document.getElementById('email-input').value.trim();
             const pass = document.getElementById('password-input').value;
-            if (!email || !pass) return;
-            signInWithEmailAndPassword(auth, email, pass).catch(err => showError(err.message));
+            if (email && pass) signInWithEmailAndPassword(auth, email, pass).catch(e => showError(e.message));
         };
-
         window.emailSignUp = () => {
             const email = document.getElementById('email-input').value.trim();
             const pass = document.getElementById('password-input').value;
-            if (!email || !pass) return;
-            createUserWithEmailAndPassword(auth, email, pass).catch(err => showError(err.message));
+            if (email && pass) createUserWithEmailAndPassword(auth, email, pass).catch(e => showError(e.message));
         };
 
         function showError(msg) {
             const el = document.getElementById('signin-error');
-            el.textContent = msg;
-            el.classList.remove('hidden');
+            el.textContent = msg; el.classList.remove('hidden');
             setTimeout(() => el.classList.add('hidden'), 4000);
         }
 
@@ -169,22 +158,28 @@
         }
 
         function loadMessages() {
-            if (messagesUnsub) off(messagesUnsub);
+            if (messagesUnsub) messagesUnsub();
             const msgDiv = document.getElementById('messages');
             msgDiv.innerHTML = '';
             if (!currentChatId) return;
+
             const messagesRef = ref(db, `chats/${currentChatId}/messages`);
-            messagesUnsub = onChildAdded(messagesRef, (snap) => {
-                const msg = snap.val();
-                const mine = msg.uid === currentUser.uid;
-                msgDiv.innerHTML += `
-                <div class="flex ${mine ? 'justify-end' : 'justify-start'}">
-                    <div class="${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]">
-                        ${!mine ? `<div class="text-xs opacity-70 mb-1">${msg.name}</div>` : ''}
-                        <div>${msg.text}</div>
-                        <div class="text-[10px] opacity-60 text-right mt-1">${new Date(msg.timestamp).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'})}</div>
-                    </div>
-                </div>`;
+            messagesUnsub = onValue(messagesRef, (snap) => {
+                msgDiv.innerHTML = '';
+                const msgs = [];
+                snap.forEach(c => msgs.push(c.val()));
+                msgs.sort((a,b) => a.timestamp - b.timestamp);
+                msgs.forEach(msg => {
+                    const mine = msg.uid === currentUser.uid;
+                    msgDiv.innerHTML += `
+                    <div class="flex ${mine ? 'justify-end' : 'justify-start'}">
+                        <div class="${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]">
+                            ${!mine ? `<div class="text-xs opacity-70 mb-1">${msg.name}</div>` : ''}
+                            <div>${msg.text}</div>
+                            <div class="text-[10px] opacity-60 text-right mt-1">${new Date(msg.timestamp).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'})}</div>
+                        </div>
+                    </div>`;
+                });
                 msgDiv.scrollTop = msgDiv.scrollHeight;
             });
         }
@@ -193,8 +188,7 @@
             const input = document.getElementById('message-input');
             const text = input.value.trim();
             if (!text || !currentUser || !currentChatId) return;
-            const messagesRef = ref(db, `chats/${currentChatId}/messages`);
-            push(messagesRef, {
+            push(ref(db, `chats/${currentChatId}/messages`), {
                 uid: currentUser.uid,
                 name: currentUser.displayName || currentUser.email || 'User',
                 text: text,
@@ -213,7 +207,6 @@
                     const u = child.val();
                     if (u.email && u.email.toLowerCase() === email) found = u;
                 });
-                off(usersRef, 'value');
                 if (found && found.uid !== currentUser.uid) startDM(found);
                 else alert("User not found");
             }, {onlyOnce: true});
@@ -221,10 +214,8 @@
 
         window.startDMByUid = (uid) => {
             if (uid === currentUser.uid) return;
-            const userRef = ref(db, `users/${uid}`);
-            onValue(userRef, (snap) => {
+            onValue(ref(db, `users/${uid}`), (snap) => {
                 const other = snap.val();
-                off(userRef, 'value');
                 if (other) startDM(other);
             }, {onlyOnce: true});
         };
@@ -232,16 +223,8 @@
         window.startDM = (otherUser) => {
             const ids = [currentUser.uid, otherUser.uid].sort();
             const chatId = ids.join('_');
-            set(ref(db, `userChats/${currentUser.uid}/${chatId}`), {
-                type: 'dm',
-                name: otherUser.name || otherUser.email,
-                otherUid: otherUser.uid
-            });
-            set(ref(db, `userChats/${otherUser.uid}/${chatId}`), {
-                type: 'dm',
-                name: currentUser.displayName || currentUser.email || 'User',
-                otherUid: currentUser.uid
-            });
+            set(ref(db, `userChats/${currentUser.uid}/${chatId}`), { type: 'dm', name: otherUser.name || otherUser.email, otherUid: otherUser.uid });
+            set(ref(db, `userChats/${otherUser.uid}/${chatId}`), { type: 'dm', name: currentUser.displayName || currentUser.email || 'User', otherUid: currentUser.uid });
             switchToChat(chatId, otherUser.name || otherUser.email);
         };
 
@@ -249,38 +232,30 @@
             const name = prompt("Group name?");
             if (!name) return;
             const groupId = 'group_' + Date.now();
-            set(ref(db, `userChats/${currentUser.uid}/${groupId}`), {
-                type: 'group',
-                name: name
-            });
+            set(ref(db, `userChats/${currentUser.uid}/${groupId}`), { type: 'group', name: name });
             switchToChat(groupId, name);
         };
 
         function loadUserChats() {
-            if (chatsUnsub) off(chatsUnsub);
+            if (chatsUnsub) chatsUnsub();
             const list = document.getElementById('chats-list');
             const groupList = document.getElementById('chats-list-groups');
             chatsUnsub = onValue(ref(db, `userChats/${currentUser.uid}`), (snap) => {
-                list.innerHTML = '';
-                groupList.innerHTML = '';
+                list.innerHTML = ''; groupList.innerHTML = '';
                 snap.forEach(child => {
                     const data = child.val();
                     const chatId = child.key;
                     const el = document.createElement('div');
                     el.className = `px-4 py-3 hover:bg-blue-50 rounded-2xl cursor-pointer flex items-center gap-3 ${currentChatId === chatId ? 'bg-blue-50' : ''}`;
-                    el.innerHTML = `
-                        <div class="w-8 h-8 bg-gray-200 rounded-2xl flex-shrink-0"></div>
-                        <div class="flex-1 truncate">${data.name}</div>
-                    `;
+                    el.innerHTML = `<div class="w-8 h-8 bg-gray-200 rounded-2xl flex-shrink-0"></div><div class="flex-1 truncate">${data.name}</div>`;
                     el.onclick = () => switchToChat(chatId, data.name);
-                    if (data.type === 'group') groupList.appendChild(el);
-                    else list.appendChild(el);
+                    (data.type === 'group' ? groupList : list).appendChild(el);
                 });
             });
         }
 
         function loadPeople() {
-            if (peopleUnsub) off(peopleUnsub);
+            if (peopleUnsub) peopleUnsub();
             const container = document.getElementById('people-list');
             peopleUnsub = onValue(ref(db, 'users'), (snap) => {
                 container.innerHTML = '';
@@ -312,21 +287,15 @@
                 mainApp.classList.remove('hidden');
                 await createUserProfile(user);
                 const bar = document.getElementById('user-bar');
-                bar.innerHTML = `
-                    ${user.photoURL ? `<img src="${user.photoURL}" class="w-9 h-9 rounded-2xl">` : `<div class="w-9 h-9 bg-gray-200 rounded-2xl"></div>`}
-                    <div class="flex-1 min-w-0">
-                        <div class="font-medium truncate">${user.displayName || user.email || 'User'}</div>
-                        <div class="text-xs text-gray-500 truncate">${user.email || 'Anonymous'}</div>
-                    </div>
-                `;
+                bar.innerHTML = `${user.photoURL ? `<img src="${user.photoURL}" class="w-9 h-9 rounded-2xl">` : `<div class="w-9 h-9 bg-gray-200 rounded-2xl"></div>`}<div class="flex-1 min-w-0"><div class="font-medium truncate">${user.displayName || user.email || 'User'}</div><div class="text-xs text-gray-500 truncate">${user.email || 'Anonymous'}</div></div>`;
                 loadUserChats();
                 loadPeople();
             } else {
                 signScreen.classList.remove('hidden');
                 mainApp.classList.add('hidden');
-                if (messagesUnsub) off(messagesUnsub);
-                if (chatsUnsub) off(chatsUnsub);
-                if (peopleUnsub) off(peopleUnsub);
+                if (messagesUnsub) messagesUnsub();
+                if (chatsUnsub) chatsUnsub();
+                if (peopleUnsub) peopleUnsub();
             }
         });
     </script>
