@@ -103,7 +103,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signInAnonymously, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut as firebaseSignOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-        import { getDatabase, ref, onValue, push, set, onDisconnect, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+        import { getDatabase, ref, onChildAdded, push, onValue, set, onDisconnect } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
         import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
 
         const firebaseConfig = {
@@ -205,7 +205,7 @@
             setTimeout(() => el.classList.add('hidden'), 4000);
         }
 
-        window.signOut = () => { firebaseSignOut(auth); location.reload(); };
+        window.signOut = () => firebaseSignOut(auth);
 
         function switchToChat(chatId, headerName) {
             currentChatId = chatId;
@@ -218,23 +218,23 @@
             const msgDiv = document.getElementById('messages');
             msgDiv.innerHTML = '';
             if (!currentChatId) return;
-            const messagesRef = query(ref(db, `chats/${currentChatId}/messages`), orderByChild('timestamp'), limitToLast(100));
+            const messagesRef = ref(db, `chats/${currentChatId}/messages`);
             messagesUnsub = onValue(messagesRef, (snap) => {
                 msgDiv.innerHTML = '';
                 const msgs = [];
                 snap.forEach(c => msgs.push(c.val()));
                 msgs.sort((a,b) => (a.timestamp || 0) - (b.timestamp || 0));
-                let html = '';
                 msgs.forEach(msg => {
                     const mine = msg.uid === currentUser.uid;
-                    const time = new Date(msg.timestamp || Date.now()).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
-                    if (msg.isImage) {
-                        html += `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div class="${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]">${!mine ? `<div class="text-xs opacity-70 mb-1">${msg.name || 'User'}</div>` : ''}<img src="${msg.text}" class="max-w-full rounded-3xl cursor-pointer" onclick="window.open('${msg.text}')"><div class="text-[10px] opacity-60 text-right mt-1">${time}</div></div></div>`;
-                    } else {
-                        html += `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div class="${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]">${!mine ? `<div class="text-xs opacity-70 mb-1">${msg.name || 'User'}</div>` : ''}<div>${msg.text || ''}</div><div class="text-[10px] opacity-60 text-right mt-1">${time}</div></div></div>`;
-                    }
+                    msgDiv.innerHTML += `
+                    <div class="flex ${mine ? 'justify-end' : 'justify-start'}">
+                        <div class="${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]">
+                            ${!mine ? `<div class="text-xs opacity-70 mb-1">${msg.name}</div>` : ''}
+                            ${msg.isImage ? `<img src="${msg.text}" class="max-w-full rounded-3xl cursor-pointer" onclick="window.open('${msg.text}')">` : `<div>${msg.text}</div>`}
+                            <div class="text-[10px] opacity-60 text-right mt-1">${new Date(msg.timestamp).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'})}</div>
+                        </div>
+                    </div>`;
                 });
-                msgDiv.innerHTML = html;
                 msgDiv.scrollTop = msgDiv.scrollHeight;
             });
         }
@@ -250,7 +250,6 @@
                 timestamp: Date.now()
             });
             input.value = '';
-            loadMessages();
         };
 
         window.sendImage = () => {
@@ -270,14 +269,13 @@
                     isImage: true,
                     timestamp: Date.now()
                 });
-                loadMessages();
             };
             input.click();
         };
 
         window.startDMByEmail = () => {
             const email = document.getElementById('search-input').value.trim().toLowerCase();
-            if (!email || !currentUser) return;
+            if (!email) return;
             const usersRef = ref(db, 'users');
             onValue(usersRef, (snap) => {
                 let found = null;
@@ -356,20 +354,40 @@
         }
 
         onAuthStateChanged(auth, async (user) => {
-            if (user && !customUserData) {
-                currentUser = user;
-                document.getElementById('sign-in-screen').classList.add('hidden');
-                document.getElementById('main-app').classList.remove('hidden');
+            currentUser = user;
+            const signScreen = document.getElementById('sign-in-screen');
+            const mainApp = document.getElementById('main-app');
+            if (user) {
+                signScreen.classList.add('hidden');
+                mainApp.classList.remove('hidden');
+                await createUserProfile(user);
                 const bar = document.getElementById('user-bar');
                 bar.innerHTML = `${user.photoURL ? `<img src="${user.photoURL}" class="w-9 h-9 rounded-2xl">` : `<div class="w-9 h-9 bg-gray-200 rounded-2xl"></div>`}<div class="flex-1 min-w-0"><div class="font-medium truncate">${user.displayName || user.email || 'User'}</div><div class="text-xs text-gray-500 truncate">${user.email || 'Anonymous'}</div></div>`;
-                const userRef = ref(db, `users/${user.uid}`);
-                const snap = await new Promise(r => onValue(userRef, r, {onlyOnce: true}));
-                if (!snap.exists()) set(userRef, { uid: user.uid, name: user.displayName || user.email || 'User', email: user.email, photoURL: user.photoURL, createdAt: Date.now() });
-                if (user.isAnonymous) onDisconnect(userRef).remove();
                 loadUserChats();
                 loadPeople();
+            } else {
+                signScreen.classList.remove('hidden');
+                mainApp.classList.add('hidden');
+                if (messagesUnsub) messagesUnsub();
+                if (chatsUnsub) chatsUnsub();
+                if (peopleUnsub) peopleUnsub();
             }
         });
+
+        async function createUserProfile(user) {
+            const userRef = ref(db, `users/${user.uid}`);
+            const snap = await new Promise(r => onValue(userRef, r, {onlyOnce: true}));
+            if (!snap.exists()) {
+                set(userRef, {
+                    uid: user.uid,
+                    email: user.email || null,
+                    name: user.displayName || (user.email ? user.email.split('@')[0] : 'Guest'),
+                    photoURL: user.photoURL || null,
+                    createdAt: Date.now()
+                });
+            }
+            if (user.isAnonymous) onDisconnect(userRef).remove();
+        }
     </script>
 </body>
 </html>
