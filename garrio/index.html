@@ -128,7 +128,6 @@
         let chatsUnsub = null;
         let peopleUnsub = null;
 
-        // AuthPenguin
         let authToken = null;
         let customUserData = null;
 
@@ -198,7 +197,6 @@
             loadPeople();
         }
 
-        // Firebase sign-ins
         window.googleSignIn = () => signInWithPopup(auth, new GoogleAuthProvider()).catch(e => showError(e.message));
         window.anonymousSignIn = () => signInAnonymously(auth).catch(e => showError(e.message));
         window.emailSignIn = () => {
@@ -218,7 +216,10 @@
             setTimeout(() => el.classList.add('hidden'), 4000);
         }
 
-        window.signOut = () => firebaseSignOut(auth);
+        window.signOut = () => {
+            firebaseSignOut(auth);
+            location.reload();
+        };
 
         function switchToChat(chatId, headerName) {
             currentChatId = chatId;
