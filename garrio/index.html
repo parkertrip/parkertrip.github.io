@@ -237,10 +237,10 @@
                 msgDiv.innerHTML = '';
                 const msgs = [];
                 snap.forEach(c => msgs.push(c.val()));
-                msgs.sort((a,b) => a.timestamp - b.timestamp);
+                msgs.sort((a,b) => (a.timestamp || 0) - (b.timestamp || 0));
                 msgs.forEach(msg => {
                     const mine = msg.uid === currentUser.uid;
-                    const time = new Date(msg.timestamp).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+                    const time = new Date(msg.timestamp || Date.now()).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
                     if (msg.isImage) {
                         msgDiv.innerHTML += `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div class="${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]">${!mine ? `<div class="text-xs opacity-70 mb-1">${msg.name}</div>` : ''}<img src="${msg.text}" class="max-w-full rounded-3xl cursor-pointer" onclick="window.open('${msg.text}')"><div class="text-[10px] opacity-60 text-right mt-1">${time}</div></div></div>`;
                     } else {
