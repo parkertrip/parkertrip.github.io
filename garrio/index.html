@@ -35,7 +35,6 @@
                 </div>
             </div>
 
-            <!-- AuthPenguin extra sign-in options -->
             <div class="border-t pt-8">
                 <h3 class="text-center text-gray-500 mb-4 text-sm">More sign-in options (AuthPenguin)</h3>
                 <div class="grid grid-cols-2 gap-3">
@@ -129,11 +128,10 @@
         let chatsUnsub = null;
         let peopleUnsub = null;
 
-        // AuthPenguin vars
+        // AuthPenguin
         let authToken = null;
         let customUserData = null;
 
-        // AuthPenguin helpers
         function generateProjectId() {
             const urlParams = new URLSearchParams(window.location.hash.substring(1));
             if (urlParams.has('project_id')) return urlParams.get('project_id');
@@ -145,67 +143,35 @@
         window.loginWithProvider = (provider) => {
             const origin = encodeURIComponent(window.location.origin);
             const projectId = generateProjectId();
-            const popup = window.open(
-                `https://oauth.mubilop.com/auth/${provider}?projectId=${projectId}&origin=${origin}`,
-                'oauth', 'width=500,height=600,scrollbars=yes,resizable=yes'
-            );
-
-            const messageListener = (event) => {
-                if (event.data?.type === 'AUTH_SUCCESS') {
-                    authToken = event.data.token;
-                    window.removeEventListener('message', messageListener);
-                    fetch(`https://oauth.mubilop.com/auth/status?projectId=${projectId}`, {
-                        headers: { Authorization: `Bearer ${authToken}` }
-                    }).then(r => r.json()).then(data => {
-                        customUserData = data;
-                        handleCustomLogin();
-                    }).catch(() => showError("AuthPenguin failed"));
-                } else if (event.data?.type === 'AUTH_FAILURE' || event.data?.type === 'AUTH_BLOCKED') {
-                    window.removeEventListener('message', messageListener);
-                    showError("Login cancelled");
+            const popup = window.open(`https://oauth.mubilop.com/auth/${provider}?projectId=${projectId}&origin=${origin}`, 'oauth', 'width=500,height=600,scrollbars=yes,resizable=yes');
+            const listener = (e) => {
+                if (e.data?.type === 'AUTH_SUCCESS') {
+                    authToken = e.data.token;
+                    window.removeEventListener('message', listener);
+                    fetch(`https://oauth.mubilop.com/auth/status?projectId=${projectId}`, { headers: { Authorization: `Bearer ${authToken}` } })
+                        .then(r => r.json()).then(data => { customUserData = data; handleCustomLogin(); });
+                } else if (e.data?.type === 'AUTH_FAILURE' || e.data?.type === 'AUTH_BLOCKED') {
+                    window.removeEventListener('message', listener);
                 }
             };
-            window.addEventListener('message', messageListener);
-
-            const checkClosed = setInterval(() => {
-                if (popup.closed) {
-                    clearInterval(checkClosed);
-                    window.removeEventListener('message', messageListener);
-                }
-            }, 1000);
+            window.addEventListener('message', listener);
         };
 
         window.loginWithPopupSelector = () => {
             const origin = encodeURIComponent(window.location.origin);
             const projectId = generateProjectId();
-            const popup = window.open(
-                `https://oauth.mubilop.com/auth/selector?projectId=${projectId}&origin=${origin}`,
-                'oauth-selector', 'width=400,height=500,scrollbars=yes,resizable=yes'
-            );
-
-            const messageListener = (event) => {
-                if (event.data?.type === 'AUTH_SUCCESS') {
-                    authToken = event.data.token;
-                    window.removeEventListener('message', messageListener);
-                    fetch(`https://oauth.mubilop.com/auth/status?projectId=${projectId}`, {
-                        headers: { Authorization: `Bearer ${authToken}` }
-                    }).then(r => r.json()).then(data => {
-                        customUserData = data;
-                        handleCustomLogin();
-                    }).catch(() => showError("AuthPenguin failed"));
-                } else if (event.data?.type === 'AUTH_FAILURE' || event.data?.type === 'AUTH_BLOCKED') {
-                    window.removeEventListener('message', messageListener);
-                    showError("Login cancelled");
+            const popup = window.open(`https://oauth.mubilop.com/auth/selector?projectId=${projectId}&origin=${origin}`, 'oauth-selector', 'width=400,height=500,scrollbars=yes,resizable=yes');
+            const listener = (e) => {
+                if (e.data?.type === 'AUTH_SUCCESS') {
+                    authToken = e.data.token;
+                    window.removeEventListener('message', listener);
+                    fetch(`https://oauth.mubilop.com/auth/status?projectId=${projectId}`, { headers: { Authorization: `Bearer ${authToken}` } })
+                        .then(r => r.json()).then(data => { customUserData = data; handleCustomLogin(); });
+                } else if (e.data?.type === 'AUTH_FAILURE' || e.data?.type === 'AUTH_BLOCKED') {
+                    window.removeEventListener('message', listener);
                 }
             };
-            window.addEventListener('message', messageListener);
-
-            const checkClosed = setInterval(() => {
-                if (popup.closed) {
-                    clearInterval(checkClosed);
-                    window.removeEventListener('message', messageListener);
-                }
-            }, 1000);
+            window.addEventListener('message', listener);
         };
 
         function handleCustomLogin() {
@@ -214,24 +180,25 @@
                 uid: customUserData.id || 'custom-' + Date.now(),
                 displayName: customUserData.username || customUserData.name || 'User',
                 photoURL: customUserData.avatar || null,
-                email: customUserData.email || null,
-                provider: customUserData.provider || 'authpenguin'
+                email: customUserData.email || null
             };
-            const signScreen = document.getElementById('sign-in-screen');
-            const mainApp = document.getElementById('main-app');
-            signScreen.classList.add('hidden');
-            mainApp.classList.remove('hidden');
-
+            const userRef = ref(db, `users/${currentUser.uid}`);
+            set(userRef, {
+                uid: currentUser.uid,
+                name: currentUser.displayName,
+                email: currentUser.email,
+                photoURL: currentUser.photoURL,
+                createdAt: Date.now()
+            });
+            document.getElementById('sign-in-screen').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
             const bar = document.getElementById('user-bar');
             bar.innerHTML = `${currentUser.photoURL ? `<img src="${currentUser.photoURL}" class="w-9 h-9 rounded-2xl">` : `<div class="w-9 h-9 bg-gray-200 rounded-2xl"></div>`}<div class="flex-1 min-w-0"><div class="font-medium truncate">${currentUser.displayName}</div><div class="text-xs text-gray-500 truncate">${currentUser.email || 'Custom'}</div></div>`;
-
-            // anonymous Firebase for realtime
-            signInAnonymously(auth).catch(() => {});
             loadUserChats();
             loadPeople();
         }
 
-        // Original Firebase sign-ins (unchanged)
+        // Firebase sign-ins
         window.googleSignIn = () => signInWithPopup(auth, new GoogleAuthProvider()).catch(e => showError(e.message));
         window.anonymousSignIn = () => signInAnonymously(auth).catch(e => showError(e.message));
         window.emailSignIn = () => {
@@ -253,7 +220,6 @@
 
         window.signOut = () => firebaseSignOut(auth);
 
-        // Rest of chat logic (messages now support images/GIFs)
         function switchToChat(chatId, headerName) {
             currentChatId = chatId;
             document.getElementById('chat-header').innerHTML = `<span class="text-blue-600"># </span>${headerName}`;
@@ -265,7 +231,6 @@
             const msgDiv = document.getElementById('messages');
             msgDiv.innerHTML = '';
             if (!currentChatId) return;
-
             const messagesRef = ref(db, `chats/${currentChatId}/messages`);
             messagesUnsub = onValue(messagesRef, (snap) => {
                 msgDiv.innerHTML = '';
@@ -276,23 +241,9 @@
                     const mine = msg.uid === currentUser.uid;
                     const time = new Date(msg.timestamp).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
                     if (msg.isImage) {
-                        msgDiv.innerHTML += `
-                        <div class="flex ${mine ? 'justify-end' : 'justify-start'}">
-                            <div class="${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]">
-                                ${!mine ? `<div class="text-xs opacity-70 mb-1">${msg.name}</div>` : ''}
-                                <img src="${msg.text}" class="max-w-full rounded-3xl cursor-pointer" onclick="window.open('${msg.text}')">
-                                <div class="text-[10px] opacity-60 text-right mt-1">${time}</div>
-                            </div>
-                        </div>`;
+                        msgDiv.innerHTML += `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div class="${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]">${!mine ? `<div class="text-xs opacity-70 mb-1">${msg.name}</div>` : ''}<img src="${msg.text}" class="max-w-full rounded-3xl cursor-pointer" onclick="window.open('${msg.text}')"><div class="text-[10px] opacity-60 text-right mt-1">${time}</div></div></div>`;
                     } else {
-                        msgDiv.innerHTML += `
-                        <div class="flex ${mine ? 'justify-end' : 'justify-start'}">
-                            <div class="${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]">
-                                ${!mine ? `<div class="text-xs opacity-70 mb-1">${msg.name}</div>` : ''}
-                                <div>${msg.text}</div>
-                                <div class="text-[10px] opacity-60 text-right mt-1">${time}</div>
-                            </div>
-                        </div>`;
+                        msgDiv.innerHTML += `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div class="${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]">${!mine ? `<div class="text-xs opacity-70 mb-1">${msg.name}</div>` : ''}<div>${msg.text}</div><div class="text-[10px] opacity-60 text-right mt-1">${time}</div></div></div>`;
                     }
                 });
                 msgDiv.scrollTop = msgDiv.scrollHeight;
@@ -320,38 +271,110 @@
                 const file = e.target.files[0];
                 if (!file || !currentUser || !currentChatId) return;
                 const fileRef = storageRef(storage, `chats/${currentChatId}/${Date.now()}_${file.name}`);
-                try {
-                    await uploadBytes(fileRef, file);
-                    const url = await getDownloadURL(fileRef);
-                    push(ref(db, `chats/${currentChatId}/messages`), {
-                        uid: currentUser.uid,
-                        name: currentUser.displayName || currentUser.email || 'User',
-                        text: url,
-                        isImage: true,
-                        timestamp: Date.now()
-                    });
-                } catch (err) { console.error(err); }
+                await uploadBytes(fileRef, file);
+                const url = await getDownloadURL(fileRef);
+                push(ref(db, `chats/${currentChatId}/messages`), {
+                    uid: currentUser.uid,
+                    name: currentUser.displayName || currentUser.email || 'User',
+                    text: url,
+                    isImage: true,
+                    timestamp: Date.now()
+                });
             };
             input.click();
         };
 
-        // Rest of functions (startDMByEmail, startDM, createGroup, loadUserChats, loadPeople) unchanged from previous version
-        window.startDMByEmail = () => { /* same as before */ };
-        window.startDMByUid = (uid) => { /* same as before */ };
-        window.startDM = (otherUser) => { /* same as before */ };
-        window.createGroup = () => { /* same as before */ };
-        function loadUserChats() { /* same as before */ }
-        function loadPeople() { /* same as before */ }
+        window.startDMByEmail = () => {
+            const email = document.getElementById('search-input').value.trim().toLowerCase();
+            if (!email || !currentUser) return;
+            const usersRef = ref(db, 'users');
+            onValue(usersRef, (snap) => {
+                let found = null;
+                snap.forEach(child => {
+                    const u = child.val();
+                    if (u.email && u.email.toLowerCase() === email) found = u;
+                });
+                if (found && found.uid !== currentUser.uid) startDM(found);
+                else alert("User not found");
+            }, {onlyOnce: true});
+        };
+
+        window.startDMByUid = (uid) => {
+            if (uid === currentUser.uid) return;
+            onValue(ref(db, `users/${uid}`), (snap) => {
+                const other = snap.val();
+                if (other) startDM(other);
+            }, {onlyOnce: true});
+        };
+
+        window.startDM = (otherUser) => {
+            const ids = [currentUser.uid, otherUser.uid].sort();
+            const chatId = ids.join('_');
+            set(ref(db, `userChats/${currentUser.uid}/${chatId}`), { type: 'dm', name: otherUser.name || otherUser.email, otherUid: otherUser.uid });
+            set(ref(db, `userChats/${otherUser.uid}/${chatId}`), { type: 'dm', name: currentUser.displayName || currentUser.email || 'User', otherUid: currentUser.uid });
+            switchToChat(chatId, otherUser.name || otherUser.email);
+        };
+
+        window.createGroup = () => {
+            const name = prompt("Group name?");
+            if (!name) return;
+            const groupId = 'group_' + Date.now();
+            set(ref(db, `userChats/${currentUser.uid}/${groupId}`), { type: 'group', name: name });
+            switchToChat(groupId, name);
+        };
+
+        function loadUserChats() {
+            if (chatsUnsub) chatsUnsub();
+            const list = document.getElementById('chats-list');
+            const groupList = document.getElementById('chats-list-groups');
+            chatsUnsub = onValue(ref(db, `userChats/${currentUser.uid}`), (snap) => {
+                list.innerHTML = ''; groupList.innerHTML = '';
+                snap.forEach(child => {
+                    const data = child.val();
+                    const chatId = child.key;
+                    const el = document.createElement('div');
+                    el.className = `px-4 py-3 hover:bg-blue-50 rounded-2xl cursor-pointer flex items-center gap-3 ${currentChatId === chatId ? 'bg-blue-50' : ''}`;
+                    el.innerHTML = `<div class="w-8 h-8 bg-gray-200 rounded-2xl flex-shrink-0"></div><div class="flex-1 truncate">${data.name}</div>`;
+                    el.onclick = () => switchToChat(chatId, data.name);
+                    (data.type === 'group' ? groupList : list).appendChild(el);
+                });
+            });
+        }
+
+        function loadPeople() {
+            if (peopleUnsub) peopleUnsub();
+            const container = document.getElementById('people-list');
+            peopleUnsub = onValue(ref(db, 'users'), (snap) => {
+                container.innerHTML = '';
+                snap.forEach(child => {
+                    const u = child.val();
+                    if (u.uid === currentUser.uid) return;
+                    const el = document.createElement('div');
+                    el.className = "flex items-center gap-3 px-3 py-3 hover:bg-gray-50 rounded-2xl cursor-pointer";
+                    el.innerHTML = `
+                        ${u.photoURL ? `<img src="${u.photoURL}" class="w-8 h-8 rounded-2xl">` : `<div class="w-8 h-8 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-xs font-bold">${(u.name||'?')[0]}</div>`}
+                        <div class="flex-1">
+                            <div class="font-medium">${u.name}</div>
+                            <div class="text-xs text-gray-500">${u.email || ''}</div>
+                        </div>
+                        <button onclick="event.stopImmediatePropagation();startDMByUid('${u.uid}')" class="text-xs bg-blue-600 text-white px-4 py-1 rounded-3xl">Message</button>
+                    `;
+                    container.appendChild(el);
+                });
+            });
+        }
 
         onAuthStateChanged(auth, async (user) => {
-            if (user && !customUserData) { // only for Firebase auth
+            if (user && !customUserData) {
                 currentUser = user;
-                const signScreen = document.getElementById('sign-in-screen');
-                const mainApp = document.getElementById('main-app');
-                signScreen.classList.add('hidden');
-                mainApp.classList.remove('hidden');
+                document.getElementById('sign-in-screen').classList.add('hidden');
+                document.getElementById('main-app').classList.remove('hidden');
                 const bar = document.getElementById('user-bar');
                 bar.innerHTML = `${user.photoURL ? `<img src="${user.photoURL}" class="w-9 h-9 rounded-2xl">` : `<div class="w-9 h-9 bg-gray-200 rounded-2xl"></div>`}<div class="flex-1 min-w-0"><div class="font-medium truncate">${user.displayName || user.email || 'User'}</div><div class="text-xs text-gray-500 truncate">${user.email || 'Anonymous'}</div></div>`;
+                const userRef = ref(db, `users/${user.uid}`);
+                const snap = await new Promise(r => onValue(userRef, r, {onlyOnce: true}));
+                if (!snap.exists()) set(userRef, { uid: user.uid, name: user.displayName || user.email || 'User', email: user.email, photoURL: user.photoURL, createdAt: Date.now() });
+                if (user.isAnonymous) onDisconnect(userRef).remove();
                 loadUserChats();
                 loadPeople();
             }
