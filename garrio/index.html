@@ -103,7 +103,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signInAnonymously, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut as firebaseSignOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-        import { getDatabase, ref, onValue, push, set, onDisconnect, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+        import { getDatabase, ref, onValue, push, set, onDisconnect } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
         import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
 
         const firebaseConfig = {
@@ -205,10 +205,7 @@
             setTimeout(() => el.classList.add('hidden'), 4000);
         }
 
-        window.signOut = () => {
-            firebaseSignOut(auth);
-            location.reload();
-        };
+        window.signOut = () => { firebaseSignOut(auth); location.reload(); };
 
         function switchToChat(chatId, headerName) {
             currentChatId = chatId;
@@ -221,19 +218,21 @@
             const msgDiv = document.getElementById('messages');
             msgDiv.innerHTML = '';
             if (!currentChatId) return;
-            const messagesRef = query(ref(db, `chats/${currentChatId}/messages`), orderByChild('timestamp'), limitToLast(100));
+
+            const messagesRef = ref(db, `chats/${currentChatId}/messages`);
             messagesUnsub = onValue(messagesRef, (snap) => {
                 msgDiv.innerHTML = '';
                 const msgs = [];
-                snap.forEach(c => msgs.push(c.val()));
+                snap.forEach((c) => msgs.push(c.val()));
+                msgs.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
                 let html = '';
-                msgs.forEach(msg => {
-                    const mine = msg.uid === currentUser.uid;
+                msgs.forEach((msg) => {
+                    const mine = msg.uid === currentUser?.uid;
                     const time = new Date(msg.timestamp || Date.now()).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
                     if (msg.isImage) {
-                        html += `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div class="${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]">${!mine ? `<div class="text-xs opacity-70 mb-1">${msg.name}</div>` : ''}<img src="${msg.text}" class="max-w-full rounded-3xl cursor-pointer" onclick="window.open('${msg.text}')"><div class="text-[10px] opacity-60 text-right mt-1">${time}</div></div></div>`;
+                        html += `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div class="${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]">${!mine ? `<div class="text-xs opacity-70 mb-1">${msg.name || 'User'}</div>` : ''}<img src="${msg.text}" class="max-w-full rounded-3xl cursor-pointer" onclick="window.open('${msg.text}')"><div class="text-[10px] opacity-60 text-right mt-1">${time}</div></div></div>`;
                     } else {
-                        html += `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div class="${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]">${!mine ? `<div class="text-xs opacity-70 mb-1">${msg.name}</div>` : ''}<div>${msg.text}</div><div class="text-[10px] opacity-60 text-right mt-1">${time}</div></div></div>`;
+                        html += `<div class="flex ${mine ? 'justify-end' : 'justify-start'}"><div class="${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]">${!mine ? `<div class="text-xs opacity-70 mb-1">${msg.name || 'User'}</div>` : ''}<div>${msg.text || ''}</div><div class="text-[10px] opacity-60 text-right mt-1">${time}</div></div></div>`;
                     }
                 });
                 msgDiv.innerHTML = html;
@@ -252,7 +251,7 @@
                 timestamp: Date.now()
             });
             input.value = '';
-            loadMessages();
+            loadMessages(); // force update
         };
 
         window.sendImage = () => {
@@ -272,7 +271,7 @@
                     isImage: true,
                     timestamp: Date.now()
                 });
-                loadMessages();
+                loadMessages(); // force update
             };
             input.click();
         };
