@@ -103,7 +103,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signInAnonymously, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut as firebaseSignOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-        import { getDatabase, ref, onValue, push, set, onDisconnect } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+        import { getDatabase, ref, onValue, push, set, onDisconnect, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
         import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
 
         const firebaseConfig = {
@@ -175,20 +175,9 @@
 
         function handleCustomLogin() {
             if (!customUserData) return;
-            currentUser = {
-                uid: customUserData.id || 'custom-' + Date.now(),
-                displayName: customUserData.username || customUserData.name || 'User',
-                photoURL: customUserData.avatar || null,
-                email: customUserData.email || null
-            };
+            currentUser = { uid: customUserData.id || 'custom-' + Date.now(), displayName: customUserData.username || customUserData.name || 'User', photoURL: customUserData.avatar || null, email: customUserData.email || null };
             const userRef = ref(db, `users/${currentUser.uid}`);
-            set(userRef, {
-                uid: currentUser.uid,
-                name: currentUser.displayName,
-                email: currentUser.email,
-                photoURL: currentUser.photoURL,
-                createdAt: Date.now()
-            });
+            set(userRef, { uid: currentUser.uid, name: currentUser.displayName, email: currentUser.email, photoURL: currentUser.photoURL, createdAt: Date.now() });
             document.getElementById('sign-in-screen').classList.add('hidden');
             document.getElementById('main-app').classList.remove('hidden');
             const bar = document.getElementById('user-bar');
@@ -232,12 +221,11 @@
             const msgDiv = document.getElementById('messages');
             msgDiv.innerHTML = '';
             if (!currentChatId) return;
-            const messagesRef = ref(db, `chats/${currentChatId}/messages`);
+            const messagesRef = query(ref(db, `chats/${currentChatId}/messages`), orderByChild('timestamp'), limitToLast(100));
             messagesUnsub = onValue(messagesRef, (snap) => {
                 msgDiv.innerHTML = '';
                 const msgs = [];
                 snap.forEach(c => msgs.push(c.val()));
-                msgs.sort((a,b) => (a.timestamp || 0) - (b.timestamp || 0));
                 let html = '';
                 msgs.forEach(msg => {
                     const mine = msg.uid === currentUser.uid;
@@ -264,7 +252,7 @@
                 timestamp: Date.now()
             });
             input.value = '';
-            loadMessages(); // Force immediate refresh
+            loadMessages();
         };
 
         window.sendImage = () => {
@@ -284,7 +272,7 @@
                     isImage: true,
                     timestamp: Date.now()
                 });
-                loadMessages(); // Force immediate refresh
+                loadMessages();
             };
             input.click();
         };
