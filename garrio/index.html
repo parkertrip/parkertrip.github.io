@@ -213,43 +213,6 @@
             loadMessages();
         }
 
-        function renderMessage(container, msg) {
-            const mine = msg.uid === currentUser.uid;
-
-            const wrapper = document.createElement('div');
-            wrapper.className = `flex ${mine ? 'justify-end' : 'justify-start'}`;
-
-            const bubble = document.createElement('div');
-            bubble.className = `${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]`;
-
-            if (!mine) {
-                const nameEl = document.createElement('div');
-                nameEl.className = 'text-xs opacity-70 mb-1';
-                nameEl.textContent = msg.name || 'User';
-                bubble.appendChild(nameEl);
-            }
-
-            if (msg.isImage) {
-                const img = document.createElement('img');
-                img.src = msg.text;
-                img.className = 'max-w-full rounded-3xl cursor-pointer';
-                img.onclick = () => window.open(msg.text);
-                bubble.appendChild(img);
-            } else {
-                const textEl = document.createElement('div');
-                textEl.textContent = msg.text || '';
-                bubble.appendChild(textEl);
-            }
-
-            const timeEl = document.createElement('div');
-            timeEl.className = 'text-[10px] opacity-60 text-right mt-1';
-            timeEl.textContent = new Date(msg.timestamp || Date.now()).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
-            bubble.appendChild(timeEl);
-
-            wrapper.appendChild(bubble);
-            container.appendChild(wrapper);
-        }
-
         function loadMessages() {
             if (messagesUnsub) messagesUnsub();
             const msgDiv = document.getElementById('messages');
@@ -262,7 +225,37 @@
                 const msgs = [];
                 snap.forEach(c => msgs.push(c.val()));
                 msgs.sort((a,b) => (a.timestamp || 0) - (b.timestamp || 0));
-                msgs.forEach(msg => renderMessage(msgDiv, msg));
+                msgs.forEach(msg => {
+                    const mine = msg.uid === currentUser.uid;
+                    const time = new Date(msg.timestamp || Date.now()).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+                    const wrapper = document.createElement('div');
+                    wrapper.className = `flex ${mine ? 'justify-end' : 'justify-start'}`;
+                    const bubble = document.createElement('div');
+                    bubble.className = `${mine ? 'bg-blue-600 text-white' : 'bg-white shadow-sm'} rounded-3xl px-5 py-3 max-w-[70%]`;
+                    if (!mine) {
+                        const nameEl = document.createElement('div');
+                        nameEl.className = 'text-xs opacity-70 mb-1';
+                        nameEl.textContent = msg.name || 'User';
+                        bubble.appendChild(nameEl);
+                    }
+                    if (msg.isImage) {
+                        const img = document.createElement('img');
+                        img.src = msg.text;
+                        img.className = 'max-w-full rounded-3xl cursor-pointer';
+                        img.onclick = () => window.open(msg.text);
+                        bubble.appendChild(img);
+                    } else {
+                        const textEl = document.createElement('div');
+                        textEl.textContent = msg.text || '';
+                        bubble.appendChild(textEl);
+                    }
+                    const timeEl = document.createElement('div');
+                    timeEl.className = 'text-[10px] opacity-60 text-right mt-1';
+                    timeEl.textContent = time;
+                    bubble.appendChild(timeEl);
+                    wrapper.appendChild(bubble);
+                    msgDiv.appendChild(wrapper);
+                });
                 msgDiv.scrollTop = msgDiv.scrollHeight;
             });
         }
