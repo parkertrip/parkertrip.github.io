@@ -123,7 +123,7 @@
                     <button onclick="updatePassword()" class="mt-3 w-full bg-blue-600 text-white py-3 rounded-2xl font-medium hover:bg-blue-700">Update Password</button>
                 </div>
 
-                <button onclick="resetPassword()" class="w-full bg-amber-500 text-white py-3 rounded-2xl font-medium hover:bg-amber-600">Forgot Password? Send Reset Email</button>
+                <button onclick="resetPassword()" class="w-full bg-amber-500 text-white py-3 rounded-2xl font-medium hover:bg-amber-600">Send Password Reset Email</button>
                 <button onclick="deleteAccount()" class="w-full bg-red-600 text-white py-3 rounded-2xl font-medium hover:bg-red-700">Delete Account</button>
             </div>
         </div>
@@ -310,16 +310,20 @@
             input.onchange = async (e) => {
                 const file = e.target.files[0];
                 if (!file || !currentUser || !currentChatId) return;
-                const fileRef = storageRef(storage, `chats/${currentChatId}/${Date.now()}_${file.name}`);
-                await uploadBytes(fileRef, file);
-                const url = await getDownloadURL(fileRef);
-                push(ref(db, `chats/${currentChatId}/messages`), {
-                    uid: currentUser.uid,
-                    name: currentUser.displayName || currentUser.email || 'User',
-                    text: url,
-                    isImage: true,
-                    timestamp: Date.now()
-                });
+                try {
+                    const fileRef = storageRef(storage, `chats/${currentChatId}/${Date.now()}_${file.name.replace(/[^a-z0-9.]/gi, '_')}`);
+                    await uploadBytes(fileRef, file);
+                    const url = await getDownloadURL(fileRef);
+                    push(ref(db, `chats/${currentChatId}/messages`), {
+                        uid: currentUser.uid,
+                        name: currentUser.displayName || currentUser.email || 'User',
+                        text: url,
+                        isImage: true,
+                        timestamp: Date.now()
+                    });
+                } catch (e) {
+                    alert("Image upload failed");
+                }
             };
             input.click();
         };
@@ -414,7 +418,7 @@
 
         window.updateDisplayName = () => {
             const name = document.getElementById('new-display-name').value.trim();
-            if (!name || !currentUser) return;
+            if (!name) return;
             updateProfile(auth.currentUser, { displayName: name }).then(() => {
                 alert("✅ Display name updated");
                 hideAccountSettings();
@@ -423,7 +427,7 @@
 
         window.updatePassword = () => {
             const newPass = document.getElementById('new-password').value;
-            if (!newPass || !currentUser) return;
+            if (!newPass) return;
             firebaseUpdatePassword(auth.currentUser, newPass).then(() => {
                 alert("✅ Password updated");
                 hideAccountSettings();
@@ -436,14 +440,12 @@
         };
 
         window.forgotPassword = () => {
-            const email = prompt("Enter your email for password reset:");
+            const email = prompt("Enter email for password reset:");
             if (email) sendPasswordResetEmail(auth, email).then(() => alert("✅ Reset email sent")).catch(e => alert(e.message));
         };
 
         window.deleteAccount = () => {
-            if (confirm("Delete account permanently?")) {
-                deleteUser(auth.currentUser).then(() => location.reload());
-            }
+            if (confirm("Delete account permanently?")) deleteUser(auth.currentUser).then(() => location.reload());
         };
 
         onAuthStateChanged(auth, async (user) => {
