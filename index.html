@@ -1,44 +1,504 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parker Tripoli - Epic Creator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="https://avatars.githubusercontent.com/u/230787001?v=4" type="image/png">
     <style>
-        /* Your exact original styles (unchanged) */
-        *,::after,::before{box-sizing:border-box}html{font-family:'Orbitron',Arial,sans-serif;line-height:1.6}body{margin:0;padding:0;background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);color:#e0e0e0;overflow-x:hidden;position:relative}.fixed{position:fixed}.top-0{top:0}.left-0{left:0}.w-full{width:100%}.h-full{height:100%}.text-center{text-align:center}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:text-5xl{font-size:3rem;line-height:1}@media (min-width:768px){.md\:text-5xl{font-size:3rem}}.font-bold{font-weight:700}.text-white{color:#fff}.shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05)}.border-b-4{border-bottom-width:4px}.border-cyan-400{border-color:#22d3ee}.text-lg{font-size:1.125rem;line-height:1.75rem}.md\:text-xl{font-size:1.25rem;line-height:1.75rem}@media (min-width:768px){.md\:text-xl{font-size:1.25rem}}.mt-2{margin-top:0.5rem}.text-base{font-size:1rem;line-height:1.5rem}.sticky{position:sticky}.bg-black{background-color:#000}.bg-opacity-10{background-opacity:0.1}.bg-gray-900\/50{background-color:#11182780}.backdrop-blur-md{backdrop-filter:blur(8px)}.py-4{padding-top:1rem;padding-bottom:1rem}.shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06)}.shadow-nav{box-shadow:0 2px 10px rgba(0,0,0,0.5)}.z-10{z-index:10}.flex{display:flex}.justify-center{justify-content:center}.space-x-6>*+*{margin-left:1.5rem}.text-cyan-400{color:#22d3ee}.text-lg{font-size:1.125rem}.hover\:text-pink-500:hover{color:#ec4899}.transition-all{transition-property:all}.duration-300{transition-duration:300ms}.mx-auto{margin-left:auto;margin-right:auto}.my-12{margin-top:3rem;margin-bottom:3rem}.p-8{padding:2rem}.max-w-5xl{max-width:80rem}.bg-gray-800{background-color:#1f2937}.bg-opacity-90{background-opacity:0.9}.rounded-xl{border-radius:0.75rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}@media (min-width:768px){.md\:text-4xl{font-size:2.25rem}}.mb-4{margin-bottom:1rem}.text-base{font-size:1rem}.md\:text-lg{font-size:1.125rem}@media (min-width:768px){.md\:text-lg{font-size:1.125rem}}.mt-4{margin-top:1rem}.inline-block{display:inline-block}.px-4{padding-left:1rem;padding-right:1rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.m-2{margin:0.5rem}.bg-gray-900{background-color:#111827}.border-2{border-width:2px}.rounded-md{border-radius:0.375rem}.hover\:bg-pink-500:hover{background-color:#ec4899}.hover\:border-pink-500:hover{border-color:#ec4899}.hover\:text-white:hover{color:#fff}.hover\:underline:hover{text-decoration:underline}.grid{display:grid}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}@media (min-width:640px){.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (min-width:768px){.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}.gap-6{gap:1.5rem}.p-4{padding:1rem}.hover\:shadow-\[0_0_25px_\#ff007a\,0_0_50px_\#00d4ff\]:hover{box-shadow:0 0 25px #ff007a,0 0 50px #00d4ff}.transform{transform:perspective(500px) rotateX(0) rotateY(0)}.hover\:-translate-y-1:hover{transform:translateY(-0.25rem)}.w-16{width:4rem}.h-16{height:4rem}.rounded-full{border-radius:9999px}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.border-purple-500{border-color:#a855f7}.hover\:scale-110:hover{transform:scale(1.1)}.transition-transform{transition-property:transform}.flex-col{flex-direction:column}.items-center{align-items:center}.space-y-4>*+*{margin-top:1rem}.w-full{width:100%}.max-w-md{max-width:28rem}.mt-6{margin-top:1.5rem}.text-xl{font-size:1.25rem}.md\:text-2xl{font-size:1.5rem}@media (min-width:768px){.md\:text-2xl{font-size:1.5rem}}.space-x-4>*+*{margin-left:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.text-gray-400{color:#9ca3af}.bottom-6{bottom:1.5rem}.right-6{right:1.5rem}.p-3{padding:0.75rem}.rounded-full{border-radius:9999px}.hidden{display:none}.min-w-\[200px\]{min-width:200px}.border-gradient {border-image: linear-gradient(to right, #ff007a, #00d4ff, #aa00ff) 1;}
-        @media (max-width: 640px) {.nav-links {flex-direction: column;align-items: center;space-y-4;}.nav-links a {margin: 0.5rem 0;}}
-        .tooltip {position: relative;display: inline-block;}.tooltip .tooltiptext {visibility: hidden;width: 120px;background-color: #111827;color: #22d3ee;text-align: center;border-radius: 6px;padding: 5px;position: absolute;z-index: 1;bottom: 125%;left: 50%;margin-left: -60px;opacity: 0;transition: opacity 0.3s;}.tooltip:hover .tooltiptext {visibility: visible;opacity: 1;}
-        .hover\:glow:hover {box-shadow: 0 0 15px #ff007a, 0 0 30px #00d4ff;}
-        ::-webkit-scrollbar {width: 10px;}::-webkit-scrollbar-track {background: #1f2937;border-radius: 5px;}::-webkit-scrollbar-thumb {background: #22d3ee;border-radius: 5px;box-shadow: 0 0 10px #ff007a;}::-webkit-scrollbar-thumb:hover {background: #ec4899;}
-        body {overflow-x: hidden;position: relative;scroll-behavior: smooth;}
-        #particles {position: fixed;top: 0;left: 0;width: 100%;height: 100%;z-index: -5;background: transparent;opacity: 0.6;}
-        .gradient-shift {background: linear-gradient(45deg, #ff007a, #00d4ff, #aa00ff);background-size: 200% 200%;animation: gradientShift 8s ease infinite;}
-        .intro-text {display: inline-block;overflow: hidden;white-space: nowrap;animation: typing 2s steps(40, end), slideIn 1s ease-out;}
-        .header-title {animation: pulse 3s infinite;}
-        .about-text strong {color: #ff007a;text-shadow: 0 0 10px #ff007a;animation: pulse 2s infinite;}
-        .about-text li {margin: 10px 0;position: relative;padding-left: 20px;animation: fadeInUp 1s ease-out backwards;}
-        .about-text li:nth-child(1) {animation-delay: 0.1s;}.about-text li:nth-child(2) {animation-delay: 0.2s;}.about-text li:nth-child(3) {animation-delay: 0.3s;}.about-text li:nth-child(4) {animation-delay: 0.4s;}.about-text li:nth-child(5) {animation-delay: 0.5s;}.about-text li:nth-child(6) {animation-delay: 0.6s;}
-        .about-text li::before {content: '🦥';position: absolute;left: 0;color: #00d4ff;}
-        .sloth-web-text h3 {background: linear-gradient(to right, #ff007a, #00d4ff);-webkit-background-clip: text;-webkit-text-fill-color: transparent;text-shadow: 0 0 10px #aa00ff;animation: fadeIn 1s ease-out;}
-        .stats-img {animation: bounceIn 1.5s ease-out backwards;}
-        .stats-img:nth-child(1) {animation-delay: 0.1s;}.stats-img:nth-child(2) {animation-delay: 0.3s;}.stats-img:nth-child(3) {animation-delay: 0.5s;}
-        .project-link {animation: fadeIn 1s ease-out backwards;}
-        .project-link:nth-child(1) {animation-delay: 0.2s;}.project-link:nth-child(2) {animation-delay: 0.4s;}
-        .section-header {transition: all 0.3s ease;}.section-header:hover {transform: scale(1.05);text-shadow: 0 0 20px #00d4ff;}
-        .footer-fade {animation: fadeIn 1s ease-out 0.5s backwards;}
-        .text-shadow-lg {text-shadow: 0 0 15px #ff007a, 0 0 30px #00d4ff;}.text-shadow-md {text-shadow: 0 0 10px #aa00ff;}.text-shadow-sm {text-shadow: 0 0 5px #aaa;}
-        .profile-item {padding: 1.5rem;min-width: 200px;}
-        .nav-link {text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);}
-        .hover\:text-shadow-lg:hover {text-shadow: 0 0 15px #ff007a, 0 0 30px #00d4ff;}
-        @keyframes gradientShift {0% {background-position: 0% 50%;}50% {background-position: 100% 50%;}100% {background-position: 0% 50%;}}
-        @keyframes fadeIn {from {opacity: 0;}to {opacity: 1;}}@keyframes fadeInUp {from {opacity: 0;transform: translateY(20px);}to {opacity: 1;transform: translateY(0);}}@keyframes slideIn {from {transform: translateX(-100%);opacity: 0;}to {transform: translateX(0);opacity: 1;}}@keyframes bounceIn {0% {transform: scale(0.8);opacity: 0;}50% {transform: scale(1.1);opacity: 0.5;}100% {transform: scale(1);opacity: 1;}}@keyframes typing {from {width: 0;}to {width: 100%;}}@keyframes pulse {0% {text-shadow: 0 0 10px #ff007a;}50% {text-shadow: 0 0 20px #aa00ff;}100% {text-shadow: 0 0 10px #ff007a;}}@keyframes bounce {0%, 100% {transform: translateY(0);}50% {transform: translateY(-5px);}}
-        .spinner {border: 4px solid #f3f3f3;border-top: 4px solid #22d3ee;border-radius: 50%;width: 20px;height: 20px;animation: spin 1s linear infinite;margin: 0 auto;display: none;}@keyframes spin {0% {transform: rotate(0deg);}100% {transform: rotate(360deg);}}
-        /* New styles for project cards */
-        .project-card {transition: all 0.3s ease;}.project-card:hover {transform: translateY(-8px);box-shadow: 0 0 30px #ff007a, 0 0 60px #00d4ff;}
-        .project-favicon {width: 80px;height: 80px;border-radius: 9999px;border: 4px solid #a855f7;object-fit: cover;transition: all 0.3s ease;}.project-favicon:hover {transform: scale(1.15);}
+        *, ::after, ::before {
+            box-sizing: border-box;
+        }
+
+        html {
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at 50% 50%, #121824 0%, #080c10 100%);
+            color: #e2e8f0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        h1, h2, h3, .header-title, nav a {
+            font-family: 'Orbitron', Arial, sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .fixed { position: fixed; }
+        .top-0 { top: 0; }
+        .left-0 { left: 0; }
+        .w-full { width: 100%; }
+        .h-full { height: 100%; }
+        .text-center { text-align: center; }
+        .py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+        .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+        .md\:text-5xl { font-size: 3rem; line-height: 1; }
+        @media (min-width: 768px) {
+            .md\:text-5xl { font-size: 3.5rem; }
+        }
+        .font-bold { font-weight: 700; }
+        .text-white { color: #fff; }
+        .shadow-lg { box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5), 0 8px 10px -6px rgba(0,0,0,0.5); }
+        
+        /* Rounded gradient borders using dual background trick */
+        .border-gradient {
+            border: 4px solid transparent;
+            background-image: linear-gradient(#151d2a, #151d2a), linear-gradient(135deg, #ff007a, #00d4ff, #aa00ff);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            border-radius: 1rem;
+        }
+
+        /* Specific override for header since it is a straight block */
+        header.border-gradient {
+            border: none;
+            border-bottom: 4px solid transparent;
+            border-image: linear-gradient(to right, #ff007a, #00d4ff, #aa00ff) 1;
+            border-radius: 0;
+        }
+
+        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+        .md\:text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+        @media (min-width: 768px) {
+            .md\:text-xl { font-size: 1.35rem; }
+        }
+        .mt-2 { margin-top: 0.5rem; }
+        .text-base { font-size: 1rem; line-height: 1.5rem; }
+        .sticky { position: sticky; }
+        .bg-black { background-color: #000; }
+        
+        /* Glassmorphism navbar styling */
+        nav.sticky {
+            top: 0;
+            background-color: rgba(10, 15, 26, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.25);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            z-index: 50;
+            transition: all 0.3s ease;
+        }
+
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .z-10 { z-index: 10; }
+        .flex { display: flex; }
+        .justify-center { justify-content: center; }
+        
+        /* Desktop navigation links spacing */
+        .space-x-6 > * + * { margin-left: 1.5rem; }
+        .text-cyan-400 { color: #22d3ee; }
+        .hover\:text-pink-500:hover { color: #ec4899; }
+        .transition-all { transition-property: all; }
+        .duration-300 { transition-duration: 300ms; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .my-12 { margin-top: 3rem; margin-bottom: 3rem; }
+        .p-8 { padding: 2rem; }
+        .max-w-5xl { max-width: 80rem; }
+
+        /* Custom section layout with glassmorphism */
+        .bg-gray-800 {
+            background-color: rgba(21, 29, 43, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+        .md\:text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+        @media (min-width: 768px) {
+            .md\:text-4xl { font-size: 2.5rem; }
+        }
+        .mb-4 { margin-bottom: 1rem; }
+        .mt-4 { margin-top: 1rem; }
+        .inline-block { display: inline-block; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .m-2 { margin: 0.5rem; }
+        
+        /* Button styling improvements */
+        .bg-gray-900 {
+            background-color: rgba(10, 15, 26, 0.9);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .border-2 { border-width: 2px; }
+        .rounded-md { border-radius: 8px; }
+        .hover\:bg-pink-500:hover { background-color: #ec4899; }
+        .hover\:border-pink-500:hover { border-color: #ec4899; }
+        .hover\:text-white:hover { color: #fff; }
+        .hover\:underline:hover { text-decoration: none; }
+        
+        /* Grid Layout */
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        @media (min-width: 640px) {
+            .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (min-width: 768px) {
+            .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+        .gap-6 { gap: 1.5rem; }
+        .p-4 { padding: 1rem; }
+
+        /* Hover glows and transforms */
+        .hover\:shadow-\[0_0_25px_\#ff007a\,0_0_50px_\#00d4ff\]:hover {
+            box-shadow: 0 0 25px #ff007a, 0 0 50px #00d4ff;
+        }
+        .transform { transform: perspective(500px) rotateX(0) rotateY(0); }
+        .hover\:-translate-y-1:hover { transform: translateY(-0.35rem) scale(1.02); }
+        .w-16 { width: 4rem; }
+        .h-16 { height: 4rem; }
+        .rounded-full { border-radius: 9999px; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .border-purple-500 { border-color: #a855f7; }
+        .hover\:scale-110:hover { transform: scale(1.1); }
+        .transition-transform { transition-property: transform; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .max-w-md { max-width: 28rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .text-xl { font-size: 1.25rem; }
+        .md\:text-2xl { font-size: 1.5rem; }
+        @media (min-width: 768px) {
+            .md\:text-2xl { font-size: 1.75rem; }
+        }
+        .space-x-4 > * + * { margin-left: 1rem; }
+        .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .text-gray-400 { color: #9ca3af; }
+        .bottom-6 { bottom: 1.5rem; }
+        .right-6 { right: 1.5rem; }
+        .p-3 { padding: 0.75rem; }
+        .hidden { display: none; }
+        .min-w-\[200px\] { min-width: 200px; }
+
+        /* Fixed Mobile Responsiveness navigation bar bug (removed space-y-4 bug) */
+        @media (max-width: 640px) {
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.75rem;
+            }
+            /* Override the space-x-6 margin-left selector on mobile */
+            .nav-links > * + * {
+                margin-left: 0 !important;
+            }
+            .nav-links a {
+                margin: 0.25rem 0;
+            }
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #0b0f19;
+            color: #22d3ee;
+            text-align: center;
+            border-radius: 6px;
+            padding: 6px;
+            position: absolute;
+            z-index: 100;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-size: 0.8rem;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .hover\:glow:hover {
+            box-shadow: 0 0 15px #ff007a, 0 0 30px #00d4ff;
+        }
+
+        /* Beautiful Neon Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #22d3ee, #ff007a);
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #ec4899, #00d4ff);
+        }
+
+        body {
+            overflow-x: hidden;
+            position: relative;
+            scroll-behavior: smooth;
+        }
+
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -5;
+            background: transparent;
+            opacity: 0.45;
+        }
+
+        /* Dynamic gradient shift animation */
+        .gradient-shift {
+            background: linear-gradient(45deg, #ff007a, #aa00ff, #00d4ff, #ff007a);
+            background-size: 300% 300%;
+            animation: gradientShift 10s ease infinite;
+        }
+
+        /* Slide text animation */
+        .intro-text {
+            display: inline-block;
+            overflow: hidden;
+            white-space: normal; /* support wrapping on smaller screens */
+            animation: slideIn 1s ease-out;
+        }
+
+        .header-title {
+            animation: pulse 3s infinite;
+        }
+
+        .about-text strong {
+            color: #ff007a;
+            text-shadow: 0 0 10px rgba(255, 0, 122, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        /* Beautiful fadeInUp listing transitions for About elements */
+        .about-text li {
+            margin: 12px 0;
+            position: relative;
+            padding-left: 28px;
+            animation: fadeInUp 0.8s ease-out backwards;
+            list-style-type: none; /* remove default dot */
+        }
+        .about-text li:nth-child(1) { animation-delay: 0.1s; }
+        .about-text li:nth-child(2) { animation-delay: 0.15s; }
+        .about-text li:nth-child(3) { animation-delay: 0.2s; }
+        .about-text li:nth-child(4) { animation-delay: 0.25s; }
+        .about-text li:nth-child(5) { animation-delay: 0.3s; }
+        .about-text li:nth-child(6) { animation-delay: 0.35s; }
+        .about-text li:nth-child(7) { animation-delay: 0.4s; }
+        .about-text li:nth-child(8) { animation-delay: 0.45s; }
+
+        .about-text li::before {
+            content: '🦥';
+            position: absolute;
+            left: 0;
+            top: 1px;
+            color: #00d4ff;
+        }
+
+        .sloth-web-text h3 {
+            background: linear-gradient(to right, #ff007a, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(170, 0, 255, 0.2);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .stats-img {
+            animation: bounceIn 1.5s ease-out backwards;
+        }
+        .stats-img:nth-child(1) { animation-delay: 0.1s; }
+        .stats-img:nth-child(2) { animation-delay: 0.3s; }
+        .stats-img:nth-child(3) { animation-delay: 0.5s; }
+
+        .project-link {
+            animation: fadeIn 1s ease-out backwards;
+        }
+        .project-link:nth-child(1) { animation-delay: 0.2s; }
+        .project-link:nth-child(2) { animation-delay: 0.4s; }
+
+        .section-header {
+            transition: all 0.3s ease;
+        }
+        .section-header:hover {
+            transform: scale(1.03);
+            text-shadow: 0 0 20px #00d4ff;
+        }
+
+        .footer-fade {
+            animation: fadeIn 1s ease-out 0.5s backwards;
+        }
+
+        .text-shadow-lg { text-shadow: 0 0 15px #ff007a, 0 0 30px #00d4ff; }
+        .text-shadow-md { text-shadow: 0 0 10px #aa00ff; }
+        .text-shadow-sm { text-shadow: 0 0 5px #aaa; }
+        .nav-link { text-shadow: 0 0 8px rgba(255, 255, 255, 0.3); }
+        .hover\:text-shadow-lg:hover { text-shadow: 0 0 15px #ff007a, 0 0 30px #00d4ff; }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { transform: translateX(-50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes bounceIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            50% { transform: scale(1.03); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes pulse {
+            0% { text-shadow: 0 0 10px #ff007a; }
+            50% { text-shadow: 0 0 20px #aa00ff, 0 0 30px #ff007a; }
+            100% { text-shadow: 0 0 10px #ff007a; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #22d3ee;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px auto;
+            display: none;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Enhanced Project Cards with modern layouts */
+        .project-card {
+            background-color: rgba(10, 15, 26, 0.85);
+            border: 2px solid rgba(34, 211, 238, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(255, 0, 122, 0.25), 0 0 15px rgba(0, 212, 255, 0.4);
+            border-color: #ff007a;
+        }
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #ff007a, #00d4ff);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .project-card:hover::before {
+            opacity: 1;
+        }
+        .project-favicon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 3px solid #aa00ff;
+            object-fit: cover;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .project-card:hover .project-favicon {
+            transform: scale(1.1) rotate(5deg);
+            border-color: #22d3ee;
+        }
+
+        /* Premium Profiles Styling */
+        .profile-item {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
+            border: 2px solid rgba(6, 182, 212, 0.4) !important;
+            border-radius: 16px !important;
+            padding: 1.5rem !important;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+            color: #fff;
+            min-w: 200px;
+        }
+        .profile-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+        .profile-item:hover::before {
+            opacity: 1;
+        }
+        .profile-item:hover {
+            border-color: #ec4899 !important;
+            transform: translateY(-8px) scale(1.03) !important;
+            box-shadow: 0 12px 30px rgba(236, 72, 153, 0.3), 0 0 15px rgba(6, 182, 212, 0.2) !important;
+        }
+        .profile-avatar {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 9999px;
+            border: 3px solid #a855f7;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+            margin-bottom: 0.75rem;
+            transition: all 0.4s ease;
+            z-index: 2;
+            object-fit: cover;
+        }
+        .profile-item:hover .profile-avatar {
+            transform: rotate(5deg) scale(1.1);
+            border-color: #ec4899;
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.7);
+        }
+        .profile-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #22d3ee;
+            margin-bottom: 0.25rem;
+            z-index: 2;
+            transition: color 0.3s ease;
+        }
+        .profile-item:hover .profile-title {
+            color: #f472b6;
+        }
+        .profile-username {
+            font-size: 0.95rem;
+            color: #9ca3af;
+            z-index: 2;
+        }
     </style>
 </head>
 <body>
@@ -46,7 +506,7 @@
 
     <header class="text-center py-10 gradient-shift text-white shadow-lg border-b-4 border-gradient">
         <h1 class="text-4xl md:text-5xl font-bold text-shadow-lg header-title" style="text-shadow: 0 0 20px #00d4ff, 0 0 10px #ff007a;">😃 Parker Tripoli 😃</h1>
-        <p class="text-lg md:text-xl mt-2 text-shadow-md">Epic Game Creator | Computer Wizard | Robot Champ | Basketball Star | Slick Ninja | Code Wizard</p>
+        <p class="text-lg md:text-xl mt-2 text-shadow-md">Epic Game Creator | Vibe Coder Extraordinaire | Robot Champ | Boy Scout | Basketball Star | Slick Ninja | Code Wizard</p>
         <p class="text-base">📍 US, CA</p>
     </header>
 
@@ -61,8 +521,8 @@
                 <span class="tooltiptext">Check my profiles!</span>
             </div>
             <div class="tooltip">
-                <a href="#stats" class="text-cyan-400 font-bold text-lg nav-link hover:text-pink-500 hover:text-shadow-lg hover:underline transition-all duration-300" onclick="scrollToSection('stats', this); return false;" aria-label="Scroll to My Stats & Projects">My Stats & Projects</a>
-                <span class="tooltiptext">See my stats and projects!</span>
+                <a href="#stats" class="text-cyan-400 font-bold text-lg nav-link hover:text-pink-500 hover:text-shadow-lg hover:underline transition-all duration-300" onclick="scrollToSection('stats', this); return false;" aria-label="Scroll to My Projects">My Projects</a>
+                <span class="tooltiptext">See my vibe-coded projects!</span>
             </div>
         </div>
     </nav>
@@ -74,10 +534,11 @@
             <li><strong>Game Creator Extraordinaire:</strong> I love making my own video games and software! I mainly do vibecoding. It's like building my own world where I decide the rules. I use computers to bring my ideas to life, and it's so cool to play something I made.</li>
             <li><strong>Computer Whiz:</strong> I'm crazy about computers! I like learning how they work and using them for fun projects. They're like magic tools for creating and exploring.</li>
             <li><strong>Robot Champ:</strong> I was part of a super awesome team called Robot Subs in First LEGO League (FLL). We built and programmed robots, and guess what? We made it all the way to regionals and won the Rising All-Star award, celebrating a team the judges expect great things from in the future. We also won the Engineering Excellence Award for an efficiently designed robot and an innovative project solution!</li>
+            <li><strong>Boy Scouts:</strong> I've been active in Boy Scouts from 2026 to now! I love going on outdoor adventures, camping, learning wilderness survival skills, working on merit badges, and practicing leadership and teamwork with my troop.</li>
             <li><strong>Basketball Star:</strong> When I'm not at the computer, you'll find me on the basketball court. I love dribbling, shooting hoops, and playing with my friends—it's so much fun to stay active!</li>
             <li><strong>Master Builder:</strong> I love making things, whether it's a cool LEGO creation, a craft, or something totally new. I'm always coming up with ideas and figuring out how to build them.</li>
             <li><strong>Slick Ninja:</strong> I attend a ninja class where I learned how to do a front flip and other impressive moves. My coach is nice, and I go every Thursday—it's fun!</li>
-			<li><strong>Code Wizard:</strong> I love developing software and building websites.  I mainly do vibecoding. I’ve experimented with creating an AI, and I’ve built a polished note‑taking app and a small encyclopedia project. I mainly focus on software development, and I use what I call “vibecoding,” a flexible approach that helps me quickly pick up new tools and work confidently across different programming languages.</li>
+            <li><strong>Code Wizard & Vibe Coder:</strong> I love developing software and building websites. I mainly vibe code! I use artificial intelligence and a flexible approach to quickly build tools, games, and web apps, enabling me to work confidently across different programming languages and systems.</li>
         </ul>
         <p class="intro-text text-lg">If you want to talk about games, robots, basketball, or being a ninja, I'm your guy!</p>
         <div class="text-center mt-4">
@@ -91,59 +552,65 @@
     <section id="profiles" class="mx-auto my-12 p-8 max-w-5xl bg-gray-800 bg-opacity-90 rounded-xl shadow-lg border-4 border-gradient" style="animation: fadeInUp 0.8s ease-out;">
         <h2 class="text-3xl md:text-4xl text-cyan-400 text-shadow-md mb-4 section-header">My Profiles</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
-            <a href="https://github.com/parkertripoli-wq" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit GitHub Profile">
+            <a href="https://github.com/parkertripoli-wq" target="_blank" class="profile-item" aria-label="Visit GitHub Profile">
                 <div class="spinner" id="github-spinner"></div>
-                <img src="https://avatars.githubusercontent.com/u/230787001?v=4" alt="GitHub Avatar" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('github-spinner').style.display='none';" loading="lazy" decoding="async">
-                <h3 class="text-lg font-bold text-cyan-400">GitHub</h3>
-                <p>parkertripoli-wq</p>
+                <img src="https://avatars.githubusercontent.com/u/230787001?v=4" alt="GitHub Avatar" class="profile-avatar" onload="document.getElementById('github-spinner').style.display='none';" loading="lazy" decoding="async">
+                <h3 class="profile-title">GitHub</h3>
+                <p class="profile-username">parkertripoli-wq</p>
             </a>
-            <a href="https://psrf.github.io/rts?x.com/huckenbacher" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit Twitter/X Profile">
+            <a href="https://psrf.github.io/rts?x.com/huckenbacher" target="_blank" class="profile-item" aria-label="Visit Twitter/X Profile">
                 <div class="spinner" id="x-spinner"></div>
-                <img src="https://pbs.twimg.com/profile_images/1874669732336431104/oPbmgtxO_400x400.jpg" alt="X Avatar" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('x-spinner').style.display='none';" loading="lazy" decoding="async">
-                <h3 class="text-lg font-bold text-cyan-400">Twitter/X</h3>
-                <p>@huckenbacher</p>
+                <img src="https://pbs.twimg.com/profile_images/1874669732336431104/oPbmgtxO_400x400.jpg" alt="X Avatar" class="profile-avatar" onload="document.getElementById('x-spinner').style.display='none';" loading="lazy" decoding="async">
+                <h3 class="profile-title">Twitter/X</h3>
+                <p class="profile-username">@huckenbacher</p>
             </a>
-            <a href="https://psrf.github.io/rts?www.youtube.com/@PlayWithParkerAndEaston" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit YouTube Profile">
+            <a href="https://psrf.github.io/rts?www.youtube.com/@PlayWithParkerAndEaston" target="_blank" class="profile-item" aria-label="Visit YouTube Profile">
                 <div class="spinner" id="youtube-spinner"></div>
-                <img src="https://yt3.googleusercontent.com/_39gdO0jBACuC2TXTK8RdTrQNM1sQw2iP7zUPrSGSbT5k7RppmloNTjK9L4GwJvx2rcf_l5nj1o=s72-c-k-c0x00ffffff-no-rj" alt="YouTube Avatar" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('youtube-spinner').style.display='none';" loading="lazy" decoding="async">
-                <h3 class="text-lg font-bold text-cyan-400">YouTube</h3>
-                <p>Play with Parker and Easton</p>
+                <img src="https://yt3.googleusercontent.com/_39gdO0jBACuC2TXTK8RdTrQNM1sQw2iP7zUPrSGSbT5k7RppmloNTjK9L4GwJvx2rcf_l5nj1o=s72-c-k-c0x00ffffff-no-rj" alt="YouTube Avatar" class="profile-avatar" onload="document.getElementById('youtube-spinner').style.display='none';" loading="lazy" decoding="async">
+                <h3 class="profile-title">YouTube</h3>
+                <p class="profile-username">Play with Parker and Easton</p>
             </a>
-            <a href="https://psrf.github.io/rts?penguinmod.com/profile/?user=softbear312" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit PenguinMod Profile">
+            <a href="https://psrf.github.io/rts?penguinmod.com/profile/?user=softbear312" target="_blank" class="profile-item" aria-label="Visit PenguinMod Profile">
                 <div class="spinner" id="penguinmod-spinner"></div>
-                <img src="https://projects.penguinmod.com/api/v1/users/getpfp?username=softbear312" alt="PenguinMod Avatar" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('penguinmod-spinner').style.display='none';" loading="lazy" decoding="async">
-                <h3 class="text-lg font-bold text-cyan-400">PenguinMod</h3>
-                <p>softbear312</p>
+                <img src="https://projects.penguinmod.com/api/v1/users/getpfp?username=softbear312" alt="PenguinMod Avatar" class="profile-avatar" onload="document.getElementById('penguinmod-spinner').style.display='none';" loading="lazy" decoding="async">
+                <h3 class="profile-title">PenguinMod</h3>
+                <p class="profile-username">softbear312</p>
             </a>
-            <a href="https://psrf.github.io/rts?scratch.mit.edu/users/king__99/" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit Scratch Profile">
+            <a href="https://psrf.github.io/rts?scratch.mit.edu/users/king__99/" target="_blank" class="profile-item" aria-label="Visit Scratch Profile">
                 <div class="spinner" id="scratch-spinner"></div>
-                <img src="https://uploads.scratch.mit.edu/get_image/user/139698736_60x60.png" alt="Scratch Avatar" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('scratch-spinner').style.display='none';" loading="lazy" decoding="async">
-                <h3 class="text-lg font-bold text-cyan-400">Scratch</h3>
-                <p>king__99</p>
+                <img src="https://uploads.scratch.mit.edu/get_image/user/139698736_60x60.png" alt="Scratch Avatar" class="profile-avatar" onload="document.getElementById('scratch-spinner').style.display='none';" loading="lazy" decoding="async">
+                <h3 class="profile-title">Scratch</h3>
+                <p class="profile-username">king__99</p>
             </a>
-            <a href="https://psrf.github.io/rts?/www.cocrea.world/@TecHelp" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit Gandi IDE Profile">
+            <a href="https://psrf.github.io/rts?/www.cocrea.world/@TecHelp" target="_blank" class="profile-item" aria-label="Visit Gandi IDE Profile">
                 <div class="spinner" id="cocrea-spinner"></div>
-                <img src="https://assets.cocrea.world/ccw/oNviRgK0W1GhFjWA.png" alt="Cocrea Avatar" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('cocrea-spinner').style.display='none';" loading="lazy" decoding="async">
-                <h3 class="text-lg font-bold text-cyan-400">Gandi IDE (Cocrea)</h3>
-                <p>@TecHelp</p>
+                <img src="https://assets.cocrea.world/ccw/oNviRgK0W1GhFjWA.png" alt="Cocrea Avatar" class="profile-avatar" onload="document.getElementById('cocrea-spinner').style.display='none';" loading="lazy" decoding="async">
+                <h3 class="profile-title">Gandi IDE (Cocrea)</h3>
+                <p class="profile-username">@TecHelp</p>
             </a>
-            <a href="https://psrf.github.io/rts?hyse16.wixstudio.com/techelp" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit Tec Help Website">
+            <a href="https://psrf.github.io/rts?hyse16.wixstudio.com/techelp" target="_blank" class="profile-item" aria-label="Visit Tec Help Website">
                 <div class="spinner" id="techelp-spinner"></div>
-                <img src="https://i.ibb.co/tpxTQwpH/Screenshot-2025-10-12-110335.png" alt="Tec Help Logo" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('techelp-spinner').style.display='none';" loading="lazy">
-                <h3 class="text-lg font-bold text-cyan-400">My Tec Help Website</h3>
-                <p>Tec Help</p>
+                <img src="https://i.ibb.co/tpxTQwpH/Screenshot-2025-10-12-110335.png" alt="Tec Help Logo" class="profile-avatar" onload="document.getElementById('techelp-spinner').style.display='none';" loading="lazy">
+                <h3 class="profile-title">Tec Help</h3>
+                <p class="profile-username">Tec Help Site</p>
             </a>
-            <a href="https://psrf.github.io/rts?www.instagram.com/techelp_biz/" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit Instagram Profile">
+            <a href="https://psrf.github.io/rts?www.instagram.com/techelp_biz/" target="_blank" class="profile-item" aria-label="Visit Instagram Profile">
                 <div class="spinner" id="instagram-spinner"></div>
-                <img src="https://i.ibb.co/nN4cthqK/525615673-17842091496551172-6708170054717946277-n.jpg" alt="Instagram Profile" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('instagram-spinner').style.display='none';" loading="lazy">
-                <h3 class="text-lg font-bold text-cyan-400">Instagram</h3>
-                <p>techelp_biz</p>
+                <img src="https://i.ibb.co/nN4cthqK/525615673-17842091496551172-6708170054717946277-n.jpg" alt="Instagram Profile" class="profile-avatar" onload="document.getElementById('instagram-spinner').style.display='none';" loading="lazy">
+                <h3 class="profile-title">Instagram</h3>
+                <p class="profile-username">techelp_biz</p>
             </a>
-			<a href="https://psrf.github.io/rts?contacts.google.com/person/100132206015984426451?hl=en" target="_blank" class="profile-item bg-gray-900 border-2 border-cyan-400 rounded-lg p-6 text-center hover:shadow-[0_0_25px_#ff007a,0_0_50px_#00d4ff] transition-all duration-300 transform hover:-translate-y-1 min-w-[200px]" aria-label="Visit Google Profile">
+            <a href="https://psrf.github.io/rts?contacts.google.com/person/100132206015984426451?hl=en" target="_blank" class="profile-item" aria-label="Visit Google Profile">
                 <div class="spinner" id="google-spinner"></div>
-                <img src="https://lh3.googleusercontent.com/a/ACg8ocJ4nZnq3lreD5Gh3yY107oA0ObWlgJgscS1DAfqlmis2YlCszM=s272-p-k-rw-no" alt="Google Profile" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-purple-500 transform hover:scale-110 transition-transform duration-300" onload="document.getElementById('google-spinner').style.display='none';" loading="lazy">
-                <h3 class="text-lg font-bold text-cyan-400">Google</h3>
-                <p>P Trip</p>
+                <img src="https://lh3.googleusercontent.com/a/ACg8ocJ4nZnq3lreD5Gh3yY107oA0ObWlgJgscS1DAfqlmis2YlCszM=s272-p-k-rw-no" alt="Google Profile" class="profile-avatar" onload="document.getElementById('google-spinner').style.display='none';" loading="lazy">
+                <h3 class="profile-title">Google</h3>
+                <p class="profile-username">P Trip</p>
+            </a>
+            <a href="https://psrf.github.io/rts/?hyse16.wixsite.com/chatem/profile/my/profile" target="_blank" class="profile-item" aria-label="Visit Chatem Profile">
+                <div class="spinner" id="chatem-profile-spinner"></div>
+                <img src="https://static.wixstatic.com/media/1bf8c6_f60cdf7c469c4ab4934a8de84b2cc295%7Emv2.jpg/v1/fill/w_110,h_110,al_c,q_80,enc_auto/1bf8c6_f60cdf7c469c4ab4934a8de84b2cc295%257Emv2.jpg" alt="Chatem Avatar" class="profile-avatar" onload="document.getElementById('chatem-profile-spinner').style.display='none';" loading="lazy">
+                <h3 class="profile-title">Chatem</h3>
+                <p class="profile-username">@Parker</p>
             </a>
         </div>
         <div class="text-center mt-4">
@@ -152,21 +619,10 @@
     </section>
 
     <section id="stats" class="mx-auto my-12 p-8 max-w-5xl bg-gray-800 bg-opacity-90 rounded-xl shadow-lg border-4 border-gradient" style="animation: fadeInUp 0.8s ease-out;">
-        <h2 class="text-3xl md:text-4xl text-cyan-400 text-shadow-md mb-6 section-header text-center">My Stats & Projects</h2>
-        
-        <!-- Original stats graphs restored -->
-        <div class="flex flex-col items-center space-y-4">
-            <div class="spinner" id="stats-spinner-1"></div>
-            <img class="w-full max-w-md rounded-lg stats-img" src="https://github-readme-stats.vercel.app/api?username=parkertripoli-wq&hide_title=false&hide_rank=false&show_icons=true&include_all_commits=true&count_private=true&disable_animations=false&theme=neon&locale=en&hide_border=false&border_radius=30" height="150" alt="stats graph" onload="document.getElementById('stats-spinner-1').style.display='none';" loading="lazy" decoding="async">
-            <div class="spinner" id="stats-spinner-2"></div>
-            <img class="w-full max-w-md rounded-lg stats-img" src="https://streak-stats.demolab.com/?user=parkertripoli-wq&locale=en&mode=daily&theme=neon&hide_border=false&border_radius=30" height="150" alt="streak graph" onload="document.getElementById('stats-spinner-2').style.display='none';" loading="lazy" decoding="async">
-            <div class="spinner" id="stats-spinner-3"></div>
-            <img class="w-full max-w-md rounded-lg stats-img" src="https://github-readme-stats.vercel.app/api/top-langs?username=parkertripoli-wq&locale=en&hide_title=false&layout=compact&card_width=320&langs_count=5&theme=neon&hide_border=false&border_radius=30" height="150" alt="languages graph" onload="document.getElementById('stats-spinner-3').style.display='none';" loading="lazy" decoding="async">
-        </div>
+        <h2 class="text-3xl md:text-4xl text-cyan-400 text-shadow-md mb-6 section-header text-center">My Projects</h2>
 
 <p class="text-center my-10 high-quality-text">
-  I'm Making cool stuff! 
-  <strong>Some projects are finished, some are works-in-progress or experiments</strong> — check them out anyway!
+  I'm making cool stuff! 🚀 I mainly vibe code to bring my ideas to life at light speed — check them out!
 </p>
 
 <style>
@@ -175,7 +631,7 @@
   font-weight: 800;
 
   /* Smooth high-quality gradient */
-  background: linear-gradient(120deg, #ff4fd8, #4fdcff);
+  background: linear-gradient(120deg, #ff4fd8, #4fdcff, #a855f7);
   background-size: 200% 200%;
 
   -webkit-background-clip: text;
@@ -183,13 +639,19 @@
 
   /* Smooth neon glow (not harsh) */
   text-shadow:
-    0 0 6px rgba(255, 79, 216, 0.6),
-    0 0 12px rgba(79, 220, 255, 0.6);
+    0 0 6px rgba(255, 79, 216, 0.4),
+    0 0 12px rgba(79, 220, 255, 0.4);
 
   letter-spacing: 0.5px;
 
   /* Optional smooth animation */
   animation: gradientFlow 6s ease infinite;
+}
+
+@media (max-width: 768px) {
+  .high-quality-text {
+    font-size: 1.8rem;
+  }
 }
 
 @keyframes gradientFlow {
@@ -198,64 +660,8 @@
   100% { background-position: 0% 50%; }
 }
 </style>
-        <!-- Restored "I'm Making" blocks exactly as you had them (with your original pins + new buttons) -->
-        <div class="sloth-web-text text-center mt-6">
-            <h3 class="text-xl md:text-2xl mb-4">I'm Making Sloth Web</h3>
-            <div class="flex justify-center mb-4">
-                <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertripoli-wq&repo=sloth-web&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Sloth Web Pin">
-            </div>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="https://github.com/parkertripoli-wq/sloth-web" target="_blank" class="inline-block px-5 py-2.5 bg-gray-800 border-2 border-cyan-500 rounded-lg text-cyan-300 hover:bg-pink-600 hover:border-pink-500 hover:text-white transition-all duration-300 hover:glow">See Project</a>
-                <a href="https://parkertrip.github.io/slothweb/" target="_blank" class="inline-block px-5 py-2.5 bg-cyan-500 text-gray-900 font-bold rounded-lg hover:bg-pink-500 hover:text-white transition-all duration-300 hover:glow">View Site</a>
-            </div>
-        </div>
 
-        <div class="sloth-web-text text-center mt-6">
-            <h3 class="text-xl md:text-2xl mb-4">I'm Making My Portfolio</h3>
-            <div class="flex justify-center mb-4">
-                <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertrip&repo=parkertrip.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Portfolio Pin">
-            </div>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="https://github.com/parkertrip/parkertrip.github.io" target="_blank" class="inline-block px-5 py-2.5 bg-gray-800 border-2 border-cyan-500 rounded-lg text-cyan-300 hover:bg-pink-600 hover:border-pink-500 hover:text-white transition-all duration-300 hover:glow">See Project</a>
-                <a href="https://parkertrip.github.io/" target="_blank" class="inline-block px-5 py-2.5 bg-cyan-500 text-gray-900 font-bold rounded-lg hover:bg-pink-500 hover:text-white transition-all duration-300 hover:glow">View Site</a>
-            </div>
-        </div>
-
-        <div class="sloth-web-text text-center mt-6">
-            <h3 class="text-xl md:text-2xl mb-4">I'm Making Sloth Web Extensions Site</h3>
-            <div class="flex justify-center mb-4">
-                <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertripoli-wq&repo=parkertripoli-wq.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Extensions Pin">
-            </div>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="https://github.com/parkertripoli-wq/parkertripoli-wq.github.io" target="_blank" class="inline-block px-5 py-2.5 bg-gray-800 border-2 border-cyan-500 rounded-lg text-cyan-300 hover:bg-pink-600 hover:border-pink-500 hover:text-white transition-all duration-300 hover:glow">See Project</a>
-                <a href="https://parkertripoli-wq.github.io" target="_blank" class="inline-block px-5 py-2.5 bg-cyan-500 text-gray-900 font-bold rounded-lg hover:bg-pink-500 hover:text-white transition-all duration-300 hover:glow">View Site</a>
-            </div>
-        </div>
-
-        <div class="sloth-web-text text-center mt-6">
-            <h3 class="text-xl md:text-2xl mb-4">I'm Making Notely</h3>
-            <div class="flex justify-center mb-4">
-                <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertrip&repo=parkertrip.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Notely Pin">
-            </div>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="https://github.com/parkertrip/parkertrip.github.io/tree/main/notely" target="_blank" class="inline-block px-5 py-2.5 bg-gray-800 border-2 border-cyan-500 rounded-lg text-cyan-300 hover:bg-pink-600 hover:border-pink-500 hover:text-white transition-all duration-300 hover:glow">See Project</a>
-                <a href="https://parkertrip.github.io/notely/" target="_blank" class="inline-block px-5 py-2.5 bg-cyan-500 text-gray-900 font-bold rounded-lg hover:bg-pink-500 hover:text-white transition-all duration-300 hover:glow">View Site</a>
-            </div>
-        </div>
-
-        <div class="sloth-web-text text-center mt-6">
-            <h3 class="text-xl md:text-2xl mb-4">I'm Making Atiley</h3>
-            <div class="flex justify-center mb-4">
-                <img class="w-full max-w-md rounded-lg" src="https://github-readme-stats.vercel.app/api/pin/?username=parkertrip&repo=parkertrip.github.io&locale=en&theme=neon&hide_border=false&border_radius=30" alt="Atiley Pin">
-            </div>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="https://github.com/parkertrip/parkertrip.github.io/tree/main/atiley" target="_blank" class="inline-block px-5 py-2.5 bg-gray-800 border-2 border-cyan-500 rounded-lg text-cyan-300 hover:bg-pink-600 hover:border-pink-500 hover:text-white transition-all duration-300 hover:glow">See Project</a>
-                <a href="https://parkertrip.github.io/atiley/" target="_blank" class="inline-block px-5 py-2.5 bg-cyan-500 text-gray-900 font-bold rounded-lg hover:bg-pink-500 hover:text-white transition-all duration-300 hover:glow">View Site</a>
-            </div>
-        </div>
-
-        <!-- New modern grid with all your GitHub folders (dynamic favicon from page code) -->
-        <h3 class="text-2xl text-cyan-400 text-center mt-12 mb-6">More Projects from My GitHub Folders</h3>
+        <h3 class="text-3xl text-cyan-400 text-center mt-12 mb-6 font-bold text-shadow-md">My Vibe‑Coded Projects</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="dynamic-projects">
             <!-- JS will fill this with cards for: atiley, extensions, faeai, healthy, langlearn, newtab, notely, obie, shop, slothweb + more -->
         </div>
@@ -341,10 +747,11 @@
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 4 + 5;
-                this.speedX = Math.random() * 5 - 0;
-                this.speedY = Math.random() * 5 - 0;
-                this.color = ['#ff007a', '#00d4ff', '#aa00ff', '#20ff00', '#ffda00', '#ff0000'][Math.floor(Math.random() * 3)];
+                this.size = Math.random() * 3 + 3;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+                const colors = ['#ff007a', '#00d4ff', '#aa00ff'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
             }
             update() {
                 this.x += this.speedX;
@@ -383,6 +790,8 @@
            const projects = [
     {name: "Sloth Web", live: "https://parkertrip.github.io/slothweb/", repo: "https://github.com/parkertripoli-wq/sloth-web", desc: "Main browser/web platform"},
     {name: "Extensions Site", live: "https://parkertripoli-wq.github.io", repo: "https://github.com/parkertripoli-wq/parkertripoli-wq.github.io", desc: "Sloth Web Extensions"},
+    {name: "Garrio", live: "https://parkertrip.github.io/garrio/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/garrio", desc: "A sleek real-time chat platform"},
+    {name: "Wizerdz", live: "https://parkertrip.github.io/Wizerdz/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/Wizerdz", desc: "An epic wizard-themed web experience"},
     {name: "Notely", live: "https://parkertrip.github.io/notely/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/notely", desc: "Polished note-taking app"},
     {name: "Atiley", live: "https://parkertrip.github.io/atiley/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/atiley", desc: "Neon encyclopedia for kids"},
     {name: "LangLearn", live: "https://parkertrip.github.io/langlearn/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/langlearn", desc: "Language learning tool"},
@@ -392,13 +801,13 @@
     {name: "Shop", live: "https://parkertrip.github.io/shop/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/shop", desc: "Mini shop demo"},
     {name: "Healthy", live: "https://parkertrip.github.io/healthy/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/healthy", desc: "Health tracker"},
     {name: "Softstorage", live: "https://parkertrip.github.io/softstorage/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/softstorage", desc: "A local file hosting platform"},
-    {name: "Chatem", live: "https://hyse16.wixsite.com/chatem", repo: "https://parkertrip.github.io/notely/?view=N4IgLglmA2CmIC4QGEAWBDMsC2IA0IAxgPYB2W5iIAPACYQBuAfNQM5gCecTAOqQAT8ARsVod+wPoMHZ0AJwDmEUgn4AGANxTpqWBAWowqgIxq1DVFoHT6rAA7R0HVQDM4ADyvT+6aPtIAtFA4rKqEsOSwcl7SAFYAruwQLhwBJJHkYRFY0dqCQuiEANYKcsTxpLSqfqSw8gGl6PTZABTGAMwArLSwCnj8AMRqLsYA7ABM6P0DxrDt6AAcU4MAnO3rdQCUMYIuZGABLujYENDO-ADkAMq9xLD8AKoAkhf9rOikrAGsUck7-CRoMQ5KoAO6oYIxAC+fG0ADpCPJaBI8sJCiUyhUqvxFAUWuNOp1+gSifwSf01HC1AttqiCsVaGU7IdTjlVEJoPE5G1OnZ3LTrPlgT05AE5E0IIlVOM1Hz-nYmvRSApVAAWWWeVGydwBUEQWhgVCqTpmOWorDuA6+fxZSK5QXCYg61gYWjEUGqNRkjX8ABsPtx6BaajwIbDcNVAu8HwgskgZFcQMwftY-DqPyCgXKYH4yhcykh2hhpG0AAEirAOC5xdhYKm3MRk5IHWoAKQSfhgcWfPZybCqLsfViOLAATWDfO2-GL3hN7eAne7rF7-cXQ5HsHHAVMk4009RpjbHcHPeBq5Pw8wm4n-L3M-3JesqGMKIde3I3wgAC9YNK4Z0cH+WRFGUAIRDAMBiFXHdNQdekMXKSpqmUOpRUaZpyBaFY1B6PpBnaBYhFoFwFmmFxVQmIRfSjaRdVgIQiigMD0VKRDaDSPw7AHWBLX+OiGKYi0DnzaBoDSYggRBNdPgVORsmhWFrDsV9vHfA5WG-X9+GMOFZmwf4algAJdH0QwTDhX1-mIBVCCgc5KRWBTH0EOEIQMPwDBzZtvEBYFVAGAiiJI-41Lo0yjEdaBaCc7R0BUmwIHsRxzmUQywKBYogPkJRAkgrjvTNB0FVoJUVW08Y+TJXlYO8EQ5BFMUJSlfgVlawrvCEgIehIcV4xUfhSDIWB-l8qTwULOCWMxJD+EM+p0IgVpsNw6ZAuI0jBnIyjqP+C8oAgBN1DhdpWBi6x0AQVBiAYKJ4sEC8V1UVhETgNoqU6GihWdV13U9bSfQJSrA2DUNQcpSMnOoAB6dguFgXhHzoRgAUcVhWAAXh4IgkSxhHBGoZ8mDQK9sGhwnFPxuw8ekYmsGwfg3Trfg2AVARCFRjGsbc1APMMXHBpzDAbp8HFYDsYgNMguQOGh+wPiYYRYERRJ7igfhQXQVMhHiVl+ESZQFH4VEWY+FHNc5kBud5sBcYAdQgdxZdZph+ji0F6Ml+5tdOEU4W0aGqYp5nA4dJ4cw11MTbZjnMct0zrf54gcwYCAhHuEgeloJ35f4QAUAlzcPNYBeRYBceJRPEHoNIUWpkQ+ZFCDkq9aD96wA4R-2Q+8W2PhzSCAV0YoC-4bMAH5-ahkP-bi1A5JcWPDDAOxQihqHUA4H5jF9OE9XcT2ESgqHCAwOmsc7bLYDAWOAH0OQ+IpcdRAA1RK1dpnB+EAXg3AAC9if0AR6G9BmCKT4IAxgTB8AgHFKCKgkDERYAUMCDgVBACsG4AJ12UGACjdlBgBk3awSgwA6bsoMAGG7KDACJu5AsA6AFCsEQAAbQALoEFoFeKgMpxi+gCGodoARxjjAACrGAWAgNQvoEB8N0uMBYAAtSBdhlC10QEcaAPwCDyGPowWAtAlG+B+FCIAA", desc: "A social media platform like Facebook/X"},
-	{name: "Noiy", live: "https://parkertrip.github.io/noiy/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/noiy", desc: "The Best news website"},
-	{name: "Packet", live: "https://parkertrip.github.io/packet/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/packet", desc: "FUN"},
-	{name: "Boank", live: "https://parkertrip.github.io/bk/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/bk", desc: "money"},
-	{name: "stoneymc", live: "https://parkertrip.github.io/stoneymc/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/stoneymc", desc: "Minecraft"},
-	{name: "Yapper", live: "https://parkertrip.github.io/yapper/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/yapper", desc: "NEW"},
-	{name: "Psrf", live: "https://psrf.github.io/", repo: "https://github.com/psrf/psrf.github.io", desc: "rdr"},
+    {name: "Chatem", live: "https://hyse16.wixsite.com/chatem", repo: "https://parkertrip.github.io/notely/?view=N4IgLglmA2CmIC4QGEAWBDMsC2IA0IAxgPYB2W5iIAPACYQBuAfNQM5gCecTAOqQAT8ARsVod+wPoMHZ0AJwDmEUgn4AGANxTpqWBAWowqgIxq1DVFoHT6rAA7R0HVQDM4ADyvT+6aPtIAtFA4rKqEsOSwcl7SAFYAruwQLhwBJJHkYRFY0dqCQuiEANYKcsTxpLSqfqSw8gGl6PTZABTGAMwArLSwCnj8AMRqLsYA7ABM6P0DxrDt6AAcU4MAnO3rdQCUMYIuZGABLujYENDO-ADkAMq9xLD8AKoAkhf9rOikrAGsUck7-CRoMQ5KoAO6oYIxAC+fG0ADpCPJaBI8sJCiUyhUqvxFAUWuNOp1+gSifwSf01HC1AttqiCsVaGU7IdTjlVEJoPE5G1OnZ3LTrPlgT05AE5E0IIlVOM1Hz-nYmvRSApVAAWWWeVGydwBUEQWhgVCqTpmOWorDuA6+fxZSK5QXCYg61gYWjEUGqNRkjX8ABsPtx6BaajwIbDcNVAu8HwgskgZFcQMwftY-DqPyCgXKYH4yhcykh2hhpG0AAEirAOC5xdhYKm3MRk5IHWoAKQSfhgcWfPZybCqLsfViOLAATWDfO2-GL3hN7eAne7rF7-cXQ5HsHHAVMk4009RpjbHcHPeBq5Pw8wm4n-L3M-3JesqGMKIde3I3wgAC9YNK4Z0cH+WRFGUAIRDAMBiFXHdNQdekMXKSpqmUOpRUaZpyBaFY1B6PpBnaBYhFoFwFmmFxVQmIRfSjaRdVgIQiigMD0VKRDaDSPw7AHWBLX+OiGKYi0DnzaBoDSYggRBNdPgVORsmhWFrDsV9vHfA5WG-X9+GMOFZmwf4algAJdH0QwTDhX1-mIBVCCgc5KRWBTH0EOEIQMPwDBzZtvEBYFVAGAiiJI-41Lo0yjEdaBaCc7R0BUmwIHsRxzmUQywKBYogPkJRAkgrjvTNB0FVoJUVW08Y+TJXlYO8EQ5BFMUJSlfgVlawrvCEgIehIcV4xUfhSDIWB-l8qTwULOCWMxJD+EM+p0IgVpsNw6ZAuI0jBnIyjqP+C8oAgBN1DhdpWBi6x0AQVBiAYKJ4sEC8V1UVhETgNoqU6GihWdV13U9bSfQJSrA2DUNQcpSMnOoAB6dguFgXhHzoRgAUcVhWAAXh4IgkSxhHBGoZ8mDQK9sGhwnFPxuw8ekYmsGwfg3Trfg2AVARCFRjGsbc1APMMXHBpzDAbp8HFYDsYgNMguQOGh+wPiYYRYERRJ7igfhQXQVMhHiVl+ESZQFH4VEWY+FHNc5kBud5sBcYAdQgdxZdZph+ji0F6Ml+5tdOEU4W0aGqYp5nA4dJ4cw11MTbZjnMct0zrf54gcwYCAhHuEgeloJ35f4QAUAlzcPNYBeRYBceJRPEHoNIUWpkQ+ZFCDkq9aD96wA4R/2Q+8W2PhzSCAV0YoC-4bMAH5-ahkP-bi1A5JcWPDDAOxQihqHUA4H5jF9OE9XcT2ESgqHCAwOmsc7bLYDAWOAH0OQ+IpcdRAA1RK1dpnB+EAXg3AAC9if0AR6G9BmCKT4IAxgTB8AgHFKCKgkDERYAUMCDgVBACsG4AJ12UGACjdlBgBk3awSgwA6bsoMAGG7KDACJu5AsA6AFCsEQAAbQALoEFoFeKgMpxi+gCGodoARxjjAACrGAWAgNQvoEB8N0uMBYAAtSBdhlC10QEcaAPwCDyGPowWAtAlG+B+FCIAA", desc: "A social media platform like Facebook/X"},
+    {name: "Noiy", live: "https://parkertrip.github.io/noiy/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/noiy", desc: "The Best news website"},
+    {name: "Packet", live: "https://parkertrip.github.io/packet/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/packet", desc: "FUN"},
+    {name: "Boank", live: "https://parkertrip.github.io/bk/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/bk", desc: "money"},
+    {name: "stoneymc", live: "https://parkertrip.github.io/stoneymc/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/stoneymc", desc: "Minecraft"},
+    {name: "Yapper", live: "https://parkertrip.github.io/yapper/", repo: "https://github.com/parkertrip/parkertrip.github.io/tree/main/yapper", desc: "NEW"},
+    {name: "Psrf", live: "https://psrf.github.io/", repo: "https://github.com/psrf/psrf.github.io", desc: "rdr"},
 ];
 
             projects.forEach(proj => {
