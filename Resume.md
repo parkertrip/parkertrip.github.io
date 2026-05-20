@@ -1,117 +1,99 @@
-# Resume
+# ⚡ Parker James Tripoli
 
-## Contact Information
-
-**Name:** Parker James Tripoli  
-**Email:** parkertripoli@gmail.com  
-**Phone:** Not available  
-**Location:** US, CA  
+> [!IMPORTANT]
+> **Vibe Coder Extraordinaire | Game Creator | FLL Robotics Champ | Boy Scout**  
+> 📍 California, US | 📧 [parkertripoli@gmail.com](mailto:parkertripoli@gmail.com)
 
 ---
 
-## Objective
+## 🌐 My Digital Space
 
-Creative and motivated student with strong interests in software development, game creation, robotics, and technology support. Seeking opportunities to learn, build real-world projects, and contribute skills in programming, problem-solving, and teamwork through tech programs, clubs, or independent projects.
-
----
-
-## Skills
-
-### Programming & Software Development
-- Experience building software and websites using **Python, JavaScript, HTML, and CSS**
-- Created a **note-taking app**, a **small encyclopedia**, and a **custom web browser with extension support**
-- Built and managed a **Minecraft server**
-- Comfortable learning new tools quickly using a flexible, hands-on approach (“vibecoding”)
-
-### Game Development
-- Designed and developed multiple games using **PenguinMod** and web technologies
-- Implemented gameplay systems such as shops, achievements, progression, and user input
-- Focused on clean design, usability, and fun player experiences
-
-### Robotics
-- First LEGO League (FLL) experience building and programming LEGO robots
-- Skilled in efficient robot design and testing
-- Contributed to award-winning engineering and project solutions
-
-### Problem-Solving
-- Strong debugging and logical thinking skills
-- Experience breaking down complex problems in coding, robotics, and game mechanics
-
-### Teamwork & Leadership
-- Worked effectively in team environments, including robotics and sports
-- Demonstrated cooperation, respect, and communication following FLL Core Values
-
-### Technology Support
-- Provide amasing tech help and troubleshooting through a personal tech help site  
-  **Website:** https://hyse16.wixstudio.com/techelp
-
-### Athletics & Physical Skills
-- Basketball fundamentals: dribbling, shooting, and team play
-- Ninja training, including agility work and front flips
-
-### Creativity & Building
-- Enjoy building physical and digital projects, including LEGO creations and custom designs
-- Strong interest in creating original ideas and bringing them to life
+[![Portfolio](https://img.shields.io/badge/Portfolio-parkertrip.github.io-00d4ff?style=for-the-badge&logo=google-chrome&logoColor=white)](https://parkertrip.github.io/)
+[![GitHub](https://img.shields.io/badge/GitHub-parkertripoli--wq-ff007a?style=for-the-badge&logo=github&logoColor=white)](https://github.com/parkertripoli-wq)
+[![Chatem](https://img.shields.io/badge/Chatem-@Parker-a855f7?style=for-the-badge&logo=wix&logoColor=white)](https://psrf.github.io/rts/?hyse16.wixsite.com/chatem/profile/my/profile)
+[![Tec Help](https://img.shields.io/badge/Tec_Help-Website-yellow?style=for-the-badge&logo=wix&logoColor=white)](https://hyse16.wixstudio.com/techelp)
 
 ---
 
-## Experience
+## 🎯 Profile & Objective
 
-### Software & Game Developer (Personal Projects)  
+I mainly **vibe code** to bring my ideas to life at lightspeed. I'm a highly creative game creator, robot champion, and scout who loves building both digital worlds and physical structures. I'm seeking opportunities to learn new tech, construct cool software projects, and collaborate with other developers.
+
+---
+
+## 🛠️ Skills & Powers
+
+| Power Area | Skills & Tools |
+| :--- | :--- |
+| **Vibe Coding & Web** | JavaScript, HTML5, CSS3, Python, Glassmorphism, APIs |
+| **Game Dev** | PenguinMod, Collision Physics, Shop/Achievement Systems |
+| **Hardware & Robotics** | LEGO FLL Mindstorms programming, Structural Engineering |
+| **Problem Solving** | Troubleshooting, server hosting (Minecraft), debugging |
+| **Athletics** | Ninja agility (front flips), Basketball team coordination |
+| **Leadership** | Scout values, FLL Core Values, teamwork |
+
+### 🚀 Tech Badges
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
+![Minecraft](https://img.shields.io/badge/Minecraft-%23007b0c?style=for-the-badge&logo=minecraft&logoColor=white)
+![LEGO](https://img.shields.io/badge/LEGO-FLL-red?style=for-the-badge&logo=lego&logoColor=white)
+
+---
+
+## 🚀 Experience
+
+### 💻 Software & Game Developer
 **Self-Directed | 2020 – Present**
+- Developed browser-based games using HTML, CSS, and JavaScript.
+- Created **"Zozer,"** a platformer game in PenguinMod featuring dynamic shop and achievement systems.
+- Built **Garrio** (chat platform) and **Wizerdz** (magical web adventure).
+- Designed and published **Sloth Web**, a custom web browser with extension support.
+- Hosted and managed a custom **Minecraft** server.
 
-- Developed browser-based games using HTML, CSS, and JavaScript
-- Created **“Zozer,”** a platformer game in PenguinMod featuring shop and achievement systems
-- Built a **note-taking application**, **encyclopedia project**, and **custom web browser**
-- Hosted and managed a **Minecraft server**
-- Improved user interfaces, added sound effects, and refined gameplay for better user engagement
+### ⚜️ Boy Scout Member
+**Boy Scouts of America | 2026 – Present**
+- Active member engaging in wilderness survival training, camping trips, and community service.
+- Working on merit badges including Emergency Preparedness, Wilderness Survival, and Citizenship.
+- Practicing leadership, troop coordination, and team cooperation.
 
----
+### 🤖 First LEGO League Team Member — *Robot Subs*
+**FLL Robotics | 2024**
+- Designed, built, and programmed LEGO robots under competition constraints.
+- Advanced to **FLL Regional Championships**.
+- Earned prestigious awards:
+  - 🏆 **Rising All-Star Award** (Judges' future champions award)
+  - 🛠️ **Engineering Excellence Award** (Efficient robot design)
 
-### First LEGO League Team Member — *Robot Subs*  
-**2024**
-
-- Designed, built, and programmed LEGO robots for competition
-- Advanced to **regionals**
-- Helped earn:
-  - **Rising All-Star Award**
-  - **Engineering Excellence Award**
-- Demonstrated teamwork, innovation, and problem-solving under competition constraints
-
----
-
-### Basketball Player  
+### 🏀 Youth Basketball Player
 **i9 Sports Youth League | 2021 – Present**
+- Developed court vision, team play, strategy, and fitness.
+- Practiced sportsmanship and coordination.
 
-- Participated in regular practices and games
-- Developed teamwork, strategy, and sportsmanship
-- Maintained an active and healthy lifestyle
-
----
-
-### Ninja Class Participant  
+### 🤸 Ninja Class Participant
 **Gymminy Kids | 2022 – Present**
-
-- Attend weekly training sessions
-- Learned front flips, agility techniques, and coordination skills
-- Built confidence and physical control through consistent practice
+- Mastered front flips, agility tracks, and coordination drills.
 
 ---
 
-## Achievements
+## 🏆 Key Achievements
 
-- **Rising All-Star Award** — First LEGO League  
-- **Engineering Excellence Award** — First LEGO League  
-- Successfully created and published multiple games and software projects  
-- Built and maintained a Minecraft server  
+- **Rising All-Star Award** — First LEGO League
+- **Engineering Excellence Award** — First LEGO League
+- Created and published multiple games and software platforms
 - Launched a personal tech help website
 
 ---
 
-## Interests
+## 📊 Timeline of Projects & Activities
 
-- Software development & programming  
-- Game design  
-- Robotics & engineering  
-- Basketball and fitness  
-- Creative building (LEGO, digital projects, and inventions)
+```mermaid
+timeline
+    title My Journey & Timeline
+    2020 : Started Coding & Game Design
+    2021 : Joined i9 Youth Basketball
+    2022 : Started Gymnastics Ninja Class
+    2024 : FLL Robot Subs (Awards & Regionals)
+    2026 : Joined Boy Scouts & Vibe-Coding at lightspeed
+```
