@@ -1,0 +1,1885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>𝓑̲͎̲𝓵̲͎̲𝓸̲͎̲𝓹̲͎̲𝓲̲͎̲𝓮̲͎̲</title>
+    <!-- Blopie Favicon (using logo) -->
+    <link rel="icon" href="https://chatgpt.com/backend-api/estuary/public_content/enc/eyJpZCI6Im1fNmEyMDgwZDIxMzg4ODE5MTlmZWJiOGUxNTQ4MGE4YzM6ZmlsZV8wMDAwMDAwMDFlMzQ3MWY1YmNkZjYzZjgyMWRlNzlkNCIsInRzIjoiMjA2MDciLCJwIjoicHlpIiwiY2lkIjoiMSIsInNpZyI6Ijc2ZjhiMzMzODU2ODNjODY0OTQxOTc2OTYyMTkyM2Q2NmRhOWJjZTYyY2I4ODVlNGZmNDU5OGU1ZWNkOTk4ZDciLCJ2IjoiMCIsImdpem1vX2lkIjpudWxsLCJjcyI6bnVsbCwiY2RuIjpudWxsLCJmbiI6bnVsbCwiY2QiOm51bGwsImNwIjpudWxsLCJtYSI6bnVsbH0=" type="image/png">
+    <!-- 
+      Tailwind Play CDN (https://tailwindcss.com/docs/installation/play-cdn)
+      Perfect for single-file demos & local development.
+      For true production builds, use Tailwind CLI or PostCSS.
+      The "should not be used in production" warning in console is expected and harmless here.
+    -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quantico:wght@400;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+        }
+        
+        body {
+            font-family: 'Space Grotesk', 'Space Mono', 'Quantico', system-ui, -apple-system, sans-serif;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', 'Quantico', sans-serif;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+
+        .font-mono {
+            font-family: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .glass-dark {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+        }
+
+        .chat-container {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+        }
+
+        .message-bubble {
+            max-width: 85%;
+            padding: 14px 18px;
+            border-radius: 20px;
+            position: relative;
+            animation: fadeInUp 0.2s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-bubble {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border-bottom-right-radius: 6px;
+        }
+
+        .assistant-bubble {
+            background: rgba(255,255,255,0.95);
+            color: #0f172a;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-bottom-left-radius: 6px;
+        }
+
+        .dark .assistant-bubble {
+            background: rgba(30, 41, 59, 0.95);
+            color: #e2e8f0;
+            border: 1px solid rgba(148, 163, 184, 0.15);
+        }
+
+        .markdown-content h1, .markdown-content h2, .markdown-content h3 {
+            font-weight: 600;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+        }
+        
+        .markdown-content p {
+            margin-bottom: 0.75em;
+            line-height: 1.65;
+        }
+        
+        .markdown-content ul, .markdown-content ol {
+            margin-left: 1.25rem;
+            margin-bottom: 0.75em;
+        }
+        
+        .markdown-content code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            background: rgba(15, 23, 42, 0.08);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 0.875em;
+        }
+        
+        .markdown-content pre {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 14px;
+            overflow-x: auto;
+            margin: 12px 0;
+            border: 1px solid rgba(148, 163, 184, 0.15);
+        }
+        
+        .markdown-content pre code {
+            background: transparent;
+            padding: 0;
+            color: #e2e8f0;
+        }
+
+        .sidebar-item {
+            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .sidebar-item:hover {
+            background-color: rgba(255,255,255,0.06);
+            transform: translateX(2px);
+        }
+        
+        .sidebar-item.active {
+            background-color: rgba(59, 130, 246, 0.15);
+            border-left: 3px solid #3b82f6;
+        }
+
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .glassmorphism {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .nav-active {
+            background: linear-gradient(90deg, rgba(59,130,246,0.15), transparent);
+            border-left: 3px solid #3b82f6;
+        }
+
+        .chat-scroll {
+            scroll-behavior: smooth;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+        }
+        
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #64748b;
+            border-radius: 50%;
+            animation: typingBounce 1.2s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .model-badge {
+            font-size: 0.75rem;
+            padding: 2px 10px;
+            border-radius: 9999px;
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            font-weight: 500;
+        }
+
+        .blopie-logo {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .message-actions {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .message-bubble:hover .message-actions {
+            opacity: 1;
+        }
+
+        .section-header {
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 overflow-hidden">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div id="sidebar" class="w-72 bg-slate-900 border-r border-slate-800 flex flex-col glass-dark">
+            <!-- Sidebar Header -->
+            <div class="p-5 border-b border-slate-800">
+                <div class="flex items-center gap-x-3">
+                    <img src="https://chatgpt.com/backend-api/estuary/public_content/enc/eyJpZCI6Im1fNmEyMDgwZDIxMzg4ODE5MTlmZWJiOGUxNTQ4MGE4YzM6ZmlsZV8wMDAwMDAwMDFlMzQ3MWY1YmNkZjYzZjgyMWRlNzlkNCIsInRzIjoiMjA2MDciLCJwIjoicHlpIiwiY2lkIjoiMSIsInNpZyI6Ijc2ZjhiMzMzODU2ODNjODY0OTQxOTc2OTYyMTkyM2Q2NmRhOWJjZTYyY2I4ODVlNGZmNDU5OGU1ZWNkOTk4ZDciLCJ2IjoiMCIsImdpem1vX2lkIjpudWxsLCJjcyI6bnVsbCwiY2RuIjpudWxsLCJmbiI6bnVsbCwiY2QiOm51bGwsImNwIjpudWxsLCJtYSI6bnVsbH0=" 
+                         class="w-10 h-10 rounded-2xl object-cover shadow-lg ring-1 ring-white/20" alt="Blopie Logo">
+                    <div>
+                        <div class="blopie-logo text-3xl font-display tracking-tighter">𝓑𝓵𝓸𝓹𝓲𝓮</div>
+                        <div class="text-[10px] text-slate-500 -mt-1">Ultra • Local Brain</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Chat Button + Search -->
+            <div class="p-4 space-y-3">
+                <button onclick="createNewChat()" 
+                        class="w-full flex items-center justify-center gap-x-2 bg-white text-slate-900 hover:bg-slate-100 transition-all py-3 px-4 rounded-2xl font-semibold text-sm shadow-lg active:scale-[0.985]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span>New Chat</span>
+                </button>
+                
+                <!-- Chat Search -->
+                <div class="relative">
+                    <input id="chat-search" type="text" placeholder="Search conversations..." 
+                           oninput="filterChatHistory()"
+                           class="w-full bg-slate-800 border border-slate-700 focus:border-blue-500 text-sm px-4 py-2.5 pl-9 rounded-2xl placeholder:text-slate-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 absolute left-3.5 top-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 01-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Chat History -->
+            <div class="flex-1 overflow-y-auto px-3 pb-4 chat-container" id="chat-history-list">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Sidebar Footer -->
+            <div class="p-4 border-t border-slate-800 space-y-1">
+                <button onclick="showMemoryModal()" 
+                        class="w-full flex items-center gap-x-3 px-4 py-3 text-sm text-slate-300 hover:text-white hover:bg-white/5 rounded-2xl transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2 2 2 0 012 2v2" />
+                    </svg>
+                    <span>Memory Bank</span>
+                </button>
+                
+                <button onclick="showSettingsModal()" 
+                        class="w-full flex items-center gap-x-3 px-4 py-3 text-sm text-slate-300 hover:text-white hover:bg-white/5 rounded-2xl transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 002.572 1.065c1.755.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.755-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-2.572-1.065c-1.755-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span>Settings</span>
+                </button>
+
+                <!-- Import Chat Button -->
+                <button onclick="importChat()" 
+                        class="w-full flex items-center gap-x-3 px-4 py-3 text-sm text-slate-300 hover:text-white hover:bg-white/5 rounded-2xl transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v-4m0 0l4 4m-4-4l4-4m12 8v-4m0 0l-4 4m4-4l-4-4" />
+                    </svg>
+                    <span>Import Chat</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="flex-1 flex flex-col bg-slate-950">
+            <!-- Top Header -->
+            <div class="h-16 border-b border-slate-800 bg-slate-900/70 backdrop-blur-xl flex items-center justify-between px-6 z-20">
+                <div class="flex items-center gap-x-4">
+                    <!-- Mobile sidebar toggle -->
+                    <button onclick="toggleSidebar()" class="lg:hidden p-2 text-slate-400 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    
+                    <div>
+                        <div id="current-chat-title" class="font-semibold text-lg tracking-tight">New Conversation</div>
+                        <div id="current-chat-meta" class="text-xs text-slate-500 flex items-center gap-x-2">
+                            <span id="message-count">0 messages</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-x-3">
+                    <!-- Research Mode Toggle -->
+                    <div class="flex items-center bg-slate-900 border border-slate-700 rounded-2xl p-1 text-sm">
+                        <div class="flex items-center px-3 py-1.5 gap-x-2">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" id="research-mode-toggle" class="sr-only peer" onchange="toggleResearchMode()">
+                                <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none peer-focus:ring-0 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500 relative"></div>
+                                <span class="ml-3 text-xs font-medium text-slate-400 peer-checked:text-emerald-400">Research</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Model Selector -->
+                    <div class="relative group">
+                        <button onclick="showModelPicker()" 
+                                class="flex items-center gap-x-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 transition-colors text-sm px-4 h-10 rounded-2xl">
+                            <span id="current-model-name" class="font-medium">Select Model</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- More actions -->
+                    <div class="flex items-center gap-x-1">
+                        <button onclick="exportCurrentChat()" 
+                                class="p-2.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-2xl transition-colors" title="Export chat">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13v6m-3-3h6M6 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4m4 0v4m0 0v4m0-4h4m-4 4v4" />
+                            </svg>
+                        </button>
+                        
+                        <button onclick="deleteCurrentChat()" 
+                                class="p-2.5 text-slate-400 hover:text-red-400 hover:bg-red-950/30 rounded-2xl transition-colors" title="Delete chat">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.595-1.858L5 7m5 4v6m4-6v6m1-10V9a1 1 0 00-1-1h-4a1 1 0 00-1 1v1M5 7h14" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Area -->
+            <div id="messages-container" 
+                 class="flex-1 overflow-y-auto p-6 chat-scroll bg-[radial-gradient(#1e2937_0.8px,transparent_1px)] bg-[length:4px_4px]"
+                 style="background-position: 0 0;">
+                <div id="welcome-screen" class="h-full flex flex-col items-center justify-center text-center max-w-md mx-auto">
+                    <div class="w-20 h-20 mb-6 rounded-3xl bg-gradient-to-br from-blue-500/10 to-violet-500/10 flex items-center justify-center border border-white/10">
+                        <span class="text-6xl">🧠</span>
+                    </div>
+                    <h2 class="text-3xl font-semibold tracking-tighter mb-2">Welcome to Blopie Ultra</h2>
+                    <p class="text-slate-400 mb-8">Your personal AI with persistent memory, research superpowers, and beautiful glassmorphism.</p>
+                    
+                    <div class="grid grid-cols-2 gap-3 w-full max-w-xs text-sm">
+                        <div onclick="quickStart('Tell me about quantum computing')" class="cursor-pointer p-4 rounded-2xl border border-slate-700 hover:border-slate-600 bg-slate-900/50 text-left">
+                            <div class="font-medium">Quantum Computing</div>
+                            <div class="text-xs text-slate-500 mt-0.5">Explain the basics</div>
+                        </div>
+                        <div onclick="quickStart('Help me plan a 7-day trip to Japan')" class="cursor-pointer p-4 rounded-2xl border border-slate-700 hover:border-slate-600 bg-slate-900/50 text-left">
+                            <div class="font-medium">Travel Planner</div>
+                            <div class="text-xs text-slate-500 mt-0.5">7-day Japan itinerary</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="messages-list" class="space-y-6 max-w-3xl mx-auto hidden"></div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="border-t border-slate-800 bg-slate-900/70 backdrop-blur-xl p-4">
+                <div class="max-w-3xl mx-auto">
+                    <div class="relative glassmorphism rounded-3xl border border-white/10 shadow-2xl">
+                        <textarea id="message-input" rows="1" 
+                                  class="w-full bg-transparent resize-none px-6 py-4 pr-16 text-base placeholder:text-slate-400 focus:outline-none"
+                                  placeholder="Message Blopie... (Shift+Enter for new line)"
+                                  onkeydown="if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"></textarea>
+                        
+                        <div class="absolute right-3 bottom-3 flex items-center gap-x-2">
+                            <button onclick="sendMessage()" 
+                                    class="bg-white hover:bg-slate-100 active:bg-white transition-all text-slate-900 w-9 h-9 flex items-center justify-center rounded-2xl shadow-inner">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-2 px-2 text-[10px] text-slate-500">
+                        <div class="flex items-center gap-x-4">
+                            <div id="research-status" class="hidden items-center gap-x-1.5 text-emerald-400">
+                                <div class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
+                                <span class="font-medium">Research mode active</span>
+                            </div>
+                        </div>
+                        <div>
+                            Powered by <span class="font-mono text-[9px]">g4f.space</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Picker Modal -->
+    <div id="model-modal" onclick="if (event.target.id === 'model-modal') hideModelPicker()" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div onclick="event.stopImmediatePropagation()" class="glassmorphism w-full max-w-md mx-4 rounded-3xl border border-white/10 overflow-hidden">
+            <div class="p-5 border-b border-white/10 flex items-center justify-between">
+                <div class="font-semibold">Choose Model</div>
+                <button onclick="hideModelPicker()" class="text-slate-400 hover:text-white p-1">✕</button>
+            </div>
+            
+            <div class="p-2 max-h-[420px] overflow-y-auto" id="model-list">
+                <!-- Populated dynamically -->
+            </div>
+            
+            <div class="p-4 bg-black/20 text-xs text-center text-slate-400 border-t border-white/10">
+                Models loaded from <span class="font-mono">g4f.space/api/ollama/models</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" onclick="if (event.target.id === 'settings-modal') hideSettingsModal()" class="hidden fixed inset-0 bg-black/70 backdrop-blur z-[60] flex items-center justify-center">
+        <div onclick="event.stopImmediatePropagation()" class="glassmorphism w-full max-w-lg mx-4 rounded-3xl border border-white/10 overflow-hidden">
+            <div class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
+                <div class="font-semibold text-xl tracking-tight">Settings</div>
+                <button onclick="hideSettingsModal()" class="text-2xl leading-none text-slate-400 hover:text-white">×</button>
+            </div>
+            
+            <div class="p-6 space-y-6 text-sm">
+                <!-- API Key -->
+                <div>
+                    <label class="block text-xs font-semibold tracking-wider text-slate-400 mb-1.5">G4F.SPACE API KEY</label>
+                    <input id="api-key-input" type="password" placeholder="sk-... or leave empty to try without key" 
+                           class="w-full bg-slate-900 border border-slate-700 focus:border-blue-500 transition-colors rounded-2xl px-4 py-3 text-sm font-mono placeholder:text-slate-500">
+                    <p class="text-[10px] text-slate-500 mt-1.5">Get a free key at <a href="https://g4f.dev/api_key.html" target="_blank" class="underline">g4f.dev/api_key</a>. Some models may work without it.</p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold tracking-wider text-slate-400 mb-1.5">TEMPERATURE</label>
+                        <input id="temperature-input" type="range" min="0" max="2" step="0.1" value="0.7" class="w-full accent-blue-500">
+                        <div class="flex justify-between text-[10px] text-slate-400 mt-0.5">
+                            <div>Precise</div><div id="temp-value">0.7</div><div>Creative</div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold tracking-wider text-slate-400 mb-1.5">MAX TOKENS</label>
+                        <input id="max-tokens-input" type="number" value="2048" class="w-full bg-slate-900 border border-slate-700 rounded-2xl px-4 py-2.5 text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="flex items-center gap-x-3 cursor-pointer">
+                        <input type="checkbox" id="auto-save-toggle" checked class="accent-blue-500 w-4 h-4">
+                        <span class="text-sm">Auto-save chats to local memory</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="px-6 py-4 bg-black/30 flex justify-end gap-x-3 border-t border-white/10">
+                <button onclick="hideSettingsModal()" class="px-6 py-2.5 text-sm rounded-2xl hover:bg-white/5 transition-colors">Cancel</button>
+                <button onclick="saveSettings()" class="px-6 py-2.5 bg-white text-slate-900 text-sm font-semibold rounded-2xl hover:bg-slate-100 transition-all">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Memory Modal -->
+    <div id="memory-modal" onclick="if (event.target.id === 'memory-modal') hideMemoryModal()" class="hidden fixed inset-0 bg-black/70 backdrop-blur z-[70] flex items-center justify-center">
+        <div onclick="event.stopImmediatePropagation()" class="glassmorphism w-full max-w-2xl mx-4 rounded-3xl border border-white/10 flex flex-col max-h-[85vh]">
+            <div class="px-6 py-5 border-b border-white/10 flex justify-between items-center flex-shrink-0">
+                <div>
+                    <div class="font-semibold text-xl tracking-tight">Memory Bank</div>
+                    <div class="text-xs text-slate-400">Persistent facts Blopie remembers across all chats</div>
+                </div>
+                <button onclick="hideMemoryModal()" class="text-2xl text-slate-400 hover:text-white">×</button>
+            </div>
+            
+            <div class="p-6 flex-1 overflow-auto">
+                <!-- Add new memory -->
+                <div class="mb-5">
+                    <div class="flex gap-3">
+                        <input id="new-memory-key" type="text" placeholder="Key (e.g. my_favorite_color)" 
+                               class="flex-1 bg-slate-900 border border-slate-700 rounded-2xl px-4 py-3 text-sm">
+                        <input id="new-memory-value" type="text" placeholder="Value (e.g. deep blue)" 
+                               class="flex-1 bg-slate-900 border border-slate-700 rounded-2xl px-4 py-3 text-sm">
+                        <button onclick="addMemory()" class="px-5 bg-emerald-600 hover:bg-emerald-500 transition-colors rounded-2xl text-sm font-semibold">Add</button>
+                    </div>
+                </div>
+                
+                <div id="memory-list" class="space-y-2 text-sm">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            
+            <div class="p-4 border-t border-white/10 flex justify-between items-center flex-shrink-0 text-xs">
+                <div class="text-slate-400">Memories are injected into every system prompt</div>
+                <button onclick="clearAllMemories()" class="text-red-400 hover:text-red-300 px-3 py-1">Clear all</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // BLOPIE ULTRA - Full ChatGPT-style Application
+        // ============================================
+        
+        let db;
+        let currentChatId = null;
+        let chats = [];
+        let memories = [];
+        let settings = {
+            apiKey: '',
+            temperature: 0.7,
+            maxTokens: 2048,
+            autoSave: true
+        };
+        let currentModel = null;
+        let availableModels = [];
+        let researchMode = false;
+        let isStreaming = false;
+
+        // Initialize Tailwind script
+        function initTailwind() {
+            document.documentElement.style.setProperty('--accent', '#3b82f6');
+        }
+
+        // Initialize IndexedDB (with graceful fallback for file:// protocol)
+        async function initDB() {
+            return new Promise((resolve) => {
+                // Detect if running directly from filesystem (common cause of IndexedDB SecurityError)
+                const isFileProtocol = window.location.protocol === 'file:';
+                
+                if (isFileProtocol) {
+                    console.warn('%c[Blopie] Running from file:// protocol — IndexedDB is blocked by browser security policy.', 'color:#f59e0b');
+                    showFileProtocolWarning();
+                    resolve(null); // graceful fallback to memory-only
+                    return;
+                }
+                
+                try {
+                    const request = indexedDB.open('BlopieDB', 2);
+                    
+                    request.onerror = (event) => {
+                        console.error('IndexedDB error:', event.target.error);
+                        showToast('Persistence unavailable (browser blocked IndexedDB)');
+                        resolve(null);
+                    };
+                    
+                    request.onsuccess = (event) => {
+                        db = event.target.result;
+                        resolve(db);
+                    };
+                    
+                    request.onupgradeneeded = (event) => {
+                        const database = event.target.result;
+                        
+                        if (!database.objectStoreNames.contains('chats')) {
+                            const chatStore = database.createObjectStore('chats', { keyPath: 'id' });
+                            chatStore.createIndex('updated', 'updated', { unique: false });
+                        }
+                        
+                        if (!database.objectStoreNames.contains('memories')) {
+                            database.createObjectStore('memories', { keyPath: 'key' });
+                        }
+                        
+                        if (!database.objectStoreNames.contains('settings')) {
+                            database.createObjectStore('settings', { keyPath: 'id' });
+                        }
+                    };
+                } catch (e) {
+                    console.error('IndexedDB init failed:', e);
+                    resolve(null);
+                }
+            });
+        }
+
+        function showFileProtocolWarning() {
+            // Show a non-intrusive but clear guidance banner
+            setTimeout(() => {
+                const banner = document.createElement('div');
+                banner.className = `fixed top-4 left-1/2 -translate-x-1/2 z-[9999] max-w-md w-full mx-4 glassmorphism border border-amber-500/30 bg-amber-950/90 text-amber-200 px-5 py-3 rounded-2xl text-sm flex items-start gap-3 shadow-xl`;
+                banner.innerHTML = `
+                    <div class="flex-1">
+                        <div class="font-semibold text-amber-300">Persistence disabled</div>
+                        <div class="text-xs mt-0.5 opacity-90">You're opening this file directly (<code>file://</code>). Browsers block IndexedDB for security.</div>
+                        <div class="mt-2 text-[10px]">
+                            <strong>Fix:</strong> Run a local server instead:<br>
+                            <code class="font-mono bg-black/40 px-1.5 py-0.5 rounded">python -m http.server 8000</code><br>
+                            then open <span class="font-mono">http://localhost:8000/blopie.html</span>
+                        </div>
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="text-amber-400 hover:text-white text-xl leading-none mt-0.5">×</button>
+                `;
+                document.body.appendChild(banner);
+                
+                // Auto-hide after 18 seconds
+                setTimeout(() => {
+                    if (banner.parentElement) banner.parentElement.removeChild(banner);
+                }, 18000);
+            }, 1200);
+        }
+
+        // Load everything from DB
+        async function loadFromDB() {
+            if (!db) return; // memory-only mode
+            
+            // Load settings
+            const settingsTx = db.transaction('settings', 'readonly');
+            const settingsStore = settingsTx.objectStore('settings');
+            const settingsReq = settingsStore.get('main');
+            
+            await new Promise(resolve => {
+                settingsReq.onsuccess = () => {
+                    if (settingsReq.result) {
+                        settings = { ...settings, ...settingsReq.result.data };
+                    }
+                    resolve();
+                };
+                settingsReq.onerror = () => resolve();
+            });
+            
+            // Load memories
+            const memTx = db.transaction('memories', 'readonly');
+            const memStore = memTx.objectStore('memories');
+            const memReq = memStore.getAll();
+            
+            await new Promise(resolve => {
+                memReq.onsuccess = () => {
+                    memories = memReq.result || [];
+                    resolve();
+                };
+                memReq.onerror = () => resolve();
+            });
+            
+            // Load chats
+            const chatTx = db.transaction('chats', 'readonly');
+            const chatStore = chatTx.objectStore('chats');
+            const chatReq = chatStore.getAll();
+            
+            await new Promise(resolve => {
+                chatReq.onsuccess = () => {
+                    chats = chatReq.result || [];
+                    // Sort by most recent
+                    chats.sort((a, b) => (b.updated || 0) - (a.updated || 0));
+                    resolve();
+                };
+                chatReq.onerror = () => resolve();
+            });
+            
+            // Apply settings to UI
+            applySettingsToUI();
+        }
+
+        function applySettingsToUI() {
+            const apiInput = document.getElementById('api-key-input');
+            if (apiInput) apiInput.value = settings.apiKey || '';
+            
+            const tempInput = document.getElementById('temperature-input');
+            if (tempInput) {
+                tempInput.value = settings.temperature;
+                document.getElementById('temp-value').innerText = settings.temperature;
+                
+                tempInput.oninput = () => {
+                    document.getElementById('temp-value').innerText = tempInput.value;
+                };
+            }
+            
+            const maxTokInput = document.getElementById('max-tokens-input');
+            if (maxTokInput) maxTokInput.value = settings.maxTokens;
+            
+            const autoSave = document.getElementById('auto-save-toggle');
+            if (autoSave) autoSave.checked = settings.autoSave;
+        }
+
+        async function saveSettingsToDB() {
+            if (!db) {
+                console.warn('IndexedDB unavailable — settings saved in memory only for this session');
+                return;
+            }
+            try {
+                const tx = db.transaction('settings', 'readwrite');
+                const store = tx.objectStore('settings');
+                await store.put({ id: 'main', data: settings });
+            } catch (e) {
+                console.error('Failed to save settings to DB:', e);
+            }
+        }
+
+        // Save a chat to IndexedDB
+        async function saveChatToDB(chat) {
+            if (!settings.autoSave) return;
+            if (!db) {
+                console.warn('IndexedDB unavailable — chat saved in memory only for this session');
+                return;
+            }
+            try {
+                const tx = db.transaction('chats', 'readwrite');
+                const store = tx.objectStore('chats');
+                await store.put(chat);
+            } catch (e) {
+                console.error('Failed to save chat to DB:', e);
+            }
+        }
+
+        // Delete chat from DB
+        async function deleteChatFromDB(chatId) {
+            if (!db) return;
+            try {
+                const tx = db.transaction('chats', 'readwrite');
+                const store = tx.objectStore('chats');
+                await store.delete(chatId);
+            } catch (e) {
+                console.error('Failed to delete chat from DB:', e);
+            }
+        }
+
+        // Render chat history in sidebar
+        function renderChatHistory() {
+            const container = document.getElementById('chat-history-list');
+            container.innerHTML = '';
+            
+            if (chats.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'px-4 py-8 text-center';
+                empty.innerHTML = `
+                    <div class="text-slate-500 text-xs">No conversations yet.<br>Start a new chat!</div>
+                `;
+                container.appendChild(empty);
+                return;
+            }
+            
+            chats.forEach(chat => {
+                const div = document.createElement('div');
+                div.className = `sidebar-item flex items-center gap-x-3 px-3 py-[10px] mx-1 rounded-2xl cursor-pointer text-sm ${currentChatId === chat.id ? 'active nav-active' : ''}`;
+                
+                const lastMsg = chat.messages && chat.messages.length > 0 
+                    ? chat.messages[chat.messages.length - 1].content.substring(0, 55) 
+                    : 'Empty chat';
+                
+                div.innerHTML = `
+                    <div class="flex-1 min-w-0">
+                        <div class="font-medium truncate">${chat.title || 'Untitled Chat'}</div>
+                        <div class="text-[10px] text-slate-500 truncate">${lastMsg}</div>
+                    </div>
+                    <button onclick="event.stopImmediatePropagation(); deleteChat('${chat.id}');" 
+                            class="opacity-40 hover:opacity-100 p-1 text-red-400 hover:text-red-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6h12v12" />
+                        </svg>
+                    </button>
+                `;
+                
+                div.onclick = () => switchToChat(chat.id);
+                container.appendChild(div);
+            });
+        }
+
+        // Create a new chat
+        async function createNewChat() {
+            const newChat = {
+                id: 'chat_' + Date.now(),
+                title: 'New Conversation',
+                messages: [],
+                created: Date.now(),
+                updated: Date.now(),
+                model: currentModel ? currentModel.id : null
+            };
+            
+            chats.unshift(newChat);
+            await saveChatToDB(newChat);
+            
+            currentChatId = newChat.id;
+            renderChatHistory();
+            renderMessages();
+            updateHeader();
+            
+            // Focus input
+            setTimeout(() => {
+                document.getElementById('message-input').focus();
+            }, 100);
+        }
+
+        // Switch to existing chat
+        function switchToChat(chatId) {
+            currentChatId = chatId;
+            renderChatHistory();
+            renderMessages();
+            updateHeader();
+        }
+
+        // Get current chat object
+        function getCurrentChat() {
+            return chats.find(c => c.id === currentChatId);
+        }
+
+        // Update header info
+        function updateHeader() {
+            const chat = getCurrentChat();
+            const titleEl = document.getElementById('current-chat-title');
+            const metaEl = document.getElementById('message-count');
+            
+            if (!chat) {
+                titleEl.textContent = 'New Conversation';
+                metaEl.textContent = '0 messages';
+                return;
+            }
+            
+            titleEl.textContent = chat.title || 'Untitled';
+            const count = chat.messages ? chat.messages.length : 0;
+            metaEl.textContent = `${count} message${count !== 1 ? 's' : ''}`;
+            
+            // Update model badge if model exists
+            if (chat.model && currentModel && currentModel.id !== chat.model) {
+                // Could show model used for this chat
+            }
+        }
+
+        // Render all messages for current chat
+        function renderMessages() {
+            const container = document.getElementById('messages-list');
+            const welcome = document.getElementById('welcome-screen');
+            container.innerHTML = '';
+            
+            const chat = getCurrentChat();
+            
+            if (!chat || chat.messages.length === 0) {
+                welcome.classList.remove('hidden');
+                container.classList.add('hidden');
+                return;
+            }
+            
+            welcome.classList.add('hidden');
+            container.classList.remove('hidden');
+            
+            chat.messages.forEach((msg, index) => {
+                const msgEl = createMessageElement(msg, index);
+                container.appendChild(msgEl);
+            });
+            
+            // Scroll to bottom
+            setTimeout(() => {
+                container.parentElement.scrollTop = container.parentElement.scrollHeight;
+            }, 50);
+            
+            // Highlight code blocks
+            setTimeout(() => {
+                container.querySelectorAll('pre code').forEach(block => {
+                    hljs.highlightElement(block);
+                });
+            }, 100);
+        }
+
+        function createMessageElement(msg, index) {
+            const div = document.createElement('div');
+            div.className = `flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} group`;
+            
+            if (msg.role === 'user') {
+                div.innerHTML = `
+                    <div class="max-w-[75%]">
+                        <div class="message-bubble user-bubble px-5 py-3.5 text-[15px] leading-relaxed">
+                            ${escapeHtml(msg.content)}
+                        </div>
+                        <div class="text-right mt-1 pr-1">
+                            <span class="text-[10px] text-slate-500">You • just now</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Assistant message with markdown
+                const html = marked.parse(msg.content || '');
+                div.innerHTML = `
+                    <div class="max-w-[82%] flex gap-x-3">
+                        <img src="https://chatgpt.com/backend-api/estuary/public_content/enc/eyJpZCI6Im1fNmEyMDgwZmUxMjA0ODE5MWIzZDMyNzgzOWNhZDU3NDU6ZmlsZV8wMDAwMDAwMDA2NDA3MjBjYTEyM2IyNGYzZWZlYWM1OCIsInRzIjoiMjA2MDciLCJwIjoicHlpIiwiY2lkIjoiMSIsInNpZyI6IjhkNmJmNTcxNTI1ODAyM2U2NTczNzY0NGMzZmZiZTM5YTc4NDAxMjhmMzI3OWQ4OTY5NTkxMjIyYjk5OWE3YzIiLCJ2IjoiMCIsImdpem1vX2lkIjpudWxsLCJjcyI6bnVsbCwiY2RuIjpudWxsLCJmbiI6bnVsbCwiY2QiOm51bGwsImNwIjpudWxsLCJtYSI6bnVsbH0=" 
+                             class="w-8 h-8 rounded-2xl object-cover flex-shrink-0 mt-1 shadow-inner ring-1 ring-white/20" alt="Blopie">
+                        
+                        <div class="flex-1">
+                            <div class="message-bubble assistant-bubble px-5 py-4 text-[15px] leading-relaxed markdown-content">
+                                ${html}
+                            </div>
+                            
+                            <div class="flex items-center gap-x-2 mt-1.5 pl-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                                <button onclick="copyMessage(${index})" class="text-xs flex items-center gap-x-1 px-2 py-0.5 hover:bg-white/5 rounded-lg text-slate-400 hover:text-slate-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M8 16v-4m4 4v4m4-8v8m4-4v-4m-16 8h16a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2" /></svg>
+                                    <span class="text-[10px]">Copy</span>
+                                </button>
+                                
+                                <button onclick="regenerateResponse(${index})" class="text-xs flex items-center gap-x-1 px-2 py-0.5 hover:bg-white/5 rounded-lg text-slate-400 hover:text-slate-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.058 11H1M12 3v2m0 16v2m9-9H15m-6 0a8.002 8.002 0 01-1.358-1.265" /></svg>
+                                    <span class="text-[10px]">Regenerate</span>
+                                </button>
+
+                                <!-- Thumbs up / down feedback -->
+                                <button onclick="rateMessage(${index}, 'up')" class="text-xs flex items-center gap-x-1 px-2 py-0.5 hover:bg-emerald-500/10 hover:text-emerald-400 rounded-lg text-slate-400 transition-colors" title="Good response">
+                                    👍
+                                </button>
+                                <button onclick="rateMessage(${index}, 'down')" class="text-xs flex items-center gap-x-1 px-2 py-0.5 hover:bg-red-500/10 hover:text-red-400 rounded-lg text-slate-400 transition-colors" title="Needs improvement">
+                                    👎
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            return div;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function copyMessage(index) {
+            const chat = getCurrentChat();
+            if (!chat || !chat.messages[index]) return;
+            
+            const textToCopy = chat.messages[index].content;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showToast('Copied to clipboard!');
+            }).catch(() => {
+                // Fallback for older browsers or permission issues
+                const textarea = document.createElement('textarea');
+                textarea.value = textToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('Copied to clipboard!');
+            });
+        }
+
+        function rateMessage(index, rating) {
+            const chat = getCurrentChat();
+            if (!chat || !chat.messages[index]) return;
+            
+            const msg = chat.messages[index];
+            msg.rating = rating;
+            
+            // Save feedback
+            saveChatToDB(chat);
+            
+            if (rating === 'up') {
+                showToast('Thanks! Glad you liked it 👍');
+                // Optionally turn this into a memory
+                if (msg.content.length > 60) {
+                    // Auto-learn from positive feedback (simple heuristic)
+                    const key = `positive_feedback_${Date.now()}`;
+                    memories.push({ key, value: `User liked this response: ${msg.content.substring(0, 120)}...`, created: Date.now() });
+                    if (db) {
+                        try {
+                            const tx = db.transaction('memories', 'readwrite');
+                            const store = tx.objectStore('memories');
+                            store.put({ key, value: `User liked: ${msg.content.substring(0, 100)}`, created: Date.now() });
+                        } catch (e) {}
+                    }
+                }
+            } else {
+                showToast('Thanks for the feedback — I\'ll do better next time 👎');
+            }
+        }
+
+        async function regenerateResponse(index) {
+            const chat = getCurrentChat();
+            if (!chat || index < 1) return;
+            
+            // Remove the assistant message and everything after
+            chat.messages = chat.messages.slice(0, index);
+            await saveChatToDB(chat);
+            
+            renderMessages();
+            
+            // Resend the last user message
+            const lastUserMsg = chat.messages[chat.messages.length - 1];
+            if (lastUserMsg && lastUserMsg.role === 'user') {
+                await sendMessageToAPI(lastUserMsg.content, true);
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 glassmorphism px-5 py-3 rounded-2xl text-sm flex items-center gap-x-2 border border-white/10 z-[999]`;
+            toast.innerHTML = `
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.transition = 'all 0.2s ease';
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 200);
+            }, 2200);
+        }
+
+        // Fetch available models from g4f.space
+        async function fetchModels() {
+            try {
+                // Primary source: OpenAI-compatible models endpoint
+                const res = await fetch('https://g4f.space/v1/models');
+                const data = await res.json();
+                
+                if (data && data.data) {
+                    availableModels = data.data.map(m => ({
+                        id: m.id,
+                        name: m.id,           // g4f often returns just id
+                        owned_by: m.owned_by || 'g4f',
+                        created: m.created
+                    }));
+                } else {
+                    throw new Error('Unexpected response format');
+                }
+                
+                // Auto-select first model if none selected
+                if (!currentModel && availableModels.length > 0) {
+                    currentModel = availableModels[0];
+                    document.getElementById('current-model-name').innerHTML = 
+                        `<span class="model-badge">${currentModel.name}</span>`;
+                }
+            } catch (e) {
+                console.error('Failed to fetch from v1/models, trying fallback...', e);
+                
+                // Fallback to ollama list if v1 fails
+                try {
+                    const res2 = await fetch('https://g4f.space/api/ollama/models');
+                    const data2 = await res2.json();
+                    if (data2 && data2.data) {
+                        availableModels = data2.data.map(m => ({
+                            id: m.id || m.model,
+                            name: m.name || m.id || m.model,
+                            family: 'ollama'
+                        }));
+                    }
+                } catch (e2) {
+                    // Ultimate fallback
+                    availableModels = [
+                        { id: 'gpt-4.1', name: 'GPT-4.1' },
+                        { id: 'deepseek-v3', name: 'DeepSeek V3' },
+                        { id: 'qwen3-next:80b', name: 'Qwen3 80B' },
+                        { id: 'flux', name: 'Flux (Image)' }
+                    ];
+                }
+                
+                if (!currentModel && availableModels.length > 0) {
+                    currentModel = availableModels[0];
+                    document.getElementById('current-model-name').innerHTML = 
+                        `<span class="model-badge">${currentModel.name}</span>`;
+                }
+            }
+        }
+
+        function showModelPicker() {
+            const modal = document.getElementById('model-modal');
+            const listContainer = document.getElementById('model-list');
+            listContainer.innerHTML = '';
+            
+            if (availableModels.length === 0) {
+                listContainer.innerHTML = `<div class="p-4 text-center text-sm text-slate-400">Loading models...</div>`;
+                fetchModels().then(() => showModelPicker());
+                return;
+            }
+            
+            availableModels.forEach(model => {
+                const item = document.createElement('div');
+                item.className = `px-4 py-3.5 hover:bg-white/5 cursor-pointer flex items-center justify-between rounded-2xl mx-1 my-0.5 ${currentModel && currentModel.id === model.id ? 'bg-white/5' : ''}`;
+                
+                item.innerHTML = `
+                    <div>
+                        <div class="font-medium">${model.name}</div>
+                        <div class="text-xs text-slate-400 font-mono">${model.id}</div>
+                    </div>
+                    ${currentModel && currentModel.id === model.id ? 
+                        `<div class="text-emerald-400 text-xs px-3 py-1 bg-emerald-950 rounded-full">Current</div>` : ''}
+                `;
+                
+                item.onclick = () => {
+                    currentModel = model;
+                    document.getElementById('current-model-name').innerHTML = `<span class="model-badge">${model.name}</span>`;
+                    hideModelPicker();
+                    
+                    // Update current chat model
+                    const chat = getCurrentChat();
+                    if (chat) {
+                        chat.model = model.id;
+                        saveChatToDB(chat);
+                    }
+                };
+                
+                listContainer.appendChild(item);
+            });
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function hideModelPicker() {
+            const modal = document.getElementById('model-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        // Toggle research mode
+        function toggleResearchMode() {
+            researchMode = document.getElementById('research-mode-toggle').checked;
+            const status = document.getElementById('research-status');
+            
+            if (researchMode) {
+                status.classList.remove('hidden');
+                status.classList.add('flex');
+            } else {
+                status.classList.remove('flex');
+                status.classList.add('hidden');
+            }
+        }
+
+        // Wikipedia research helper
+        async function performResearch(query) {
+            try {
+                // Use Wikipedia opensearch + summary
+                const searchUrl = `https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(query)}&limit=4&format=json&origin=*`;
+                const searchRes = await fetch(searchUrl);
+                const searchData = await searchRes.json();
+                
+                if (!searchData || !searchData[1] || searchData[1].length === 0) {
+                    return '';
+                }
+                
+                const titles = searchData[1].slice(0, 3);
+                let context = '## Relevant Wikipedia Context\n\n';
+                
+                for (const title of titles) {
+                    try {
+                        const summaryUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`;
+                        const sumRes = await fetch(summaryUrl);
+                        const sumData = await sumRes.json();
+                        
+                        if (sumData.extract) {
+                            context += `**${title}**\n${sumData.extract}\n\n`;
+                        }
+                    } catch (e) {}
+                }
+                
+                return context;
+            } catch (error) {
+                console.error('Research error:', error);
+                return '';
+            }
+        }
+
+        // Build system prompt with memories + research
+        async function buildSystemPrompt(userQuery = '') {
+            let system = `You are Blopie, a helpful, witty, and highly capable AI assistant with a persistent memory. 
+You have access to the user's personal memory bank and can reference it naturally.
+Be concise when appropriate but thorough when needed. Always use markdown for formatting when helpful.
+
+**CONTINUOUS LEARNING MODE (ALWAYS ACTIVE):**
+You are constantly learning about the user. After every response, actively look for:
+- Preferences, tastes, style
+- Personal facts, relationships, goals
+- Communication preferences
+- Recurring topics or projects
+
+If you discover anything worth remembering, immediately output it using:
+
+<memory key="unique_snake_case_key">clear value or fact</memory>
+
+You can output MULTIPLE memory tags in one response. Be proactive — better to remember too much than too little.
+
+**CHAT TITLE GENERATION:**
+For new conversations (when this is the first or second exchange), at the end of your response also include a short, catchy chat title using exactly this format:
+
+<title>Your Suggested Title Here</title>
+
+Keep titles 3-8 words, descriptive, and engaging. Examples: "Quantum Computing Basics", "Planning Japan Trip 2026", "Building My AI Side Project".
+
+The <title> tag will be automatically extracted and used as the chat name. It will be removed from the visible response.`;
+
+            // Add memories
+            if (memories.length > 0) {
+                system += '\n\n## Your Memory Bank (use this information when relevant):\n';
+                memories.forEach(mem => {
+                    system += `- ${mem.key}: ${mem.value}\n`;
+                });
+            }
+
+            // Continuous learning from random words
+            const learnedContext = getLearnedWordsContext();
+            if (learnedContext) {
+                system += learnedContext;
+            }
+            
+            // Add research if enabled and query provided
+            if (researchMode && userQuery) {
+                const researchContext = await performResearch(userQuery);
+                if (researchContext) {
+                    system += '\n\n' + researchContext;
+                    system += '\nUse the above context to give accurate, up-to-date answers. Cite sources inline when possible.';
+                }
+            }
+            
+            return system;
+        }
+
+        // Process autonomous memory + title tags from assistant response (continuous learning)
+        function processResponseTags(responseText, chat) {
+            const memoryRegex = /<memory\s+key=["']([^"']+)["']>([\s\S]*?)<\/memory>/gi;
+            const titleRegex = /<title>([\s\S]*?)<\/title>/gi;
+            
+            const newMemories = [];
+            let extractedTitle = null;
+            let match;
+            
+            // Extract memories
+            while ((match = memoryRegex.exec(responseText)) !== null) {
+                const key = match[1].trim();
+                const value = match[2].trim();
+                if (key && value) {
+                    newMemories.push({ key, value, created: Date.now() });
+                }
+            }
+            
+            // Extract title (for new chats)
+            while ((match = titleRegex.exec(responseText)) !== null) {
+                const title = match[1].trim();
+                if (title && title.length > 3 && title.length < 80) {
+                    extractedTitle = title;
+                }
+            }
+            
+            // Remove all special tags from visible response
+            let cleanedResponse = responseText
+                .replace(memoryRegex, '')
+                .replace(titleRegex, '')
+                .trim();
+            
+            // Auto-set chat title if we got one and chat is new-ish
+            if (extractedTitle && chat && (!chat.title || chat.title === 'New Conversation' || chat.messages.length <= 3)) {
+                chat.title = extractedTitle;
+                // Update UI immediately
+                const titleEl = document.getElementById('current-chat-title');
+                if (titleEl) titleEl.textContent = extractedTitle;
+                saveChatToDB(chat);
+            }
+            
+            return { cleanedResponse, newMemories, extractedTitle };
+        }
+
+        // Main send message function
+        async function sendMessage() {
+            const input = document.getElementById('message-input');
+            const text = input.value.trim();
+            
+            if (!text || isStreaming) return;
+            
+            if (!currentChatId) {
+                await createNewChat();
+            }
+            
+            const chat = getCurrentChat();
+            if (!chat) return;
+            
+            // Add user message
+            const userMsg = {
+                role: 'user',
+                content: text,
+                timestamp: Date.now()
+            };
+            
+            chat.messages.push(userMsg);
+            chat.updated = Date.now();
+            
+            // Update title if first message
+            if (chat.messages.length === 1) {
+                chat.title = text.length > 45 ? text.substring(0, 42) + '...' : text;
+            }
+            
+            await saveChatToDB(chat);
+            
+            // Clear input
+            input.value = '';
+            
+            // Re-render
+            renderChatHistory();
+            renderMessages();
+            updateHeader();
+            
+            // Send to API
+            await sendMessageToAPI(text);
+        }
+
+        // Call the LLM API (g4f.space OpenAI compatible)
+        async function sendMessageToAPI(userText, isRegeneration = false) {
+            const chat = getCurrentChat();
+            if (!chat) return;
+            
+            isStreaming = true;
+            
+            // Show typing indicator
+            const container = document.getElementById('messages-list');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.className = 'flex justify-start';
+            typingDiv.innerHTML = `
+                <div class="max-w-[82%] flex gap-x-3">
+                    <div class="w-8 h-8 rounded-2xl bg-gradient-to-br from-violet-500 to-blue-500 flex-shrink-0 flex items-center justify-center text-white text-sm font-bold mt-1">B</div>
+                    <div class="message-bubble assistant-bubble px-5 py-4">
+                        <div class="typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(typingDiv);
+            container.parentElement.scrollTop = container.parentElement.scrollHeight;
+            
+            try {
+                // Build messages for API
+                const systemPrompt = await buildSystemPrompt(userText);
+                
+                const apiMessages = [
+                    { role: 'system', content: systemPrompt },
+                    ...chat.messages.map(m => ({ role: m.role, content: m.content }))
+                ];
+                
+                // Prepare request
+                const payload = {
+                    model: currentModel ? currentModel.id : 'gemma4:31b',
+                    messages: apiMessages,
+                    temperature: parseFloat(settings.temperature),
+                    max_tokens: parseInt(settings.maxTokens),
+                    stream: true
+                };
+                
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+                
+                if (settings.apiKey && settings.apiKey.trim() !== '') {
+                    headers['Authorization'] = `Bearer ${settings.apiKey.trim()}`;
+                }
+                
+                const response = await fetch('https://g4f.space/v1/chat/completions', {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`API Error ${response.status}: ${errorText}`);
+                }
+                
+                // Remove typing indicator
+                typingDiv.remove();
+                
+                // Create assistant message placeholder
+                const assistantMsg = {
+                    role: 'assistant',
+                    content: '',
+                    timestamp: Date.now()
+                };
+                
+                chat.messages.push(assistantMsg);
+                const msgIndex = chat.messages.length - 1;
+                
+                // Create streaming message element
+                const msgEl = createMessageElement(assistantMsg, msgIndex);
+                container.appendChild(msgEl);
+                
+                const contentDiv = msgEl.querySelector('.markdown-content');
+                
+                // Stream the response
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let fullResponse = '';
+                let buffer = '';
+                
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    buffer += decoder.decode(value, { stream: true });
+                    
+                    // Parse SSE lines
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop() || '';
+                    
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const data = line.slice(6).trim();
+                            
+                            if (data === '[DONE]') {
+                                break;
+                            }
+                            
+                            try {
+                                const json = JSON.parse(data);
+                                const delta = json.choices?.[0]?.delta?.content || '';
+                                
+                                if (delta) {
+                                    fullResponse += delta;
+                                    assistantMsg.content = fullResponse;
+                                    
+                                    // Update the DOM with markdown
+                                    contentDiv.innerHTML = marked.parse(fullResponse);
+                                    
+                                    // Scroll
+                                    container.parentElement.scrollTop = container.parentElement.scrollHeight;
+                                }
+                            } catch (e) {
+                                // Ignore parse errors for partial chunks
+                            }
+                        }
+                    }
+                }
+                
+                // Finalize + continuous learning (memories + auto title)
+                const { cleanedResponse, newMemories, extractedTitle } = processResponseTags(fullResponse, chat);
+                
+                assistantMsg.content = cleanedResponse || fullResponse;
+                chat.updated = Date.now();
+                await saveChatToDB(chat);
+                
+                // Update header if title was auto-generated
+                if (extractedTitle) {
+                    updateHeader();
+                    renderChatHistory();
+                }
+                
+                // Save any new memories the AI decided to create (continuous learning)
+                if (newMemories.length > 0) {
+                    for (const mem of newMemories) {
+                        // Overwrite if key exists
+                        memories = memories.filter(m => m.key !== mem.key);
+                        memories.push(mem);
+                        
+                        if (db) {
+                            try {
+                                const tx = db.transaction('memories', 'readwrite');
+                                const store = tx.objectStore('memories');
+                                await store.put(mem);
+                            } catch (e) {
+                                console.error('Failed to auto-save memory:', e);
+                            }
+                        }
+                    }
+                    
+                    // Nice feedback toast
+                    const count = newMemories.length;
+                    showToast(`Blopie learned ${count} new memor${count > 1 ? 'ies' : 'y'} 🧠`);
+                    
+                    // If memory modal is open, refresh it
+                    const memModal = document.getElementById('memory-modal');
+                    if (memModal && !memModal.classList.contains('hidden')) {
+                        renderMemoryList();
+                    }
+                }
+                
+                // Re-render to apply syntax highlighting properly
+                setTimeout(() => {
+                    renderMessages();
+                    renderChatHistory();
+                    updateHeader();
+                }, 50);
+                
+            } catch (error) {
+                console.error('API call failed:', error);
+                typingDiv.remove();
+                
+                // Show error message
+                const errorMsg = {
+                    role: 'assistant',
+                    content: `**Error:** ${error.message}\n\nPlease check your API key in Settings or try a different model. Some models on g4f.space require a valid key.`,
+                    timestamp: Date.now()
+                };
+                
+                chat.messages.push(errorMsg);
+                await saveChatToDB(chat);
+                renderMessages();
+            } finally {
+                isStreaming = false;
+            }
+        }
+
+        // Quick start examples
+        async function quickStart(prompt) {
+            if (!currentChatId) {
+                await createNewChat();
+            }
+            
+            const input = document.getElementById('message-input');
+            input.value = prompt;
+            await sendMessage();
+        }
+
+        // Delete a chat
+        async function deleteChat(chatId) {
+            if (!confirm('Delete this conversation permanently?')) return;
+            
+            chats = chats.filter(c => c.id !== chatId);
+            await deleteChatFromDB(chatId);
+            
+            if (currentChatId === chatId) {
+                currentChatId = chats.length > 0 ? chats[0].id : null;
+            }
+            
+            renderChatHistory();
+            
+            if (currentChatId) {
+                renderMessages();
+                updateHeader();
+            } else {
+                document.getElementById('messages-list').classList.add('hidden');
+                document.getElementById('welcome-screen').classList.remove('hidden');
+            }
+        }
+
+        async function deleteCurrentChat() {
+            if (!currentChatId) return;
+            await deleteChat(currentChatId);
+        }
+
+        // Export current chat
+        function exportCurrentChat() {
+            const chat = getCurrentChat();
+            if (!chat) return;
+            
+            const dataStr = JSON.stringify(chat, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `${chat.title || 'blopie-chat'}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+
+        // Import chat (can be called from button if added)
+        async function importChat() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = async (ev) => {
+                    try {
+                        const imported = JSON.parse(ev.target.result);
+                        
+                        // Basic validation
+                        if (!imported.messages || !Array.isArray(imported.messages)) {
+                            throw new Error('Invalid chat file');
+                        }
+                        
+                        imported.id = 'chat_' + Date.now();
+                        imported.imported = true;
+                        
+                        chats.unshift(imported);
+                        await saveChatToDB(imported);
+                        
+                        currentChatId = imported.id;
+                        renderChatHistory();
+                        renderMessages();
+                        updateHeader();
+                        
+                        showToast('Chat imported successfully');
+                    } catch (err) {
+                        alert('Failed to import: ' + err.message);
+                    }
+                };
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
+        // Memory functions
+        function showMemoryModal() {
+            const modal = document.getElementById('memory-modal');
+            renderMemoryList();
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function hideMemoryModal() {
+            const modal = document.getElementById('memory-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        function renderMemoryList() {
+            const container = document.getElementById('memory-list');
+            container.innerHTML = '';
+            
+            if (memories.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-sm text-slate-400">No memories stored yet.<br>Add some above to give Blopie long-term context.</div>`;
+                return;
+            }
+            
+            memories.forEach((mem, idx) => {
+                const row = document.createElement('div');
+                row.className = 'flex items-start justify-between gap-3 bg-slate-900/70 border border-slate-700 p-3.5 rounded-2xl';
+                
+                row.innerHTML = `
+                    <div class="flex-1 min-w-0">
+                        <div class="font-mono text-xs text-emerald-400">${mem.key}</div>
+                        <div class="text-sm mt-0.5 break-words">${mem.value}</div>
+                    </div>
+                    <button onclick="deleteMemory(${idx})" class="text-red-400 hover:text-red-500 p-1">×</button>
+                `;
+                
+                container.appendChild(row);
+            });
+        }
+
+        async function addMemory() {
+            const keyInput = document.getElementById('new-memory-key');
+            const valueInput = document.getElementById('new-memory-value');
+            
+            const key = keyInput.value.trim();
+            const value = valueInput.value.trim();
+            
+            if (!key || !value) {
+                alert('Please enter both key and value');
+                return;
+            }
+            
+            // Check for duplicate key
+            if (memories.find(m => m.key === key)) {
+                if (!confirm('A memory with this key already exists. Overwrite?')) return;
+                memories = memories.filter(m => m.key !== key);
+            }
+            
+            memories.push({ key, value, created: Date.now() });
+            
+            // Save to DB (safe)
+            if (db) {
+                try {
+                    const tx = db.transaction('memories', 'readwrite');
+                    const store = tx.objectStore('memories');
+                    await store.put({ key, value, created: Date.now() });
+                } catch (e) {
+                    console.error('Failed to persist memory to DB:', e);
+                }
+            } else {
+                console.warn('Memory saved in-memory only (IndexedDB unavailable)');
+            }
+            
+            keyInput.value = '';
+            valueInput.value = '';
+            
+            renderMemoryList();
+            showToast('Memory saved');
+        }
+
+        async function deleteMemory(index) {
+            const mem = memories[index];
+            if (!confirm(`Delete memory "${mem.key}"?`)) return;
+            
+            if (db) {
+                try {
+                    const tx = db.transaction('memories', 'readwrite');
+                    const store = tx.objectStore('memories');
+                    await store.delete(mem.key);
+                } catch (e) {
+                    console.error('Failed to delete memory from DB:', e);
+                }
+            }
+            
+            memories.splice(index, 1);
+            renderMemoryList();
+        }
+
+        async function clearAllMemories() {
+            if (!confirm('Clear ALL memories? This cannot be undone.')) return;
+            
+            if (db) {
+                try {
+                    const tx = db.transaction('memories', 'readwrite');
+                    const store = tx.objectStore('memories');
+                    await store.clear();
+                } catch (e) {
+                    console.error('Failed to clear memories DB:', e);
+                }
+            }
+            memories = [];
+            renderMemoryList();
+        }
+
+        // Settings modal
+        function showSettingsModal() {
+            const modal = document.getElementById('settings-modal');
+            applySettingsToUI();
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function hideSettingsModal() {
+            const modal = document.getElementById('settings-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        async function saveSettings() {
+            settings.apiKey = document.getElementById('api-key-input').value.trim();
+            settings.temperature = parseFloat(document.getElementById('temperature-input').value);
+            settings.maxTokens = parseInt(document.getElementById('max-tokens-input').value) || 2048;
+            settings.autoSave = document.getElementById('auto-save-toggle').checked;
+            
+            await saveSettingsToDB();
+            hideSettingsModal();
+            showToast('Settings saved');
+        }
+
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hidden');
+            sidebar.classList.toggle('lg:flex');
+        }
+
+        // Keyboard shortcuts
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                if (e.metaKey && e.key === 'k') {
+                    e.preventDefault();
+                    const input = document.getElementById('message-input');
+                    input.focus();
+                }
+                
+                if (e.metaKey && e.key === '/') {
+                    e.preventDefault();
+                    showModelPicker();
+                }
+            });
+            
+            // Auto-resize textarea
+            const textarea = document.getElementById('message-input');
+            textarea.addEventListener('input', () => {
+                textarea.style.height = 'auto';
+                textarea.style.height = Math.min(textarea.scrollHeight, 160) + 'px';
+            });
+        }
+
+        // Initialize everything
+        async function initializeBlopie() {
+            initTailwind();
+            
+            // initDB now handles its own errors gracefully
+            await initDB();
+            
+            if (db) {
+                await loadFromDB();
+            } else {
+                console.warn('%c[Blopie] Running in memory-only mode (no persistent storage this session)', 'color:#f59e0b');
+            }
+            
+            // Render initial state
+            renderChatHistory();
+            
+            // Fetch models
+            await fetchModels();
+            
+            // If no chats, create one
+            if (chats.length === 0) {
+                await createNewChat();
+            } else {
+                // Load most recent
+                currentChatId = chats[0].id;
+                renderMessages();
+                updateHeader();
+            }
+            
+            // Set initial model display
+            if (currentModel) {
+                document.getElementById('current-model-name').innerHTML = 
+                    `<span class="model-badge">${currentModel.name}</span>`;
+            } else {
+                document.getElementById('current-model-name').innerHTML = 
+                    `<span class="text-slate-400">Select model</span>`;
+            }
+            
+            // Setup research toggle initial state
+            document.getElementById('research-mode-toggle').checked = researchMode;
+            
+            setupKeyboardShortcuts();
+            
+            // Welcome toast
+            setTimeout(() => {
+                // Optional: showToast('Blopie Ultra ready. Try the Research toggle!');
+            }, 1200);
+            
+            // Make import available globally for console or future button
+            window.BlopieImport = importChat;
+            
+            const storageMode = db ? 'IndexedDB (persistent)' : 'memory-only (session)';
+            console.log(`%c[Blopie] Ultra ready — Storage: ${storageMode}`, 'color:#64748b');
+
+            // Start background random word learner (every 8 minutes)
+            startRandomWordLearner();
+        }
+
+        // ============================================
+        // Background Random Word Learner (Continuous Learning)
+        // ============================================
+        let learnedWords = JSON.parse(localStorage.getItem('blopieLearnedWords') || '[]');
+
+        async function fetchAndLearnRandomWord() {
+            try {
+                const res = await fetch('https://random-words-api.kushcreates.com/api?language=en&words=1');
+                const words = await res.json();
+                if (!words || words.length === 0) return;
+
+                const word = words[0].toLowerCase();
+
+                // Avoid duplicates
+                if (learnedWords.some(w => w.word === word)) return;
+
+                // "Learn" about it (store + optionally fetch simple info)
+                const entry = {
+                    word: word,
+                    learnedAt: Date.now(),
+                    // In future we could fetch definition, but for now just the word
+                };
+
+                learnedWords.unshift(entry);
+                if (learnedWords.length > 50) learnedWords.pop(); // keep last 50
+
+                localStorage.setItem('blopieLearnedWords', JSON.stringify(learnedWords));
+
+                console.log(`[Blopie Learner] Learned new word: ${word}`);
+
+                // Occasionally inject into next system prompt (handled in buildSystemPrompt)
+            } catch (e) {
+                // Silent fail - don't spam console
+            }
+        }
+
+        function startRandomWordLearner() {
+            // Fetch one immediately on start (after 30s)
+            setTimeout(fetchAndLearnRandomWord, 30000);
+
+            // Then every ~8 minutes
+            setInterval(fetchAndLearnRandomWord, 8 * 60 * 1000);
+        }
+
+        // Enhance system prompt with learned words occasionally
+        function getLearnedWordsContext() {
+            if (learnedWords.length === 0) return '';
+            const recent = learnedWords.slice(0, 5).map(w => w.word).join(', ');
+            return `\n\n[Continuous Learning] I have been learning new words recently: ${recent}. I can reference them naturally if relevant.`;
+        }
+
+        // Boot the app
+        window.onload = initializeBlopie;
+    </script>
+</body>
+</html>
