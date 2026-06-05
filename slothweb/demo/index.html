@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sloth Web • Platinum</title>
+<style>
+:root {
+  --accent: #4a9eff;
+  --bg: #0f0f0f;
+  --fg: #f0f0f0;
+  --glass: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.12);
+  --nav-bg: rgba(28, 28, 28, 0.95);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: linear-gradient(135deg, #050505, #0a0a0a);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Browser Window */
+.browser-window {
+  width: 100%;
+  max-width: 1400px;
+  height: 95vh;
+  background: #111;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 25px 80px -15px rgba(0,0,0,0.8),
+              0 0 0 1px rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Title Bar */
+.titlebar {
+  height: 38px;
+  background: #1a1a1a;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #aaa;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.titlebar .title {
+  flex: 1;
+  text-align: center;
+  font-weight: 700;
+  color: #ddd;
+}
+
+.window-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.window-controls button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-close { background: #ff5f57; }
+.btn-min { background: #ffbd2e; }
+.btn-max { background: #28c840; }
+
+/* Tab Bar */
+.tabbar {
+  height: 44px;
+  background: #1f1f1f;
+  display: flex;
+  align-items: center;
+  padding: 4px 8px 0;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  background: #2a2a2a;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  padding: 8px 16px;
+  margin-right: 4px;
+  min-width: 160px;
+  max-width: 220px;
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.tab.active {
+  background: #111;
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.tab .close {
+  margin-left: auto;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+.tab .close:hover {
+  background: rgba(255,60,60,0.3);
+  color: #ff6666;
+}
+
+.new-tab-btn {
+  width: 36px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-size: 22px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+  transition: all 0.2s;
+}
+
+.new-tab-btn:hover {
+  background: var(--accent);
+  color: #000;
+  transform: scale(1.05);
+}
+
+/* Toolbar */
+.toolbar {
+  height: 56px;
+  background: var(--nav-bg);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.toolbar button {
+  width: 38px;
+  height: 38px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: #ddd;
+  font-size: 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolbar button:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.toolbar button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.url-bar {
+  flex: 1;
+  max-width: 680px;
+  margin: 0 12px;
+  position: relative;
+}
+
+.url-bar input {
+  width: 100%;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--border);
+  color: white;
+  padding: 10px 20px 10px 48px;
+  border-radius: 9999px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.url-bar input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.2);
+}
+
+.url-bar .ssl {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+}
+
+/* Main Content */
+.content-area {
+  flex: 1;
+  background: #0a0a0a;
+  position: relative;
+  overflow: hidden;
+}
+
+.page {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 0;
+}
+
+/* Internal Page Styles (ported from Sloth) */
+.sloth-page {
+  background: var(--bg);
+  color: var(--fg);
+  padding: 40px 20px;
+  min-height: 100%;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 3.2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.module-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 22px 18px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  text-decoration: none;
+  color: inherit;
+}
+
+.module-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: var(--accent);
+  box-shadow: 0 20px 40px -10px rgba(74, 158, 255, 0.3);
+}
+
+.module-icon {
+  font-size: 2.4rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+/* Arcade Games */
+#snakeGame {
+  background: #000;
+  border: 3px solid #00ff88;
+  image-rendering: pixelated;
+  display: block;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+
+#clickerArea {
+  height: 280px;
+  background: rgba(255,0,255,0.08);
+  border: 3px solid #ff00ff;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.1s;
+  user-select: none;
+}
+
+/* Focus Timer */
+#timer-display {
+  font-size: 3.5rem;
+  font-weight: 800;
+  font-family: monospace;
+  color: var(--accent);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 8px;
+}
+
+/* Status Bar */
+.statusbar {
+  height: 28px;
+  background: #1a1a1a;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 12px;
+  color: #888;
+  flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+
+<div class="browser-window">
+  <!-- Title Bar -->
+  <div class="titlebar">
+    <div class="window-controls">
+      <button class="btn-close" onclick="window.close()"></button>
+      <button class="btn-min"></button>
+      <button class="btn-max"></button>
+    </div>
+    <div class="title">🦥 Sloth Web • Platinum</div>
+    <div style="width: 80px;"></div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tabbar" id="tabbar">
+    <!-- Tabs injected by JS -->
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <button onclick="goBack()" title="Back">⬅️</button>
+    <button onclick="goForward()" title="Forward">➡️</button>
+    <button onclick="reloadPage()" title="Reload">🔄</button>
+    <button onclick="goHome()" title="Home">🏠</button>
+    
+    <div class="url-bar">
+      <span class="ssl">🔒</span>
+      <input type="text" id="url-bar" placeholder="Enter URL or search the Grid..." 
+             onkeydown="if (event.key === 'Enter') navigateToUrl()">
+    </div>
+    
+    <button onclick="bookmarkCurrent()" title="Bookmark">⭐</button>
+    <button onclick="showSidebar()" title="Sidebar">📂</button>
+    <button onclick="showSettings()" title="Settings">⚙️</button>
+    <button onclick="showArcade()" title="Arcade">🎮</button>
+  </div>
+
+  <!-- Content Area -->
+  <div class="content-area" id="content-area">
+    <!-- Dynamic page content injected here -->
+  </div>
+
+  <!-- Status Bar -->
+  <div class="statusbar">
+    <div style="flex:1">Ready • AdBlock: <span id="adblock-status">ON</span> • Version 2.6</div>
+    <div>🦥 Sloth Web Platinum</div>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar" style="display:none; position:fixed; top:0; right:0; width:320px; height:100vh; background:#111; border-left:1px solid var(--border); z-index:999; padding:20px; overflow:auto;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <h3 style="color:var(--accent);">Sloth Hub</h3>
+    <button onclick="hideSidebar()" style="background:none; border:none; color:#888; font-size:22px; cursor:pointer;">×</button>
+  </div>
+  
+  <div style="margin-bottom:12px;">
+    <button onclick="showBookmarks()" style="width:100%; padding:10px; margin-bottom:8px; background:var(--glass); border:1px solid var(--border); border-radius:10px; color:white;">🔖 Bookmarks</button>
+    <button onclick="showHistory()" style="width:100%; padding:10px; margin-bottom:8px; background:var(--glass); border:1px solid var(--border); border-radius:10px; color:white;">🕒 History</button>
+    <button onclick="showFocusTimer()" style="width:100%; padding:10px; background:var(--glass); border:1px solid var(--border); border-radius:10px; color:white;">⏱️ Focus Session</button>
+  </div>
+  
+  <div id="sidebar-content"></div>
+</div>
+
+<script>
+// ==================== SLOTH WEB BROWSER (HTML Edition) ====================
+
+let tabs = [];
+let currentTabId = null;
+let historyStack = [];
+let historyIndex = -1;
+let bookmarks = JSON.parse(localStorage.getItem('sloth_bookmarks') || '[]');
+
+// Accent color (can be changed in settings)
+let accentColor = localStorage.getItem('sloth_accent') || '#4a9eff';
+
+// Create initial tab
+function createTab(title = "New Tab", url = "sloth://home") {
+  const tabId = Date.now().toString(36);
+  
+  const tab = {
+    id: tabId,
+    title: title,
+    url: url,
+    history: [url],
+    historyIndex: 0
+  };
+  
+  tabs.push(tab);
+  renderTabs();
+  switchToTab(tabId);
+  
+  return tabId;
+}
+
+function renderTabs() {
+  const tabbar = document.getElementById('tabbar');
+  tabbar.innerHTML = '';
+  
+  tabs.forEach(tab => {
+    const tabEl = document.createElement('div');
+    tabEl.className = `tab ${tab.id === currentTabId ? 'active' : ''}`;
+    tabEl.innerHTML = `
+      <span>${tab.title}</span>
+      <span class="close" onclick="event.stopImmediatePropagation(); closeTab('${tab.id}')">×</span>
+    `;
+    tabEl.onclick = () => switchToTab(tab.id);
+    tabbar.appendChild(tabEl);
+  });
+  
+  // New tab button
+  const newBtn = document.createElement('button');
+  newBtn.className = 'new-tab-btn';
+  newBtn.innerHTML = '+';
+  newBtn.onclick = () => createTab();
+  tabbar.appendChild(newBtn);
+}
+
+function switchToTab(tabId) {
+  currentTabId = tabId;
+  const tab = tabs.find(t => t.id === tabId);
+  if (!tab) return;
+  
+  document.getElementById('url-bar').value = tab.url;
+  loadPage(tab.url);
+  renderTabs();
+}
+
+function closeTab(tabId) {
+  const index = tabs.findIndex(t => t.id === tabId);
+  if (index === -1) return;
+  
+  const wasCurrent = tabId === currentTabId;
+  tabs.splice(index, 1);
+  
+  if (tabs.length === 0) {
+    createTab();
+    return;
+  }
+  
+  if (wasCurrent) {
+    const newIndex = Math.max(0, index - 1);
+    switchToTab(tabs[newIndex].id);
+  } else {
+    renderTabs();
+  }
+}
+
+function updateCurrentTab(title, url) {
+  const tab = tabs.find(t => t.id === currentTabId);
+  if (!tab) return;
+  
+  tab.title = title;
+  tab.url = url;
+  
+  // Update history
+  if (tab.history[tab.historyIndex] !== url) {
+    tab.history = tab.history.slice(0, tab.historyIndex + 1);
+    tab.history.push(url);
+    tab.historyIndex = tab.history.length - 1;
+  }
+  
+  document.getElementById('url-bar').value = url;
+  renderTabs();
+}
+
+// ==================== PAGE LOADING ====================
+
+function loadPage(url) {
+  const contentArea = document.getElementById('content-area');
+  contentArea.innerHTML = '';
+  
+  const pageDiv = document.createElement('div');
+  pageDiv.className = 'page';
+  
+  if (url === 'sloth://home' || url === 'about:home') {
+    pageDiv.innerHTML = getHomePageHTML();
+    contentArea.appendChild(pageDiv);
+    initHomePageScripts();
+  } 
+  else if (url === 'sloth://settings') {
+    pageDiv.innerHTML = getSettingsPageHTML();
+    contentArea.appendChild(pageDiv);
+    initSettingsScripts();
+  } 
+  else if (url === 'sloth://arcade') {
+    pageDiv.innerHTML = getArcadePageHTML();
+    contentArea.appendChild(pageDiv);
+    initArcadeScripts();
+  } 
+  else if (url === 'sloth://bookmarks') {
+    pageDiv.innerHTML = getBookmarksPageHTML();
+    contentArea.appendChild(pageDiv);
+  } 
+  else if (url.startsWith('https://') || url.startsWith('http://')) {
+    // Load external sites in iframe for authentic browser feel
+    pageDiv.innerHTML = `
+      <div style="width:100%; height:100%; display:flex; flex-direction:column; background:#000;">
+        <div style="padding:8px 16px; background:#1a1a1a; color:#aaa; font-size:13px; display:flex; align-items:center; gap:12px; border-bottom:1px solid #333;">
+          <span>🌐 External Site</span>
+          <span style="flex:1; color:#666; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${url}</span>
+          <button onclick="window.open('${url}', '_blank')" 
+                  style="padding:4px 14px; background:#333; color:#ccc; border:1px solid #555; border-radius:6px; font-size:12px; cursor:pointer;">Open in New Tab</button>
+          <button onclick="goHome()" style="padding:4px 14px; background:#333; color:#ccc; border:1px solid #555; border-radius:6px; font-size:12px; cursor:pointer;">Home</button>
+        </div>
+        <iframe 
+          src="${url}" 
+          style="flex:1; width:100%; border:none; background:white;"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads"
+          allowfullscreen>
+        </iframe>
+      </div>
+    `;
+    contentArea.appendChild(pageDiv);
+  } 
+  else {
+    // Unknown / error page
+    pageDiv.innerHTML = getErrorPageHTML(url);
+    contentArea.appendChild(pageDiv);
+  }
+  
+  // Update tab
+  const tab = tabs.find(t => t.id === currentTabId);
+  if (tab) {
+    tab.url = url;
+    renderTabs();
+  }
+  
+  // Update URL bar
+  const urlInput = document.getElementById('url-bar');
+  if (urlInput) urlInput.value = url;
+}
+
+function navigateToUrl() {
+  const input = document.getElementById('url-bar').value.trim();
+  if (!input) return;
+  
+  let url = input;
+  
+  if (url.startsWith('sloth://')) {
+    loadPage(url);
+  } else if (url.includes('.') && !url.includes(' ')) {
+    if (!url.startsWith('http')) url = 'https://' + url;
+    loadPage(url);
+  } else {
+    // Treat as search
+    const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(url)}`;
+    loadPage(searchUrl);
+  }
+}
+
+function goBack() {
+  const tab = tabs.find(t => t.id === currentTabId);
+  if (!tab || tab.historyIndex <= 0) return;
+  
+  tab.historyIndex--;
+  const prevUrl = tab.history[tab.historyIndex];
+  document.getElementById('url-bar').value = prevUrl;
+  loadPage(prevUrl);
+}
+
+function goForward() {
+  const tab = tabs.find(t => t.id === currentTabId);
+  if (!tab || tab.historyIndex >= tab.history.length - 1) return;
+  
+  tab.historyIndex++;
+  const nextUrl = tab.history[tab.historyIndex];
+  document.getElementById('url-bar').value = nextUrl;
+  loadPage(nextUrl);
+}
+
+function reloadPage() {
+  const tab = tabs.find(t => t.id === currentTabId);
+  if (tab) {
+    loadPage(tab.url);
+  }
+}
+
+function goHome() {
+  loadPage('sloth://home');
+}
+
+// ==================== PAGE TEMPLATES ====================
+
+function getHomePageHTML() {
+  return `
+    <div class="sloth-page">
+      <div class="container">
+        <!-- Header -->
+        <div style="text-align:center; margin-bottom:30px;">
+          <div id="greeting" style="font-size:1.35rem; opacity:0.85; margin-bottom:4px;">Welcome back, Sloth</div>
+          <h1 style="font-size:3.8rem; margin:0;">SLOTH PLATINUM</h1>
+          <div id="clock" style="font-size:2rem; font-weight:700; color:#4a9eff; font-family:monospace; margin-top:8px;"></div>
+        </div>
+
+        <!-- Search -->
+        <div style="max-width:620px; margin:0 auto 40px;">
+          <form onsubmit="handleSearch(event)" style="display:flex; background:rgba(0,0,0,0.3); border:1px solid #333; border-radius:999px; overflow:hidden;">
+            <input type="text" id="search-input" placeholder="Search the Grid..." 
+                   style="flex:1; padding:16px 24px; background:transparent; border:none; color:white; font-size:15px; outline:none;">
+            <button type="submit" style="padding:0 28px; background:#4a9eff; color:#000; font-weight:700; border:none; cursor:pointer;">Search</button>
+          </form>
+        </div>
+
+        <!-- Quick Modules -->
+        <div class="grid">
+          <div class="module-card" onclick="loadPage('sloth://settings')">
+            <span class="module-icon">⚙️</span>
+            <div style="font-weight:600;">Settings</div>
+          </div>
+          <div class="module-card" onclick="loadPage('sloth://bookmarks')">
+            <span class="module-icon">🔖</span>
+            <div style="font-weight:600;">Bookmarks</div>
+          </div>
+          <div class="module-card" onclick="loadPage('sloth://arcade')">
+            <span class="module-icon">🎮</span>
+            <div style="font-weight:600;">Arcade Lab</div>
+          </div>
+          <div class="module-card" onclick="showFocusTimer()">
+            <span class="module-icon">⏱️</span>
+            <div style="font-weight:600;">Focus Mode</div>
+          </div>
+          <div class="module-card" onclick="loadPage('https://www.youtube.com')">
+            <span class="module-icon">▶️</span>
+            <div style="font-weight:600;">YouTube</div>
+          </div>
+          <div class="module-card" onclick="loadPage('https://github.com')">
+            <span class="module-icon">🐙</span>
+            <div style="font-weight:600;">GitHub</div>
+          </div>
+        </div>
+
+        <!-- Widgets Row -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:40px;">
+          <!-- Scratchpad -->
+          <div class="card">
+            <h3 style="margin-top:0; color:#4a9eff;">📝 Quick Notes</h3>
+            <textarea id="scratchpad" placeholder="Write quick thoughts..." 
+                      style="width:100%; height:160px; background:rgba(0,0,0,0.3); border:1px solid #333; border-radius:12px; padding:14px; color:white; resize:vertical; font-size:14px;"></textarea>
+          </div>
+
+          <!-- Focus Timer -->
+          <div class="card" style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
+            <h3 style="margin-top:0; color:#4a9eff;">⏱️ Focus Session</h3>
+            <div id="home-timer" style="font-size:3rem; font-weight:800; font-family:monospace; color:#4a9eff; margin:10px 0;">25:00</div>
+            <div style="display:flex; gap:10px;">
+              <button onclick="startFocusFromHome()" style="padding:8px 22px; background:#4a9eff; color:#000; border:none; border-radius:10px; font-weight:700; cursor:pointer;">Start</button>
+              <button onclick="resetFocusFromHome()" style="padding:8px 18px; background:#333; color:#ccc; border:1px solid #555; border-radius:10px; cursor:pointer;">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center; margin-top:50px; opacity:0.6; font-size:13px;">
+          Sloth Web Platinum • v2.6 • Built with ❤️ in HTML
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function initHomePageScripts() {
+  // Clock
+  function updateClock() {
+    const el = document.getElementById('clock');
+    if (!el) return;
+    const now = new Date();
+    el.textContent = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // Greeting
+  const greet = document.getElementById('greeting');
+  if (greet) {
+    const hour = new Date().getHours();
+    if (hour < 12) greet.textContent = "Good morning, Sloth";
+    else if (hour < 18) greet.textContent = "Good afternoon, Sloth";
+    else greet.textContent = "Good evening, Sloth";
+  }
+
+  // Scratchpad
+  const scratch = document.getElementById('scratchpad');
+  if (scratch) {
+    scratch.value = localStorage.getItem('sloth_scratchpad') || '';
+    scratch.oninput = () => {
+      localStorage.setItem('sloth_scratchpad', scratch.value);
+    };
+  }
+}
+
+let homeTimerInterval = null;
+let homeTimeLeft = 25 * 60;
+
+function startFocusFromHome() {
+  if (homeTimerInterval) return;
+  homeTimerInterval = setInterval(() => {
+    homeTimeLeft--;
+    updateHomeTimer();
+    if (homeTimeLeft <= 0) {
+      clearInterval(homeTimerInterval);
+      homeTimerInterval = null;
+      alert("Focus session complete! Great job, Sloth.");
+      homeTimeLeft = 5 * 60;
+    }
+  }, 1000);
+}
+
+function resetFocusFromHome() {
+  if (homeTimerInterval) {
+    clearInterval(homeTimerInterval);
+    homeTimerInterval = null;
+  }
+  homeTimeLeft = 25 * 60;
+  updateHomeTimer();
+}
+
+function updateHomeTimer() {
+  const el = document.getElementById('home-timer');
+  if (!el) return;
+  const m = Math.floor(homeTimeLeft / 60);
+  const s = homeTimeLeft % 60;
+  el.textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}
+
+function handleSearch(e) {
+  e.preventDefault();
+  const q = document.getElementById('search-input').value.trim();
+  if (q) {
+    loadPage(`https://www.google.com/search?q=${encodeURIComponent(q)}`);
+  }
+}
+
+// ==================== OTHER PAGES ====================
+
+function getSettingsPageHTML() {
+  return `
+    <div class="sloth-page">
+      <div class="container" style="max-width:800px;">
+        <h1 style="font-size:2.8rem;">Settings</h1>
+        <p style="text-align:center; opacity:0.7;">Customize your browsing experience</p>
+        
+        <div class="card" style="margin-top:30px;">
+          <h3>Appearance</h3>
+          <div style="margin:20px 0;">
+            <label style="display:block; margin-bottom:8px;">Accent Color</label>
+            <input type="color" id="accent-picker" value="${accentColor}" 
+                   style="width:80px; height:40px; border:none; background:none; cursor:pointer;">
+          </div>
+          
+          <div style="margin:20px 0;">
+            <label style="display:block; margin-bottom:8px;">Theme</label>
+            <button onclick="toggleTheme()" style="padding:10px 20px; background:#333; color:white; border:1px solid #555; border-radius:10px; cursor:pointer;">
+              Toggle Dark / Light
+            </button>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h3>Privacy</h3>
+          <div style="display:flex; align-items:center; justify-content:space-between; margin:16px 0;">
+            <div>Ad Blocker</div>
+            <label class="switch">
+              <input type="checkbox" checked onchange="toggleAdblock(this)">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+        
+        <div style="text-align:center; margin-top:40px;">
+          <button onclick="loadPage('sloth://home')" 
+                  style="padding:12px 40px; background:#333; color:#ccc; border:1px solid #555; border-radius:12px; cursor:pointer;">
+            ← Back to Home
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function initSettingsScripts() {
+  const picker = document.getElementById('accent-picker');
+  if (picker) {
+    picker.oninput = () => {
+      accentColor = picker.value;
+      localStorage.setItem('sloth_accent', accentColor);
+      document.documentElement.style.setProperty('--accent', accentColor);
+    };
+  }
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.style.getPropertyValue('--bg') === '#0f0f0f' || 
+                 document.documentElement.style.getPropertyValue('--bg') === '';
+  
+  if (isDark) {
+    // Switch to Light
+    document.documentElement.style.setProperty('--bg', '#f5f5f7');
+    document.documentElement.style.setProperty('--fg', '#1d1d1f');
+    document.documentElement.style.setProperty('--glass', 'rgba(0, 0, 0, 0.04)');
+    document.documentElement.style.setProperty('--border', 'rgba(0, 0, 0, 0.12)');
+    document.documentElement.style.setProperty('--nav-bg', 'rgba(255, 255, 255, 0.95)');
+    document.body.style.background = 'linear-gradient(135deg, #f0f0f3, #e8e8ed)';
+    localStorage.setItem('sloth_theme', 'light');
+  } else {
+    // Switch to Dark
+    document.documentElement.style.setProperty('--bg', '#0f0f0f');
+    document.documentElement.style.setProperty('--fg', '#f0f0f0');
+    document.documentElement.style.setProperty('--glass', 'rgba(255, 255, 255, 0.06)');
+    document.documentElement.style.setProperty('--border', 'rgba(255, 255, 255, 0.12)');
+    document.documentElement.style.setProperty('--nav-bg', 'rgba(28, 28, 28, 0.95)');
+    document.body.style.background = 'linear-gradient(135deg, #050505, #0a0a0a)';
+    localStorage.setItem('sloth_theme', 'dark');
+  }
+}
+
+function toggleAdblock(checkbox) {
+  const status = document.getElementById('adblock-status');
+  if (status) {
+    status.textContent = checkbox.checked ? 'ON' : 'OFF';
+  }
+}
+
+function getArcadePageHTML() {
+  return `
+    <div class="sloth-page">
+      <div class="container">
+        <h1 style="text-align:center;">🎮 Arcade Lab</h1>
+        <p style="text-align:center; opacity:0.7;">High-performance grid gaming</p>
+        
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-top:30px;">
+          <!-- Snake -->
+          <div class="card">
+            <h2 style="color:#00ff88; margin-top:0;">🐍 Neon Snake</h2>
+            <canvas id="snake-canvas" width="300" height="300" style="background:#000; border:3px solid #00ff88; border-radius:8px; display:block; margin:0 auto;"></canvas>
+            <div style="text-align:center; margin-top:12px;">
+              <div id="snake-score" style="font-family:monospace; margin-bottom:8px;">Score: 0</div>
+              <button onclick="startSnakeGame()" style="padding:8px 24px; background:#00ff88; color:#000; border:none; border-radius:10px; font-weight:700; cursor:pointer;">Start Game</button>
+            </div>
+          </div>
+          
+          <!-- Clicker -->
+          <div class="card">
+            <h2 style="color:#ff00ff; margin-top:0;">⚡ Neon Surge</h2>
+            <div id="clicker-area" onclick="surgeClick()"
+                 style="height:300px; background:rgba(255,0,255,0.08); border:3px solid #ff00ff; border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; user-select:none;">
+              <div style="font-size:4rem;">⚡</div>
+              <div id="surge-count" style="font-size:2.8rem; font-weight:800; font-family:monospace;">0</div>
+              <div style="opacity:0.6;">CLICK TO SURGE</div>
+            </div>
+            <div style="text-align:center; margin-top:12px;">
+              <button onclick="resetSurge()" style="padding:8px 24px; background:#ff00ff; color:white; border:none; border-radius:10px; cursor:pointer;">Reset</button>
+            </div>
+          </div>
+        </div>
+        
+        <div style="text-align:center; margin-top:40px;">
+          <button onclick="loadPage('sloth://home')" style="padding:12px 32px; background:#333; color:#ccc; border:1px solid #555; border-radius:12px; cursor:pointer;">
+            ← Back to Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+let snakeGame = null;
+let surgeCount = 0;
+
+function initArcadeScripts() {
+  // Snake game setup
+  const canvas = document.getElementById('snake-canvas');
+  if (canvas) {
+    window.snakeCtx = canvas.getContext('2d');
+  }
+  
+  // Clicker
+  surgeCount = 0;
+  const surgeEl = document.getElementById('surge-count');
+  if (surgeEl) surgeEl.textContent = '0';
+}
+
+function startSnakeGame() {
+  const canvas = document.getElementById('snake-canvas');
+  if (!canvas || !window.snakeCtx) return;
+  
+  const ctx = window.snakeCtx;
+  let snake = [{x:10, y:10}];
+  let food = {x:15, y:15};
+  let dx = 1, dy = 0;
+  let score = 0;
+  let gameInterval = null;
+  
+  function draw() {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, 300, 300);
+    
+    // Snake
+    ctx.fillStyle = '#00ff88';
+    snake.forEach(segment => {
+      ctx.fillRect(segment.x * 15, segment.y * 15, 14, 14);
+    });
+    
+    // Food
+    ctx.fillStyle = '#ff3366';
+    ctx.fillRect(food.x * 15, food.y * 15, 14, 14);
+    
+    document.getElementById('snake-score').textContent = 'Score: ' + score;
+  }
+  
+  function gameLoop() {
+    const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+    
+    // Collision
+    if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20 || 
+        snake.some(s => s.x === head.x && s.y === head.y)) {
+      clearInterval(gameInterval);
+      alert('Game Over! Score: ' + score);
+      return;
+    }
+    
+    snake.unshift(head);
+    
+    if (head.x === food.x && head.y === food.y) {
+      score++;
+      food = {x: Math.floor(Math.random()*20), y: Math.floor(Math.random()*20)};
+    } else {
+      snake.pop();
+    }
+    
+    draw();
+  }
+  
+  // Keyboard
+  document.onkeydown = function(e) {
+    if (e.key === 'ArrowUp' && dy !== 1) { dx=0; dy=-1; }
+    if (e.key === 'ArrowDown' && dy !== -1) { dx=0; dy=1; }
+    if (e.key === 'ArrowLeft' && dx !== 1) { dx=-1; dy=0; }
+    if (e.key === 'ArrowRight' && dx !== -1) { dx=1; dy=0; }
+  };
+  
+  if (gameInterval) clearInterval(gameInterval);
+  gameInterval = setInterval(gameLoop, 120);
+  draw();
+}
+
+function surgeClick() {
+  surgeCount++;
+  const el = document.getElementById('surge-count');
+  if (el) el.textContent = surgeCount;
+  
+  const area = document.getElementById('clicker-area');
+  if (area) {
+    area.style.transform = 'scale(0.96)';
+    setTimeout(() => { if (area) area.style.transform = 'scale(1)'; }, 80);
+  }
+}
+
+function resetSurge() {
+  surgeCount = 0;
+  const el = document.getElementById('surge-count');
+  if (el) el.textContent = '0';
+}
+
+// ==================== BOOKMARKS & HISTORY ====================
+
+function bookmarkCurrent() {
+  const tab = tabs.find(t => t.id === currentTabId);
+  if (!tab) return;
+  
+  const title = prompt('Bookmark name:', tab.title);
+  if (!title) return;
+  
+  bookmarks.push({ title: title, url: tab.url });
+  localStorage.setItem('sloth_bookmarks', JSON.stringify(bookmarks));
+  alert('Bookmarked!');
+}
+
+function showBookmarks() {
+  const sidebarContent = document.getElementById('sidebar-content');
+  sidebarContent.innerHTML = '<h4 style="margin-bottom:12px;">Your Bookmarks</h4>';
+  
+  if (bookmarks.length === 0) {
+    sidebarContent.innerHTML += '<p style="opacity:0.6;">No bookmarks yet.</p>';
+    return;
+  }
+  
+  bookmarks.forEach((bm, index) => {
+    const div = document.createElement('div');
+    div.style.cssText = 'padding:10px; background:rgba(255,255,255,0.03); border-radius:10px; margin-bottom:8px; cursor:pointer;';
+    div.innerHTML = `
+      <div style="font-weight:600;">${bm.title}</div>
+      <div style="font-size:12px; opacity:0.6; word-break:break-all;">${bm.url}</div>
+    `;
+    div.onclick = () => {
+      hideSidebar();
+      loadPage(bm.url);
+    };
+    sidebarContent.appendChild(div);
+  });
+}
+
+function showHistory() {
+  const sidebarContent = document.getElementById('sidebar-content');
+  sidebarContent.innerHTML = '<h4 style="margin-bottom:12px;">Recent History</h4><p style="opacity:0.6; font-size:13px;">History is stored per session in this demo.</p>';
+}
+
+function showFocusTimer() {
+  hideSidebar();
+  const content = document.getElementById('content-area');
+  content.innerHTML = `
+    <div class="sloth-page">
+      <div class="container" style="max-width:420px; text-align:center;">
+        <h1>⏱️ Focus Mode</h1>
+        <div id="focus-timer-big" style="font-size:5rem; font-weight:800; font-family:monospace; color:#4a9eff; margin:30px 0;">25:00</div>
+        
+        <div style="display:flex; gap:12px; justify-content:center;">
+          <button onclick="startFocusBig()" style="padding:14px 32px; background:#4a9eff; color:#000; border:none; border-radius:14px; font-size:15px; font-weight:700; cursor:pointer;">Start Focus</button>
+          <button onclick="resetFocusBig()" style="padding:14px 26px; background:#333; color:#ccc; border:1px solid #555; border-radius:14px; font-size:15px; cursor:pointer;">Reset</button>
+        </div>
+        
+        <div style="margin-top:40px;">
+          <button onclick="loadPage('sloth://home')" style="padding:10px 24px; background:transparent; color:#888; border:1px solid #444; border-radius:10px; cursor:pointer;">← Back</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+let focusBigInterval = null;
+let focusBigTime = 25*60;
+
+function startFocusBig() {
+  if (focusBigInterval) return;
+  focusBigInterval = setInterval(() => {
+    focusBigTime--;
+    updateFocusBig();
+    if (focusBigTime <= 0) {
+      clearInterval(focusBigInterval);
+      focusBigInterval = null;
+      alert("Excellent focus session completed!");
+    }
+  }, 1000);
+}
+
+function resetFocusBig() {
+  if (focusBigInterval) clearInterval(focusBigInterval);
+  focusBigInterval = null;
+  focusBigTime = 25*60;
+  updateFocusBig();
+}
+
+function updateFocusBig() {
+  const el = document.getElementById('focus-timer-big');
+  if (!el) return;
+  const m = Math.floor(focusBigTime / 60);
+  const s = focusBigTime % 60;
+  el.textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}
+
+// ==================== SIDEBAR ====================
+
+function showSidebar() {
+  document.getElementById('sidebar').style.display = 'block';
+  document.getElementById('sidebar-content').innerHTML = `
+    <p style="opacity:0.7; font-size:14px;">Use the buttons above to explore Bookmarks, History, and Focus tools.</p>
+  `;
+}
+
+function showSettings() {
+  loadPage('sloth://settings');
+}
+
+function showArcade() {
+  loadPage('sloth://arcade');
+}
+
+function hideSidebar() {
+  document.getElementById('sidebar').style.display = 'none';
+}
+
+// ==================== INITIALIZATION ====================
+
+function initBrowser() {
+  // Set accent color
+  document.documentElement.style.setProperty('--accent', accentColor);
+  
+  // Restore saved theme
+  const savedTheme = localStorage.getItem('sloth_theme');
+  if (savedTheme === 'light') {
+    document.documentElement.style.setProperty('--bg', '#f5f5f7');
+    document.documentElement.style.setProperty('--fg', '#1d1d1f');
+    document.documentElement.style.setProperty('--glass', 'rgba(0, 0, 0, 0.04)');
+    document.documentElement.style.setProperty('--border', 'rgba(0, 0, 0, 0.12)');
+    document.documentElement.style.setProperty('--nav-bg', 'rgba(255, 255, 255, 0.95)');
+    document.body.style.background = 'linear-gradient(135deg, #f0f0f3, #e8e8ed)';
+  }
+  
+  // Create first tab
+  createTab("Home", "sloth://home");
+  
+  // Keyboard shortcuts
+  document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.key === 't') {
+      e.preventDefault();
+      createTab();
+    }
+    if (e.ctrlKey && e.key === 'w') {
+      e.preventDefault();
+      if (currentTabId) closeTab(currentTabId);
+    }
+    if (e.ctrlKey && e.key === 'r') {
+      e.preventDefault();
+      reloadPage();
+    }
+    if (e.altKey && e.key === 'Home') {
+      e.preventDefault();
+      goHome();
+    }
+  });
+  
+  // Make URL bar clickable to focus
+  const urlInput = document.getElementById('url-bar');
+  urlInput.onclick = () => urlInput.select();
+  
+  console.log('%c[Sloth Web] HTML Edition initialized successfully', 'color:#4a9eff');
+}
+
+// Boot the browser
+initBrowser();
+</script>
+</body>
+</html>
