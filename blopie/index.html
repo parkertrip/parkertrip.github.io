@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>𝓑̲͎̲𝓵̲͎̲𝓸̲͎̲𝓹̲͎̲𝓲̲͎̲𝓮̲͎̲</title>
+    <title>𝓑𝓵𝓸𝓹𝓲𝓮</title>
     <!-- Blopie Favicon (using logo) -->
     <link rel="icon" href="https://chatgpt.com/backend-api/estuary/public_content/enc/eyJpZCI6Im1fNmEyMDgwZDIxMzg4ODE5MTlmZWJiOGUxNTQ4MGE4YzM6ZmlsZV8wMDAwMDAwMDFlMzQ3MWY1YmNkZjYzZjgyMWRlNzlkNCIsInRzIjoiMjA2MDciLCJwIjoicHlpIiwiY2lkIjoiMSIsInNpZyI6Ijc2ZjhiMzMzODU2ODNjODY0OTQxOTc2OTYyMTkyM2Q2NmRhOWJjZTYyY2I4ODVlNGZmNDU5OGU1ZWNkOTk4ZDciLCJ2IjoiMCIsImdpem1vX2lkIjpudWxsLCJjcyI6bnVsbCwiY2RuIjpudWxsLCJmbiI6bnVsbCwiY2QiOm51bGwsImNwIjpudWxsLCJtYSI6bnVsbH0=" type="image/png">
     <!-- 
@@ -392,11 +392,27 @@
                 <div class="max-w-3xl mx-auto">
                     <div class="relative glassmorphism rounded-3xl border border-white/10 shadow-2xl">
                         <textarea id="message-input" rows="1" 
-                                  class="w-full bg-transparent resize-none px-6 py-4 pr-16 text-base placeholder:text-slate-400 focus:outline-none"
+                                  class="w-full bg-transparent resize-none px-5 py-3 pr-20 text-[15px] placeholder:text-slate-400 focus:outline-none leading-tight"
                                   placeholder="Message Blopie... (Shift+Enter for new line)"
                                   onkeydown="if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"></textarea>
                         
                         <div class="absolute right-3 bottom-3 flex items-center gap-x-2">
+                            <!-- File Attachment -->
+                            <button onclick="attachFile()" 
+                                    class="p-2 text-slate-400 hover:text-white transition-colors" title="Attach file (images & text)">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                </svg>
+                            </button>
+
+                            <!-- Image Generation -->
+                            <button onclick="generateImagePrompt()" 
+                                    class="p-2 text-slate-400 hover:text-purple-400 transition-colors" title="Generate Image">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </button>
+                            
                             <button onclick="sendMessage()" 
                                     class="bg-white hover:bg-slate-100 active:bg-white transition-all text-slate-900 w-9 h-9 flex items-center justify-center rounded-2xl shadow-inner">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
@@ -539,6 +555,7 @@
         let availableModels = [];
         let researchMode = false;
         let isStreaming = false;
+        let learnedWords = JSON.parse(localStorage.getItem('blopieLearnedWords') || '[]');
 
         // Initialize Tailwind script
         function initTailwind() {
@@ -736,44 +753,120 @@
         }
 
         // Render chat history in sidebar
-        function renderChatHistory() {
+        function renderChatHistory(filteredChats = null) {
             const container = document.getElementById('chat-history-list');
             container.innerHTML = '';
             
-            if (chats.length === 0) {
+            let list = filteredChats || chats;
+            
+            if (list.length === 0) {
                 const empty = document.createElement('div');
                 empty.className = 'px-4 py-8 text-center';
                 empty.innerHTML = `
-                    <div class="text-slate-500 text-xs">No conversations yet.<br>Start a new chat!</div>
+                    <div class="text-slate-500 text-xs">No conversations found.<br>Try a different search or start a new chat!</div>
                 `;
                 container.appendChild(empty);
                 return;
             }
             
-            chats.forEach(chat => {
+            // Sort: pinned first, then by updated time
+            list = [...list].sort((a, b) => {
+                if (a.pinned && !b.pinned) return -1;
+                if (!a.pinned && b.pinned) return 1;
+                return (b.updated || 0) - (a.updated || 0);
+            });
+            
+            list.forEach(chat => {
                 const div = document.createElement('div');
-                div.className = `sidebar-item flex items-center gap-x-3 px-3 py-[10px] mx-1 rounded-2xl cursor-pointer text-sm ${currentChatId === chat.id ? 'active nav-active' : ''}`;
+                div.className = `sidebar-item group flex items-center gap-x-2 px-3 py-[9px] mx-1 rounded-2xl cursor-pointer text-sm ${currentChatId === chat.id ? 'active nav-active' : ''}`;
                 
                 const lastMsg = chat.messages && chat.messages.length > 0 
-                    ? chat.messages[chat.messages.length - 1].content.substring(0, 55) 
+                    ? chat.messages[chat.messages.length - 1].content.substring(0, 50) 
                     : 'Empty chat';
                 
+                const pinIcon = chat.pinned 
+                    ? `<button onclick="event.stopImmediatePropagation(); togglePinChat('${chat.id}');" class="p-1 text-yellow-400 hover:text-yellow-300" title="Unpin">★</button>`
+                    : `<button onclick="event.stopImmediatePropagation(); togglePinChat('${chat.id}');" class="p-1 opacity-40 group-hover:opacity-100 text-slate-400 hover:text-yellow-400" title="Pin conversation">☆</button>`;
+                
                 div.innerHTML = `
-                    <div class="flex-1 min-w-0">
-                        <div class="font-medium truncate">${chat.title || 'Untitled Chat'}</div>
+                    <div class="flex-1 min-w-0" ondblclick="renameChat('${chat.id}', event)">
+                        <div class="font-medium truncate flex items-center gap-x-1.5">
+                            ${chat.title || 'Untitled Chat'}
+                            ${chat.pinned ? '<span class="text-yellow-400 text-xs">★</span>' : ''}
+                        </div>
                         <div class="text-[10px] text-slate-500 truncate">${lastMsg}</div>
                     </div>
-                    <button onclick="event.stopImmediatePropagation(); deleteChat('${chat.id}');" 
-                            class="opacity-40 hover:opacity-100 p-1 text-red-400 hover:text-red-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6h12v12" />
-                        </svg>
-                    </button>
+                    
+                    <div class="flex items-center gap-x-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        ${pinIcon}
+                        
+                        <button onclick="event.stopImmediatePropagation(); renameChat('${chat.id}', event)" 
+                                class="p-1 text-slate-400 hover:text-blue-400" title="Rename">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                            </svg>
+                        </button>
+                        
+                        <button onclick="event.stopImmediatePropagation(); deleteChat('${chat.id}');" 
+                                class="p-1 text-red-400 hover:text-red-500" title="Delete">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6h12v12" />
+                            </svg>
+                        </button>
+                    </div>
                 `;
                 
-                div.onclick = () => switchToChat(chat.id);
+                div.onclick = (e) => {
+                    if (!e.target.closest('button')) {
+                        switchToChat(chat.id);
+                    }
+                };
                 container.appendChild(div);
             });
+        }
+
+        function filterChatHistory() {
+            const searchInput = document.getElementById('chat-search');
+            if (!searchInput) return;
+            
+            const term = searchInput.value.toLowerCase().trim();
+            if (!term) {
+                renderChatHistory();
+                return;
+            }
+            
+            const filtered = chats.filter(chat => 
+                (chat.title || '').toLowerCase().includes(term) ||
+                (chat.messages || []).some(m => (m.content || '').toLowerCase().includes(term))
+            );
+            
+            renderChatHistory(filtered);
+        }
+
+        async function togglePinChat(chatId) {
+            const chat = chats.find(c => c.id === chatId);
+            if (!chat) return;
+            
+            chat.pinned = !chat.pinned;
+            chat.updated = Date.now();
+            await saveChatToDB(chat);
+            renderChatHistory();
+        }
+
+        async function renameChat(chatId, event) {
+            event?.stopImmediatePropagation();
+            
+            const chat = chats.find(c => c.id === chatId);
+            if (!chat) return;
+            
+            const newTitle = prompt('Rename conversation:', chat.title || 'Untitled Chat');
+            if (!newTitle || newTitle.trim() === '') return;
+            
+            chat.title = newTitle.trim();
+            chat.updated = Date.now();
+            await saveChatToDB(chat);
+            renderChatHistory();
+            updateHeader();
         }
 
         // Create a new chat
@@ -784,7 +877,8 @@
                 messages: [],
                 created: Date.now(),
                 updated: Date.now(),
-                model: currentModel ? currentModel.id : null
+                model: currentModel ? currentModel.id : null,
+                pinned: false
             };
             
             chats.unshift(newChat);
@@ -876,10 +970,17 @@
             div.className = `flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} group`;
             
             if (msg.role === 'user') {
+                let contentHtml = escapeHtml(msg.content || '');
+                if (msg.image) {
+                    contentHtml = `<img src="${msg.image}" class="max-w-[280px] rounded-2xl mb-2 border border-white/10" alt="${msg.attachmentName || 'Attached image'}" /><br>${contentHtml}`;
+                }
+                if (msg.attachmentName && !msg.image) {
+                    contentHtml = `<div class="text-xs opacity-70 mb-1">📎 ${msg.attachmentName}</div>${contentHtml}`;
+                }
                 div.innerHTML = `
                     <div class="max-w-[75%]">
                         <div class="message-bubble user-bubble px-5 py-3.5 text-[15px] leading-relaxed">
-                            ${escapeHtml(msg.content)}
+                            ${contentHtml}
                         </div>
                         <div class="text-right mt-1 pr-1">
                             <span class="text-[10px] text-slate-500">You • just now</span>
@@ -1014,92 +1115,280 @@
             }, 2200);
         }
 
-        // Fetch available models from g4f.space
-        async function fetchModels() {
-            try {
-                // Primary source: OpenAI-compatible models endpoint
-                const res = await fetch('https://g4f.space/v1/models');
-                const data = await res.json();
-                
-                if (data && data.data) {
-                    availableModels = data.data.map(m => ({
-                        id: m.id,
-                        name: m.id,           // g4f often returns just id
-                        owned_by: m.owned_by || 'g4f',
-                        created: m.created
-                    }));
+        function attachFile() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*,text/*,.pdf,.txt,.md,.json,.csv';
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        window.pendingAttachment = { type: 'image', name: file.name, data: ev.target.result };
+                        showToast(`🖼️ Image attached: ${file.name}. Describe what to do with it in your next message.`);
+                    };
+                    reader.readAsDataURL(file);
                 } else {
-                    throw new Error('Unexpected response format');
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        window.pendingAttachment = { type: 'text', name: file.name, content: ev.target.result.substring(0, 8000) };
+                        showToast(`📄 File attached: ${file.name}`);
+                    };
+                    reader.readAsText(file);
                 }
-                
-                // Auto-select first model if none selected
-                if (!currentModel && availableModels.length > 0) {
-                    currentModel = availableModels[0];
-                    document.getElementById('current-model-name').innerHTML = 
-                        `<span class="model-badge">${currentModel.name}</span>`;
-                }
-            } catch (e) {
-                console.error('Failed to fetch from v1/models, trying fallback...', e);
-                
-                // Fallback to ollama list if v1 fails
-                try {
-                    const res2 = await fetch('https://g4f.space/api/ollama/models');
-                    const data2 = await res2.json();
-                    if (data2 && data2.data) {
-                        availableModels = data2.data.map(m => ({
-                            id: m.id || m.model,
-                            name: m.name || m.id || m.model,
-                            family: 'ollama'
-                        }));
-                    }
-                } catch (e2) {
-                    // Ultimate fallback
-                    availableModels = [
-                        { id: 'gpt-4.1', name: 'GPT-4.1' },
-                        { id: 'deepseek-v3', name: 'DeepSeek V3' },
-                        { id: 'qwen3-next:80b', name: 'Qwen3 80B' },
-                        { id: 'flux', name: 'Flux (Image)' }
-                    ];
-                }
-                
-                if (!currentModel && availableModels.length > 0) {
-                    currentModel = availableModels[0];
-                    document.getElementById('current-model-name').innerHTML = 
-                        `<span class="model-badge">${currentModel.name}</span>`;
-                }
+            };
+            input.click();
+        }
+
+        async function generateImagePrompt() {
+            const prompt = prompt('What image do you want to generate? (e.g. "a cyberpunk cat in neon Tokyo")');
+            if (!prompt || !prompt.trim()) return;
+
+            showToast('🎨 Generating image...');
+
+            try {
+                const encodedPrompt = encodeURIComponent(prompt.trim());
+                const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1024&height=1024&model=flux&safe=false`;
+
+                const chat = getCurrentChat() || (await createNewChat() && getCurrentChat());
+
+                const imgMsg = {
+                    role: 'assistant',
+                    content: `**Generated with Flux**\n\n![${prompt}](${imageUrl})\n\n*Prompt: ${prompt}*`,
+                    timestamp: Date.now(),
+                    imageUrl: imageUrl
+                };
+
+                chat.messages.push(imgMsg);
+                chat.updated = Date.now();
+                await saveChatToDB(chat);
+
+                renderMessages();
+                updateHeader();
+                showToast('Image ready!');
+            } catch (err) {
+                console.error(err);
+                showToast('Image generation failed. Please try again.');
             }
         }
 
-        function showModelPicker() {
+        // Fetch available models from g4f.space
+        async function fetchModels(forceRefresh = false) {
+            // Check cache first (valid for 15 minutes)
+            if (!forceRefresh) {
+                const cached = localStorage.getItem('blopieModelsCache');
+                if (cached) {
+                    try {
+                        const { models, timestamp } = JSON.parse(cached);
+                        if (Date.now() - timestamp < 15 * 60 * 1000 && models.length > 10) {
+                            availableModels = models;
+                            return; // Use cache
+                        }
+                    } catch (e) {}
+                }
+            }
+
+            const sources = [
+                { url: 'https://g4f.space/v1/models', needsKey: true, type: 'openai' },
+                { url: 'https://g4f.space/api/groq', needsKey: false, type: 'groq' },
+                { url: 'https://g4f.space/api/ollama', needsKey: false, type: 'ollama' },
+                { url: 'https://g4f.space/api/pollinations', needsKey: false, type: 'pollinations' },
+                { url: 'https://g4f.space/api/nvidia', needsKey: false, type: 'nvidia' },
+                { url: 'https://g4f.space/api/gemini', needsKey: false, type: 'gemini' }
+            ];
+
+            const allModels = [];
+            const seenIds = new Set();
+            const apiKey = settings.apiKey || 'g4f_u_mq2m97_fe99c3b169907bd9f06a6f6dddbe489f89ffd339103200cc_c3c5b627';
+
+            // Fetch in parallel but with small delay to reduce rate limit pressure
+            const promises = sources.map(async (source, index) => {
+                await new Promise(r => setTimeout(r, index * 120)); // slight stagger
+
+                try {
+                    const headers = { 'Content-Type': 'application/json' };
+                    if (source.needsKey && apiKey) {
+                        headers['Authorization'] = `Bearer ${apiKey}`;
+                    }
+
+                    const res = await fetch(source.url, { headers, signal: AbortSignal.timeout(8000) });
+                    if (!res.ok) {
+                        if (res.status === 429) console.warn(`Rate limited on ${source.type}`);
+                        return [];
+                    }
+
+                    const data = await res.json();
+                    let modelsList = data?.data || data?.models || (Array.isArray(data) ? data : []);
+
+                    return modelsList.map(m => {
+                        const id = m.id || m.model || m.name;
+                        if (!id || seenIds.has(id)) return null;
+                        seenIds.add(id);
+                        return {
+                            id,
+                            name: m.name || m.id || id,
+                            provider: source.type,
+                            owned_by: m.owned_by || source.type
+                        };
+                    }).filter(Boolean);
+                } catch (err) {
+                    console.warn(`Failed ${source.type}:`, err.message);
+                    return [];
+                }
+            });
+
+            const results = await Promise.all(promises);
+            results.flat().forEach(m => allModels.push(m));
+
+            if (allModels.length > 5) {
+                availableModels = allModels;
+                // Cache for 15 minutes
+                localStorage.setItem('blopieModelsCache', JSON.stringify({
+                    models: allModels,
+                    timestamp: Date.now()
+                }));
+            } else {
+                // Fallback models
+                availableModels = [
+                    { id: 'gpt-4o-mini', name: 'GPT-4o Mini (Fast)', provider: 'openai' },
+                    { id: 'gpt-4.1', name: 'GPT-4.1', provider: 'openai' },
+                    { id: 'deepseek-v3', name: 'DeepSeek V3', provider: 'deepseek' },
+                    { id: 'flux', name: 'Flux (Image)', provider: 'pollinations' }
+                ];
+            }
+
+            // Smart default
+            if (!currentModel && availableModels.length > 0) {
+                const fast = availableModels.find(m => 
+                    m.id.toLowerCase().includes('gpt-4o-mini') || 
+                    m.id.toLowerCase().includes('mini') ||
+                    m.name.toLowerCase().includes('fast')
+                ) || availableModels[0];
+
+                currentModel = fast;
+                const nameEl = document.getElementById('current-model-name');
+                if (nameEl) nameEl.innerHTML = `<span class="model-badge">${currentModel.name}</span>`;
+            }
+        }
+
+        // Improved Model Picker with stable search input (no cursor jumping)
+        function showModelPicker(initialSearchTerm = '') {
             const modal = document.getElementById('model-modal');
             const listContainer = document.getElementById('model-list');
-            listContainer.innerHTML = '';
-            
-            if (availableModels.length === 0) {
-                listContainer.innerHTML = `<div class="p-4 text-center text-sm text-slate-400">Loading models...</div>`;
-                fetchModels().then(() => showModelPicker());
+
+            // If modal is already open and we're just filtering, don't rebuild everything
+            let searchInput = document.getElementById('model-search-input');
+            const isAlreadyOpen = modal.classList.contains('flex') && searchInput;
+
+            if (!isAlreadyOpen) {
+                listContainer.innerHTML = '';
+
+                if (availableModels.length === 0) {
+                    listContainer.innerHTML = `
+                        <div class="p-4 text-center text-sm text-slate-400">
+                            Loading models from multiple providers...<br>
+                            <button onclick="refreshModels()" class="mt-2 text-xs underline">Refresh</button>
+                        </div>
+                    `;
+                    fetchModels().then(() => showModelPicker(initialSearchTerm));
+                    return;
+                }
+
+                // Create stable header with search
+                const header = document.createElement('div');
+                header.className = 'p-3 border-b border-white/10 sticky top-0 bg-slate-900/95 backdrop-blur z-10 flex gap-2';
+                header.innerHTML = `
+                    <input id="model-search-input" type="text" 
+                           placeholder="Search models (gpt, flux, deepseek, code...)" 
+                           class="flex-1 bg-slate-800 border border-slate-700 focus:border-blue-500 text-sm px-4 py-2 rounded-2xl placeholder:text-slate-500">
+                    <button onclick="refreshModels()" 
+                            class="px-3 py-2 text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl transition-colors">
+                        ↻
+                    </button>
+                `;
+                listContainer.appendChild(header);
+
+                searchInput = header.querySelector('#model-search-input');
+                searchInput.value = initialSearchTerm;
+
+                // Live filter without re-rendering the whole modal
+                searchInput.oninput = () => {
+                    filterModelList(searchInput.value);
+                };
+
+                // Create the scrollable list container once
+                const modelsListDiv = document.createElement('div');
+                modelsListDiv.id = 'models-list-items';
+                modelsListDiv.className = 'max-h-[420px] overflow-y-auto p-1';
+                listContainer.appendChild(modelsListDiv);
+            } else {
+                searchInput = document.getElementById('model-search-input');
+                if (initialSearchTerm) searchInput.value = initialSearchTerm;
+            }
+
+            // Render or filter the model items
+            filterModelList(searchInput ? searchInput.value : initialSearchTerm);
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            // Focus search only the first time
+            if (!isAlreadyOpen) {
+                setTimeout(() => {
+                    if (searchInput) {
+                        searchInput.focus();
+                        searchInput.select();
+                    }
+                }, 80);
+            }
+        }
+
+        function filterModelList(searchTerm = '') {
+            const container = document.getElementById('models-list-items');
+            if (!container) return;
+
+            container.innerHTML = '';
+            const term = searchTerm.toLowerCase().trim();
+
+            const filtered = term 
+                ? availableModels.filter(m => 
+                    (m.name || '').toLowerCase().includes(term) || 
+                    (m.id || '').toLowerCase().includes(term) ||
+                    (m.provider || '').toLowerCase().includes(term)
+                  )
+                : availableModels;
+
+            if (filtered.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'p-4 text-center text-sm text-slate-400';
+                empty.textContent = 'No models match your search.';
+                container.appendChild(empty);
                 return;
             }
-            
-            availableModels.forEach(model => {
+
+            filtered.forEach(model => {
                 const item = document.createElement('div');
-                item.className = `px-4 py-3.5 hover:bg-white/5 cursor-pointer flex items-center justify-between rounded-2xl mx-1 my-0.5 ${currentModel && currentModel.id === model.id ? 'bg-white/5' : ''}`;
+                item.className = `px-4 py-3 hover:bg-white/5 cursor-pointer flex items-center justify-between rounded-2xl mx-1 my-0.5 transition-colors ${currentModel && currentModel.id === model.id ? 'bg-white/5 ring-1 ring-blue-500/30' : ''}`;
                 
                 item.innerHTML = `
-                    <div>
-                        <div class="font-medium">${model.name}</div>
-                        <div class="text-xs text-slate-400 font-mono">${model.id}</div>
+                    <div class="flex-1 min-w-0">
+                        <div class="font-medium">
+                            ${model.name || model.id}
+                        </div>
+                        <div class="text-xs text-slate-400 font-mono truncate">${model.id}</div>
                     </div>
                     ${currentModel && currentModel.id === model.id ? 
-                        `<div class="text-emerald-400 text-xs px-3 py-1 bg-emerald-950 rounded-full">Current</div>` : ''}
+                        `<div class="text-emerald-400 text-xs px-3 py-1 bg-emerald-950 rounded-full whitespace-nowrap">Current</div>` : ''}
                 `;
                 
                 item.onclick = () => {
                     currentModel = model;
-                    document.getElementById('current-model-name').innerHTML = `<span class="model-badge">${model.name}</span>`;
+                    const nameEl = document.getElementById('current-model-name');
+                    if (nameEl) nameEl.innerHTML = `<span class="model-badge">${model.name || model.id}</span>`;
                     hideModelPicker();
                     
-                    // Update current chat model
                     const chat = getCurrentChat();
                     if (chat) {
                         chat.model = model.id;
@@ -1107,11 +1396,26 @@
                     }
                 };
                 
-                listContainer.appendChild(item);
+                container.appendChild(item);
             });
+        }
+
+        async function refreshModels() {
+            const listContainer = document.getElementById('model-list');
+            if (listContainer) {
+                listContainer.innerHTML = `<div class="p-4 text-center text-sm text-slate-400">Refreshing models...</div>`;
+            }
             
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            // Clear cache
+            localStorage.removeItem('blopieModelsCache');
+            availableModels = [];
+            
+            await fetchModels();
+            
+            // Reopen picker with current search
+            const searchInput = document.getElementById('model-search-input');
+            const currentTerm = searchInput ? searchInput.value : '';
+            showModelPicker(currentTerm);
         }
 
         function hideModelPicker() {
@@ -1286,13 +1590,27 @@ The <title> tag will be automatically extracted and used as the chat name. It wi
                 content: text,
                 timestamp: Date.now()
             };
+
+            // Handle pending attachment
+            if (window.pendingAttachment) {
+                if (window.pendingAttachment.type === 'image') {
+                    userMsg.image = window.pendingAttachment.data;
+                    userMsg.attachmentName = window.pendingAttachment.name;
+                    userMsg.content = text || `Analyze this image: ${window.pendingAttachment.name}`;
+                } else if (window.pendingAttachment.type === 'text') {
+                    userMsg.attachment = window.pendingAttachment.content;
+                    userMsg.attachmentName = window.pendingAttachment.name;
+                    userMsg.content = text ? `${text}\n\n[Attached file: ${window.pendingAttachment.name}]` : `Summarize this file: ${window.pendingAttachment.name}`;
+                }
+                delete window.pendingAttachment;
+            }
             
             chat.messages.push(userMsg);
             chat.updated = Date.now();
             
-            // Update title if first message
-            if (chat.messages.length === 1) {
-                chat.title = text.length > 45 ? text.substring(0, 42) + '...' : text;
+            // Let AI generate title on first response (via <title> tag). Fallback only if needed.
+            if (chat.messages.length === 1 && (!chat.title || chat.title === 'New Conversation')) {
+                chat.title = text.length > 50 ? text.substring(0, 47) + '...' : text;
             }
             
             await saveChatToDB(chat);
@@ -1342,7 +1660,19 @@ The <title> tag will be automatically extracted and used as the chat name. It wi
                 
                 const apiMessages = [
                     { role: 'system', content: systemPrompt },
-                    ...chat.messages.map(m => ({ role: m.role, content: m.content }))
+                    ...chat.messages.map(m => {
+                        if (m.role === 'user' && m.image) {
+                            // Vision format
+                            return {
+                                role: 'user',
+                                content: [
+                                    { type: 'text', text: m.content || 'What is in this image?' },
+                                    { type: 'image_url', image_url: { url: m.image } }
+                                ]
+                            };
+                        }
+                        return { role: m.role, content: m.content };
+                    })
                 ];
                 
                 // Prepare request
@@ -1785,8 +2115,8 @@ The <title> tag will be automatically extracted and used as the chat name. It wi
             // Render initial state
             renderChatHistory();
             
-            // Fetch models
-            await fetchModels();
+            // Fetch models in background (cached)
+            fetchModels().catch(() => {});
             
             // If no chats, create one
             if (chats.length === 0) {
@@ -1830,8 +2160,6 @@ The <title> tag will be automatically extracted and used as the chat name. It wi
         // ============================================
         // Background Random Word Learner (Continuous Learning)
         // ============================================
-        let learnedWords = JSON.parse(localStorage.getItem('blopieLearnedWords') || '[]');
-
         async function fetchAndLearnRandomWord() {
             try {
                 const res = await fetch('https://random-words-api.kushcreates.com/api?language=en&words=1');
