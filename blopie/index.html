@@ -614,6 +614,12 @@
         let availableModels = [];
         let researchMode = false;
         let isStreaming = false;
+        
+        // Fallback API keys (tried in order)
+        const FALLBACK_API_KEYS = [
+            'g4f_u_mq2m97_fe99c3b169907bd9f06a6f6dddbe489f89ffd339103200cc_c3c5b627',
+            'g4f_u_mqh81q_38150b3d058f835137510efdaf7cd674ad3a3f15db9763dd_5a4cadf8'
+        ];
         let learnedWords = JSON.parse(localStorage.getItem('blopieLearnedWords') || '[]');
         let devMode = false;
         let currentFileHandle = null;
@@ -623,6 +629,17 @@
         // Performance: Debounced render functions for speed
         let renderMessagesTimeout = null;
         let renderChatHistoryTimeout = null;
+
+        // Get the best available API key (user setting > fallbacks)
+        function getApiKey() {
+            const userKey = settings.apiKey?.trim();
+            if (userKey) return userKey;
+
+            for (let key of FALLBACK_API_KEYS) {
+                if (key && key.trim()) return key.trim();
+            }
+            return '';
+        }
 
         // Initialize Tailwind script
         function initTailwind() {
@@ -759,6 +776,22 @@
         function applySettingsToUI() {
             const apiInput = document.getElementById('api-key-input');
             if (apiInput) apiInput.value = settings.apiKey || 'g4f_u_mq2m97_fe99c3b169907bd9f06a6f6dddbe489f89ffd339103200cc_c3c5b627';
+            
+            // Show which key is active
+            const keyStatus = document.getElementById('api-key-status');
+            if (keyStatus) {
+                const currentKey = getApiKey();
+                if (currentKey === FALLBACK_API_KEYS[0]) {
+                    keyStatus.textContent = 'Using primary key';
+                    keyStatus.className = 'text-xs text-emerald-400';
+                } else if (currentKey === FALLBACK_API_KEYS[1]) {
+                    keyStatus.textContent = 'Using fallback key';
+                    keyStatus.className = 'text-xs text-yellow-400';
+                } else {
+                    keyStatus.textContent = 'No API key';
+                    keyStatus.className = 'text-xs text-red-400';
+                }
+            }
             
             // Load custom prompt and style
             const customPromptInput = document.getElementById('custom-system-prompt');
@@ -1281,7 +1314,7 @@
 
             const allModels = [];
             const seenIds = new Set();
-            const apiKey = settings.apiKey || 'g4f_u_mq2m97_fe99c3b169907bd9f06a6f6dddbe489f89ffd339103200cc_c3c5b627';
+            const apiKey = getApiKey();
 
             // Fetch in parallel but with small delay to reduce rate limit pressure
             const promises = sources.map(async (source, index) => {
@@ -1879,15 +1912,40 @@ You have access to enhanced research capabilities. When the user asks for inform
                     'Content-Type': 'application/json'
                 };
                 
-                if (settings.apiKey && settings.apiKey.trim() !== '') {
-                    headers['Authorization'] = `Bearer ${settings.apiKey.trim()}`;
+                const apiKey = getApiKey();
+                if (apiKey) {
+                    headers['Authorization'] = `Bearer ${apiKey}`;
                 }
                 
-                const response = await fetch('https://g4f.space/v1/chat/completions', {
+                let response = await fetch('https://g4f.space/v1/chat/completions', {
                     method: 'POST',
                     headers: headers,
                     body: JSON.stringify(payload)
                 });
+                
+                // Simple key fallback if auth/rate limit error
+                if (!response.ok && (response.status === 401 || response.status === 429)) {
+                    // Try next fallback key
+                    for (let fallbackKey of FALLBACK_API_KEYS) {
+                        if (fallbackKey === apiKey) continue; // skip the one we just tried
+                        
+                        const retryHeaders = { ...headers };
+                        retryHeaders['Authorization'] = `Bearer ${fallbackKey}`;
+                        
+                        try {
+                            const retryResponse = await fetch('https://g4f.space/v1/chat/completions', {
+                                method: 'POST',
+                                headers: retryHeaders,
+                                body: JSON.stringify(payload)
+                            });
+                            
+                            if (retryResponse.ok) {
+                                response = retryResponse;
+                                break;
+                            }
+                        } catch (e) {}
+                    }
+                }
                 
                 if (!response.ok) {
                     const errorText = await response.text();
