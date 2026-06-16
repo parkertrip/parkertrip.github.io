@@ -208,6 +208,39 @@
             font-weight: 700;
             letter-spacing: -0.025em;
         }
+        
+        /* Mobile Sidebar Drawer - Proper mobile support */
+        @media (max-width: 767px) {
+            #sidebar {
+                position: fixed !important;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 100;
+                transform: translateX(-100%);
+                transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+                width: 260px !important;
+                max-width: 82vw !important;
+                box-shadow: none;
+                display: none !important; /* Hidden by default on mobile */
+            }
+            
+            #sidebar.mobile-open {
+                display: flex !important;
+                transform: translateX(0);
+                box-shadow: 4px 0 25px rgba(0, 0, 0, 0.4);
+            }
+            
+            /* Force main content full width on mobile */
+            .flex-1 {
+                width: 100% !important;
+            }
+            
+            /* Smaller touch targets on mobile */
+            .p-2\\.5 {
+                padding: 0.5rem !important;
+            }
+        }
 
         .message-actions {
             opacity: 0;
@@ -562,15 +595,20 @@
         // BLOPIE ULTRA - Full ChatGPT-style Application
         // ============================================
         
+        // Mobile detection must be first (used by toggleSidebar and init)
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+        
         let db;
         let currentChatId = null;
         let chats = [];
         let memories = [];
         let settings = {
-            apiKey: '',
+            apiKey: 'g4f_u_mq2m97_fe99c3b169907bd9f06a6f6dddbe489f89ffd339103200cc_c3c5b627',
             temperature: 0.7,
             maxTokens: 2048,
-            autoSave: true
+            autoSave: true,
+            customSystemPrompt: '',
+            responseStyle: 'balanced'
         };
         let currentModel = null;
         let availableModels = [];
@@ -581,6 +619,10 @@
         let currentFileHandle = null;
         let currentDevCode = '';
         let currentFileName = 'untitled.js';
+        
+        // Performance: Debounced render functions for speed
+        let renderMessagesTimeout = null;
+        let renderChatHistoryTimeout = null;
 
         // Initialize Tailwind script
         function initTailwind() {
@@ -716,7 +758,14 @@
 
         function applySettingsToUI() {
             const apiInput = document.getElementById('api-key-input');
-            if (apiInput) apiInput.value = settings.apiKey || '';
+            if (apiInput) apiInput.value = settings.apiKey || 'g4f_u_mq2m97_fe99c3b169907bd9f06a6f6dddbe489f89ffd339103200cc_c3c5b627';
+            
+            // Load custom prompt and style
+            const customPromptInput = document.getElementById('custom-system-prompt');
+            if (customPromptInput) customPromptInput.value = settings.customSystemPrompt || '';
+            
+            const styleSelect = document.getElementById('response-style');
+            if (styleSelect) styleSelect.value = settings.responseStyle || 'balanced';
             
             const tempInput = document.getElementById('temperature-input');
             if (tempInput) {
@@ -1024,6 +1073,12 @@
                             <div class="message-bubble assistant-bubble px-5 py-4 text-[15px] leading-relaxed markdown-content">
                                 ${html}
                             </div>
+                            
+                            ${msg.content && msg.content.includes('```') ? `
+                            <div onclick="enterDevMode()" class="mt-2 ml-1 inline-flex items-center gap-x-1.5 text-xs px-3 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 rounded-full cursor-pointer transition-colors">
+                                <span>🛠️</span>
+                                <span class="font-medium">Switch this project to Blopie Dev for direct file editing</span>
+                            </div>` : ''}
                             
                             <div class="flex items-center gap-x-2 mt-1.5 pl-1 opacity-60 group-hover:opacity-100 transition-opacity">
                                 <button onclick="copyMessage(${index})" class="text-xs flex items-center gap-x-1 px-2 py-0.5 hover:bg-white/5 rounded-lg text-slate-400 hover:text-slate-200">
@@ -1558,7 +1613,28 @@
         async function buildSystemPrompt(userQuery = '') {
             let system = `You are Blopie, a helpful, witty, and highly capable AI assistant with a persistent memory. 
 You have access to the user's personal memory bank and can reference it naturally.
-Be concise when appropriate but thorough when needed. Always use markdown for formatting when helpful.
+Always use markdown for formatting when helpful.
+
+**RESPONSE STYLE:**
+`;
+
+            // Apply response style
+            const style = settings.responseStyle || 'balanced';
+            if (style === 'concise') {
+                system += 'Be concise, direct, and to the point. Avoid fluff.';
+            } else if (style === 'detailed') {
+                system += 'Provide comprehensive, in-depth answers with examples and context.';
+            } else if (style === 'creative') {
+                system += 'Be imaginative, use storytelling, metaphors, and engaging language.';
+            } else if (style === 'coding') {
+                system += 'Focus on clean code, best practices, and provide complete working examples.';
+            } else if (style === 'research') {
+                system += 'Be thorough, accurate, and cite sources when possible.';
+            } else {
+                system += 'Be helpful, clear, and balanced in detail.';
+            }
+
+            system += `
 
 **CONTINUOUS LEARNING MODE (ALWAYS ACTIVE):**
 You are constantly learning about the user. After every response, actively look for:
@@ -1605,6 +1681,17 @@ Do NOT describe the image in text — just output the <image> tag when generatin
             const learnedContext = getLearnedWordsContext();
             if (learnedContext) {
                 system += learnedContext;
+            }
+
+            // Research Mode context
+            if (researchMode) {
+                system += `\n\n## Research Mode Active
+You have access to enhanced research capabilities. When the user asks for information, facts, or current events, prioritize accurate, up-to-date responses. You can suggest using web search or Wikipedia for verification. Be thorough and cite sources when possible.`;
+            }
+
+            // Custom system prompt override (highest priority)
+            if (settings.customSystemPrompt && settings.customSystemPrompt.trim().length > 5) {
+                system += '\n\n## User Custom Instructions\n' + settings.customSystemPrompt.trim();
             }
             
             // Add research if enabled and query provided
@@ -1908,6 +1995,53 @@ Do NOT describe the image in text — just output the <image> tag when generatin
                         } catch (err) {
                             console.error('Image generation failed:', err);
                             showToast('Failed to generate the image requested by AI.');
+                        }
+                    })();
+                }
+
+                // Handle AI-requested web search
+                const webSearchMatch = fullResponse.match(/<web_search>([\s\S]*?)<\/web_search>/i);
+                if (webSearchMatch) {
+                    const query = webSearchMatch[1].trim();
+                    (async () => {
+                        try {
+                            // Use DuckDuckGo Instant Answer (free, no key)
+                            const searchUrl = `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`;
+                            const res = await fetch(searchUrl);
+                            const data = await res.json();
+                            
+                            let searchResults = `**Web Search Results for: ${query}**\n\n`;
+                            
+                            if (data.AbstractText) {
+                                searchResults += `**Summary:** ${data.AbstractText}\n\n`;
+                            }
+                            
+                            if (data.RelatedTopics && data.RelatedTopics.length > 0) {
+                                searchResults += '**Related Topics:**\n';
+                                data.RelatedTopics.slice(0, 5).forEach(topic => {
+                                    if (topic.Text) searchResults += `- ${topic.Text}\n`;
+                                });
+                            }
+                            
+                            if (searchResults.length < 100) {
+                                searchResults += 'No detailed results found. Try rephrasing your query.';
+                            }
+                            
+                            const searchMsg = {
+                                role: 'assistant',
+                                content: searchResults,
+                                timestamp: Date.now()
+                            };
+                            
+                            chat.messages.push(searchMsg);
+                            chat.updated = Date.now();
+                            await saveChatToDB(chat);
+                            
+                            renderMessages();
+                            showToast('Web search completed by AI!');
+                        } catch (err) {
+                            console.error('Web search failed:', err);
+                            showToast('Web search failed. The AI can still reason without it.');
                         }
                     })();
                 }
@@ -2268,6 +2402,14 @@ Do NOT describe the image in text — just output the <image> tag when generatin
 
             currentDevCode = latestCode;
             devMode = true;
+
+            // Performance warning + AI guidance for very large files
+            const lineCount = (latestCode.match(/\n/g) || []).length + 1;
+            if (lineCount > 3000) {
+                setTimeout(() => {
+                    showToast(`Large file detected (${lineCount} lines). The AI will now prefer <edit_line> for safety on huge projects.`, 4500);
+                }, 600);
+            }
 
             // Create beautiful split dev interface
             const devOverlay = document.createElement('div');
@@ -2675,6 +2817,21 @@ Do NOT describe the image in text — just output the <image> tag when generatin
             showToast('Exited Dev Mode. Back to normal chat.');
         }
 
+        // Performance optimized renders (debounced)
+        function debouncedRenderMessages() {
+            clearTimeout(renderMessagesTimeout);
+            renderMessagesTimeout = setTimeout(() => {
+                renderMessages();
+            }, 50);
+        }
+
+        function debouncedRenderChatHistory() {
+            clearTimeout(renderChatHistoryTimeout);
+            renderChatHistoryTimeout = setTimeout(() => {
+                renderChatHistory();
+            }, 80);
+        }
+
         function runCurrentFile() {
             const editor = document.getElementById('dev-code-editor');
             if (!editor) return;
@@ -2840,8 +2997,35 @@ Do NOT describe the image in text — just output the <image> tag when generatin
         // Toggle sidebar on mobile
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('hidden');
-            sidebar.classList.toggle('lg:flex');
+            
+            if (!sidebar) return;
+            
+            if (isMobile || window.innerWidth < 768) {
+                // Mobile drawer behavior
+                const isOpen = sidebar.classList.contains('mobile-open');
+                
+                if (isOpen) {
+                    sidebar.classList.remove('mobile-open');
+                    const backdrop = document.getElementById('sidebar-backdrop');
+                    if (backdrop) backdrop.remove();
+                } else {
+                    sidebar.classList.add('mobile-open');
+                    
+                    // Add backdrop for closing
+                    const existingBackdrop = document.getElementById('sidebar-backdrop');
+                    if (existingBackdrop) existingBackdrop.remove();
+                    
+                    const backdrop = document.createElement('div');
+                    backdrop.id = 'sidebar-backdrop';
+                    backdrop.className = 'fixed inset-0 bg-black/60 z-[90]';
+                    backdrop.onclick = () => toggleSidebar();
+                    document.body.appendChild(backdrop);
+                }
+            } else {
+                // Desktop behavior
+                sidebar.classList.toggle('hidden');
+                sidebar.classList.toggle('lg:flex');
+            }
         }
 
         // Keyboard shortcuts
@@ -2882,6 +3066,12 @@ Do NOT describe the image in text — just output the <image> tag when generatin
             
             // Render initial state
             renderChatHistory();
+            
+            // Mobile: Start with sidebar hidden
+            if (isMobile) {
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar) sidebar.classList.add('hidden');
+            }
             
             // Fetch models in background (cached)
             fetchModels().catch(() => {});
