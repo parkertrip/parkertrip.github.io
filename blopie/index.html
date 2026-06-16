@@ -631,14 +631,66 @@
         let renderChatHistoryTimeout = null;
 
         // Get the best available API key (user setting > fallbacks)
-        function getApiKey() {
+        function getApiKey(preferFree = false) {
             const userKey = settings.apiKey?.trim();
-            if (userKey) return userKey;
+            if (userKey && !preferFree) return userKey;
 
             for (let key of FALLBACK_API_KEYS) {
                 if (key && key.trim()) return key.trim();
             }
             return '';
+        }
+
+        // Smart fetch with automatic key fallback on 401/402/429
+        async function fetchWithKeyFallback(url, options = {}, preferFree = false) {
+            const keysToTry = [];
+            
+            const userKey = settings.apiKey?.trim();
+            if (userKey) keysToTry.push(userKey);
+            
+            for (let key of FALLBACK_API_KEYS) {
+                if (key && key.trim() && !keysToTry.includes(key)) {
+                    keysToTry.push(key);
+                }
+            }
+
+            let lastError = null;
+
+            for (let key of keysToTry) {
+                const headers = {
+                    ...options.headers,
+                    'Authorization': `Bearer ${key}`
+                };
+
+                try {
+                    const response = await fetch(url, {
+                        ...options,
+                        headers
+                    });
+
+                    if (response.ok || ![401, 402, 429].includes(response.status)) {
+                        return response;
+                    }
+                    
+                    lastError = response;
+                } catch (err) {
+                    lastError = err;
+                }
+            }
+
+            // Final attempt without key (for free endpoints like Hugging Face)
+            if (preferFree) {
+                try {
+                    return await fetch(url, {
+                        ...options,
+                        headers: { ...options.headers }
+                    });
+                } catch (err) {
+                    throw lastError || err;
+                }
+            }
+
+            throw lastError || new Error('All API keys exhausted');
         }
 
         // Initialize Tailwind script
@@ -1305,6 +1357,7 @@
 
             const sources = [
                 { url: 'https://g4f.space/v1/models', needsKey: true, type: 'openai' },
+                { url: 'https://router.huggingface.co/v1/models', needsKey: false, type: 'huggingface' },
                 { url: 'https://g4f.space/api/groq', needsKey: false, type: 'groq' },
                 { url: 'https://g4f.space/api/ollama', needsKey: false, type: 'ollama' },
                 { url: 'https://g4f.space/api/pollinations', needsKey: false, type: 'pollinations' },
@@ -1314,7 +1367,7 @@
 
             const allModels = [];
             const seenIds = new Set();
-            const apiKey = getApiKey();
+            const apiKey = getApiKey(true); // prefer free sources when possible
 
             // Fetch in parallel but with small delay to reduce rate limit pressure
             const promises = sources.map(async (source, index) => {
@@ -1912,43 +1965,42 @@ You have access to enhanced research capabilities. When the user asks for inform
                     'Content-Type': 'application/json'
                 };
                 
-                const apiKey = getApiKey();
+                const apiKey = getApiKey(true); // prefer free sources when possible
                 if (apiKey) {
                     headers['Authorization'] = `Bearer ${apiKey}`;
                 }
                 
-                let response = await fetch('https://g4f.space/v1/chat/completions', {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify(payload)
-                });
-                
-                // Simple key fallback if auth/rate limit error
-                if (!response.ok && (response.status === 401 || response.status === 429)) {
-                    // Try next fallback key
-                    for (let fallbackKey of FALLBACK_API_KEYS) {
-                        if (fallbackKey === apiKey) continue; // skip the one we just tried
-                        
-                        const retryHeaders = { ...headers };
-                        retryHeaders['Authorization'] = `Bearer ${fallbackKey}`;
-                        
-                        try {
-                            const retryResponse = await fetch('https://g4f.space/v1/chat/completions', {
-                                method: 'POST',
-                                headers: retryHeaders,
-                                body: JSON.stringify(payload)
-                            });
-                            
-                            if (retryResponse.ok) {
-                                response = retryResponse;
-                                break;
-                            }
-                        } catch (e) {}
+                // Use smart fallback fetch
+                let response;
+                try {
+                    response = await fetchWithKeyFallback('https://g4f.space/v1/chat/completions', {
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify(payload)
+                    });
+                } catch (err) {
+                    // If all g4f keys fail, try Hugging Face Router as free fallback
+                    try {
+                        response = await fetch('https://router.huggingface.co/v1/chat/completions', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                ...payload,
+                                model: payload.model || 'meta-llama/Llama-3.1-8B-Instruct'
+                            })
+                        });
+                    } catch (hfErr) {
+                        throw err;
                     }
                 }
                 
                 if (!response.ok) {
                     const errorText = await response.text();
+                    
+                    if (response.status === 402) {
+                        handlePaymentError();
+                    }
+                    
                     throw new Error(`API Error ${response.status}: ${errorText}`);
                 }
                 
@@ -2864,6 +2916,21 @@ You have access to enhanced research capabilities. When the user asks for inform
             }
             
             showToast('File System Access failed. Check chrome://flags/#file-system-access-api');
+        }
+
+        // Handle API payment / balance errors gracefully
+        function handlePaymentError() {
+            const chat = getCurrentChat();
+            if (chat) {
+                const msg = {
+                    role: 'assistant',
+                    content: `**Payment Required (402)**\n\nYour current g4f key has insufficient balance.\n\nI'm automatically trying fallback keys and free models (Hugging Face Router).\n\nIf it keeps failing, please add credits to your g4f account or use a different key in Settings.`,
+                    timestamp: Date.now()
+                };
+                chat.messages.push(msg);
+                renderMessages();
+            }
+            showToast('Payment required on g4f. Trying fallback keys + free models...');
         }
 
         function exitDevMode() {
