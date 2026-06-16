@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>𝓑𝓵𝓸𝓹𝓲𝓮</title>
     <!-- Blopie Favicon (using logo) -->
-    <link rel="icon" href="https://chatgpt.com/backend-api/estuary/public_content/enc/eyJpZCI6Im1fNmEyMDgwZDIxMzg4ODE5MTlmZWJiOGUxNTQ4MGE4YzM6ZmlsZV8wMDAwMDAwMDFlMzQ3MWY1YmNkZjYzZjgyMWRlNzlkNCIsInRzIjoiMjA2MDciLCJwIjoicHlpIiwiY2lkIjoiMSIsInNpZyI6Ijc2ZjhiMzMzODU2ODNjODY0OTQxOTc2OTYyMTkyM2Q2NmRhOWJjZTYyY2I4ODVlNGZmNDU5OGU1ZWNkOTk4ZDciLCJ2IjoiMCIsImdpem1vX2lkIjpudWxsLCJjcyI6bnVsbCwiY2RuIjpudWxsLCJmbiI6bnVsbCwiY2QiOm51bGwsImNwIjpudWxsLCJtYSI6bnVsbH0=" type="image/png">
+    <link rel="icon" href="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/blopie/f478e906-6827-4206-b936-75f82b3e434c.png" type="image/png">
     <!-- 
       Tailwind Play CDN (https://tailwindcss.com/docs/installation/play-cdn)
       Perfect for single-file demos & local development.
@@ -234,7 +234,7 @@
             <!-- Sidebar Header -->
             <div class="p-5 border-b border-slate-800">
                 <div class="flex items-center gap-x-3">
-                    <img src="https://chatgpt.com/backend-api/estuary/public_content/enc/eyJpZCI6Im1fNmEyMDgwZDIxMzg4ODE5MTlmZWJiOGUxNTQ4MGE4YzM6ZmlsZV8wMDAwMDAwMDFlMzQ3MWY1YmNkZjYzZjgyMWRlNzlkNCIsInRzIjoiMjA2MDciLCJwIjoicHlpIiwiY2lkIjoiMSIsInNpZyI6Ijc2ZjhiMzMzODU2ODNjODY0OTQxOTc2OTYyMTkyM2Q2NmRhOWJjZTYyY2I4ODVlNGZmNDU5OGU1ZWNkOTk4ZDciLCJ2IjoiMCIsImdpem1vX2lkIjpudWxsLCJjcyI6bnVsbCwiY2RuIjpudWxsLCJmbiI6bnVsbCwiY2QiOm51bGwsImNwIjpudWxsLCJtYSI6bnVsbH0=" 
+                    <img src="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/blopie/f478e906-6827-4206-b936-75f82b3e434c.png" 
                          class="w-10 h-10 rounded-2xl object-cover shadow-lg ring-1 ring-white/20" alt="Blopie Logo">
                     <div>
                         <div class="blopie-logo text-3xl font-display tracking-tighter">𝓑𝓵𝓸𝓹𝓲𝓮</div>
@@ -348,6 +348,20 @@
                                 class="p-2.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-2xl transition-colors" title="Export chat">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13v6m-3-3h6M6 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4m4 0v4m0 0v4m0-4h4m-4 4v4" />
+                            </svg>
+                        </button>
+                        
+                        <button onclick="shareCurrentChat()" 
+                                class="p-2.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-2xl transition-colors" title="Share chat as link (URL)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 01-.316-1.342m0 2.684a3 3 0 01-.316-1.342m0 2.684a3 3 0 01-.316-1.342M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 4.01V8" />
+                            </svg>
+                        </button>
+                        
+                        <button onclick="showLearnedWordsModal()" 
+                                class="p-2.5 text-slate-400 hover:text-purple-400 hover:bg-slate-800 rounded-2xl transition-colors" title="View learned words (background AI learning)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                             </svg>
                         </button>
                         
@@ -992,7 +1006,7 @@
                 const html = marked.parse(msg.content || '');
                 div.innerHTML = `
                     <div class="max-w-[82%] flex gap-x-3">
-                        <img src="https://chatgpt.com/backend-api/estuary/public_content/enc/eyJpZCI6Im1fNmEyMDgwZmUxMjA0ODE5MWIzZDMyNzgzOWNhZDU3NDU6ZmlsZV8wMDAwMDAwMDA2NDA3MjBjYTEyM2IyNGYzZWZlYWM1OCIsInRzIjoiMjA2MDciLCJwIjoicHlpIiwiY2lkIjoiMSIsInNpZyI6IjhkNmJmNTcxNTI1ODAyM2U2NTczNzY0NGMzZmZiZTM5YTc4NDAxMjhmMzI3OWQ4OTY5NTkxMjIyYjk5OWE3YzIiLCJ2IjoiMCIsImdpem1vX2lkIjpudWxsLCJjcyI6bnVsbCwiY2RuIjpudWxsLCJmbiI6bnVsbCwiY2QiOm51bGwsImNwIjpudWxsLCJtYSI6bnVsbH0=" 
+                        <img src="https://raw.githubusercontent.com/parkertrip/parkertrip.github.io/refs/heads/main/blopie/02110bfc-e8db-477f-a45f-f344cc263139.png" 
                              class="w-8 h-8 rounded-2xl object-cover flex-shrink-0 mt-1 shadow-inner ring-1 ring-white/20" alt="Blopie">
                         
                         <div class="flex-1">
@@ -1310,6 +1324,21 @@
                 `;
                 listContainer.appendChild(header);
 
+                // Recommended / "Best for" quick picks (new in this update)
+                const recommendedDiv = document.createElement('div');
+                recommendedDiv.className = 'p-3 border-b border-white/10 bg-slate-900/60';
+                recommendedDiv.innerHTML = `
+                    <div class="text-xs font-semibold text-slate-400 mb-2 px-1 tracking-wide">Best for</div>
+                    <div class="flex flex-wrap gap-1.5">
+                        <button onclick="quickSelectModel('math')" class="px-3 py-1 text-xs bg-slate-800 hover:bg-emerald-600 border border-slate-700 hover:border-emerald-500 rounded-full transition-all active:scale-95">🧮 Math / Reasoning</button>
+                        <button onclick="quickSelectModel('code')" class="px-3 py-1 text-xs bg-slate-800 hover:bg-emerald-600 border border-slate-700 hover:border-emerald-500 rounded-full transition-all active:scale-95">💻 Code</button>
+                        <button onclick="quickSelectModel('chat')" class="px-3 py-1 text-xs bg-slate-800 hover:bg-emerald-600 border border-slate-700 hover:border-emerald-500 rounded-full transition-all active:scale-95">💬 Chat / Creative</button>
+                        <button onclick="quickSelectModel('image')" class="px-3 py-1 text-xs bg-slate-800 hover:bg-emerald-600 border border-slate-700 hover:border-emerald-500 rounded-full transition-all active:scale-95">🖼️ Image Gen</button>
+                        <button onclick="quickSelectModel('fast')" class="px-3 py-1 text-xs bg-slate-800 hover:bg-emerald-600 border border-slate-700 hover:border-emerald-500 rounded-full transition-all active:scale-95">⚡ Fast & Cheap</button>
+                    </div>
+                `;
+                listContainer.appendChild(recommendedDiv);
+
                 searchInput = header.querySelector('#model-search-input');
                 searchInput.value = initialSearchTerm;
 
@@ -1424,6 +1453,48 @@
             modal.classList.add('hidden');
         }
 
+        // Quick select for "Best for" categories (new in Model Picker upgrade)
+        function quickSelectModel(category) {
+            let target = '';
+            switch (category) {
+                case 'math': target = 'deepseek'; break;
+                case 'code': target = 'deepseek'; break;
+                case 'chat': target = 'gpt-4o'; break;
+                case 'image': target = 'flux'; break;
+                case 'fast': target = 'gpt-4o-mini'; break;
+                default: target = 'gpt-4o-mini';
+            }
+
+            // Find best matching model
+            let model = availableModels.find(m => 
+                m.id.toLowerCase().includes(target.toLowerCase()) || 
+                (m.name && m.name.toLowerCase().includes(target.toLowerCase()))
+            );
+
+            if (!model && availableModels.length > 0) {
+                model = availableModels[0];
+            }
+
+            if (model) {
+                currentModel = model;
+                const nameEl = document.getElementById('current-model-name');
+                if (nameEl) nameEl.innerHTML = `<span class="model-badge">${model.name || model.id}</span>`;
+                
+                hideModelPicker();
+
+                // Update current chat
+                const chat = getCurrentChat();
+                if (chat) {
+                    chat.model = model.id;
+                    saveChatToDB(chat);
+                }
+                
+                showToast(`Switched to best model for ${category}: ${model.name || model.id}`);
+            } else {
+                showToast('No suitable model found for that category yet.');
+            }
+        }
+
         // Toggle research mode
         function toggleResearchMode() {
             researchMode = document.getElementById('research-mode-toggle').checked;
@@ -1498,7 +1569,18 @@ For new conversations (when this is the first or second exchange), at the end of
 
 Keep titles 3-8 words, descriptive, and engaging. Examples: "Quantum Computing Basics", "Planning Japan Trip 2026", "Building My AI Side Project".
 
-The <title> tag will be automatically extracted and used as the chat name. It will be removed from the visible response.`;
+The <title> tag will be automatically extracted and used as the chat name. It will be removed from the visible response.
+
+## Image Generation
+You can generate beautiful images for the user. 
+When the user asks you to make, generate, draw, or create an image (or when it makes sense in the conversation), output exactly this tag:
+
+<image>A highly detailed prompt describing the image</image>
+
+The system will automatically generate the image using Flux and display it in the chat. 
+Always use a rich, specific prompt inside the tag. You can add style hints like "in the style of cyberpunk, ultra realistic, 8k". 
+
+Do NOT describe the image in text — just output the <image> tag when generating. The tag will be removed from your visible response.`;
 
             // Add memories
             if (memories.length > 0) {
@@ -1530,9 +1612,11 @@ The <title> tag will be automatically extracted and used as the chat name. It wi
         function processResponseTags(responseText, chat) {
             const memoryRegex = /<memory\s+key=["']([^"']+)["']>([\s\S]*?)<\/memory>/gi;
             const titleRegex = /<title>([\s\S]*?)<\/title>/gi;
+            const imageRegex = /<image>([\s\S]*?)<\/image>/gi;
             
             const newMemories = [];
             let extractedTitle = null;
+            let imagePrompt = null;
             let match;
             
             // Extract memories
@@ -1552,10 +1636,19 @@ The <title> tag will be automatically extracted and used as the chat name. It wi
                 }
             }
             
+            // Extract image generation prompt
+            while ((match = imageRegex.exec(responseText)) !== null) {
+                const prompt = match[1].trim();
+                if (prompt && prompt.length > 5) {
+                    imagePrompt = prompt;
+                }
+            }
+            
             // Remove all special tags from visible response
             let cleanedResponse = responseText
                 .replace(memoryRegex, '')
                 .replace(titleRegex, '')
+                .replace(imageRegex, '')
                 .trim();
             
             // Auto-set chat title if we got one and chat is new-ish
@@ -1567,7 +1660,7 @@ The <title> tag will be automatically extracted and used as the chat name. It wi
                 saveChatToDB(chat);
             }
             
-            return { cleanedResponse, newMemories, extractedTitle };
+            return { cleanedResponse, newMemories, extractedTitle, imagePrompt };
         }
 
         // Main send message function
@@ -1767,8 +1860,8 @@ The <title> tag will be automatically extracted and used as the chat name. It wi
                     }
                 }
                 
-                // Finalize + continuous learning (memories + auto title)
-                const { cleanedResponse, newMemories, extractedTitle } = processResponseTags(fullResponse, chat);
+                // Finalize + continuous learning (memories + auto title + image gen)
+                const { cleanedResponse, newMemories, extractedTitle, imagePrompt } = processResponseTags(fullResponse, chat);
                 
                 assistantMsg.content = cleanedResponse || fullResponse;
                 chat.updated = Date.now();
@@ -1778,6 +1871,34 @@ The <title> tag will be automatically extracted and used as the chat name. It wi
                 if (extractedTitle) {
                     updateHeader();
                     renderChatHistory();
+                }
+                
+                // Handle AI-requested image generation
+                if (imagePrompt) {
+                    // Generate image in background and add to chat
+                    (async () => {
+                        try {
+                            const encodedPrompt = encodeURIComponent(imagePrompt);
+                            const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1024&height=1024&model=flux&safe=false`;
+                            
+                            const imgMsg = {
+                                role: 'assistant',
+                                content: `**Generated Image**\n\n![${imagePrompt}](${imageUrl})\n\n*Prompt used: ${imagePrompt}*`,
+                                timestamp: Date.now(),
+                                imageUrl: imageUrl
+                            };
+                            
+                            chat.messages.push(imgMsg);
+                            chat.updated = Date.now();
+                            await saveChatToDB(chat);
+                            
+                            renderMessages();
+                            showToast('Image generated by AI!');
+                        } catch (err) {
+                            console.error('Image generation failed:', err);
+                            showToast('Failed to generate the image requested by AI.');
+                        }
+                    })();
                 }
                 
                 // Save any new memories the AI decided to create (continuous learning)
@@ -1889,6 +2010,65 @@ The <title> tag will be automatically extracted and used as the chat name. It wi
             linkElement.click();
         }
 
+        function shareCurrentChat() {
+            const chat = getCurrentChat();
+            if (!chat) return;
+            
+            try {
+                const dataStr = JSON.stringify(chat);
+                // Safe base64 for Unicode
+                const encoded = btoa(unescape(encodeURIComponent(dataStr)));
+                const shareUrl = `${window.location.origin}${window.location.pathname}#share=${encoded}`;
+                
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    showToast('Share link copied to clipboard! Anyone with the link can load this chat.');
+                }).catch(() => {
+                    // Fallback
+                    const textarea = document.createElement('textarea');
+                    textarea.value = shareUrl;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    showToast('Share link copied! (fallback)');
+                });
+            } catch (e) {
+                showToast('Failed to create share link.');
+            }
+        }
+
+        function checkShareHash() {
+            const hash = window.location.hash;
+            if (hash.startsWith('#share=')) {
+                const encoded = hash.substring(7);
+                try {
+                    const dataStr = decodeURIComponent(escape(atob(encoded)));
+                    const imported = JSON.parse(dataStr);
+                    
+                    // Create new chat from shared data
+                    imported.id = 'chat_' + Date.now();
+                    imported.imported = true;
+                    imported.pinned = false; // reset pin
+                    
+                    chats.unshift(imported);
+                    saveChatToDB(imported);
+                    
+                    currentChatId = imported.id;
+                    renderChatHistory();
+                    renderMessages();
+                    updateHeader();
+                    
+                    showToast('Chat loaded from shared link!');
+                    
+                    // Clean the hash
+                    history.replaceState(null, '', window.location.pathname + window.location.search);
+                } catch (e) {
+                    console.error('Failed to load shared chat:', e);
+                    showToast('Could not load the shared chat (invalid link).');
+                }
+            }
+        }
+
         // Import chat (can be called from button if added)
         async function importChat() {
             const input = document.createElement('input');
@@ -1943,6 +2123,105 @@ The <title> tag will be automatically extracted and used as the chat name. It wi
             const modal = document.getElementById('memory-modal');
             modal.classList.remove('flex');
             modal.classList.add('hidden');
+        }
+
+        // Background Word Learner Modal (new focused update)
+        function showLearnedWordsModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100]';
+            modal.innerHTML = `
+                <div class="glassmorphism w-full max-w-md mx-4 rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between p-5 border-b border-white/10 bg-slate-900/80">
+                        <div class="flex items-center gap-x-3">
+                            <div class="w-9 h-9 bg-purple-500/20 rounded-2xl flex items-center justify-center">
+                                <span class="text-xl">🧠</span>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-lg">Learned Words</div>
+                                <div class="text-xs text-slate-400">Background continuous learning</div>
+                            </div>
+                        </div>
+                        <button onclick="this.closest('.fixed').remove()" class="p-2 text-slate-400 hover:text-white">✕</button>
+                    </div>
+                    
+                    <div class="p-5 max-h-[420px] overflow-y-auto" id="learned-words-list">
+                        <!-- Populated by JS -->
+                    </div>
+                    
+                    <div class="p-4 border-t border-white/10 flex gap-3 bg-slate-900/80">
+                        <button onclick="learnNewWordNow(this)" 
+                                class="flex-1 py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-2xl text-sm font-semibold transition-colors">
+                            Learn a new word now
+                        </button>
+                        <button onclick="this.closest('.fixed').remove()" 
+                                class="px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl text-sm font-medium transition-colors">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            renderLearnedWordsList(modal);
+        }
+        
+        function renderLearnedWordsList(modalElement) {
+            const container = modalElement.querySelector('#learned-words-list');
+            container.innerHTML = '';
+            
+            const words = JSON.parse(localStorage.getItem('blopieLearnedWords') || '[]');
+            
+            if (words.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-4xl mb-3">📚</div>
+                        <div class="text-slate-400">No words learned yet.<br>Blopie is still warming up its vocabulary!</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const list = document.createElement('div');
+            list.className = 'space-y-2';
+            
+            words.slice(0, 30).forEach((entry, index) => {
+                const date = new Date(entry.learnedAt || Date.now()).toLocaleDateString();
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between bg-slate-900/70 border border-slate-700 px-4 py-3 rounded-2xl';
+                div.innerHTML = `
+                    <div>
+                        <div class="font-medium text-white">${entry.word}</div>
+                        <div class="text-xs text-slate-500">Learned ${date}</div>
+                    </div>
+                    <div class="text-purple-400 text-xs px-2 py-1 bg-purple-500/10 rounded-full">+1 vocab</div>
+                `;
+                list.appendChild(div);
+            });
+            
+            container.appendChild(list);
+            
+            const count = document.createElement('div');
+            count.className = 'text-center text-xs text-slate-500 mt-3';
+            count.textContent = `${words.length} words learned so far • Updates every ~8 minutes`;
+            container.appendChild(count);
+        }
+        
+        async function learnNewWordNow(button) {
+            button.disabled = true;
+            button.textContent = 'Learning...';
+            
+            await fetchAndLearnRandomWord();
+            
+            // Refresh the list
+            const modal = button.closest('.fixed');
+            if (modal) {
+                renderLearnedWordsList(modal);
+            }
+            
+            button.disabled = false;
+            button.textContent = 'Learn a new word now';
+            showToast('New word learned and stored!');
         }
 
         function renderMemoryList() {
@@ -2117,6 +2396,9 @@ The <title> tag will be automatically extracted and used as the chat name. It wi
             
             // Fetch models in background (cached)
             fetchModels().catch(() => {});
+            
+            // Check for shared chat in URL hash
+            checkShareHash();
             
             // If no chats, create one
             if (chats.length === 0) {
