@@ -365,6 +365,13 @@
                             </svg>
                         </button>
                         
+                        <button onclick="enterDevMode()" 
+                                class="p-2.5 text-slate-400 hover:text-emerald-400 hover:bg-slate-800 rounded-2xl transition-colors" title="Convert chat to Blopie Dev Project (direct file editing with File System Access API)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 4l-4 4 4 4" />
+                            </svg>
+                        </button>
+                        
                         <button onclick="deleteCurrentChat()" 
                                 class="p-2.5 text-slate-400 hover:text-red-400 hover:bg-red-950/30 rounded-2xl transition-colors" title="Delete chat">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -570,6 +577,10 @@
         let researchMode = false;
         let isStreaming = false;
         let learnedWords = JSON.parse(localStorage.getItem('blopieLearnedWords') || '[]');
+        let devMode = false;
+        let currentFileHandle = null;
+        let currentDevCode = '';
+        let currentFileName = 'untitled.js';
 
         // Initialize Tailwind script
         function initTailwind() {
@@ -2222,6 +2233,484 @@ Do NOT describe the image in text — just output the <image> tag when generatin
             button.disabled = false;
             button.textContent = 'Learn a new word now';
             showToast('New word learned and stored!');
+        }
+
+        // ==================== DEV MODE (File System Access API) ====================
+        function getLatestCodeBlock(chat) {
+            if (!chat || !chat.messages || chat.messages.length === 0) return '';
+            
+            // Find the last assistant message with a code block
+            for (let i = chat.messages.length - 1; i >= 0; i--) {
+                const msg = chat.messages[i];
+                if (msg.role === 'assistant' && msg.content) {
+                    const codeMatch = msg.content.match(/```[\s\S]*?```/);
+                    if (codeMatch) {
+                        // Remove the ``` and language
+                        return codeMatch[0].replace(/```[\w]*\n?/, '').replace(/```$/, '').trim();
+                    }
+                }
+            }
+            return '';
+        }
+
+        async function enterDevMode() {
+            const chat = getCurrentChat();
+            if (!chat) {
+                showToast('No active chat to convert to dev project.');
+                return;
+            }
+
+            const latestCode = getLatestCodeBlock(chat);
+            if (!latestCode) {
+                showToast('No code block found in this chat. Ask the AI to provide some code first!');
+                return;
+            }
+
+            currentDevCode = latestCode;
+            devMode = true;
+
+            // Create beautiful split dev interface
+            const devOverlay = document.createElement('div');
+            devOverlay.id = 'dev-mode-overlay';
+            devOverlay.className = 'fixed inset-0 bg-slate-950 z-[200] flex flex-col';
+            devOverlay.innerHTML = `
+                <div class="flex items-center justify-between p-4 border-b border-slate-800 bg-slate-900">
+                    <div class="flex items-center gap-x-3">
+                        <div class="flex items-center gap-x-2">
+                            <span class="text-emerald-400">🛠️</span>
+                            <span class="font-semibold text-xl">Blopie Dev Project</span>
+                        </div>
+                        <div class="text-xs px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full">Direct File System Access</div>
+                    </div>
+                    
+                    <div class="flex items-center gap-x-2">
+                        <button onclick="exitDevMode()" class="px-4 py-2 text-sm bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl transition-colors">
+                            Exit Dev Mode
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="flex flex-1 overflow-hidden">
+                    <!-- Left: Chat -->
+                    <div class="w-5/12 border-r border-slate-800 flex flex-col bg-slate-950">
+                        <div class="p-3 border-b border-slate-800 bg-slate-900 text-sm font-medium flex items-center gap-x-2">
+                            <span>💬 Chat</span>
+                            <span class="text-xs text-slate-500">(AI assistant)</span>
+                        </div>
+                        <div id="dev-chat-messages" class="flex-1 overflow-y-auto p-4 chat-scroll text-sm">
+                            <!-- Messages will be rendered here -->
+                        </div>
+                        <div class="p-4 border-t border-slate-800 bg-slate-900">
+                            <div class="flex gap-2">
+                                <input id="dev-chat-input" type="text" placeholder="Ask AI for code changes..." 
+                                       class="flex-1 bg-slate-800 border border-slate-700 rounded-2xl px-4 py-3 text-sm focus:outline-none">
+                                <button onclick="sendDevChatMessage()" class="px-6 bg-white text-slate-900 rounded-2xl font-semibold text-sm">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Code + File Controls -->
+                    <div class="flex-1 flex flex-col">
+                        <div class="p-4 border-b border-slate-800 bg-slate-900 flex items-center justify-between">
+                            <div>
+                                <div class="font-semibold">Code Editor</div>
+                                <div id="dev-file-name" class="text-xs text-slate-400">No file selected yet</div>
+                            </div>
+                            
+                            <div class="flex gap-x-2">
+                                <button onclick="openProjectFile()" class="px-4 py-2 text-sm bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl">Open File</button>
+                                <button onclick="saveToFile()" class="px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-medium">Save / Replace Full File</button>
+                                <button onclick="runCurrentFile()" class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-medium flex items-center gap-x-1">
+                                    ▶ Run
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-1 p-4 overflow-auto bg-[#0f172a]">
+                            <textarea id="dev-code-editor" class="w-full h-full bg-[#0f172a] text-emerald-300 font-mono text-sm p-4 rounded-2xl border border-slate-700 resize-none focus:outline-none focus:border-emerald-500" spellcheck="false"></textarea>
+                        </div>
+                        
+                        <div class="p-4 border-t border-slate-800 bg-slate-900 flex flex-wrap gap-2">
+                            <button onclick="editSpecificLine()" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl text-sm">Edit Specific Line</button>
+                            <button onclick="renameCurrentFile()" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl text-sm">Rename File</button>
+                            <button onclick="applyTextareaToFile()" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl text-sm font-medium">Apply Changes to File</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(devOverlay);
+            
+            // Populate code editor
+            const editor = document.getElementById('dev-code-editor');
+            editor.value = currentDevCode;
+            
+            // Render chat messages in left panel
+            renderDevChatMessages();
+            
+            // Focus editor
+            setTimeout(() => editor.focus(), 100);
+            
+            showToast('Dev Mode activated! Latest code block loaded. Use the File System Access controls on the right.');
+        }
+
+        function renderDevChatMessages() {
+            const container = document.getElementById('dev-chat-messages');
+            if (!container) return;
+            
+            const chat = getCurrentChat();
+            if (!chat) {
+                container.innerHTML = '<div class="text-slate-500 text-sm p-4">No chat loaded.</div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            chat.messages.slice(-8).forEach(msg => {  // show last 8 messages
+                const div = document.createElement('div');
+                div.className = `mb-4 ${msg.role === 'user' ? 'text-right' : ''}`;
+                
+                if (msg.role === 'user') {
+                    div.innerHTML = `<div class="inline-block max-w-[85%] bg-blue-600 text-white px-4 py-2 rounded-3xl text-sm">${msg.content}</div>`;
+                } else {
+                    const html = marked.parse(msg.content || '');
+                    div.innerHTML = `<div class="inline-block max-w-[85%] bg-slate-800 px-4 py-3 rounded-3xl text-sm markdown-content">${html}</div>`;
+                }
+                container.appendChild(div);
+            });
+            
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function sendDevChatMessage() {
+            const input = document.getElementById('dev-chat-input');
+            if (!input || !input.value.trim()) return;
+            
+            const text = input.value.trim();
+            input.value = '';
+            
+            const chat = getCurrentChat();
+            if (!chat) return;
+            
+            // Add user message
+            chat.messages.push({ role: 'user', content: text, timestamp: Date.now() });
+            renderDevChatMessages();
+            
+            // Send to AI
+            try {
+                await sendMessageToAPI(text, false);
+                
+                setTimeout(async () => {
+                    renderDevChatMessages();
+                    
+                    // Process any file operation tags the AI just output
+                    await processDevFileTags(chat);
+                    
+                    // Refresh editor if AI provided new code
+                    const newCode = getLatestCodeBlock(chat);
+                    if (newCode && newCode.length > 10) {
+                        currentDevCode = newCode;
+                        const editor = document.getElementById('dev-code-editor');
+                        if (editor) editor.value = currentDevCode;
+                    }
+                }, 1200);
+            } catch (e) {
+                showToast('Error in dev chat.');
+            }
+        }
+
+        // Process special tags from AI for file operations (the magic part)
+        async function processDevFileTags(chat) {
+            if (!chat || !chat.messages.length) return;
+            
+            const lastMsg = chat.messages[chat.messages.length - 1];
+            if (!lastMsg || lastMsg.role !== 'assistant' || !lastMsg.content) return;
+            
+            const content = lastMsg.content;
+            
+            // 1. Full file replace
+            const fullMatch = content.match(/<apply_full>([\s\S]*?)<\/apply_full>/i);
+            if (fullMatch) {
+                const newCode = fullMatch[1].trim();
+                const editor = document.getElementById('dev-code-editor');
+                if (editor) editor.value = newCode;
+                currentDevCode = newCode;
+                
+                if (currentFileHandle) {
+                    try {
+                        const writable = await currentFileHandle.createWritable();
+                        await writable.write(newCode);
+                        await writable.close();
+                        showToast('AI replaced the full file content!');
+                    } catch (e) {
+                        showToast('AI tried to replace file but permission was denied.');
+                    }
+                } else {
+                    showToast('AI wants to replace the file. Please open or save a file first.');
+                }
+                return;
+            }
+            
+            // 2. Edit specific line
+            const lineMatch = content.match(/<edit_line\s+line=["']?(\d+)["']?>([\s\S]*?)<\/edit_line>/i);
+            if (lineMatch) {
+                const lineNum = parseInt(lineMatch[1]);
+                const newLineContent = lineMatch[2].trim();
+                
+                const editor = document.getElementById('dev-code-editor');
+                if (editor) {
+                    const lines = editor.value.split('\n');
+                    if (lineNum > 0 && lineNum <= lines.length) {
+                        lines[lineNum - 1] = newLineContent;
+                        editor.value = lines.join('\n');
+                        currentDevCode = editor.value;
+                        
+                        if (currentFileHandle) {
+                            try {
+                                const writable = await currentFileHandle.createWritable();
+                                await writable.write(editor.value);
+                                await writable.close();
+                                showToast(`AI edited line ${lineNum} successfully!`);
+                            } catch (e) {
+                                showToast('AI edited the line in editor. Click Apply to save to disk.');
+                            }
+                        }
+                    }
+                }
+                return;
+            }
+            
+            // 3. Rename file
+            const renameMatch = content.match(/<rename_file>([\s\S]*?)<\/rename_file>/i);
+            if (renameMatch) {
+                const newName = renameMatch[1].trim();
+                if (currentFileHandle) {
+                    try {
+                        const newHandle = await window.showSaveFilePicker({ suggestedName: newName });
+                        const content = document.getElementById('dev-code-editor').value;
+                        const writable = await newHandle.createWritable();
+                        await writable.write(content);
+                        await writable.close();
+                        currentFileHandle = newHandle;
+                        const nameEl = document.getElementById('dev-file-name');
+                        if (nameEl) nameEl.textContent = newName;
+                        showToast(`AI renamed file to: ${newName}`);
+                    } catch (e) {
+                        showToast('AI tried to rename but file access was denied.');
+                    }
+                } else {
+                    showToast('AI wants to rename the file. Please open a file first.');
+                }
+            }
+        }
+
+        async function openProjectFile() {
+            try {
+                const [fileHandle] = await window.showOpenFilePicker({
+                    types: [{
+                        description: 'Code Files',
+                        accept: {
+                            'text/plain': ['.js', '.html', '.css', '.py', '.json', '.md', '.txt']
+                        }
+                    }]
+                });
+                
+                currentFileHandle = fileHandle;
+                const file = await fileHandle.getFile();
+                const contents = await file.text();
+                
+                currentDevCode = contents;
+                const editor = document.getElementById('dev-code-editor');
+                if (editor) editor.value = currentDevCode;
+                
+                const nameEl = document.getElementById('dev-file-name');
+                if (nameEl) nameEl.textContent = file.name;
+                
+                showToast(`Opened: ${file.name}`);
+            } catch (err) {
+                handleFSError(err);
+            }
+        }
+
+        async function saveToFile() {
+            const editor = document.getElementById('dev-code-editor');
+            if (!editor) return;
+            
+            const content = editor.value;
+            
+            try {
+                if (!currentFileHandle) {
+                    currentFileHandle = await window.showSaveFilePicker({
+                        suggestedName: 'project.js',
+                        types: [{
+                            description: 'Code File',
+                            accept: { 'text/plain': ['.js', '.html', '.py', '.txt'] }
+                        }]
+                    });
+                }
+                
+                const writable = await currentFileHandle.createWritable();
+                await writable.write(content);
+                await writable.close();
+                
+                const nameEl = document.getElementById('dev-file-name');
+                if (nameEl) nameEl.textContent = currentFileHandle.name || 'Saved file';
+                
+                showToast('File saved successfully via File System Access API!');
+                currentDevCode = content;
+            } catch (err) {
+                handleFSError(err);
+            }
+        }
+
+        async function editSpecificLine() {
+            const editor = document.getElementById('dev-code-editor');
+            if (!editor) return;
+            
+            const lineNum = prompt('Enter line number to edit (starting from 1):');
+            if (!lineNum) return;
+            
+            const newLineContent = prompt('Enter the new content for that line:');
+            if (newLineContent === null) return;
+            
+            const lines = editor.value.split('\n');
+            const idx = parseInt(lineNum) - 1;
+            
+            if (idx < 0 || idx >= lines.length) {
+                showToast('Invalid line number.');
+                return;
+            }
+            
+            lines[idx] = newLineContent;
+            editor.value = lines.join('\n');
+            
+            showToast(`Line ${lineNum} updated in editor. Click "Apply Changes to File" to save.`);
+        }
+
+        async function renameCurrentFile() {
+            if (!currentFileHandle) {
+                showToast('Please open or save a file first.');
+                return;
+            }
+            
+            const newName = prompt('Enter new file name:', currentFileHandle.name || 'file.txt');
+            if (!newName) return;
+            
+            try {
+                // Workaround for rename: save content to new file with new name
+                const content = document.getElementById('dev-code-editor').value;
+                const newHandle = await window.showSaveFilePicker({
+                    suggestedName: newName
+                });
+                
+                const writable = await newHandle.createWritable();
+                await writable.write(content);
+                await writable.close();
+                
+                currentFileHandle = newHandle;
+                const nameEl = document.getElementById('dev-file-name');
+                if (nameEl) nameEl.textContent = newName;
+                
+                showToast(`File renamed/saved as: ${newName}`);
+            } catch (err) {
+                handleFSError(err);
+            }
+        }
+
+        async function applyTextareaToFile() {
+            const editor = document.getElementById('dev-code-editor');
+            if (!editor) return;
+            
+            const content = editor.value;
+            
+            if (!currentFileHandle) {
+                // Auto prompt to save if no file open
+                try {
+                    currentFileHandle = await window.showSaveFilePicker({
+                        suggestedName: currentFileName || 'project.js'
+                    });
+                    const nameEl = document.getElementById('dev-file-name');
+                    if (nameEl) nameEl.textContent = currentFileHandle.name;
+                } catch (e) {
+                    showToast('Please select a file to save to.');
+                    return;
+                }
+            }
+            
+            try {
+                const writable = await currentFileHandle.createWritable();
+                await writable.write(content);
+                await writable.close();
+                
+                currentDevCode = content;
+                showToast('Changes applied to file successfully!');
+            } catch (err) {
+                handleFSError(err);
+            }
+        }
+
+        function handleFSError(err) {
+            console.error('File System Access error:', err);
+            
+            const chat = getCurrentChat();
+            if (chat) {
+                const errorMsg = {
+                    role: 'assistant',
+                    content: `**Direct file access error**\n\nIt looks like direct file access is off or was denied.\n\nPlease go to: **chrome://flags/#file-system-access-api** and make sure it is **Enabled**.\n\nThen reload the page and try again. This feature works best in Chrome/Edge.`,
+                    timestamp: Date.now()
+                };
+                chat.messages.push(errorMsg);
+                renderMessages();
+            }
+            
+            showToast('File System Access failed. Check chrome://flags/#file-system-access-api');
+        }
+
+        function exitDevMode() {
+            const overlay = document.getElementById('dev-mode-overlay');
+            if (overlay) overlay.remove();
+            
+            devMode = false;
+            currentFileHandle = null;
+            showToast('Exited Dev Mode. Back to normal chat.');
+        }
+
+        function runCurrentFile() {
+            const editor = document.getElementById('dev-code-editor');
+            if (!editor) return;
+
+            const content = editor.value;
+            const nameEl = document.getElementById('dev-file-name');
+            const fileName = nameEl ? nameEl.textContent : 'file.html';
+
+            if (fileName.endsWith('.html') || fileName.endsWith('.htm')) {
+                // Open HTML in new tab for preview
+                const blob = new Blob([content], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                window.open(url, '_blank');
+                showToast('Opened HTML preview in new tab');
+            } else if (fileName.endsWith('.js')) {
+                // Try to run simple JS (limited)
+                try {
+                    // Create a safe-ish execution context
+                    const iframe = document.createElement('iframe');
+                    iframe.style.display = 'none';
+                    document.body.appendChild(iframe);
+                    
+                    const script = iframe.contentWindow.document.createElement('script');
+                    script.textContent = content;
+                    iframe.contentWindow.document.body.appendChild(script);
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(iframe);
+                        showToast('JavaScript executed (check console for output)');
+                    }, 100);
+                } catch (e) {
+                    showToast('Could not run JS safely. Open in browser instead.');
+                }
+            } else {
+                showToast(`Running ${fileName.split('.').pop()} files is not supported yet. Try HTML or JS.`);
+            }
         }
 
         function renderMemoryList() {
