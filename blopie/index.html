@@ -375,6 +375,13 @@
                         </button>
                     </div>
 
+                    <!-- Current API Provider Indicator -->
+                    <div id="api-provider-badge" 
+                         class="hidden md:flex items-center gap-x-1.5 px-3 py-1.5 text-xs rounded-2xl border border-slate-700 bg-slate-900 text-slate-400 cursor-pointer hover:bg-slate-800 transition-colors"
+                         onclick="showApiKeyInfo()">
+                        <span id="api-provider-text">API</span>
+                    </div>
+
                     <!-- More actions -->
                     <div class="flex items-center gap-x-1">
                         <button onclick="exportCurrentChat()" 
@@ -459,6 +466,14 @@
                                 </svg>
                             </button>
 
+                            <!-- Voice Input -->
+                            <button onclick="startVoiceInput()" 
+                                    class="p-2 text-slate-400 hover:text-blue-400 transition-colors" title="Voice Input (Speech to Text)">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m-4-4H8m4-4v-4m0 4h4" />
+                                </svg>
+                            </button>
+
                             <!-- Image Generation -->
                             <button onclick="generateImagePrompt()" 
                                     class="p-2 text-slate-400 hover:text-purple-400 transition-colors" title="Generate Image">
@@ -524,6 +539,19 @@
                     <input id="api-key-input" type="password" placeholder="sk-... or leave empty to try without key" 
                            class="w-full bg-slate-900 border border-slate-700 focus:border-blue-500 transition-colors rounded-2xl px-4 py-3 text-sm font-mono placeholder:text-slate-500">
                     <p class="text-[10px] text-slate-500 mt-1.5">Get a free key at <a href="https://g4f.dev/api_key.html" target="_blank" class="underline">g4f.dev/api_key</a>. Some models may work without it.</p>
+                    
+                    <!-- API Key Quick Selector -->
+                    <div class="mt-3">
+                        <label class="block text-xs font-semibold tracking-wider text-slate-400 mb-1.5">QUICK KEY SELECTOR</label>
+                        <select id="api-key-select" onchange="selectApiKey(this.value)" 
+                                class="w-full bg-slate-900 border border-slate-700 focus:border-blue-500 rounded-2xl px-4 py-2.5 text-sm">
+                            <option value="g4f_u_mq2m97_fe99c3b169907bd9f06a6f6dddbe489f89ffd339103200cc_c3c5b627">OG Key (Primary)</option>
+                            <option value="g4f_u_mqh81q_38150b3d058f835137510efdaf7cd674ad3a3f15db9763dd_5a4cadf8">Fallback Key 1</option>
+                            <option value="g4f_u_mqheny_ca4674f6ce633da136f742ed902f5c50367b742822cadfb3_cdad69d1">Fallback Key 2</option>
+                            <option value="g4f_u_mqheq6_2e0aedfbcdda13d687564783172e379b3053e5d12039963c_7906c8c5">Fallback Key 3</option>
+                            <option value="">Use Custom / No Key</option>
+                        </select>
+                    </div>
                 </div>
                 
                 <div class="grid grid-cols-2 gap-4">
@@ -615,10 +643,12 @@
         let researchMode = false;
         let isStreaming = false;
         
-        // Fallback API keys (tried in order)
+        // All available API keys (tried in order on failure)
         const FALLBACK_API_KEYS = [
-            'g4f_u_mq2m97_fe99c3b169907bd9f06a6f6dddbe489f89ffd339103200cc_c3c5b627',
-            'g4f_u_mqh81q_38150b3d058f835137510efdaf7cd674ad3a3f15db9763dd_5a4cadf8'
+            'g4f_u_mq2m97_fe99c3b169907bd9f06a6f6dddbe489f89ffd339103200cc_c3c5b627', // OG
+            'g4f_u_mqh81q_38150b3d058f835137510efdaf7cd674ad3a3f15db9763dd_5a4cadf8',
+            'g4f_u_mqheny_ca4674f6ce633da136f742ed902f5c50367b742822cadfb3_cdad69d1',
+            'g4f_u_mqheq6_2e0aedfbcdda13d687564783172e379b3053e5d12039963c_7906c8c5'
         ];
         let learnedWords = JSON.parse(localStorage.getItem('blopieLearnedWords') || '[]');
         let devMode = false;
@@ -641,13 +671,149 @@
             return '';
         }
 
-        // Smart fetch with automatic key fallback on 401/402/429
+        // Update the visible API provider badge
+        function updateApiProviderBadge() {
+            const badge = document.getElementById('api-provider-badge');
+            const text = document.getElementById('api-provider-text');
+            if (!badge || !text) return;
+
+            const currentKey = getApiKey();
+            
+            if (!currentKey) {
+                text.textContent = 'No Key';
+                badge.className = 'hidden md:flex items-center gap-x-1.5 px-3 py-1.5 text-xs rounded-2xl border border-red-700 bg-red-950/30 text-red-400 cursor-pointer';
+                return;
+            }
+
+            if (currentKey === FALLBACK_API_KEYS[0]) {
+                text.textContent = 'g4f • Primary';
+                badge.className = 'hidden md:flex items-center gap-x-1.5 px-3 py-1.5 text-xs rounded-2xl border border-emerald-700 bg-emerald-950/30 text-emerald-400 cursor-pointer';
+            } else if (currentKey) {
+                text.textContent = 'g4f • Fallback';
+                badge.className = 'hidden md:flex items-center gap-x-1.5 px-3 py-1.5 text-xs rounded-2xl border border-yellow-700 bg-yellow-950/30 text-yellow-400 cursor-pointer';
+            } else {
+                text.textContent = 'Custom Key';
+                badge.className = 'hidden md:flex items-center gap-x-1.5 px-3 py-1.5 text-xs rounded-2xl border border-blue-700 bg-blue-950/30 text-blue-400 cursor-pointer';
+            }
+        }
+
+        function selectApiKey(selectedKey) {
+            if (selectedKey === '') {
+                settings.apiKey = '';
+            } else {
+                settings.apiKey = selectedKey;
+            }
+            
+            // Save settings
+            saveSettingsToDB();
+            
+            // Update badge
+            updateApiProviderBadge();
+            
+            showToast('API Key changed. Changes will apply on next request.');
+        }
+
+        function showApiKeyInfo() {
+            const currentKey = getApiKey();
+            let message = `Current API Key: ${currentKey ? currentKey.substring(0, 20) + '...' : 'None'}\n\n`;
+            
+            if (currentKey === FALLBACK_API_KEYS[0]) {
+                message += 'Using your primary g4f key.';
+            } else if (currentKey === FALLBACK_API_KEYS[1]) {
+                message += 'Using fallback g4f key (primary had issues).';
+            } else {
+                message += 'Using custom key from settings.';
+            }
+
+            alert(message + '\n\nYou can change keys in Settings.');
+        }
+
+        // ==================== VOICE MODE ====================
+        let recognition = null;
+        let isListening = false;
+
+        function startVoiceInput() {
+            if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+                showToast('Voice input not supported in this browser. Try Chrome or Edge.');
+                return;
+            }
+
+            if (isListening) {
+                if (recognition) recognition.stop();
+                return;
+            }
+
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                const input = document.getElementById('message-input');
+                if (input) {
+                    input.value = transcript;
+                    sendMessage();
+                }
+                isListening = false;
+            };
+
+            recognition.onerror = (event) => {
+                showToast('Voice recognition error: ' + event.error);
+                isListening = false;
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+            };
+
+            try {
+                recognition.start();
+                isListening = true;
+                showToast('Listening... Speak now');
+            } catch (e) {
+                showToast('Could not start voice input.');
+                isListening = false;
+            }
+        }
+
+        // Speak text using browser TTS
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
+
+            // Clean text for speech
+            const cleanText = text.replace(/```[\s\S]*?```/g, 'Code block').replace(/[*_#`]/g, '');
+
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            utterance.volume = 0.9;
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Toggle auto voice mode (speak AI responses)
+        let voiceModeEnabled = false;
+
+        function toggleVoiceMode() {
+            voiceModeEnabled = !voiceModeEnabled;
+            const btn = document.getElementById('voice-mode-btn');
+            if (btn) {
+                btn.classList.toggle('bg-blue-600', voiceModeEnabled);
+                btn.classList.toggle('text-white', voiceModeEnabled);
+            }
+            showToast(voiceModeEnabled ? 'Voice Mode enabled - AI will speak responses' : 'Voice Mode disabled');
+        }
+
+        // Smart fetch with automatic key fallback (very aggressive)
         async function fetchWithKeyFallback(url, options = {}, preferFree = false) {
             const keysToTry = [];
             
+            // User key first (if set)
             const userKey = settings.apiKey?.trim();
             if (userKey) keysToTry.push(userKey);
             
+            // Then all fallback keys
             for (let key of FALLBACK_API_KEYS) {
                 if (key && key.trim() && !keysToTry.includes(key)) {
                     keysToTry.push(key);
@@ -668,17 +834,19 @@
                         headers
                     });
 
+                    // Success or non-retryable error
                     if (response.ok || ![401, 402, 429].includes(response.status)) {
                         return response;
                     }
                     
                     lastError = response;
+                    console.warn(`Key failed with status ${response.status}, trying next...`);
                 } catch (err) {
                     lastError = err;
                 }
             }
 
-            // Final attempt without key (for free endpoints like Hugging Face)
+            // Final attempt without any key (Hugging Face Router etc.)
             if (preferFree) {
                 try {
                     return await fetch(url, {
@@ -690,7 +858,7 @@
                 }
             }
 
-            throw lastError || new Error('All API keys exhausted');
+            throw lastError || new Error('All API keys exhausted. Please add your own key in Settings.');
         }
 
         // Initialize Tailwind script
@@ -834,13 +1002,13 @@
             if (keyStatus) {
                 const currentKey = getApiKey();
                 if (currentKey === FALLBACK_API_KEYS[0]) {
-                    keyStatus.textContent = 'Using primary key';
+                    keyStatus.textContent = 'g4f Primary';
                     keyStatus.className = 'text-xs text-emerald-400';
-                } else if (currentKey === FALLBACK_API_KEYS[1]) {
-                    keyStatus.textContent = 'Using fallback key';
+                } else if (currentKey) {
+                    keyStatus.textContent = 'Fallback / Custom';
                     keyStatus.className = 'text-xs text-yellow-400';
                 } else {
-                    keyStatus.textContent = 'No API key';
+                    keyStatus.textContent = 'No Key';
                     keyStatus.className = 'text-xs text-red-400';
                 }
             }
@@ -1744,6 +1912,13 @@ Keep titles 3-8 words, descriptive, and engaging. Examples: "Quantum Computing B
 
 The <title> tag will be automatically extracted and used as the chat name. It will be removed from the visible response.
 
+**CRITICAL RULE - ALWAYS FINISH CODE BLOCKS:**
+You MUST always complete every code block you start. 
+- If you write a code block, you MUST close it properly with three backticks.
+- Never leave an open code block.
+- Always finish the full code before ending your response.
+- This is extremely important for the user experience.
+
 ## Image Generation
 You can generate beautiful images for the user. 
 When the user asks you to make, generate, draw, or create an image (or when it makes sense in the conversation), output exactly this tag:
@@ -2072,6 +2247,11 @@ You have access to enhanced research capabilities. When the user asks for inform
                 const { cleanedResponse, newMemories, extractedTitle, imagePrompt } = processResponseTags(fullResponse, chat);
                 
                 assistantMsg.content = cleanedResponse || fullResponse;
+
+                // Voice Mode: Speak the response
+                if (voiceModeEnabled && cleanedResponse) {
+                    setTimeout(() => speakText(cleanedResponse), 300);
+                }
                 chat.updated = Date.now();
                 await saveChatToDB(chat);
                 
@@ -2533,6 +2713,13 @@ You have access to enhanced research capabilities. When the user asks for inform
                             <span class="font-semibold text-xl">Blopie Dev Project</span>
                         </div>
                         <div class="text-xs px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full">Direct File System Access</div>
+                        
+                        <!-- Hidden Advanced Button -->
+                        <button onclick="enableAdvancedDevMode()" 
+                                class="ml-2 px-2 py-1 text-[10px] text-slate-500 hover:text-emerald-400 border border-slate-700 hover:border-emerald-600 rounded-lg transition-all opacity-40 hover:opacity-100"
+                                title="Advanced Dev Mode (AI Bug Checking + Templates)">
+                            ADV
+                        </button>
                     </div>
                     
                     <div class="flex items-center gap-x-2">
@@ -2586,6 +2773,13 @@ You have access to enhanced research capabilities. When the user asks for inform
                             <button onclick="editSpecificLine()" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl text-sm">Edit Specific Line</button>
                             <button onclick="renameCurrentFile()" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl text-sm">Rename File</button>
                             <button onclick="applyTextareaToFile()" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl text-sm font-medium">Apply Changes to File</button>
+                            
+                            <!-- Hidden Advanced AI Agent Button -->
+                            <button onclick="activateAdvancedAgentMode()" 
+                                    class="w-full mt-2 py-2 text-[10px] opacity-20 hover:opacity-70 text-purple-400 hover:text-purple-300 transition-all rounded-2xl border border-purple-900/40 hover:border-purple-700/60"
+                                    title="Advanced Autonomous Agent - Let AI find and fix bugs automatically">
+                                ⚡ Advanced Agent (Auto Bug Fix + Fast)
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -2693,9 +2887,9 @@ You have access to enhanced research capabilities. When the user asks for inform
                         const writable = await currentFileHandle.createWritable();
                         await writable.write(newCode);
                         await writable.close();
-                        showToast('AI replaced the full file content!');
+                        showToast('AI automatically applied full file changes!');
                     } catch (e) {
-                        showToast('AI tried to replace file but permission was denied.');
+                        showToast('AI updated the editor. Click Apply to save.');
                     }
                 } else {
                     showToast('AI wants to replace the file. Please open or save a file first.');
@@ -2722,9 +2916,9 @@ You have access to enhanced research capabilities. When the user asks for inform
                                 const writable = await currentFileHandle.createWritable();
                                 await writable.write(editor.value);
                                 await writable.close();
-                                showToast(`AI edited line ${lineNum} successfully!`);
+                                showToast(`AI automatically applied line ${lineNum} edit!`);
                             } catch (e) {
-                                showToast('AI edited the line in editor. Click Apply to save to disk.');
+                                showToast('AI edited the line in editor. Click Apply to save.');
                             }
                         }
                     }
@@ -2942,6 +3136,135 @@ You have access to enhanced research capabilities. When the user asks for inform
             showToast('Exited Dev Mode. Back to normal chat.');
         }
 
+        // ==================== ADVANCED DEV MODE ====================
+        function enableAdvancedDevMode() {
+            const overlay = document.getElementById('dev-mode-overlay');
+            if (!overlay) return;
+
+            showToast('Advanced Dev Mode enabled! AI will now auto-check for bugs.');
+
+            // Add Advanced UI elements
+            const rightPanel = overlay.querySelector('.flex-1');
+            if (rightPanel) {
+                const advancedBar = document.createElement('div');
+                advancedBar.className = 'p-3 border-b border-slate-800 bg-slate-900 flex flex-wrap gap-2 text-xs';
+                advancedBar.innerHTML = `
+                    <button onclick="aiCheckForBugs()" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl">🧠 AI Check for Bugs</button>
+                    <button onclick="loadTemplate('platformer')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl">Platformer</button>
+                    <button onclick="loadTemplate('minecraft')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl">Minecraft-like</button>
+                    <button onclick="loadTemplate('pong')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl">Pong</button>
+                    <button onclick="loadTemplate('snake')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl">Snake</button>
+                `;
+                rightPanel.insertBefore(advancedBar, rightPanel.children[1]);
+            }
+        }
+
+        function aiCheckForBugs() {
+            const editor = document.getElementById('dev-code-editor');
+            if (!editor) return;
+
+            const code = editor.value;
+            if (!code.trim()) {
+                showToast('No code to analyze.');
+                return;
+            }
+
+            showToast('AI is analyzing code for bugs...');
+
+            // Send to AI with special instruction
+            const chat = getCurrentChat();
+            if (chat) {
+                const analysisRequest = `Please analyze this code for bugs, errors, and improvements. Be thorough:\n\n\`\`\`\n${code}\n\`\`\``;
+                chat.messages.push({ role: 'user', content: analysisRequest, timestamp: Date.now() });
+                
+                // Trigger AI response
+                sendMessageToAPI(analysisRequest).then(() => {
+                    renderDevChatMessages();
+                });
+            }
+        }
+
+        function loadTemplate(type) {
+            const editor = document.getElementById('dev-code-editor');
+            if (!editor) return;
+
+            let code = '';
+
+            if (type === 'platformer') {
+                code = `// Simple but good Platformer
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+
+let player = { x: 50, y: 300, width: 30, height: 50, vy: 0, onGround: false };
+let gravity = 0.8;
+let keys = {};
+
+function update() {
+    // Gravity
+    player.vy += gravity;
+    player.y += player.vy;
+
+    // Simple ground
+    if (player.y > 350) {
+        player.y = 350;
+        player.vy = 0;
+        player.onGround = true;
+    }
+
+    // Jump
+    if (keys[' '] && player.onGround) {
+        player.vy = -15;
+        player.onGround = false;
+    }
+
+    // Move left/right
+    if (keys['ArrowLeft']) player.x -= 5;
+    if (keys['ArrowRight']) player.x += 5;
+
+    // Keep player in bounds
+    if (player.x < 0) player.x = 0;
+    if (player.x > canvas.width - player.width) player.x = canvas.width - player.width;
+}
+
+function draw() {
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Ground
+    ctx.fillStyle = '#334155';
+    ctx.fillRect(0, 380, canvas.width, 20);
+
+    // Player
+    ctx.fillStyle = '#22c55e';
+    ctx.fillRect(player.x, player.y, player.width, player.height);
+}
+
+function loop() {
+    update();
+    draw();
+    requestAnimationFrame(loop);
+}
+
+window.addEventListener('keydown', e => keys[e.key] = true);
+window.addEventListener('keyup', e => keys[e.key] = false);
+
+loop();`;
+            } else if (type === 'minecraft') {
+                code = `// Simple Minecraft-like (very basic)
+console.log("Minecraft-like template loaded. Expand this!");`;
+            } else if (type === 'pong') {
+                code = `// Classic Pong
+console.log("Pong template loaded");`;
+            } else if (type === 'snake') {
+                code = `// Snake Game
+console.log("Snake template loaded");`;
+            }
+
+            editor.value = code;
+            currentDevCode = code;
+            showToast(`${type} template loaded!`);
+        }
+
         // Performance optimized renders (debounced)
         function debouncedRenderMessages() {
             clearTimeout(renderMessagesTimeout);
@@ -2992,6 +3315,41 @@ You have access to enhanced research capabilities. When the user asks for inform
                 }
             } else {
                 showToast(`Running ${fileName.split('.').pop()} files is not supported yet. Try HTML or JS.`);
+            }
+        }
+
+        // ==================== ADVANCED AI AGENT MODE ====================
+        let advancedAgentMode = false;
+
+        function activateAdvancedAgentMode() {
+            advancedAgentMode = !advancedAgentMode;
+            
+            const chat = getCurrentChat();
+            if (!chat) return;
+
+            if (advancedAgentMode) {
+                showToast('Advanced Agent Mode Activated — AI will now autonomously find and fix bugs.');
+                
+                // Send a strong instruction to the AI
+                const instruction = `You are now in Advanced Autonomous Coding Agent mode. 
+Analyze the current code for bugs, security issues, performance problems, and code quality issues.
+Then automatically fix them using <edit_line> or <apply_full> tags.
+Be extremely thorough and proactive. Work fast and make high-quality improvements.`;
+                
+                chat.messages.push({
+                    role: 'user',
+                    content: instruction,
+                    timestamp: Date.now()
+                });
+                
+                // Trigger AI response
+                setTimeout(() => {
+                    sendMessageToAPI(instruction, false).then(() => {
+                        renderDevChatMessages();
+                    });
+                }, 300);
+            } else {
+                showToast('Advanced Agent Mode deactivated.');
             }
         }
 
