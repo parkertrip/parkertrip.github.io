@@ -1,0 +1,863 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aut & Ledger — Bank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#10192B;
+    --ink-2:#182338;
+    --ink-3:#1F2C46;
+    --paper:#F3ECDA;
+    --paper-dim:#E8DFC6;
+    --brass:#C9A227;
+    --brass-bright:#E0BE4A;
+    --forest:#2E6B52;
+    --forest-bright:#3E9873;
+    --rust:#9C4A3A;
+    --rust-bright:#D77860;
+    --slate:#8792A3;
+    --slate-dark:#556074;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(201,162,39,0.07), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(201,162,39,0.05), transparent 45%);
+    color:var(--paper);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 80px;
+  }
+  .app{ width:100%; max-width:460px; }
+  .fade-in{ animation:fadeIn .5s ease both; }
+  @keyframes fadeIn{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+
+  .brand{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px; }
+  .brand h1{ font-family:'Fraunces', serif; font-weight:600; font-size:1.5rem; letter-spacing:0.3px; margin:0; }
+  .brand h1 span{ color:var(--brass-bright); }
+  .brand small{ color:var(--slate); font-size:0.72rem; letter-spacing:1.5px; text-transform:uppercase; }
+
+  /* Connection status strip */
+  .status-strip{
+    display:flex; align-items:center; gap:8px; font-size:0.75rem; color:var(--slate);
+    margin-bottom:20px; padding:8px 12px; background:var(--ink-2);
+    border:1px solid rgba(201,162,39,0.15); border-radius:8px;
+  }
+  .status-dot{ width:8px; height:8px; border-radius:50%; background:var(--slate-dark); flex-shrink:0; }
+  .status-dot.connecting{ background:var(--brass); animation:pulse 1.2s infinite; }
+  .status-dot.online{ background:var(--forest-bright); box-shadow:0 0 6px var(--forest-bright); }
+  .status-dot.offline{ background:var(--rust-bright); }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+  .status-strip .who{ margin-left:auto; color:var(--brass-bright); font-family:'IBM Plex Mono', monospace; font-size:0.72rem; }
+
+  /* Top bar with avatar + logout, shown once signed in */
+  .topbar{ display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+  .avatar{
+    width:38px; height:38px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif; font-weight:600; font-size:0.95rem;
+    color:var(--ink); flex-shrink:0;
+    border:2px solid rgba(0,0,0,0.15);
+  }
+  .topbar .who-name{ font-size:0.92rem; font-weight:600; }
+  .topbar .who-sub{ font-size:0.7rem; color:var(--slate); }
+  .logout-btn{
+    margin-left:auto; width:auto; background:transparent; border:1px solid rgba(201,162,39,0.3);
+    color:var(--slate); font-size:0.72rem; padding:7px 12px; text-transform:uppercase; letter-spacing:0.5px;
+  }
+  .logout-btn:hover{ color:var(--brass-bright); background:rgba(201,162,39,0.08); }
+
+  /* Ledger stamp balance card */
+  .stamp-wrap{ display:flex; justify-content:center; margin:8px 0 26px; }
+  .stamp{
+    width:220px; height:220px; border-radius:50%;
+    border:3px solid var(--brass); outline:1px solid rgba(201,162,39,0.35); outline-offset:6px;
+    background:
+      repeating-conic-gradient(from 0deg, rgba(201,162,39,0.06) 0deg 2deg, transparent 2deg 8deg),
+      radial-gradient(circle at 50% 40%, var(--ink-2), var(--ink) 75%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    transition:transform .4s ease; position:relative;
+  }
+  .stamp:hover{ transform:rotate(-2deg) scale(1.02); }
+  .stamp .eyebrow{ font-size:0.62rem; letter-spacing:2px; text-transform:uppercase; color:var(--slate); margin-bottom:6px; }
+  .stamp .amount{ font-family:'IBM Plex Mono', monospace; font-size:2.6rem; font-weight:600; color:var(--paper); line-height:1; transition:transform .25s ease; }
+  .stamp .amount.bump{ transform:scale(1.08); }
+  .stamp .amount sup{ font-size:1rem; color:var(--brass-bright); margin-left:4px; }
+  .stamp .holder{ margin-top:8px; font-size:0.7rem; color:var(--slate-dark); letter-spacing:0.5px; }
+
+  .card{ background:var(--ink-2); border:1px solid rgba(201,162,39,0.18); border-radius:14px; padding:20px; margin-bottom:18px; }
+  .card h2{ font-family:'Fraunces', serif; font-size:1.05rem; font-weight:600; margin:0 0 14px; display:flex; align-items:center; gap:8px; }
+  .card h2 .num{ color:var(--brass-bright); font-family:'IBM Plex Mono', monospace; font-size:0.85rem; }
+
+  label{ display:block; font-size:0.72rem; letter-spacing:0.5px; text-transform:uppercase; color:var(--slate); margin-bottom:6px; }
+  select, input[type=number], input[type=text], input[type=password], input[type=search]{
+    width:100%; background:var(--ink); border:1px solid rgba(201,162,39,0.25); border-radius:8px;
+    color:var(--paper); padding:11px 12px; font-size:0.95rem; font-family:'Inter', sans-serif; margin-bottom:14px;
+  }
+  select:focus, input:focus{ outline:2px solid var(--brass); outline-offset:1px; }
+  .amount-field{ position:relative; }
+  .amount-field input{ font-family:'IBM Plex Mono', monospace; padding-right:52px; }
+  .amount-field .suffix{ position:absolute; right:14px; top:11px; color:var(--slate); font-size:0.85rem; font-family:'IBM Plex Mono', monospace; }
+
+  button{
+    font-family:'Inter', sans-serif; font-weight:600; font-size:0.9rem; border:none; border-radius:8px;
+    padding:12px 16px; cursor:pointer; width:100%; transition:filter .15s ease, transform .1s ease;
+  }
+  button:active{ transform:scale(0.98); }
+  .btn-primary{ background:var(--brass); color:var(--ink); }
+  .btn-primary:hover{ filter:brightness(1.08); }
+  .btn-primary:disabled{ background:var(--slate-dark); color:var(--slate); cursor:not-allowed; }
+  .btn-ghost{ background:transparent; border:1px solid rgba(201,162,39,0.3); color:var(--paper); }
+  .btn-ghost:hover{ background:rgba(201,162,39,0.08); }
+
+  .msg{ font-size:0.82rem; padding:10px 12px; border-radius:8px; margin-bottom:14px; display:none; }
+  .msg.show{ display:block; animation:fadeIn .2s ease both; }
+  .msg.ok{ background:rgba(46,107,82,0.2); color:#8fd6b6; border:1px solid rgba(46,107,82,0.4); }
+  .msg.err{ background:rgba(156,74,58,0.2); color:#f0a897; border:1px solid rgba(156,74,58,0.4); }
+
+  /* Ledger list */
+  .ledger-entry{ display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:1px dashed rgba(201,162,39,0.18); }
+  .ledger-entry:last-child{ border-bottom:none; }
+  .le-icon{
+    width:30px; height:30px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .le-icon.neg{ background:rgba(156,74,58,0.18); color:var(--rust-bright); }
+  .le-icon.pos{ background:rgba(46,107,82,0.18); color:var(--forest-bright); }
+  .le-left{ display:flex; flex-direction:column; gap:2px; flex:1; min-width:0; }
+  .le-title{ font-size:0.9rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .le-sub{ font-size:0.7rem; color:var(--slate); font-family:'IBM Plex Mono', monospace; }
+  .le-amt{ font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:0.95rem; flex-shrink:0; }
+  .le-amt.neg{ color:var(--rust-bright); }
+  .le-amt.pos{ color:var(--forest-bright); }
+  .empty{ color:var(--slate); font-size:0.85rem; text-align:center; padding:16px 0; }
+
+  footer{ text-align:center; margin-top:8px; }
+  .admin-link{
+    background:none; border:none; color:var(--slate); font-size:0.72rem; letter-spacing:1px;
+    text-transform:uppercase; cursor:pointer; width:auto; padding:6px 10px;
+  }
+  .admin-link:hover{ color:var(--brass-bright); }
+
+  /* Modal (vault dial) */
+  .overlay{ position:fixed; inset:0; background:rgba(6,10,18,0.75); display:none; align-items:center; justify-content:center; padding:20px; z-index:50; }
+  .overlay.show{ display:flex; }
+  .vault{ background:var(--ink-2); border:1px solid rgba(201,162,39,0.3); border-radius:16px; padding:28px 24px; width:100%; max-width:340px; text-align:center; }
+  .dial{
+    width:110px; height:110px; border-radius:50%; border:3px solid var(--brass); margin:0 auto 18px;
+    display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(circle, var(--ink), var(--ink-2));
+    font-family:'IBM Plex Mono', monospace; font-size:1.4rem; letter-spacing:4px; color:var(--brass-bright);
+  }
+  .vault h3{ font-family:'Fraunces', serif; margin:0 0 6px; font-size:1.1rem; }
+  .vault p{ color:var(--slate); font-size:0.8rem; margin:0 0 16px; }
+  .vault .row{ display:flex; gap:10px; }
+
+  /* Auth screen */
+  .auth-wrap{ display:flex; flex-direction:column; align-items:center; padding-top:40px; }
+  .auth-card{
+    background:var(--ink-2); border:1px solid rgba(201,162,39,0.25); border-radius:16px;
+    padding:30px 26px; width:100%;
+  }
+  .auth-emblem{
+    width:64px; height:64px; border-radius:50%; margin:0 auto 18px; border:2px solid var(--brass);
+    display:flex; align-items:center; justify-content:center; font-family:'Fraunces', serif;
+    font-size:1.6rem; color:var(--brass-bright); background:var(--ink);
+  }
+  .auth-tabs{ display:flex; gap:6px; margin-bottom:20px; background:var(--ink); border-radius:8px; padding:4px; }
+  .auth-tab{
+    flex:1; text-align:center; padding:9px 0; font-size:0.82rem; font-weight:600; color:var(--slate);
+    border-radius:6px; cursor:pointer; width:auto; background:transparent; border:none;
+  }
+  .auth-tab.active{ background:var(--brass); color:var(--ink); }
+  .remember-row{ display:flex; align-items:center; gap:8px; margin:-6px 0 16px; }
+  .remember-row input[type=checkbox]{ width:auto; margin:0; accent-color:var(--brass); }
+  .remember-row label{ margin:0; text-transform:none; letter-spacing:0; font-size:0.82rem; color:var(--paper); }
+  .auth-hint{ font-size:0.72rem; color:var(--slate-dark); text-align:center; margin-top:4px; }
+
+  /* Admin panel */
+  #adminPanel{ display:none; }
+  #adminPanel.show{ display:block; }
+  .balance-row{ display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px dashed rgba(201,162,39,0.15); }
+  .balance-row:last-child{ border-bottom:none; }
+  .balance-row .name{ font-size:0.88rem; }
+  .balance-row .val{ font-family:'IBM Plex Mono', monospace; color:var(--brass-bright); font-size:0.9rem; }
+  .mini-row{ display:flex; gap:8px; align-items:center; margin-top:10px; }
+  .mini-row select, .mini-row input{ margin-bottom:0; }
+  .danger-zone{ margin-top:16px; padding-top:14px; border-top:1px solid rgba(156,74,58,0.3); }
+  .btn-danger{ background:var(--rust); color:var(--paper); }
+  .btn-danger:hover{ filter:brightness(1.1); }
+  .pill-list{ display:flex; flex-wrap:wrap; gap:6px; }
+  .pill{ background:var(--ink); border:1px solid rgba(201,162,39,0.3); border-radius:999px; padding:4px 10px; font-size:0.72rem; font-family:'IBM Plex Mono', monospace; color:var(--brass-bright); }
+
+  ::placeholder{ color:var(--slate-dark); }
+  :focus-visible{ outline:2px solid var(--brass-bright); outline-offset:2px; }
+</style>
+</head>
+<body>
+
+<!-- ======================= AUTH SCREEN ======================= -->
+<div class="app auth-wrap" id="authScreen">
+  <div class="auth-card fade-in">
+    <div class="auth-emblem">A</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin">Log in</button>
+      <button class="auth-tab" id="tabSignup">Sign up</button>
+    </div>
+    <div id="authMsg" class="msg"></div>
+    <label for="authUser">Username</label>
+    <input type="text" id="authUser" placeholder="e.g. marcus" autocomplete="username">
+    <label for="authPass">Password</label>
+    <input type="password" id="authPass" placeholder="••••••••" autocomplete="current-password">
+    <div id="authConfirmWrap" style="display:none;">
+      <label for="authConfirm">Confirm password</label>
+      <input type="password" id="authConfirm" placeholder="••••••••" autocomplete="new-password">
+    </div>
+    <div class="remember-row">
+      <input type="checkbox" id="rememberMe" checked>
+      <label for="rememberMe">Remember me on this device</label>
+    </div>
+    <button class="btn-primary" id="authSubmit">Log in</button>
+    <div class="auth-hint" id="authHint">New here? Switch to "Sign up" to open an account with 5.00 AUT.</div>
+  </div>
+</div>
+
+<!-- ======================= MAIN APP ======================= -->
+<div class="app" id="mainApp" style="display:none;">
+  <div class="brand">
+    <h1>Aut<span>&amp;</span>Ledger</h1>
+    <small>Every aut, accounted for</small>
+  </div>
+
+  <div class="topbar">
+    <div class="avatar" id="avatar"></div>
+    <div>
+      <div class="who-name" id="whoName"></div>
+      <div class="who-sub">Signed in</div>
+    </div>
+    <button class="logout-btn" id="logoutBtn">Log out</button>
+  </div>
+
+  <div class="status-strip">
+    <div class="status-dot" id="statusDot"></div>
+    <span id="statusText">Starting up…</span>
+    <span class="who" id="statusWho"></span>
+  </div>
+
+  <div class="stamp-wrap">
+    <div class="stamp">
+      <div class="eyebrow">Current balance</div>
+      <div class="amount" id="balanceDisplay">0.00<sup>AUT</sup></div>
+      <div class="holder" id="holderName">Account · —</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Pay someone <span class="num" id="payCounter"></span></h2>
+    <div id="payMsg" class="msg"></div>
+    <label for="recipient">Pay to</label>
+    <select id="recipient">
+      <option value="__other__">Someone else…</option>
+    </select>
+    <div id="otherNameWrap" style="display:none;">
+      <label for="otherName">Recipient name</label>
+      <input type="text" id="otherName" placeholder="e.g. Marcus">
+    </div>
+    <label for="amount">Amount</label>
+    <div class="amount-field">
+      <input type="number" id="amount" min="0.01" step="0.01" placeholder="0.00">
+      <span class="suffix">AUT</span>
+    </div>
+    <label for="note">Note (optional)</label>
+    <input type="text" id="note" placeholder="What's it for?">
+    <button class="btn-primary" id="sendBtn">Send payment</button>
+  </div>
+
+  <div class="card">
+    <h2>Your transactions</h2>
+    <input type="search" id="txSearch" placeholder="Search by name or note…">
+    <div id="txList"></div>
+  </div>
+
+  <footer>
+    <button class="admin-link" id="openAdmin">Admin panel</button>
+  </footer>
+</div>
+
+<!-- Vault code modal -->
+<div class="overlay" id="vaultOverlay">
+  <div class="vault">
+    <div class="dial" id="dialDisplay">••••</div>
+    <h3>Vault access</h3>
+    <p>Enter the 4-digit admin code to continue.</p>
+    <div id="vaultMsg" class="msg err" style="display:none;"></div>
+    <input type="password" id="vaultCode" maxlength="4" inputmode="numeric" placeholder="Enter code" style="text-align:center; letter-spacing:6px; font-family:'IBM Plex Mono',monospace;">
+    <div class="row">
+      <button class="btn-ghost" id="cancelVault">Cancel</button>
+      <button class="btn-primary" id="unlockVault">Unlock</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin panel -->
+<div class="app" id="adminPanel">
+  <div class="card" style="border-color:rgba(201,162,39,0.4);">
+    <h2>🔓 Admin — Online now</h2>
+    <div class="pill-list" id="onlinePills"></div>
+  </div>
+
+  <div class="card" style="border-color:rgba(201,162,39,0.4);">
+    <h2>All balances</h2>
+    <div id="adminBalances"></div>
+    <div class="mini-row">
+      <select id="adjName" style="margin-bottom:0;"></select>
+      <input type="number" id="adjAmount" placeholder="±amount" style="margin-bottom:0;">
+      <button class="btn-primary" id="adjBtn" style="width:auto; white-space:nowrap;">Apply</button>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:rgba(201,162,39,0.4);">
+    <h2>Registered accounts</h2>
+    <div id="adminAccounts"></div>
+  </div>
+
+  <div class="card" style="border-color:rgba(201,162,39,0.4);">
+    <h2>All transactions</h2>
+    <div id="adminTxList"></div>
+    <div class="danger-zone">
+      <button class="btn-danger" id="resetAllBtn">Reset my local ledger</button>
+    </div>
+  </div>
+
+  <footer>
+    <button class="admin-link" id="lockAdmin">Lock admin panel</button>
+  </footer>
+</div>
+
+<script>
+/* ======================= CONFIG ======================= */
+const ADMIN_CODE = "5050";
+const STORAGE_USERS_KEY = "autLedgerUsers_v1";
+const STORAGE_SESSION_KEY = "autLedgerSession_v1";
+const STORAGE_STATE_KEY = "autLedgerState_v1";
+const CL_SERVERS = [
+  'wss://cloudlink.mikedev101.cc/0.2.0',
+  'wss://cl.mikedev101.cc/',
+  'wss://cl1.mubilop.tech/'
+];
+const STARTING_BALANCE = 5;
+
+/* ======================= HASHING ======================= */
+function randomHex(bytes){
+  const arr = new Uint8Array(bytes);
+  (window.crypto || {}).getRandomValues ? crypto.getRandomValues(arr) : arr.forEach((_, i) => arr[i] = Math.floor(Math.random() * 256));
+  return Array.from(arr).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+async function hashPassword(password, salt){
+  const input = salt + ':' + password;
+  if(window.crypto && crypto.subtle && crypto.subtle.digest){
+    try{
+      const enc = new TextEncoder().encode(input);
+      const buf = await crypto.subtle.digest('SHA-256', enc);
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }catch(e){ /* fall through */ }
+  }
+  // Fallback for contexts without SubtleCrypto (e.g. some browsers over file://)
+  let h = 0;
+  for(let i = 0; i < input.length; i++){ h = ((h << 5) - h + input.charCodeAt(i)) | 0; }
+  return 'fb_' + Math.abs(h).toString(16) + '_' + input.length;
+}
+
+/* ======================= USER STORE ======================= */
+function loadUsers(){
+  try{ return JSON.parse(localStorage.getItem(STORAGE_USERS_KEY)) || {}; }
+  catch(e){ return {}; }
+}
+function saveUsers(users){ localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(users)); }
+
+/* ======================= LEDGER STATE ======================= */
+function defaultState(){ return { balances: {}, transactions: [], seenIds: [] }; }
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_STATE_KEY);
+    if(!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    if(!parsed.balances || !parsed.transactions) return defaultState();
+    if(!parsed.seenIds) parsed.seenIds = [];
+    return parsed;
+  }catch(e){ return defaultState(); }
+}
+function saveState(){ localStorage.setItem(STORAGE_STATE_KEY, JSON.stringify(state)); }
+
+let state = loadState();
+let myName = "";
+let adminUnlocked = false;
+let onlineUsers = [];
+let txFilter = "";
+
+/* ======================= HELPERS ======================= */
+function fmt(n){ return Number(n).toFixed(2); }
+function timeStr(ts){
+  const d = new Date(ts);
+  return d.toLocaleDateString(undefined,{month:'short',day:'numeric'}) + ' · ' + d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
+}
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+function makeId(){
+  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return 'tx-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+}
+function showMsg(el, text, ok){
+  el.textContent = text;
+  el.className = 'msg show ' + (ok ? 'ok' : 'err');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.className = 'msg'; }, 3500);
+}
+function hueFromName(name){
+  let h = 0;
+  for(let i = 0; i < name.length; i++){ h = (h * 31 + name.charCodeAt(i)) % 360; }
+  return h;
+}
+function initialsFromName(name){
+  const parts = name.trim().split(/\s+/);
+  return (parts[0]?.[0] || '?').toUpperCase() + (parts[1]?.[0] || '').toUpperCase();
+}
+
+/* ======================= LEDGER LOGIC ======================= */
+function applyTx(tx){
+  if(state.seenIds.includes(tx.id)) return false;
+  state.seenIds.push(tx.id);
+  if(state.balances[tx.from] === undefined) state.balances[tx.from] = 0;
+  if(state.balances[tx.to] === undefined) state.balances[tx.to] = 0;
+  state.balances[tx.from] = +(state.balances[tx.from] - tx.amount).toFixed(2);
+  state.balances[tx.to] = +(state.balances[tx.to] + tx.amount).toFixed(2);
+  state.transactions.push(tx);
+  saveState();
+  return true;
+}
+function applyJoin(name){
+  if(state.balances[name] === undefined){
+    state.balances[name] = STARTING_BALANCE;
+    saveState();
+  }
+}
+
+/* ======================= RENDER ======================= */
+function bumpBalance(){
+  const el = document.getElementById('balanceDisplay');
+  el.classList.add('bump');
+  setTimeout(() => el.classList.remove('bump'), 250);
+}
+
+function render(bump){
+  const myBal = state.balances[myName] !== undefined ? state.balances[myName] : STARTING_BALANCE;
+  document.getElementById('balanceDisplay').innerHTML = fmt(myBal) + '<sup>AUT</sup>';
+  document.getElementById('holderName').textContent = 'Account · ' + (myName || '—');
+  if(bump) bumpBalance();
+
+  document.getElementById('whoName').textContent = myName;
+  const avatar = document.getElementById('avatar');
+  avatar.textContent = initialsFromName(myName || '?');
+  avatar.style.background = `hsl(${hueFromName(myName || 'x')}, 55%, 65%)`;
+
+  let yourTx = state.transactions.filter(t => t.from === myName || t.to === myName);
+  if(txFilter){
+    const f = txFilter.toLowerCase();
+    yourTx = yourTx.filter(t => {
+      const counterparty = (t.from === myName ? t.to : t.from).toLowerCase();
+      return counterparty.includes(f) || (t.note || '').toLowerCase().includes(f);
+    });
+  }
+  document.getElementById('payCounter').textContent = yourTx.length ? `(${yourTx.length})` : '';
+
+  const txList = document.getElementById('txList');
+  if(yourTx.length === 0){
+    txList.innerHTML = `<div class="empty">${txFilter ? 'No transactions match your search.' : "No transactions yet. Send your first payment above."}</div>`;
+  } else {
+    txList.innerHTML = yourTx.slice().reverse().map(t => {
+      const outgoing = t.from === myName;
+      const counterparty = outgoing ? t.to : t.from;
+      const sign = outgoing ? '−' : '+';
+      const cls = outgoing ? 'neg' : 'pos';
+      const arrow = outgoing
+        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M17 7L7 17M7 17H15M7 17V9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      return `<div class="ledger-entry">
+        <div class="le-icon ${cls}">${arrow}</div>
+        <div class="le-left">
+          <div class="le-title">${outgoing ? 'To ' : 'From '}${escapeHtml(counterparty)}${t.note ? ' — ' + escapeHtml(t.note) : ''}</div>
+          <div class="le-sub">${timeStr(t.time)}</div>
+        </div>
+        <div class="le-amt ${cls}">${sign}${fmt(t.amount)} AUT</div>
+      </div>`;
+    }).join('');
+  }
+
+  const known = new Set(Object.keys(state.balances).filter(n => n !== myName));
+  onlineUsers.forEach(n => { if(n !== myName) known.add(n); });
+  const recipientSel = document.getElementById('recipient');
+  const prevVal = recipientSel.value;
+  recipientSel.innerHTML = Array.from(known).sort().map(n =>
+    `<option value="${escapeHtml(n)}">${escapeHtml(n)}${onlineUsers.includes(n) ? ' 🟢' : ''}</option>`
+  ).join('') + '<option value="__other__">Someone else…</option>';
+  if(Array.from(recipientSel.options).some(o => o.value === prevVal)) recipientSel.value = prevVal;
+
+  if(adminUnlocked) renderAdmin();
+}
+
+function renderAdmin(){
+  const pillDiv = document.getElementById('onlinePills');
+  pillDiv.innerHTML = onlineUsers.length
+    ? onlineUsers.map(n => `<span class="pill">${escapeHtml(n)}${n === myName ? ' (you)' : ''}</span>`).join('')
+    : '<span class="empty" style="padding:0;">No one else is connected right now.</span>';
+
+  const balDiv = document.getElementById('adminBalances');
+  const names = Object.keys(state.balances);
+  balDiv.innerHTML = names.length
+    ? names.map(name => `<div class="balance-row"><span class="name">${escapeHtml(name)}</span><span class="val">${fmt(state.balances[name])} AUT</span></div>`).join('')
+    : '<div class="empty">No balances recorded yet.</div>';
+
+  const sel = document.getElementById('adjName');
+  sel.innerHTML = names.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
+
+  const users = loadUsers();
+  const accDiv = document.getElementById('adminAccounts');
+  const userNames = Object.keys(users);
+  accDiv.innerHTML = userNames.length
+    ? userNames.map(n => `<div class="balance-row"><span class="name">${escapeHtml(n)}</span><span class="val">${state.balances[n] !== undefined ? fmt(state.balances[n]) + ' AUT' : '—'}</span></div>`).join('')
+    : '<div class="empty">No accounts registered on this device yet.</div>';
+
+  const adminTx = document.getElementById('adminTxList');
+  if(state.transactions.length === 0){
+    adminTx.innerHTML = '<div class="empty">No transactions recorded yet.</div>';
+  } else {
+    adminTx.innerHTML = state.transactions.slice().reverse().map(t => `
+      <div class="ledger-entry">
+        <div class="le-left">
+          <div class="le-title">${escapeHtml(t.from)} → ${escapeHtml(t.to)}${t.note ? ' — ' + escapeHtml(t.note) : ''}</div>
+          <div class="le-sub">${timeStr(t.time)}</div>
+        </div>
+        <div class="le-amt">${fmt(t.amount)} AUT</div>
+      </div>
+    `).join('');
+  }
+}
+
+/* ======================= NETWORKING (CloudLink protocol) ======================= */
+let socket = null;
+let serverIndex = 0;
+let usernameAccepted = false;
+let handshakeTimer = null;
+let deliberatelyClosed = false;
+
+function setStatus(kind, text){
+  document.getElementById('statusDot').className = 'status-dot ' + kind;
+  document.getElementById('statusText').textContent = text;
+  document.getElementById('statusWho').textContent = usernameAccepted ? myName : '';
+}
+
+function connect(){
+  if(serverIndex >= CL_SERVERS.length){
+    setStatus('offline', 'Could not reach any server — running local-only.');
+    return;
+  }
+  const url = CL_SERVERS[serverIndex];
+  setStatus('connecting', `Connecting… (${serverIndex + 1}/${CL_SERVERS.length})`);
+  try{ socket = new WebSocket(url); }
+  catch(e){ serverIndex++; connect(); return; }
+
+  socket.onopen = () => {
+    handshakeTimer = setTimeout(sendHandshake, 400);
+    setTimeout(() => { if(socket && socket.readyState === WebSocket.OPEN) sendSetId(); }, 500);
+  };
+  socket.onclose = () => {
+    clearTimeout(handshakeTimer);
+    if(deliberatelyClosed) return;
+    if(!usernameAccepted){ serverIndex++; connect(); }
+    else{ usernameAccepted = false; setStatus('offline', 'Disconnected — running local-only.'); }
+  };
+  socket.onerror = () => {};
+  socket.onmessage = (event) => {
+    let packet;
+    try{ packet = JSON.parse(event.data); } catch(e){ return; }
+    handlePacket(packet);
+  };
+}
+
+function send(obj){
+  if(!socket || socket.readyState !== WebSocket.OPEN) return;
+  try{ socket.send(JSON.stringify(obj)); } catch(e){}
+}
+function sendHandshake(){
+  send({ cmd: 'handshake', val: { language: 'JavaScript', version: { editorType: 'AutLedger', versionNumber: 2 } }, listener: 'handshake_cfg' });
+}
+function sendSetId(){ send({ cmd: 'setid', val: myName, listener: 'username_cfg' }); }
+function broadcastJoin(){ send({ cmd: 'gmsg', val: JSON.stringify({ kind: 'join', name: myName, time: Date.now() }) }); }
+function broadcastTx(tx){ send({ cmd: 'gmsg', val: JSON.stringify({ kind: 'tx', tx }) }); }
+
+function normalizeUlist(val, mode){
+  let list = [];
+  if(typeof val === 'string') list = val.split(';').filter(Boolean);
+  else if(Array.isArray(val)) list = val.map(item => (typeof item === 'object' && item !== null) ? item.username : item).filter(Boolean);
+  else if(mode && val) list = [(typeof val === 'object') ? val.username : val];
+  return list;
+}
+
+function onConnectedSuccess(){
+  usernameAccepted = true;
+  clearTimeout(handshakeTimer);
+  applyJoin(myName);
+  broadcastJoin();
+  setStatus('online', 'Connected');
+  render();
+}
+
+function handlePacket(packet){
+  if(!packet || !packet.cmd) return;
+  switch(packet.cmd){
+    case 'statuscode': {
+      if(packet.listener === 'username_cfg'){
+        const codeStr = String(packet.code || packet.val || '');
+        if(codeStr.includes('100') || codeStr.toUpperCase().includes('OK')) onConnectedSuccess();
+      }
+      break;
+    }
+    case 'server_version': {
+      if(!usernameAccepted) onConnectedSuccess();
+      break;
+    }
+    case 'ulist': {
+      const list = normalizeUlist(packet.val, packet.mode);
+      if(packet.mode === 'add') list.forEach(n => { if(!onlineUsers.includes(n)) onlineUsers.push(n); });
+      else if(packet.mode === 'remove') onlineUsers = onlineUsers.filter(n => !list.includes(n));
+      else onlineUsers = list;
+      render();
+      break;
+    }
+    case 'gmsg': {
+      let payload;
+      try{ payload = JSON.parse(packet.val); } catch(e){ return; }
+      if(!payload || !payload.kind) return;
+      if(payload.kind === 'join' && payload.name){ applyJoin(payload.name); render(); }
+      else if(payload.kind === 'tx' && payload.tx){ if(applyTx(payload.tx)) render(true); }
+      break;
+    }
+    default: break;
+  }
+  if(!usernameAccepted && packet.cmd === 'direct') onConnectedSuccess();
+}
+function armFallbackAccept(){
+  setTimeout(() => {
+    if(!usernameAccepted && socket && socket.readyState === WebSocket.OPEN) onConnectedSuccess();
+  }, 2500);
+}
+
+/* ======================= AUTH ======================= */
+const authScreen = document.getElementById('authScreen');
+const mainApp = document.getElementById('mainApp');
+const authMsg = document.getElementById('authMsg');
+const tabLogin = document.getElementById('tabLogin');
+const tabSignup = document.getElementById('tabSignup');
+const authConfirmWrap = document.getElementById('authConfirmWrap');
+const authSubmit = document.getElementById('authSubmit');
+const authHint = document.getElementById('authHint');
+let authMode = 'login';
+
+function setAuthMode(mode){
+  authMode = mode;
+  tabLogin.classList.toggle('active', mode === 'login');
+  tabSignup.classList.toggle('active', mode === 'signup');
+  authConfirmWrap.style.display = mode === 'signup' ? 'block' : 'none';
+  authSubmit.textContent = mode === 'login' ? 'Log in' : 'Create account';
+  authHint.textContent = mode === 'login'
+    ? 'New here? Switch to "Sign up" to open an account with 5.00 AUT.'
+    : 'Already have an account? Switch to "Log in" instead.';
+  authMsg.className = 'msg';
+}
+tabLogin.addEventListener('click', () => setAuthMode('login'));
+tabSignup.addEventListener('click', () => setAuthMode('signup'));
+
+function enterApp(){
+  authScreen.style.display = 'none';
+  mainApp.style.display = 'block';
+  applyJoin(myName);
+  render();
+  connect();
+  armFallbackAccept();
+}
+
+authSubmit.addEventListener('click', async () => {
+  const username = document.getElementById('authUser').value.trim();
+  const password = document.getElementById('authPass').value;
+  const remember = document.getElementById('rememberMe').checked;
+  const users = loadUsers();
+
+  if(!username || !password){
+    showMsg(authMsg, 'Enter a username and password.', false);
+    return;
+  }
+
+  if(authMode === 'signup'){
+    const confirm = document.getElementById('authConfirm').value;
+    if(users[username]){ showMsg(authMsg, 'That username is already taken.', false); return; }
+    if(password.length < 4){ showMsg(authMsg, 'Password should be at least 4 characters.', false); return; }
+    if(password !== confirm){ showMsg(authMsg, 'Passwords don\u2019t match.', false); return; }
+
+    const salt = randomHex(16);
+    const hash = await hashPassword(password, salt);
+    users[username] = { salt, hash };
+    saveUsers(users);
+
+    myName = username;
+    const store = remember ? localStorage : sessionStorage;
+    store.setItem(STORAGE_SESSION_KEY, username);
+    enterApp();
+    return;
+  }
+
+  // login
+  const record = users[username];
+  if(!record){ showMsg(authMsg, 'No account with that username. Try signing up.', false); return; }
+  const hash = await hashPassword(password, record.salt);
+  if(hash !== record.hash){ showMsg(authMsg, 'Incorrect password.', false); return; }
+
+  myName = username;
+  const store = remember ? localStorage : sessionStorage;
+  store.setItem(STORAGE_SESSION_KEY, username);
+  enterApp();
+});
+
+document.getElementById('authPass').addEventListener('keydown', (e) => { if(e.key === 'Enter') authSubmit.click(); });
+document.getElementById('authConfirm').addEventListener('keydown', (e) => { if(e.key === 'Enter') authSubmit.click(); });
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  localStorage.removeItem(STORAGE_SESSION_KEY);
+  sessionStorage.removeItem(STORAGE_SESSION_KEY);
+  deliberatelyClosed = true;
+  if(socket) socket.close(1000, 'Logging out');
+  location.reload();
+});
+
+/* Auto-login if a remembered session exists */
+(function checkSession(){
+  const sessionName = sessionStorage.getItem(STORAGE_SESSION_KEY) || localStorage.getItem(STORAGE_SESSION_KEY);
+  const users = loadUsers();
+  if(sessionName && users[sessionName]){
+    myName = sessionName;
+    enterApp();
+  }
+})();
+
+/* ======================= UI: recipient "someone else" toggle ======================= */
+document.getElementById('recipient').addEventListener('change', function(){
+  document.getElementById('otherNameWrap').style.display = this.value === '__other__' ? 'block' : 'none';
+});
+
+/* ======================= UI: transaction search ======================= */
+document.getElementById('txSearch').addEventListener('input', function(){
+  txFilter = this.value.trim();
+  render();
+});
+
+/* ======================= UI: send payment ======================= */
+document.getElementById('sendBtn').addEventListener('click', () => {
+  const payMsg = document.getElementById('payMsg');
+  const recipientSel = document.getElementById('recipient');
+  let recipient = recipientSel.value;
+  if(recipient === '__other__') recipient = document.getElementById('otherName').value.trim();
+  const amount = parseFloat(document.getElementById('amount').value);
+  const note = document.getElementById('note').value.trim();
+
+  if(!recipient){ showMsg(payMsg, 'Enter a name to pay.', false); return; }
+  if(recipient === myName){ showMsg(payMsg, "You can't pay yourself.", false); return; }
+  if(!amount || amount <= 0){ showMsg(payMsg, 'Enter an amount greater than 0.', false); return; }
+
+  const myBal = state.balances[myName] !== undefined ? state.balances[myName] : STARTING_BALANCE;
+  if(amount > myBal){ showMsg(payMsg, `Insufficient funds — you have ${fmt(myBal)} AUT.`, false); return; }
+
+  const tx = { id: makeId(), from: myName, to: recipient, amount: amount, note: note, time: Date.now() };
+  applyTx(tx);
+  broadcastTx(tx);
+  render(true);
+
+  document.getElementById('amount').value = '';
+  document.getElementById('note').value = '';
+  showMsg(payMsg, `Sent ${fmt(amount)} AUT to ${recipient}.`, true);
+});
+
+/* ======================= Admin vault ======================= */
+const overlay = document.getElementById('vaultOverlay');
+const vaultCode = document.getElementById('vaultCode');
+const vaultMsg = document.getElementById('vaultMsg');
+const dialDisplay = document.getElementById('dialDisplay');
+
+document.getElementById('openAdmin').addEventListener('click', () => {
+  overlay.classList.add('show');
+  vaultCode.value = '';
+  dialDisplay.textContent = '••••';
+  vaultMsg.style.display = 'none';
+  vaultCode.focus();
+});
+document.getElementById('cancelVault').addEventListener('click', () => overlay.classList.remove('show'));
+vaultCode.addEventListener('input', () => {
+  dialDisplay.textContent = '•'.repeat(vaultCode.value.length) + '·'.repeat(Math.max(0, 4 - vaultCode.value.length));
+});
+vaultCode.addEventListener('keydown', (e) => { if(e.key === 'Enter') document.getElementById('unlockVault').click(); });
+
+document.getElementById('unlockVault').addEventListener('click', () => {
+  if(vaultCode.value === ADMIN_CODE){
+    adminUnlocked = true;
+    overlay.classList.remove('show');
+    document.getElementById('adminPanel').classList.add('show');
+    render();
+    document.getElementById('adminPanel').scrollIntoView({behavior:'smooth'});
+  } else {
+    vaultMsg.textContent = 'Incorrect code. Try again.';
+    vaultMsg.style.display = 'block';
+    vaultCode.value = '';
+    dialDisplay.textContent = '••••';
+  }
+});
+document.getElementById('lockAdmin').addEventListener('click', () => {
+  adminUnlocked = false;
+  document.getElementById('adminPanel').classList.remove('show');
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+/* ======================= Admin: adjust balance ======================= */
+document.getElementById('adjBtn').addEventListener('click', () => {
+  const name = document.getElementById('adjName').value;
+  const delta = parseFloat(document.getElementById('adjAmount').value);
+  if(!name || !delta) return;
+  const tx = { id: makeId(), from: delta >= 0 ? 'Admin adjustment' : name, to: delta >= 0 ? name : 'Admin adjustment', amount: Math.abs(delta), note: 'Manual admin adjustment', time: Date.now() };
+  applyTx(tx);
+  broadcastTx(tx);
+  document.getElementById('adjAmount').value = '';
+  render();
+});
+
+/* ======================= Admin: reset local data ======================= */
+document.getElementById('resetAllBtn').addEventListener('click', () => {
+  if(confirm('This erases your local copy of the ledger (balances/transactions on this device only). Registered accounts and other devices are unaffected. Continue?')){
+    state = defaultState();
+    applyJoin(myName);
+    saveState();
+    render();
+  }
+});
+</script>
+
+</body>
+</html>
