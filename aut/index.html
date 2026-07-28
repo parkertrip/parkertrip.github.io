@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,19 +8,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#10192B;
-    --ink-2:#182338;
-    --ink-3:#1F2C46;
-    --paper:#F3ECDA;
-    --paper-dim:#E8DFC6;
-    --brass:#C9A227;
-    --brass-bright:#E0BE4A;
-    --forest:#2E6B52;
-    --forest-bright:#3E9873;
-    --rust:#9C4A3A;
-    --rust-bright:#D77860;
-    --slate:#8792A3;
-    --slate-dark:#556074;
+    --ink:#10192B; --ink-2:#182338; --ink-3:#1F2C46;
+    --paper:#F3ECDA; --paper-dim:#E8DFC6;
+    --brass:#C9A227; --brass-bright:#E0BE4A;
+    --forest:#2E6B52; --forest-bright:#3E9873;
+    --rust:#9C4A3A; --rust-bright:#D77860;
+    --amber:#C98A27; --amber-bright:#E0A94A;
+    --slate:#8792A3; --slate-dark:#556074;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -30,12 +23,8 @@
     background-image:
       radial-gradient(circle at 15% 10%, rgba(201,162,39,0.07), transparent 40%),
       radial-gradient(circle at 85% 90%, rgba(201,162,39,0.05), transparent 45%);
-    color:var(--paper);
-    font-family:'Inter', sans-serif;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    padding:32px 16px 80px;
+    color:var(--paper); font-family:'Inter', sans-serif;
+    min-height:100vh; display:flex; justify-content:center; padding:32px 16px 80px;
   }
   .app{ width:100%; max-width:460px; }
   .fade-in{ animation:fadeIn .5s ease both; }
@@ -46,11 +35,10 @@
   .brand h1 span{ color:var(--brass-bright); }
   .brand small{ color:var(--slate); font-size:0.72rem; letter-spacing:1.5px; text-transform:uppercase; }
 
-  /* Connection status strip */
   .status-strip{
     display:flex; align-items:center; gap:8px; font-size:0.75rem; color:var(--slate);
     margin-bottom:20px; padding:8px 12px; background:var(--ink-2);
-    border:1px solid rgba(201,162,39,0.15); border-radius:8px;
+    border:1px solid rgba(201,162,39,0.15); border-radius:8px; flex-wrap:wrap;
   }
   .status-dot{ width:8px; height:8px; border-radius:50%; background:var(--slate-dark); flex-shrink:0; }
   .status-dot.connecting{ background:var(--brass); animation:pulse 1.2s infinite; }
@@ -58,25 +46,25 @@
   .status-dot.offline{ background:var(--rust-bright); }
   @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.3;} }
   .status-strip .who{ margin-left:auto; color:var(--brass-bright); font-family:'IBM Plex Mono', monospace; font-size:0.72rem; }
+  .lock-badge{ display:flex; align-items:center; gap:4px; color:var(--brass-bright); font-size:0.68rem; }
 
-  /* Top bar with avatar + logout, shown once signed in */
   .topbar{ display:flex; align-items:center; gap:10px; margin-bottom:18px; }
   .avatar{
-    width:38px; height:38px; border-radius:50%;
+    width:38px; height:38px; border-radius:50%; flex-shrink:0;
     display:flex; align-items:center; justify-content:center;
-    font-family:'Fraunces', serif; font-weight:600; font-size:0.95rem;
-    color:var(--ink); flex-shrink:0;
-    border:2px solid rgba(0,0,0,0.15);
+    font-family:'Fraunces', serif; font-weight:600; font-size:0.95rem; color:var(--ink);
+    border:2px solid rgba(0,0,0,0.15); background-size:cover; background-position:center;
   }
   .topbar .who-name{ font-size:0.92rem; font-weight:600; }
   .topbar .who-sub{ font-size:0.7rem; color:var(--slate); }
-  .logout-btn{
-    margin-left:auto; width:auto; background:transparent; border:1px solid rgba(201,162,39,0.3);
-    color:var(--slate); font-size:0.72rem; padding:7px 12px; text-transform:uppercase; letter-spacing:0.5px;
+  .icon-btn{
+    margin-left:0; width:auto; background:transparent; border:1px solid rgba(201,162,39,0.3);
+    color:var(--slate); font-size:0.72rem; padding:7px 10px; text-transform:uppercase; letter-spacing:0.5px;
+    display:flex; align-items:center; gap:5px;
   }
-  .logout-btn:hover{ color:var(--brass-bright); background:rgba(201,162,39,0.08); }
+  .icon-btn:hover{ color:var(--brass-bright); background:rgba(201,162,39,0.08); }
+  .topbar-actions{ margin-left:auto; display:flex; gap:6px; }
 
-  /* Ledger stamp balance card */
   .stamp-wrap{ display:flex; justify-content:center; margin:8px 0 26px; }
   .stamp{
     width:220px; height:220px; border-radius:50%;
@@ -123,22 +111,22 @@
   .msg.show{ display:block; animation:fadeIn .2s ease both; }
   .msg.ok{ background:rgba(46,107,82,0.2); color:#8fd6b6; border:1px solid rgba(46,107,82,0.4); }
   .msg.err{ background:rgba(156,74,58,0.2); color:#f0a897; border:1px solid rgba(156,74,58,0.4); }
+  .msg.info{ background:rgba(201,138,39,0.18); color:var(--amber-bright); border:1px solid rgba(201,138,39,0.4); }
 
-  /* Ledger list */
   .ledger-entry{ display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:1px dashed rgba(201,162,39,0.18); }
   .ledger-entry:last-child{ border-bottom:none; }
-  .le-icon{
-    width:30px; height:30px; border-radius:50%; flex-shrink:0;
-    display:flex; align-items:center; justify-content:center;
-  }
+  .le-icon{ width:30px; height:30px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
   .le-icon.neg{ background:rgba(156,74,58,0.18); color:var(--rust-bright); }
   .le-icon.pos{ background:rgba(46,107,82,0.18); color:var(--forest-bright); }
+  .le-icon.wait{ background:rgba(201,138,39,0.18); color:var(--amber-bright); }
   .le-left{ display:flex; flex-direction:column; gap:2px; flex:1; min-width:0; }
   .le-title{ font-size:0.9rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .le-sub{ font-size:0.7rem; color:var(--slate); font-family:'IBM Plex Mono', monospace; }
+  .le-sub.pending{ color:var(--amber-bright); }
   .le-amt{ font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:0.95rem; flex-shrink:0; }
   .le-amt.neg{ color:var(--rust-bright); }
   .le-amt.pos{ color:var(--forest-bright); }
+  .le-amt.wait{ color:var(--amber-bright); }
   .empty{ color:var(--slate); font-size:0.85rem; text-align:center; padding:16px 0; }
 
   footer{ text-align:center; margin-top:8px; }
@@ -148,10 +136,9 @@
   }
   .admin-link:hover{ color:var(--brass-bright); }
 
-  /* Modal (vault dial) */
-  .overlay{ position:fixed; inset:0; background:rgba(6,10,18,0.75); display:none; align-items:center; justify-content:center; padding:20px; z-index:50; }
+  .overlay{ position:fixed; inset:0; background:rgba(6,10,18,0.75); display:none; align-items:center; justify-content:center; padding:20px; z-index:50; overflow-y:auto; }
   .overlay.show{ display:flex; }
-  .vault{ background:var(--ink-2); border:1px solid rgba(201,162,39,0.3); border-radius:16px; padding:28px 24px; width:100%; max-width:340px; text-align:center; }
+  .vault{ background:var(--ink-2); border:1px solid rgba(201,162,39,0.3); border-radius:16px; padding:28px 24px; width:100%; max-width:340px; text-align:center; margin:auto; }
   .dial{
     width:110px; height:110px; border-radius:50%; border:3px solid var(--brass); margin:0 auto 18px;
     display:flex; align-items:center; justify-content:center;
@@ -161,30 +148,25 @@
   .vault h3{ font-family:'Fraunces', serif; margin:0 0 6px; font-size:1.1rem; }
   .vault p{ color:var(--slate); font-size:0.8rem; margin:0 0 16px; }
   .vault .row{ display:flex; gap:10px; }
+  .vault.wide{ max-width:380px; text-align:left; }
+  .vault.wide h3{ text-align:center; }
+  .vault.wide p{ text-align:center; }
 
-  /* Auth screen */
   .auth-wrap{ display:flex; flex-direction:column; align-items:center; padding-top:40px; }
-  .auth-card{
-    background:var(--ink-2); border:1px solid rgba(201,162,39,0.25); border-radius:16px;
-    padding:30px 26px; width:100%;
-  }
+  .auth-card{ background:var(--ink-2); border:1px solid rgba(201,162,39,0.25); border-radius:16px; padding:30px 26px; width:100%; }
   .auth-emblem{
     width:64px; height:64px; border-radius:50%; margin:0 auto 18px; border:2px solid var(--brass);
     display:flex; align-items:center; justify-content:center; font-family:'Fraunces', serif;
     font-size:1.6rem; color:var(--brass-bright); background:var(--ink);
   }
   .auth-tabs{ display:flex; gap:6px; margin-bottom:20px; background:var(--ink); border-radius:8px; padding:4px; }
-  .auth-tab{
-    flex:1; text-align:center; padding:9px 0; font-size:0.82rem; font-weight:600; color:var(--slate);
-    border-radius:6px; cursor:pointer; width:auto; background:transparent; border:none;
-  }
+  .auth-tab{ flex:1; text-align:center; padding:9px 0; font-size:0.82rem; font-weight:600; color:var(--slate); border-radius:6px; cursor:pointer; width:auto; background:transparent; border:none; }
   .auth-tab.active{ background:var(--brass); color:var(--ink); }
   .remember-row{ display:flex; align-items:center; gap:8px; margin:-6px 0 16px; }
   .remember-row input[type=checkbox]{ width:auto; margin:0; accent-color:var(--brass); }
   .remember-row label{ margin:0; text-transform:none; letter-spacing:0; font-size:0.82rem; color:var(--paper); }
   .auth-hint{ font-size:0.72rem; color:var(--slate-dark); text-align:center; margin-top:4px; }
 
-  /* Admin panel */
   #adminPanel{ display:none; }
   #adminPanel.show{ display:block; }
   .balance-row{ display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px dashed rgba(201,162,39,0.15); }
@@ -198,6 +180,19 @@
   .btn-danger:hover{ filter:brightness(1.1); }
   .pill-list{ display:flex; flex-wrap:wrap; gap:6px; }
   .pill{ background:var(--ink); border:1px solid rgba(201,162,39,0.3); border-radius:999px; padding:4px 10px; font-size:0.72rem; font-family:'IBM Plex Mono', monospace; color:var(--brass-bright); }
+  .note-box{ font-size:0.75rem; color:var(--slate); background:var(--ink); border:1px solid rgba(201,162,39,0.15); border-radius:8px; padding:10px 12px; margin-bottom:14px; }
+
+  /* Settings modal */
+  .settings-avatar-row{ display:flex; align-items:center; gap:16px; margin-bottom:20px; }
+  .settings-avatar{
+    width:72px; height:72px; border-radius:50%; border:2px solid var(--brass);
+    display:flex; align-items:center; justify-content:center; font-family:'Fraunces', serif;
+    font-size:1.6rem; color:var(--ink); background-size:cover; background-position:center; flex-shrink:0;
+  }
+  .settings-avatar-btns{ display:flex; flex-direction:column; gap:8px; flex:1; }
+  .settings-avatar-btns button{ font-size:0.78rem; padding:9px 12px; }
+  .settings-section-title{ font-family:'Fraunces', serif; font-size:0.95rem; margin:18px 0 10px; color:var(--brass-bright); }
+  .settings-section-title:first-of-type{ margin-top:0; }
 
   ::placeholder{ color:var(--slate-dark); }
   :focus-visible{ outline:2px solid var(--brass-bright); outline-offset:2px; }
@@ -244,12 +239,16 @@
       <div class="who-name" id="whoName"></div>
       <div class="who-sub">Signed in</div>
     </div>
-    <button class="logout-btn" id="logoutBtn">Log out</button>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="openSettings">Settings</button>
+      <button class="icon-btn" id="logoutBtn">Log out</button>
+    </div>
   </div>
 
   <div class="status-strip">
     <div class="status-dot" id="statusDot"></div>
     <span id="statusText">Starting up…</span>
+    <span class="lock-badge" id="lockBadge" style="display:none;">🔒 End-to-end encrypted</span>
     <span class="who" id="statusWho"></span>
   </div>
 
@@ -293,6 +292,38 @@
   </footer>
 </div>
 
+<!-- Settings modal -->
+<div class="overlay" id="settingsOverlay">
+  <div class="vault wide">
+    <h3>Settings</h3>
+    <p>Manage your profile and account.</p>
+    <div id="settingsMsg" class="msg"></div>
+
+    <div class="settings-section-title">Profile picture</div>
+    <div class="settings-avatar-row">
+      <div class="settings-avatar" id="settingsAvatarPreview"></div>
+      <div class="settings-avatar-btns">
+        <button class="btn-ghost" id="uploadAvatarBtn">Upload photo</button>
+        <button class="btn-ghost" id="removeAvatarBtn">Remove photo</button>
+      </div>
+      <input type="file" id="avatarFileInput" accept="image/*" style="display:none;">
+    </div>
+
+    <div class="settings-section-title">Change password</div>
+    <label for="curPass">Current password</label>
+    <input type="password" id="curPass" placeholder="••••••••">
+    <label for="newPass">New password</label>
+    <input type="password" id="newPass" placeholder="••••••••">
+    <label for="newPassConfirm">Confirm new password</label>
+    <input type="password" id="newPassConfirm" placeholder="••••••••">
+    <button class="btn-primary" id="changePassBtn">Update password</button>
+
+    <div class="row" style="margin-top:18px;">
+      <button class="btn-ghost" id="closeSettings">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- Vault code modal -->
 <div class="overlay" id="vaultOverlay">
   <div class="vault">
@@ -316,7 +347,8 @@
   </div>
 
   <div class="card" style="border-color:rgba(201,162,39,0.4);">
-    <h2>All balances</h2>
+    <h2>Balances (as known to this device)</h2>
+    <div class="note-box">Payments are end-to-end encrypted, so this device can only see balances for itself and anyone it has directly transacted with — not a global view.</div>
     <div id="adminBalances"></div>
     <div class="mini-row">
       <select id="adjName" style="margin-bottom:0;"></select>
@@ -326,12 +358,17 @@
   </div>
 
   <div class="card" style="border-color:rgba(201,162,39,0.4);">
-    <h2>Registered accounts</h2>
+    <h2>Registered accounts (this device)</h2>
     <div id="adminAccounts"></div>
   </div>
 
   <div class="card" style="border-color:rgba(201,162,39,0.4);">
-    <h2>All transactions</h2>
+    <h2>Pending outbox</h2>
+    <div id="adminOutbox"></div>
+  </div>
+
+  <div class="card" style="border-color:rgba(201,162,39,0.4);">
+    <h2>Your transactions (sent/received)</h2>
     <div id="adminTxList"></div>
     <div class="danger-zone">
       <button class="btn-danger" id="resetAllBtn">Reset my local ledger</button>
@@ -348,20 +385,40 @@
 const ADMIN_CODE = "5050";
 const STORAGE_USERS_KEY = "autLedgerUsers_v1";
 const STORAGE_SESSION_KEY = "autLedgerSession_v1";
-const STORAGE_STATE_KEY = "autLedgerState_v1";
+const STORAGE_STATE_KEY = "autLedgerState_v2";
+const STORAGE_KEYS_KEY = "autLedgerKnownKeys_v1";
 const CL_SERVERS = [
   'wss://cloudlink.mikedev101.cc/0.2.0',
   'wss://cl.mikedev101.cc/',
   'wss://cl1.mubilop.tech/'
 ];
 const STARTING_BALANCE = 5;
+const ACK_RETRY_MS = 6000;
+const ACK_MAX_RETRIES = 5;
+const OUTBOX_FLUSH_MS = 4000;
+const JOIN_HEARTBEAT_MS = 25000;
 
-/* ======================= HASHING ======================= */
+/* ======================= UTIL: base64 <-> bytes ======================= */
+function bufToB64(buf){
+  let bin = '';
+  const bytes = new Uint8Array(buf);
+  for(let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+function b64ToBuf(b64){
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for(let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes;
+}
 function randomHex(bytes){
   const arr = new Uint8Array(bytes);
-  (window.crypto || {}).getRandomValues ? crypto.getRandomValues(arr) : arr.forEach((_, i) => arr[i] = Math.floor(Math.random() * 256));
+  if(window.crypto && crypto.getRandomValues) crypto.getRandomValues(arr);
+  else arr.forEach((_, i) => arr[i] = Math.floor(Math.random() * 256));
   return Array.from(arr).map(b => b.toString(16).padStart(2, '0')).join('');
 }
+
+/* ======================= PASSWORD HASHING ======================= */
 async function hashPassword(password, salt){
   const input = salt + ':' + password;
   if(window.crypto && crypto.subtle && crypto.subtle.digest){
@@ -371,11 +428,58 @@ async function hashPassword(password, salt){
       return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
     }catch(e){ /* fall through */ }
   }
-  // Fallback for contexts without SubtleCrypto (e.g. some browsers over file://)
   let h = 0;
   for(let i = 0; i < input.length; i++){ h = ((h << 5) - h + input.charCodeAt(i)) | 0; }
   return 'fb_' + Math.abs(h).toString(16) + '_' + input.length;
 }
+
+/* ======================= E2EE (ECDH P-256 + AES-GCM) ======================= */
+const cryptoAvailable = !!(window.crypto && crypto.subtle && crypto.subtle.generateKey);
+
+async function generateKeyPair(){
+  if(!cryptoAvailable) return null;
+  const pair = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'P-256' }, true, ['deriveKey']);
+  const pubJwk = await crypto.subtle.exportKey('jwk', pair.publicKey);
+  const privJwk = await crypto.subtle.exportKey('jwk', pair.privateKey);
+  return { publicKey: pair.publicKey, privateKey: pair.privateKey, pubJwk, privJwk };
+}
+async function importKeyPairFromJwk(pubJwk, privJwk){
+  const publicKey = await crypto.subtle.importKey('jwk', pubJwk, { name: 'ECDH', namedCurve: 'P-256' }, true, []);
+  const privateKey = await crypto.subtle.importKey('jwk', privJwk, { name: 'ECDH', namedCurve: 'P-256' }, true, ['deriveKey']);
+  return { publicKey, privateKey, pubJwk, privJwk };
+}
+async function importPublicJwk(pubJwk){
+  return crypto.subtle.importKey('jwk', pubJwk, { name: 'ECDH', namedCurve: 'P-256' }, true, []);
+}
+async function deriveSharedAesKey(myPrivateKey, theirPublicKeyObj){
+  return crypto.subtle.deriveKey({ name: 'ECDH', public: theirPublicKeyObj }, myPrivateKey, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+}
+async function encryptForRecipient(theirPubJwk, plainObj){
+  const theirPub = await importPublicJwk(theirPubJwk);
+  const aesKey = await deriveSharedAesKey(myKeyPair.privateKey, theirPub);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const enc = new TextEncoder().encode(JSON.stringify(plainObj));
+  const ctBuf = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, aesKey, enc);
+  return { iv: bufToB64(iv), ct: bufToB64(ctBuf) };
+}
+async function decryptFromSender(senderPubJwk, ivB64, ctB64){
+  const senderPub = await importPublicJwk(senderPubJwk);
+  const aesKey = await deriveSharedAesKey(myKeyPair.privateKey, senderPub);
+  const iv = b64ToBuf(ivB64);
+  const ct = b64ToBuf(ctB64);
+  const buf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, aesKey, ct);
+  return JSON.parse(new TextDecoder().decode(buf));
+}
+
+let myKeyPair = null; // { publicKey, privateKey, pubJwk, privJwk }
+
+/* ======================= KNOWN PUBLIC KEYS CACHE ======================= */
+function loadKnownKeys(){
+  try{ return JSON.parse(localStorage.getItem(STORAGE_KEYS_KEY)) || {}; }
+  catch(e){ return {}; }
+}
+function saveKnownKeys(){ localStorage.setItem(STORAGE_KEYS_KEY, JSON.stringify(knownKeys)); }
+let knownKeys = loadKnownKeys(); // name -> pubJwk
 
 /* ======================= USER STORE ======================= */
 function loadUsers(){
@@ -385,7 +489,7 @@ function loadUsers(){
 function saveUsers(users){ localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(users)); }
 
 /* ======================= LEDGER STATE ======================= */
-function defaultState(){ return { balances: {}, transactions: [], seenIds: [] }; }
+function defaultState(){ return { balances: {}, transactions: [], seenIds: [], outbox: [] }; }
 function loadState(){
   try{
     const raw = localStorage.getItem(STORAGE_STATE_KEY);
@@ -393,6 +497,7 @@ function loadState(){
     const parsed = JSON.parse(raw);
     if(!parsed.balances || !parsed.transactions) return defaultState();
     if(!parsed.seenIds) parsed.seenIds = [];
+    if(!parsed.outbox) parsed.outbox = [];
     return parsed;
   }catch(e){ return defaultState(); }
 }
@@ -403,6 +508,7 @@ let myName = "";
 let adminUnlocked = false;
 let onlineUsers = [];
 let txFilter = "";
+let keyRequestedAt = {}; // name -> timestamp, to throttle key requests
 
 /* ======================= HELPERS ======================= */
 function fmt(n){ return Number(n).toFixed(2); }
@@ -419,11 +525,11 @@ function makeId(){
   if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
   return 'tx-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
 }
-function showMsg(el, text, ok){
+function showMsg(el, text, kind){
   el.textContent = text;
-  el.className = 'msg show ' + (ok ? 'ok' : 'err');
+  el.className = 'msg show ' + kind;
   clearTimeout(el._t);
-  el._t = setTimeout(() => { el.className = 'msg'; }, 3500);
+  el._t = setTimeout(() => { el.className = 'msg'; }, 4000);
 }
 function hueFromName(name){
   let h = 0;
@@ -436,16 +542,34 @@ function initialsFromName(name){
 }
 
 /* ======================= LEDGER LOGIC ======================= */
-function applyTx(tx){
+// Sender side: commit the debit locally the moment "Send" is pressed.
+function applyOutgoingLocal(tx){
   if(state.seenIds.includes(tx.id)) return false;
   state.seenIds.push(tx.id);
-  if(state.balances[tx.from] === undefined) state.balances[tx.from] = 0;
+  if(state.balances[myName] === undefined) state.balances[myName] = STARTING_BALANCE;
+  state.balances[myName] = +(state.balances[myName] - tx.amount).toFixed(2);
   if(state.balances[tx.to] === undefined) state.balances[tx.to] = 0;
-  state.balances[tx.from] = +(state.balances[tx.from] - tx.amount).toFixed(2);
-  state.balances[tx.to] = +(state.balances[tx.to] + tx.amount).toFixed(2);
-  state.transactions.push(tx);
+  state.balances[tx.to] = +(state.balances[tx.to] + tx.amount).toFixed(2); // optimistic local estimate
+  state.transactions.push({ ...tx, direction: 'out', status: 'pending' });
   saveState();
   return true;
+}
+// Recipient side: credit on successful decrypt.
+function applyIncoming(tx){
+  if(state.seenIds.includes(tx.id)) return false;
+  state.seenIds.push(tx.id);
+  if(state.balances[myName] === undefined) state.balances[myName] = STARTING_BALANCE;
+  state.balances[myName] = +(state.balances[myName] + tx.amount).toFixed(2);
+  if(state.balances[tx.from] === undefined) state.balances[tx.from] = 0;
+  state.balances[tx.from] = +(state.balances[tx.from] - tx.amount).toFixed(2); // optimistic estimate
+  state.transactions.push({ ...tx, direction: 'in', status: 'delivered' });
+  saveState();
+  return true;
+}
+function markDelivered(txId){
+  const t = state.transactions.find(t => t.id === txId && t.direction === 'out');
+  if(t && t.status !== 'delivered'){ t.status = 'delivered'; saveState(); return true; }
+  return false;
 }
 function applyJoin(name){
   if(state.balances[name] === undefined){
@@ -460,6 +584,12 @@ function bumpBalance(){
   el.classList.add('bump');
   setTimeout(() => el.classList.remove('bump'), 250);
 }
+function avatarStyleFor(name){
+  const users = loadUsers();
+  const rec = users[name];
+  if(rec && rec.avatar) return { background: `url(${rec.avatar})`, text: '' };
+  return { background: `hsl(${hueFromName(name || 'x')}, 55%, 65%)`, text: initialsFromName(name || '?') };
+}
 
 function render(bump){
   const myBal = state.balances[myName] !== undefined ? state.balances[myName] : STARTING_BALANCE;
@@ -468,9 +598,12 @@ function render(bump){
   if(bump) bumpBalance();
 
   document.getElementById('whoName').textContent = myName;
-  const avatar = document.getElementById('avatar');
-  avatar.textContent = initialsFromName(myName || '?');
-  avatar.style.background = `hsl(${hueFromName(myName || 'x')}, 55%, 65%)`;
+  const av = avatarStyleFor(myName);
+  const avatarEl = document.getElementById('avatar');
+  avatarEl.style.background = av.background;
+  avatarEl.textContent = av.text;
+
+  document.getElementById('lockBadge').style.display = cryptoAvailable ? 'flex' : 'none';
 
   let yourTx = state.transactions.filter(t => t.from === myName || t.to === myName);
   if(txFilter){
@@ -489,16 +622,22 @@ function render(bump){
     txList.innerHTML = yourTx.slice().reverse().map(t => {
       const outgoing = t.from === myName;
       const counterparty = outgoing ? t.to : t.from;
+      const pending = outgoing && t.status === 'pending';
       const sign = outgoing ? '−' : '+';
-      const cls = outgoing ? 'neg' : 'pos';
-      const arrow = outgoing
-        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M17 7L7 17M7 17H15M7 17V9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      const cls = pending ? 'wait' : (outgoing ? 'neg' : 'pos');
+      const arrow = pending
+        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+        : outgoing
+          ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+          : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M17 7L7 17M7 17H15M7 17V9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      const subLine = pending
+        ? `Pending — waiting for ${escapeHtml(counterparty)} to come online`
+        : timeStr(t.time);
       return `<div class="ledger-entry">
         <div class="le-icon ${cls}">${arrow}</div>
         <div class="le-left">
           <div class="le-title">${outgoing ? 'To ' : 'From '}${escapeHtml(counterparty)}${t.note ? ' — ' + escapeHtml(t.note) : ''}</div>
-          <div class="le-sub">${timeStr(t.time)}</div>
+          <div class="le-sub ${pending ? 'pending' : ''}">${subLine}</div>
         </div>
         <div class="le-amt ${cls}">${sign}${fmt(t.amount)} AUT</div>
       </div>`;
@@ -510,7 +649,7 @@ function render(bump){
   const recipientSel = document.getElementById('recipient');
   const prevVal = recipientSel.value;
   recipientSel.innerHTML = Array.from(known).sort().map(n =>
-    `<option value="${escapeHtml(n)}">${escapeHtml(n)}${onlineUsers.includes(n) ? ' 🟢' : ''}</option>`
+    `<option value="${escapeHtml(n)}">${escapeHtml(n)}${onlineUsers.includes(n) ? ' 🟢' : ' ⚪'}</option>`
   ).join('') + '<option value="__other__">Someone else…</option>';
   if(Array.from(recipientSel.options).some(o => o.value === prevVal)) recipientSel.value = prevVal;
 
@@ -539,6 +678,11 @@ function renderAdmin(){
     ? userNames.map(n => `<div class="balance-row"><span class="name">${escapeHtml(n)}</span><span class="val">${state.balances[n] !== undefined ? fmt(state.balances[n]) + ' AUT' : '—'}</span></div>`).join('')
     : '<div class="empty">No accounts registered on this device yet.</div>';
 
+  const outDiv = document.getElementById('adminOutbox');
+  outDiv.innerHTML = state.outbox.length
+    ? state.outbox.map(o => `<div class="balance-row"><span class="name">To ${escapeHtml(o.to)} — ${fmt(o.amount)} AUT</span><span class="val">${knownKeys[o.to] ? 'awaiting delivery' : 'awaiting key'}</span></div>`).join('')
+    : '<div class="empty">Nothing queued — all payments delivered.</div>';
+
   const adminTx = document.getElementById('adminTxList');
   if(state.transactions.length === 0){
     adminTx.innerHTML = '<div class="empty">No transactions recorded yet.</div>';
@@ -547,7 +691,7 @@ function renderAdmin(){
       <div class="ledger-entry">
         <div class="le-left">
           <div class="le-title">${escapeHtml(t.from)} → ${escapeHtml(t.to)}${t.note ? ' — ' + escapeHtml(t.note) : ''}</div>
-          <div class="le-sub">${timeStr(t.time)}</div>
+          <div class="le-sub">${timeStr(t.time)} · ${t.status || 'delivered'}</div>
         </div>
         <div class="le-amt">${fmt(t.amount)} AUT</div>
       </div>
@@ -555,12 +699,18 @@ function renderAdmin(){
   }
 }
 
-/* ======================= NETWORKING (CloudLink protocol) ======================= */
+/* ======================= NETWORKING (CloudLink protocol, hardened) ======================= */
 let socket = null;
 let serverIndex = 0;
 let usernameAccepted = false;
 let handshakeTimer = null;
 let deliberatelyClosed = false;
+let reconnectDelay = 1000;
+const RECONNECT_MAX_DELAY = 15000;
+let outgoingBuffer = []; // queued while socket isn't OPEN yet
+let ackTimers = {}; // txId -> {timer, retries}
+let heartbeatTimer = null;
+let outboxFlushTimer = null;
 
 function setStatus(kind, text){
   document.getElementById('statusDot').className = 'status-dot ' + kind;
@@ -569,14 +719,10 @@ function setStatus(kind, text){
 }
 
 function connect(){
-  if(serverIndex >= CL_SERVERS.length){
-    setStatus('offline', 'Could not reach any server — running local-only.');
-    return;
-  }
-  const url = CL_SERVERS[serverIndex];
-  setStatus('connecting', `Connecting… (${serverIndex + 1}/${CL_SERVERS.length})`);
+  const url = CL_SERVERS[serverIndex % CL_SERVERS.length];
+  setStatus('connecting', `Connecting… (${(serverIndex % CL_SERVERS.length) + 1}/${CL_SERVERS.length})`);
   try{ socket = new WebSocket(url); }
-  catch(e){ serverIndex++; connect(); return; }
+  catch(e){ scheduleReconnect(); return; }
 
   socket.onopen = () => {
     handshakeTimer = setTimeout(sendHandshake, 400);
@@ -584,9 +730,11 @@ function connect(){
   };
   socket.onclose = () => {
     clearTimeout(handshakeTimer);
+    clearInterval(heartbeatTimer);
     if(deliberatelyClosed) return;
-    if(!usernameAccepted){ serverIndex++; connect(); }
-    else{ usernameAccepted = false; setStatus('offline', 'Disconnected — running local-only.'); }
+    usernameAccepted = false;
+    setStatus('connecting', 'Reconnecting…');
+    scheduleReconnect();
   };
   socket.onerror = () => {};
   socket.onmessage = (event) => {
@@ -596,16 +744,64 @@ function connect(){
   };
 }
 
-function send(obj){
-  if(!socket || socket.readyState !== WebSocket.OPEN) return;
-  try{ socket.send(JSON.stringify(obj)); } catch(e){}
+function scheduleReconnect(){
+  serverIndex++;
+  setTimeout(() => { if(!deliberatelyClosed) connect(); }, reconnectDelay);
+  reconnectDelay = Math.min(RECONNECT_MAX_DELAY, Math.round(reconnectDelay * 1.6));
 }
+
+function send(obj){
+  if(socket && socket.readyState === WebSocket.OPEN){
+    try{ socket.send(JSON.stringify(obj)); } catch(e){ outgoingBuffer.push(obj); }
+  } else {
+    outgoingBuffer.push(obj);
+  }
+}
+function flushOutgoingBuffer(){
+  if(!socket || socket.readyState !== WebSocket.OPEN) return;
+  while(outgoingBuffer.length){
+    const obj = outgoingBuffer.shift();
+    try{ socket.send(JSON.stringify(obj)); } catch(e){ outgoingBuffer.unshift(obj); break; }
+  }
+}
+
 function sendHandshake(){
-  send({ cmd: 'handshake', val: { language: 'JavaScript', version: { editorType: 'AutLedger', versionNumber: 2 } }, listener: 'handshake_cfg' });
+  send({ cmd: 'handshake', val: { language: 'JavaScript', version: { editorType: 'AutLedger', versionNumber: 3 } }, listener: 'handshake_cfg' });
 }
 function sendSetId(){ send({ cmd: 'setid', val: myName, listener: 'username_cfg' }); }
-function broadcastJoin(){ send({ cmd: 'gmsg', val: JSON.stringify({ kind: 'join', name: myName, time: Date.now() }) }); }
-function broadcastTx(tx){ send({ cmd: 'gmsg', val: JSON.stringify({ kind: 'tx', tx }) }); }
+function broadcastJoin(){
+  send({ cmd: 'gmsg', val: JSON.stringify({ kind: 'join', name: myName, pub: myKeyPair ? myKeyPair.pubJwk : null, time: Date.now() }) });
+}
+function requestKey(name){
+  const last = keyRequestedAt[name] || 0;
+  if(Date.now() - last < 5000) return; // throttle
+  keyRequestedAt[name] = Date.now();
+  send({ cmd: 'gmsg', val: JSON.stringify({ kind: 'keyReq', from: myName, target: name, time: Date.now() }) });
+}
+function sendEncryptedTx(tx, theirPubJwk){
+  encryptForRecipient(theirPubJwk, { amount: tx.amount, note: tx.note }).then(({ iv, ct }) => {
+    send({ cmd: 'gmsg', val: JSON.stringify({ kind: 'tx', id: tx.id, from: tx.from, to: tx.to, time: tx.time, iv, ct }) });
+    scheduleAckWait(tx);
+  }).catch(() => {});
+}
+function sendAck(txId){ send({ cmd: 'gmsg', val: JSON.stringify({ kind: 'ack', id: txId }) }); }
+
+function scheduleAckWait(tx){
+  if(ackTimers[tx.id]) clearTimeout(ackTimers[tx.id].timer);
+  const retries = (ackTimers[tx.id] && ackTimers[tx.id].retries) || 0;
+  ackTimers[tx.id] = {
+    retries,
+    timer: setTimeout(() => {
+      const stillPending = state.outbox.find(o => o.id === tx.id);
+      if(!stillPending) return; // already delivered
+      if(retries < ACK_MAX_RETRIES && knownKeys[tx.to] && onlineUsers.includes(tx.to)){
+        ackTimers[tx.id] = { retries: retries + 1, timer: null };
+        sendEncryptedTx(tx, knownKeys[tx.to]);
+      }
+      // otherwise just wait for the periodic outbox flush to retry later
+    }, ACK_RETRY_MS)
+  };
+}
 
 function normalizeUlist(val, mode){
   let list = [];
@@ -618,9 +814,14 @@ function normalizeUlist(val, mode){
 function onConnectedSuccess(){
   usernameAccepted = true;
   clearTimeout(handshakeTimer);
+  reconnectDelay = 1000;
   applyJoin(myName);
   broadcastJoin();
+  flushOutgoingBuffer();
   setStatus('online', 'Connected');
+  clearInterval(heartbeatTimer);
+  heartbeatTimer = setInterval(broadcastJoin, JOIN_HEARTBEAT_MS);
+  flushOutbox();
   render();
 }
 
@@ -643,6 +844,7 @@ function handlePacket(packet){
       if(packet.mode === 'add') list.forEach(n => { if(!onlineUsers.includes(n)) onlineUsers.push(n); });
       else if(packet.mode === 'remove') onlineUsers = onlineUsers.filter(n => !list.includes(n));
       else onlineUsers = list;
+      flushOutbox();
       render();
       break;
     }
@@ -650,18 +852,61 @@ function handlePacket(packet){
       let payload;
       try{ payload = JSON.parse(packet.val); } catch(e){ return; }
       if(!payload || !payload.kind) return;
-      if(payload.kind === 'join' && payload.name){ applyJoin(payload.name); render(); }
-      else if(payload.kind === 'tx' && payload.tx){ if(applyTx(payload.tx)) render(true); }
+
+      if(payload.kind === 'join' && payload.name){
+        applyJoin(payload.name);
+        if(payload.pub){ knownKeys[payload.name] = payload.pub; saveKnownKeys(); }
+        render();
+        flushOutbox();
+      } else if(payload.kind === 'keyReq' && payload.target === myName){
+        broadcastJoin(); // re-announce our key so the requester picks it up
+      } else if(payload.kind === 'tx' && payload.to === myName && payload.from && payload.iv && payload.ct){
+        const senderKey = knownKeys[payload.from];
+        if(!senderKey){ requestKey(payload.from); return; }
+        decryptFromSender(senderKey, payload.iv, payload.ct).then(plain => {
+          const tx = { id: payload.id, from: payload.from, to: payload.to, amount: plain.amount, note: plain.note, time: payload.time };
+          const applied = applyIncoming(tx);
+          sendAck(tx.id);
+          if(applied) render(true);
+        }).catch(() => { /* couldn't decrypt, ignore */ });
+      } else if(payload.kind === 'ack' && payload.id){
+        state.outbox = state.outbox.filter(o => o.id !== payload.id);
+        saveState();
+        if(ackTimers[payload.id]){ clearTimeout(ackTimers[payload.id].timer); delete ackTimers[payload.id]; }
+        if(markDelivered(payload.id)) render();
+      }
       break;
     }
     default: break;
   }
   if(!usernameAccepted && packet.cmd === 'direct') onConnectedSuccess();
 }
+
+/* Give up waiting for a formal ack after a few seconds and assume connected,
+   so the app stays usable even if a server's handshake reply format differs. */
 function armFallbackAccept(){
   setTimeout(() => {
     if(!usernameAccepted && socket && socket.readyState === WebSocket.OPEN) onConnectedSuccess();
   }, 2500);
+}
+
+/* ======================= OUTBOX (offline / retry delivery) ======================= */
+function queueForDelivery(tx){
+  state.outbox.push({ id: tx.id, to: tx.to, amount: tx.amount, note: tx.note, time: tx.time, from: myName });
+  saveState();
+}
+function flushOutbox(){
+  if(!state.outbox.length) return;
+  if(!socket || socket.readyState !== WebSocket.OPEN) return;
+  state.outbox.forEach(o => {
+    const tx = { id: o.id, from: myName, to: o.to, amount: o.amount, note: o.note, time: o.time };
+    if(knownKeys[o.to]){
+      if(onlineUsers.includes(o.to)) sendEncryptedTx(tx, knownKeys[o.to]);
+      // if we know their key but they're offline right now, wait for them to reconnect (ulist/join event retriggers flush)
+    } else {
+      requestKey(o.to);
+    }
+  });
 }
 
 /* ======================= AUTH ======================= */
@@ -689,13 +934,33 @@ function setAuthMode(mode){
 tabLogin.addEventListener('click', () => setAuthMode('login'));
 tabSignup.addEventListener('click', () => setAuthMode('signup'));
 
-function enterApp(){
+async function ensureKeysFor(username){
+  const users = loadUsers();
+  const rec = users[username];
+  if(rec.pubJwk && rec.privJwk){
+    myKeyPair = await importKeyPairFromJwk(rec.pubJwk, rec.privJwk);
+  } else if(cryptoAvailable){
+    const kp = await generateKeyPair();
+    rec.pubJwk = kp.pubJwk;
+    rec.privJwk = kp.privJwk;
+    users[username] = rec;
+    saveUsers(users);
+    myKeyPair = kp;
+  } else {
+    myKeyPair = null;
+  }
+}
+
+async function enterApp(){
   authScreen.style.display = 'none';
   mainApp.style.display = 'block';
+  await ensureKeysFor(myName);
   applyJoin(myName);
   render();
   connect();
   armFallbackAccept();
+  clearInterval(outboxFlushTimer);
+  outboxFlushTimer = setInterval(flushOutbox, OUTBOX_FLUSH_MS);
 }
 
 authSubmit.addEventListener('click', async () => {
@@ -704,38 +969,32 @@ authSubmit.addEventListener('click', async () => {
   const remember = document.getElementById('rememberMe').checked;
   const users = loadUsers();
 
-  if(!username || !password){
-    showMsg(authMsg, 'Enter a username and password.', false);
-    return;
-  }
+  if(!username || !password){ showMsg(authMsg, 'Enter a username and password.', 'err'); return; }
 
   if(authMode === 'signup'){
-    const confirm = document.getElementById('authConfirm').value;
-    if(users[username]){ showMsg(authMsg, 'That username is already taken.', false); return; }
-    if(password.length < 4){ showMsg(authMsg, 'Password should be at least 4 characters.', false); return; }
-    if(password !== confirm){ showMsg(authMsg, 'Passwords don\u2019t match.', false); return; }
+    const confirmVal = document.getElementById('authConfirm').value;
+    if(users[username]){ showMsg(authMsg, 'That username is already taken.', 'err'); return; }
+    if(password.length < 4){ showMsg(authMsg, 'Password should be at least 4 characters.', 'err'); return; }
+    if(password !== confirmVal){ showMsg(authMsg, 'Passwords don\u2019t match.', 'err'); return; }
 
     const salt = randomHex(16);
     const hash = await hashPassword(password, salt);
-    users[username] = { salt, hash };
+    users[username] = { salt, hash, avatar: null };
     saveUsers(users);
 
     myName = username;
-    const store = remember ? localStorage : sessionStorage;
-    store.setItem(STORAGE_SESSION_KEY, username);
+    (remember ? localStorage : sessionStorage).setItem(STORAGE_SESSION_KEY, username);
     enterApp();
     return;
   }
 
-  // login
   const record = users[username];
-  if(!record){ showMsg(authMsg, 'No account with that username. Try signing up.', false); return; }
+  if(!record){ showMsg(authMsg, 'No account with that username. Try signing up.', 'err'); return; }
   const hash = await hashPassword(password, record.salt);
-  if(hash !== record.hash){ showMsg(authMsg, 'Incorrect password.', false); return; }
+  if(hash !== record.hash){ showMsg(authMsg, 'Incorrect password.', 'err'); return; }
 
   myName = username;
-  const store = remember ? localStorage : sessionStorage;
-  store.setItem(STORAGE_SESSION_KEY, username);
+  (remember ? localStorage : sessionStorage).setItem(STORAGE_SESSION_KEY, username);
   enterApp();
 });
 
@@ -746,11 +1005,12 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
   localStorage.removeItem(STORAGE_SESSION_KEY);
   sessionStorage.removeItem(STORAGE_SESSION_KEY);
   deliberatelyClosed = true;
+  clearInterval(heartbeatTimer);
+  clearInterval(outboxFlushTimer);
   if(socket) socket.close(1000, 'Logging out');
   location.reload();
 });
 
-/* Auto-login if a remembered session exists */
 (function checkSession(){
   const sessionName = sessionStorage.getItem(STORAGE_SESSION_KEY) || localStorage.getItem(STORAGE_SESSION_KEY);
   const users = loadUsers();
@@ -780,21 +1040,102 @@ document.getElementById('sendBtn').addEventListener('click', () => {
   const amount = parseFloat(document.getElementById('amount').value);
   const note = document.getElementById('note').value.trim();
 
-  if(!recipient){ showMsg(payMsg, 'Enter a name to pay.', false); return; }
-  if(recipient === myName){ showMsg(payMsg, "You can't pay yourself.", false); return; }
-  if(!amount || amount <= 0){ showMsg(payMsg, 'Enter an amount greater than 0.', false); return; }
+  if(!recipient){ showMsg(payMsg, 'Enter a name to pay.', 'err'); return; }
+  if(recipient === myName){ showMsg(payMsg, "You can't pay yourself.", 'err'); return; }
+  if(!amount || amount <= 0){ showMsg(payMsg, 'Enter an amount greater than 0.', 'err'); return; }
 
   const myBal = state.balances[myName] !== undefined ? state.balances[myName] : STARTING_BALANCE;
-  if(amount > myBal){ showMsg(payMsg, `Insufficient funds — you have ${fmt(myBal)} AUT.`, false); return; }
+  if(amount > myBal){ showMsg(payMsg, `Insufficient funds — you have ${fmt(myBal)} AUT.`, 'err'); return; }
 
   const tx = { id: makeId(), from: myName, to: recipient, amount: amount, note: note, time: Date.now() };
-  applyTx(tx);
-  broadcastTx(tx);
+  applyOutgoingLocal(tx);
+  queueForDelivery(tx);
   render(true);
+  flushOutbox();
 
   document.getElementById('amount').value = '';
   document.getElementById('note').value = '';
-  showMsg(payMsg, `Sent ${fmt(amount)} AUT to ${recipient}.`, true);
+  const willBeInstant = knownKeys[recipient] && onlineUsers.includes(recipient);
+  showMsg(payMsg, willBeInstant ? `Sending ${fmt(amount)} AUT to ${recipient}…` : `Queued ${fmt(amount)} AUT for ${recipient} — will deliver once they're online.`, 'info');
+});
+
+/* ======================= Settings ======================= */
+const settingsOverlay = document.getElementById('settingsOverlay');
+const settingsMsg = document.getElementById('settingsMsg');
+
+function renderSettingsAvatar(){
+  const av = avatarStyleFor(myName);
+  const el = document.getElementById('settingsAvatarPreview');
+  el.style.background = av.background;
+  el.textContent = av.text;
+}
+
+document.getElementById('openSettings').addEventListener('click', () => {
+  renderSettingsAvatar();
+  settingsMsg.className = 'msg';
+  document.getElementById('curPass').value = '';
+  document.getElementById('newPass').value = '';
+  document.getElementById('newPassConfirm').value = '';
+  settingsOverlay.classList.add('show');
+});
+document.getElementById('closeSettings').addEventListener('click', () => settingsOverlay.classList.remove('show'));
+
+document.getElementById('uploadAvatarBtn').addEventListener('click', () => document.getElementById('avatarFileInput').click());
+document.getElementById('avatarFileInput').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const img = new Image();
+  const reader = new FileReader();
+  reader.onload = () => {
+    img.onload = () => {
+      const size = 128;
+      const canvas = document.createElement('canvas');
+      canvas.width = size; canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      const scale = Math.max(size / img.width, size / img.height);
+      const w = img.width * scale, h = img.height * scale;
+      ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+      const users = loadUsers();
+      users[myName].avatar = dataUrl;
+      saveUsers(users);
+      renderSettingsAvatar();
+      render();
+      showMsg(settingsMsg, 'Profile picture updated.', 'ok');
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+});
+document.getElementById('removeAvatarBtn').addEventListener('click', () => {
+  const users = loadUsers();
+  if(users[myName]) users[myName].avatar = null;
+  saveUsers(users);
+  renderSettingsAvatar();
+  render();
+  showMsg(settingsMsg, 'Profile picture removed.', 'ok');
+});
+
+document.getElementById('changePassBtn').addEventListener('click', async () => {
+  const cur = document.getElementById('curPass').value;
+  const next = document.getElementById('newPass').value;
+  const confirmVal = document.getElementById('newPassConfirm').value;
+  const users = loadUsers();
+  const rec = users[myName];
+  if(!cur || !next){ showMsg(settingsMsg, 'Fill in both password fields.', 'err'); return; }
+  const curHash = await hashPassword(cur, rec.salt);
+  if(curHash !== rec.hash){ showMsg(settingsMsg, 'Current password is incorrect.', 'err'); return; }
+  if(next.length < 4){ showMsg(settingsMsg, 'New password should be at least 4 characters.', 'err'); return; }
+  if(next !== confirmVal){ showMsg(settingsMsg, 'New passwords don\u2019t match.', 'err'); return; }
+  const newSalt = randomHex(16);
+  rec.salt = newSalt;
+  rec.hash = await hashPassword(next, newSalt);
+  users[myName] = rec;
+  saveUsers(users);
+  document.getElementById('curPass').value = '';
+  document.getElementById('newPass').value = '';
+  document.getElementById('newPassConfirm').value = '';
+  showMsg(settingsMsg, 'Password updated.', 'ok');
 });
 
 /* ======================= Admin vault ======================= */
@@ -841,16 +1182,17 @@ document.getElementById('adjBtn').addEventListener('click', () => {
   const name = document.getElementById('adjName').value;
   const delta = parseFloat(document.getElementById('adjAmount').value);
   if(!name || !delta) return;
-  const tx = { id: makeId(), from: delta >= 0 ? 'Admin adjustment' : name, to: delta >= 0 ? name : 'Admin adjustment', amount: Math.abs(delta), note: 'Manual admin adjustment', time: Date.now() };
-  applyTx(tx);
-  broadcastTx(tx);
+  if(state.balances[name] === undefined) state.balances[name] = 0;
+  state.balances[name] = +(state.balances[name] + delta).toFixed(2);
+  state.transactions.push({ id: makeId(), from: delta >= 0 ? 'Admin adjustment' : name, to: delta >= 0 ? name : 'Admin adjustment', amount: Math.abs(delta), note: 'Manual admin adjustment', time: Date.now(), direction: 'out', status: 'delivered' });
+  saveState();
   document.getElementById('adjAmount').value = '';
   render();
 });
 
 /* ======================= Admin: reset local data ======================= */
 document.getElementById('resetAllBtn').addEventListener('click', () => {
-  if(confirm('This erases your local copy of the ledger (balances/transactions on this device only). Registered accounts and other devices are unaffected. Continue?')){
+  if(confirm('This erases your local copy of the ledger (balances/transactions/outbox on this device only). Registered accounts and other devices are unaffected. Continue?')){
     state = defaultState();
     applyJoin(myName);
     saveState();
