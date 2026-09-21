@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>How to install Sloth Web 3.0</title>
+  <style>
+    :root {
+      --bg: #0c1016;
+      --card: #151b24;
+      --fg: #eef3f9;
+      --muted: #93a0b0;
+      --accent: #4a9eff;
+      --ok: #3dd68c;
+      --warn: #ffb020;
+      --line: #263041;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(900px 420px at 10% -20%, #1a3058 0%, var(--bg) 50%);
+      color: var(--fg);
+      line-height: 1.55;
+    }
+    .wrap { max-width: 820px; margin: 0 auto; padding: 40px 20px 80px; }
+    h1 { font-size: 2rem; letter-spacing: -0.03em; margin: 0 0 8px; }
+    h2 { font-size: 1.25rem; margin: 28px 0 10px; }
+    .lead { color: var(--muted); margin: 0 0 28px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px 22px;
+      margin: 0 0 14px;
+    }
+    .os { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+    ol { margin: 8px 0 0; padding-left: 22px; }
+    li { margin: 8px 0; }
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.88em;
+    }
+    code {
+      background: #0b0f14;
+      border: 1px solid var(--line);
+      padding: 1px 6px;
+      border-radius: 6px;
+    }
+    pre {
+      background: #0b0f14;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      overflow-x: auto;
+      color: #d7e6ff;
+      margin: 10px 0 0;
+    }
+    .warn { border-color: #5a4718; background: #221c0e; }
+    .ok { color: var(--ok); font-weight: 700; }
+    .muted { color: var(--muted); }
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>How to install Sloth Web 3.0</h1>
+    <p class="lead">Pick your computer. You need the matching installer file next to this page (or in Downloads).</p>
+
+    <div class="card warn">
+      <b style="color:var(--warn)">Mac users — read this first</b>
+      <p class="muted" style="margin:8px 0 0">
+        A <code>.sh</code> file is a <em>plain text</em> script. If you double-click it, macOS opens <b>TextEdit</b>.
+        That is normal. It is not broken. You must either:
+      </p>
+      <ul>
+        <li>Use <code>installer_mac.command</code> (not <code>.sh</code>), or</li>
+        <li>Run it from <b>Terminal</b> after <code>chmod +x</code> (steps below).</li>
+      </ul>
+    </div>
+
+    <h2>Mac</h2>
+    <div class="card">
+      <div class="os">Apple · macOS</div>
+      <p>File to use: <code>installer_mac.command</code> (inside <code>installer_mac.zip</code>).</p>
+      <ol>
+        <li>Unzip <code>installer_mac.zip</code> if needed.</li>
+        <li>Open <b>Terminal</b> (Spotlight → type Terminal → Return).</li>
+        <li>Paste these two lines. If the file is not in Downloads, change the path.</li>
+      </ol>
+      <pre>chmod +x ~/Downloads/installer_mac.command
+~/Downloads/installer_mac.command</pre>
+      <p class="muted">
+        <code>chmod +x</code> marks the file as a program. Then the second line runs it in Terminal — not TextEdit.
+      </p>
+      <p>If macOS says it can’t be opened because it is from the internet:</p>
+      <ol>
+        <li>Finder → Right-click <code>installer_mac.command</code></li>
+        <li>Hold Option if needed, click <b>Open</b>, then Open again.</li>
+      </ol>
+      <p class="ok">When it finishes:</p>
+      <ul>
+        <li>New Terminal window, type <code>sloth-web</code>, or</li>
+        <li>Open <code>Sloth Web</code> in your Applications folder (user Applications).</li>
+      </ul>
+    </div>
+
+    <h2>Windows</h2>
+    <div class="card">
+      <div class="os">Microsoft · Windows 10 / 11</div>
+      <p>File to use: <code>installer_windows.bat</code></p>
+      <ol>
+        <li>Save it to Downloads. Do not open it in Notepad.</li>
+        <li>Double-click <code>installer_windows.bat</code>.</li>
+        <li>If SmartScreen appears: <b>More info</b> → <b>Run anyway</b>.</li>
+        <li>If it asks to install Python, check <b>Add python.exe to PATH</b>.</li>
+        <li>Wait until it says installed. Press any key to close.</li>
+      </ol>
+      <p class="ok">When it finishes:</p>
+      <ul>
+        <li>Desktop shortcut <b>Sloth Web</b>, or Start Menu → Sloth Web</li>
+        <li>Or Command Prompt: <code>python %USERPROFILE%\SlothWeb\SlothWeb.py</code></li>
+      </ul>
+    </div>
+
+    <h2>Linux</h2>
+    <div class="card">
+      <div class="os">Ubuntu · Debian · Fedora · Arch and similar</div>
+      <p>File to use: <code>installer_linux.sh</code></p>
+      <ol>
+        <li>Open a terminal in the folder where you saved the file (often Downloads).</li>
+        <li>Run:</li>
+      </ol>
+      <pre>chmod +x installer_linux.sh
+./installer_linux.sh</pre>
+      <p>It may ask for your password (sudo) to install Python / Qt libraries.</p>
+      <p class="ok">When it finishes:</p>
+      <ul>
+        <li><code>sloth-web</code> in a terminal (if <code>~/.local/bin</code> is on PATH)</li>
+        <li>or <code>python3 ~/SlothWeb/SlothWeb.py</code></li>
+        <li>or the desktop / app-menu icon</li>
+      </ul>
+    </div>
+
+    <h2>Already have Python?</h2>
+    <div class="card">
+      <p>Skip the installer. Save <code>SlothWeb-3.0.py</code> then:</p>
+      <pre>python -m pip install PyQt6 PyQt6-WebEngine requests
+python SlothWeb-3.0.py</pre>
+      <p class="muted">On Mac/Linux use <code>python3</code> if <code>python</code> is not found.</p>
+    </div>
+
+    <h2>If something fails</h2>
+    <div class="card">
+      <ul>
+        <li><b>TextEdit / Notepad opened</b> — you opened the script as a document. Use Terminal / double-click <code>.bat</code> / run <code>chmod +x</code> as above.</li>
+        <li><b>Permission denied</b> on Mac/Linux — you skipped <code>chmod +x</code>.</li>
+        <li><b>PyQt / QtWebEngine missing</b> — the installer should pip-install PyQt6. Re-run it, or run the pip line in the previous section.</li>
+        <li><b>python is not recognized</b> (Windows) — install Python and tick Add to PATH, then open a <em>new</em> Command Prompt and run the installer again.</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
