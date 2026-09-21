@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,36 +69,22 @@
     <p class="lead">Pick your computer. You need the matching installer file next to this page (or in Downloads).</p>
 
     <div class="card warn">
-      <b style="color:var(--warn)">Mac users — read this first</b>
+      <b style="color:var(--warn)">Mac — keep the .sh file</b>
       <p class="muted" style="margin:8px 0 0">
-        A <code>.sh</code> file is a <em>plain text</em> script. If you double-click it, macOS opens <b>TextEdit</b>.
-        That is normal. It is not broken. You must either:
+        <code>installer_mac.sh</code> is the real installer. Do <b>not</b> double-click it in Finder — that opens TextEdit.
+        Run it in <b>Terminal</b> (below), or send your friend the one-liner so they never download a file.
       </p>
-      <ul>
-        <li>Use <code>installer_mac.command</code> (not <code>.sh</code>), or</li>
-        <li>Run it from <b>Terminal</b> after <code>chmod +x</code> (steps below).</li>
-      </ul>
     </div>
 
     <h2>Mac</h2>
     <div class="card">
-      <div class="os">Apple · macOS</div>
-      <p>File to use: <code>installer_mac.command</code> (inside <code>installer_mac.zip</code>).</p>
-      <ol>
-        <li>Unzip <code>installer_mac.zip</code> if needed.</li>
-        <li>Open <b>Terminal</b> (Spotlight → type Terminal → Return).</li>
-        <li>Paste these two lines. If the file is not in Downloads, change the path.</li>
-      </ol>
-      <pre>chmod +x ~/Downloads/installer_mac.command
-~/Downloads/installer_mac.command</pre>
-      <p class="muted">
-        <code>chmod +x</code> marks the file as a program. Then the second line runs it in Terminal — not TextEdit.
-      </p>
-      <p>If macOS says it can’t be opened because it is from the internet:</p>
-      <ol>
-        <li>Finder → Right-click <code>installer_mac.command</code></li>
-        <li>Hold Option if needed, click <b>Open</b>, then Open again.</li>
-      </ol>
+      <div class="os">Apple · macOS · installer_mac.sh</div>
+      <p>Open <b>Terminal</b> (Spotlight → Terminal) and paste:</p>
+      <pre>chmod +x ~/Downloads/installer_mac.sh
+~/Downloads/installer_mac.sh</pre>
+      <p class="muted">If the file is not in Downloads, drag it onto the Terminal window to fill in the path.</p>
+      <p>Or skip the file entirely (best for friends):</p>
+      <pre>bash -c "$(curl -fsSL https://raw.githubusercontent.com/parkertripoli-wq/sloth-web/main/installer_mac.sh)"</pre>
       <p class="ok">When it finishes:</p>
       <ul>
         <li>New Terminal window, type <code>sloth-web</code>, or</li>
